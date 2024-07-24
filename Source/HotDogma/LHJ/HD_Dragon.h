@@ -24,5 +24,9 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 	// 스켈레탈 매쉬
+	UPROPERTY(EditAnywhere)
 	class USkeletalMeshComponent* SkeletalComp;
+
+	UPROPERTY(EditAnywhere)
+	class UHD_DragonFSM* fsm;
 };

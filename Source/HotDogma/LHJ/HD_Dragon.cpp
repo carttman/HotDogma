@@ -3,6 +3,8 @@
 
 #include "../LHJ/HD_Dragon.h"
 
+#include "HD_DragonFSM.h"
+
 // Sets default values
 AHD_Dragon::AHD_Dragon()
 {
@@ -17,6 +19,8 @@ AHD_Dragon::AHD_Dragon()
 	{
 		SkeletalComp->SetSkeletalMesh(tempSkeleton.Object);
 	}
+
+	fsm = CreateDefaultSubobject<UHD_DragonFSM>(TEXT("FSM"));
 }
 
 // Called when the game starts or when spawned
@@ -32,4 +36,3 @@ void AHD_Dragon::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 
 }
-

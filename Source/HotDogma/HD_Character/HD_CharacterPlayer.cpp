@@ -33,7 +33,7 @@ AHD_CharacterPlayer::AHD_CharacterPlayer()
 	camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
 	//camera 를 springArm 의 자식으로 셋팅
 	camera->SetupAttachment(springArm);
-	camera->SetupAttachment(GetMesh(), FName(TEXT("headSocket")));
+	//camera->SetupAttachment(GetMesh(), FName(TEXT("headSocket")));
 	camera->SetRelativeLocation(FVector(0, 0, 0));
 	camera->SetRelativeRotation(FRotator(-20, 0, 0));
 }

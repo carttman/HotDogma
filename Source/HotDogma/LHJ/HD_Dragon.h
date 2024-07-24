@@ -23,4 +23,6 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	// 스켈레탈 매쉬
+	class USkeletalMeshComponent* SkeletalComp;
 };

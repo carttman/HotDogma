@@ -23,6 +23,11 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	// 더미 콜리전
+	// NoCollision 처리할건데 충돌처리 문제나면 변경하기
+	UPROPERTY(EditAnywhere)
+	class UCapsuleComponent* CapsuleComp;
+	
 	// 스켈레탈 매쉬
 	UPROPERTY(EditAnywhere)
 	class USkeletalMeshComponent* SkeletalComp;

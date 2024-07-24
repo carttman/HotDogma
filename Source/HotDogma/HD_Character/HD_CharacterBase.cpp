@@ -5,6 +5,7 @@
 
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
+#include "HD_PlayerController.h"
 #include "Components/CapsuleComponent.h"
 
 // Sets default values
@@ -27,7 +28,7 @@ void AHD_CharacterBase::BeginPlay()
 	Super::BeginPlay();
 
 	//get APlayerController
-	APlayerController* playerContoller = Cast<APlayerController>(GetController());
+	AHD_PlayerController* playerContoller = Cast<AHD_PlayerController>(GetController());
 	if (playerContoller == nullptr) return;
 	//get subSystem
 	UEnhancedInputLocalPlayerSubsystem* subSystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(playerContoller->GetLocalPlayer());
@@ -56,9 +57,9 @@ void AHD_CharacterBase::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
 	if (enhancedInputComponent != nullptr)
 	{
 		enhancedInputComponent->BindAction(ia_DH_Move, ETriggerEvent::Triggered, this, &AHD_CharacterBase::EnhancedMove);
-		enhancedInputComponent->BindAction(ia_DH_Look, ETriggerEvent::Started, this, &AHD_CharacterBase::EnhancedLook);
+		enhancedInputComponent->BindAction(ia_DH_Look, ETriggerEvent::Triggered, this, &AHD_CharacterBase::EnhancedLook);
 		//enhancedInputComponent->BindAction(ia_DB_Jump, ETriggerEvent::Completed, this, &ACharacter::StopJumping);
-		enhancedInputComponent->BindAction(ia_DH_Jump, ETriggerEvent::Triggered, this, &AHD_CharacterBase::EnhancedJump);
+		enhancedInputComponent->BindAction(ia_DH_Jump, ETriggerEvent::Started, this, &AHD_CharacterBase::EnhancedJump);
 		
 	}
 }
@@ -80,7 +81,7 @@ void AHD_CharacterBase::EnhancedJump(const FInputActionValue& InputActionValue)
 void AHD_CharacterBase::EnhancedLook(const FInputActionValue& InputActionValue)
 {
 	FVector2D dir = InputActionValue.Get<FVector2D>();
-
 	AddControllerYawInput(dir.X);
 	AddControllerPitchInput(dir.Y);
+	//UE_LOG(LogTemp, , TEXT("%d"), x);
 }

@@ -13,6 +13,32 @@
   <component name="ChangeListManager">
     <list default="true" id="816ff4fd-5015-4971-a749-88a8f089f2fd" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.HotDogma/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.HotDogma/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Assets/Assassin/Animation/Anim_Assassin_attack1.uasset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Assets/Assassin/Animation/Anim_Assassin_attack2.uasset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Assets/Assassin/Animation/Anim_Assassin_attack3.uasset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Assets/Assassin/Animation/Anim_Assassin_attack4.uasset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Assets/Assassin/Animation/Anim_Assassin_attack5.uasset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Assets/Assassin/Animation/Anim_Assassin_death1.uasset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Assets/Assassin/Animation/Anim_Assassin_death2.uasset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Assets/Assassin/Animation/Anim_Assassin_hit1.uasset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Assets/Assassin/Animation/Anim_Assassin_hit2.uasset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Assets/Assassin/Animation/Anim_Assassin_hit3.uasset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Assets/Assassin/Animation/Anim_Assassin_idle1.uasset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Assets/Assassin/Animation/Anim_Assassin_idle2.uasset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Assets/Assassin/Animation/Anim_Assassin_jump.uasset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Assets/Assassin/Animation/Anim_Assassin_run.uasset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Assets/Assassin/Animation/Anim_Assassin_strafeleft.uasset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Assets/Assassin/Animation/Anim_Assassin_straferight.uasset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Assets/Assassin/Animation/Anim_Assassin_walk1.uasset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Assets/Assassin/Animation/Anim_Assassin_walk2.uasset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Assets/Assassin/Animation/Anim_Assassin_walkback1.uasset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Assets/Assassin/Animation/Anim_Assassin_walkback2.uasset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Assets/Assassin/Animation/Demo/ThirdPersonIdle.uasset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Assets/Assassin/Animation/Demo/ThirdPersonRun.uasset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Assets/Assassin/Animation/Demo/ThirdPersonWalk.uasset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/CHJ/Blueprints/BP_CHJ_GameModeBase.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/CHJ/Blueprints/BP_CHJ_GameModeBase.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/CHJ/Blueprints/BP_HD_Player.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/CHJ/Blueprints/BP_HD_Player.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/HotDogma/HD_Character/HD_CharacterBase.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/HotDogma/HD_Character/HD_CharacterBase.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/HotDogma/HD_Character/HD_CharacterPlayer.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/HotDogma/HD_Character/HD_CharacterPlayer.cpp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -45,6 +71,8 @@
     <setting file="file://$PROJECT_DIR$/Source/HotDogma/HD_Character/HD_CharacterBase.h" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Source/HotDogma/HD_Character/HD_CharacterPlayer.cpp" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Source/HotDogma/HD_Character/HD_CharacterPlayer.h" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Source/HotDogma/HD_Character/HD_PlayerAnimInstance.cpp" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Source/HotDogma/HD_Character/HD_PlayerAnimInstance.h" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Source/HotDogma/HD_Character/HD_PlayerController.cpp" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Source/HotDogma/HD_Character/HD_PlayerController.h" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Source/HotDogma/HD_GameModeBase/CHJ_GameMode.cpp" root0="FORCE_HIGHLIGHTING" />
@@ -532,6 +560,8 @@
       <workItem from="1721810929025" duration="7261000" />
       <workItem from="1721822633516" duration="2941000" />
       <workItem from="1721826243130" duration="112000" />
+      <workItem from="1721867308805" duration="1182000" />
+      <workItem from="1721869574961" duration="12874000" />
     </task>
     <servers />
   </component>

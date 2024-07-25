@@ -66,11 +66,30 @@ void AHD_CharacterBase::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
 
 void AHD_CharacterBase::EnhancedMove(const FInputActionValue& InputActionValue)
 {
-	FVector2D dir = InputActionValue.Get<FVector2D>();
-	FVector originVec = FVector(dir.Y, dir.X, 0);
-	FVector newVec = GetTransform().TransformVector(originVec);
+	// FVector2D dir = InputActionValue.Get<FVector2D>();
+	// FVector originVec = FVector(dir.Y, dir.X, 0);
+	// //FVector newVec = GetTransform().TransformVector(originVec);
+	//
+	// AddMovementInput(originVec);
+	// input is a Vector2D
+	FVector2D MovementVector = InputActionValue.Get<FVector2D>();
 
-	AddMovementInput(newVec);
+	if (Controller != nullptr)
+	{
+		// find out which way is forward
+		const FRotator Rotation = Controller->GetControlRotation();
+		const FRotator YawRotation(0, Rotation.Yaw, 0);
+
+		// get forward vector
+		const FVector ForwardDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
+	
+		// get right vector 
+		const FVector RightDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
+
+		// add movement 
+		AddMovementInput(ForwardDirection, MovementVector.Y);
+		AddMovementInput(RightDirection, MovementVector.X);
+	}
 }
 
 void AHD_CharacterBase::EnhancedJump(const FInputActionValue& InputActionValue)

@@ -3,11 +3,11 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameFramework/Actor.h"
+#include "GameFramework/Character.h"
 #include "HD_Dragon.generated.h"
 
 UCLASS()
-class HOTDOGMA_API AHD_Dragon : public AActor
+class HOTDOGMA_API AHD_Dragon : public ACharacter
 {
 	GENERATED_BODY()
 	
@@ -34,4 +34,7 @@ public:
 
 	UPROPERTY(EditAnywhere)
 	class UHD_DragonFSM* fsm;
+	
+	UPROPERTY()
+	TArray<class ACharacter*> CharacterArr;	// 공격 대상 인지
 };

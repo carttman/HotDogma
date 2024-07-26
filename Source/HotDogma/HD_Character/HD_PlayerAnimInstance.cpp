@@ -14,7 +14,8 @@ void UHD_PlayerAnimInstance::NativeInitializeAnimation()
 	Super::NativeInitializeAnimation();
 	
 	Player = Cast<AHD_CharacterPlayer>(TryGetPawnOwner());
-	PlayerWeapon = Cast<AHD_PlayerWeaponBase>(GetOwningActor());
+	// Left_Weapon = Cast<AHD_PlayerWeaponBase>(Player->Left_Weapon);
+	// Right_Weapon = Cast<AHD_PlayerWeaponBase>(Player->Right_Weapon);
 }
 
 void UHD_PlayerAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
@@ -35,14 +36,24 @@ void UHD_PlayerAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 
 void UHD_PlayerAnimInstance::AnimNotify_Damage_On()
 {
+	if(Left_Weapon == nullptr)
+	{
+		Left_Weapon = Cast<AHD_PlayerWeaponBase>(Player->Left_Weapon);
+	}
+	if(Right_Weapon == nullptr)
+	{
+		Right_Weapon = Cast<AHD_PlayerWeaponBase>(Player->Right_Weapon);
+	}
 	//캡슐 콜리전 on
 	UE_LOG(LogTemp, Warning, TEXT("On"));
-	PlayerWeapon->CapsuleComp->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
+	Left_Weapon->CapsuleComp->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
+	Right_Weapon->CapsuleComp->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
 }
 
 void UHD_PlayerAnimInstance::AnimNotify_Damage_Off()
 {
 	//캡슐 콜리전 off
 	UE_LOG(LogTemp, Warning, TEXT("Off"));
-	PlayerWeapon->CapsuleComp->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	Left_Weapon->CapsuleComp->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	Right_Weapon->CapsuleComp->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 }

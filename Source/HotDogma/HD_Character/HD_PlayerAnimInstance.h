@@ -56,7 +56,8 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	class AHD_CharacterPlayer* Player;
 
-	class AHD_PlayerWeaponBase* PlayerWeapon;
+	class AHD_PlayerWeaponBase* Left_Weapon;
+	class AHD_PlayerWeaponBase* Right_Weapon;
 public:
 	UFUNCTION()
 	void AnimNotify_Damage_On();

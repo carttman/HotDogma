@@ -4,7 +4,9 @@
 #include "../HD_Character/HD_PlayerAnimInstance.h"
 
 #include "HD_CharacterPlayer.h"
+#include "Components/CapsuleComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "HD_PlayerItem/HD_PlayerWeaponBase.h"
 #include "Kismet/KismetMathLibrary.h"
 
 void UHD_PlayerAnimInstance::NativeInitializeAnimation()
@@ -12,6 +14,7 @@ void UHD_PlayerAnimInstance::NativeInitializeAnimation()
 	Super::NativeInitializeAnimation();
 	
 	Player = Cast<AHD_CharacterPlayer>(TryGetPawnOwner());
+	PlayerWeapon = Cast<AHD_PlayerWeaponBase>(GetOwningActor());
 }
 
 void UHD_PlayerAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
@@ -27,7 +30,6 @@ void UHD_PlayerAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 		else ShouldMove = false;
 
 		isFalling = Player->GetCharacterMovement()->IsFalling();
-		
 	}
 }
 
@@ -35,10 +37,12 @@ void UHD_PlayerAnimInstance::AnimNotify_Damage_On()
 {
 	//캡슐 콜리전 on
 	UE_LOG(LogTemp, Warning, TEXT("On"));
+	PlayerWeapon->CapsuleComp->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
 }
 
 void UHD_PlayerAnimInstance::AnimNotify_Damage_Off()
 {
 	//캡슐 콜리전 off
 	UE_LOG(LogTemp, Warning, TEXT("Off"));
+	PlayerWeapon->CapsuleComp->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 }

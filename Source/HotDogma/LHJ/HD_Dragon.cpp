@@ -3,6 +3,7 @@
 
 #include "../LHJ/HD_Dragon.h"
 
+#include "EngineUtils.h"
 #include "HD_DragonFSM.h"
 #include "Components/CapsuleComponent.h"
 
@@ -12,16 +13,16 @@ AHD_Dragon::AHD_Dragon()
 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
-	CapsuleComp = CreateDefaultSubobject<UCapsuleComponent>(TEXT("CapsuleComp"));
-	SetRootComponent(CapsuleComp);
-	CapsuleComp->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	// CapsuleComp = CreateDefaultSubobject<UCapsuleComponent>(TEXT("CapsuleComp"));
+	// SetRootComponent(CapsuleComp);
+	// CapsuleComp->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 
 	SkeletalComp = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("SkeletalComp"));
-	SkeletalComp->SetupAttachment(CapsuleComp);
-	SkeletalComp->SetRelativeRotation(FRotator(0, -90, 0));
+	SetRootComponent(SkeletalComp);
 
 	ConstructorHelpers::FObjectFinder<USkeletalMesh> tempSkeleton(TEXT(
-		"/Script/Engine.SkeletalMesh'/Game/LHJ/QuadrapedCreatures/MountainDragon/Meshes/SK_MOUNTAIN_DRAGON.SK_MOUNTAIN_DRAGON'"));
+		"/Script/Engine.PhysicsAsset'/Game/LHJ/UnkaDragon/Meshes/UnkaDragon/SK_Unka_Realistic_TEST_PhysicsAsset.SK_Unka_Realistic_TEST_PhysicsAsset'"));
+	//(Pitch=0.000000,Yaw=-90.000000,Roll=0.000000)
 	if (tempSkeleton.Succeeded())
 	{
 		SkeletalComp->SetSkeletalMesh(tempSkeleton.Object);
@@ -34,6 +35,17 @@ AHD_Dragon::AHD_Dragon()
 void AHD_Dragon::BeginPlay()
 {
 	Super::BeginPlay();
+
+	// 필드에 있는 캐릭터를 인지한다.
+	for (TActorIterator<ACharacter> It(GetWorld()); It; ++It)
+	{
+		ACharacter* Character = *It;
+		if (Character)
+		{
+			if (!Character->GetActorLabel().Contains("Dragon"))
+				CharacterArr.Add(Character);
+		}
+	}
 }
 
 // Called every frame

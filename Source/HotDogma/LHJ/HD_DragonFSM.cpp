@@ -21,11 +21,11 @@ void UHD_DragonFSM::BeginPlay()
 {
 	Super::BeginPlay();
 
-	NearTargetActor = UGameplayStatics::GetActorOfClass(GetWorld(), AHD_CharacterPlayer::StaticClass());
-	if (!NearTargetActor)
-		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("NearTargetActor Is NullPtr"));
-	else
-		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Blue, TEXT("NearTargetActor Is Not NullPtr"));
+	// NearTargetActor = UGameplayStatics::GetActorOfClass(GetWorld(), AHD_CharacterPlayer::StaticClass());
+	// if (!NearTargetActor)
+	// 	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("NearTargetActor Is NullPtr"));
+	// else
+	// 	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Blue, TEXT("NearTargetActor Is Not NullPtr"));
 
 	DragonActor = UGameplayStatics::GetActorOfClass(GetWorld(), AHD_Dragon::StaticClass());
 	if (!DragonActor)
@@ -39,7 +39,7 @@ void UHD_DragonFSM::BeginPlay()
 	else
 		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Blue, TEXT("Dragon Is Not NullPtr"));
 
-	if(Dragon->SkeletalComp->GetAnimInstance())
+	if (Dragon->SkeletalComp->GetAnimInstance())
 	{
 		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Blue, TEXT("GetAnimInstance Is Not NullPtr"));
 	}
@@ -47,7 +47,7 @@ void UHD_DragonFSM::BeginPlay()
 	{
 		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("GetAnimInstance Is NullPtr"));
 	}
-	
+
 	if (Dragon)
 		Anim = Cast<UHD_DragonAnim>(Dragon->SkeletalComp->GetAnimInstance());
 	if (!Anim)
@@ -65,13 +65,50 @@ void UHD_DragonFSM::TickComponent(float DeltaTime, ELevelTick TickType, FActorCo
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
-	double dot = ChkDirectionFromCharacter();
+	//double dot = GetRadianFromCharacter();
 	//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("Player To Dragon Direction : %f"), dot));
+
+	switch (State)
+	{
+	case DragonState::Sleep:
+		SleepState();
+		break;
+	case DragonState::Idle:
+		IdleState();
+		break;
+	case DragonState::Walk:
+		WalkState();
+		break;
+	}
 }
 #pragma endregion
 
 #pragma region [State Function]
+void UHD_DragonFSM::SleepState()
+{
+	if (Dragon->CharacterArr.Num() == 0)
+	{
+		
+	}
+	
+	// 일정거리 안에 플레이어가 들어오거나, 플레이어가 먼저 공격을 하면
+	// SleepEnd 애니메이션 재생을 하고,
+	// Idle 상태로 전환한다(노티파이 처리)
+	ChkCharacterIntoRadian();
+
+	if (Anim->bSleepEnd)
+		State = DragonState::Idle;
+}
+
 void UHD_DragonFSM::IdleState()
+{
+	// 타겟을 지정한다.
+	for (int i = 0; i < Dragon->CharacterArr.Num(); i++)
+	{
+	}
+}
+
+void UHD_DragonFSM::WalkState()
 {
 }
 
@@ -81,7 +118,7 @@ void UHD_DragonFSM::MoveState()
 #pragma endregion
 
 #pragma region [Check direction from character]
-double UHD_DragonFSM::ChkDirectionFromCharacter()
+double UHD_DragonFSM::GetRadianFromCharacter()
 {
 	double dRtn = 0;
 
@@ -97,5 +134,29 @@ double UHD_DragonFSM::ChkDirectionFromCharacter()
 	}
 
 	return dRtn;
+}
+
+// 일정 범위 내에 플레이어가 있는지 확인
+bool UHD_DragonFSM::ChkCharacterIntoRadian()
+{
+	bool bRtn = false;
+	int32 ThresholdRadian = 500; // 인식 범위
+
+	// 월드에 있는 캐릭터를 가지고 와서 배열에 저장(BeginPlay에 작성)
+	// 임시로 캐릭터로 지정
+	// 일정 거리 안에 들어온 캐릭터가 있으면
+	for (int i = 0; i < Dragon->CharacterArr.Num(); i++)
+	{
+		int distanceSize = (Dragon->CharacterArr[i]->GetActorLocation() - Dragon->GetActorLocation()).Size();
+		if (distanceSize <= ThresholdRadian)
+		{
+			if (Anim)
+			{
+				// true 리턴
+				Anim->bSleepEnd = true;
+			}
+		}
+	}
+	return bRtn;
 }
 #pragma endregion

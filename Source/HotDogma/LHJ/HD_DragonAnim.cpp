@@ -17,3 +17,8 @@ void UHD_DragonAnim::NativeInitializeAnimation()
 		Dragon = Cast<AHD_Dragon>(OwnerActor);
 	}
 }
+
+void UHD_DragonAnim::PlayShoutAnim()
+{
+	bPlayShoutAnim = true;
+}

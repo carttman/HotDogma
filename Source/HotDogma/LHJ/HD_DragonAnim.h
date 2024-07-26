@@ -16,14 +16,17 @@ class HOTDOGMA_API UHD_DragonAnim : public UAnimInstance
 	GENERATED_BODY()
 
 	virtual void NativeInitializeAnimation() override;
-	
+
 public:
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "FSM")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "FSM")
 	DragonState AnimState;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FSM")
 	class UHD_DragonFSM* fsm;
-	
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FSM")
 	class AHD_Dragon* Dragon;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FSM")
+	bool bSleepEnd = false;	// 플레이어 인지
 };

@@ -28,9 +28,18 @@ public:
 
 	
 public:
-	//camera
 	UPROPERTY(EditAnywhere)
-	class UCameraComponent* camera;
+	class USceneComponent* Left_WeaponScene;
 	UPROPERTY(EditAnywhere)
-	class USpringArmComponent* springArm;
+	class USceneComponent* Right_WeaponScene;
+	
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<class AHD_PlayerWeaponBase> PlayerWeaponFactory;
+
+	UPROPERTY(EditAnywhere)
+	class AHD_PlayerWeaponBase* Right_Weapon;
+	UPROPERTY(EditAnywhere)
+	class AHD_PlayerWeaponBase* Left_Weapon;
+public:
+	void AttachWeapon();
 };

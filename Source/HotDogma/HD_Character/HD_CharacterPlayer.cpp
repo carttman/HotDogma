@@ -3,8 +3,8 @@
 
 #include "../HD_Character/HD_CharacterPlayer.h"
 
-#include "Camera/CameraComponent.h"
-#include "GameFramework/SpringArmComponent.h"
+#include "HD_PlayerItem/HD_PlayerWeaponBase.h"
+#include "Kismet/GameplayStatics.h"
 
 // Sets default values
 AHD_CharacterPlayer::AHD_CharacterPlayer()
@@ -12,37 +12,32 @@ AHD_CharacterPlayer::AHD_CharacterPlayer()
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 	
-	// 메쉬 위치 셋팅
-	GetMesh()->SetRelativeLocation(FVector(0, 0, -88));
-	GetMesh()->SetRelativeRotation(FRotator(0, -90, 0));
+	// Left_Dagger = CreateDefaultSubobject<UChildActorComponent>(TEXT("Left_Dagger"));
+	// Left_Dagger->SetupAttachment(GetMesh(), TEXT("middle_01_l"));
+	// Left_Dagger->SetRelativeLocation(FVector(3.2,-3, -4.6));
+	// Left_Dagger->SetRelativeRotation(FRotator(0,-180,180));
+	// Left_Dagger->SetChildActorClass(PlayerWeaponBase);
+	//
+	// Right_Dagger = CreateDefaultSubobject<UChildActorComponent>(TEXT("Right_Dagger"));
+	// Right_Dagger->SetupAttachment(GetMesh(), TEXT("middle_01_r"));
+	// Right_Dagger->SetRelativeLocation(FVector(-4,2, 5));
+	// Right_Dagger->SetChildActorClass(PlayerWeaponBase);
+	Left_WeaponScene = CreateDefaultSubobject<USceneComponent>(TEXT("Left_WeaponScene"));
+	Left_WeaponScene->SetupAttachment(GetMesh(), TEXT("middle_01_l"));
+	Left_WeaponScene->SetRelativeLocation(FVector(3.2,-3, -4.6));
+	Left_WeaponScene->SetRelativeRotation(FRotator(0,-180,180));
 
-	//SpringArm 컴포넌트 생성
-	springArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("springArm"));
-	//springArm 을 RootComponent 의 자식 (루프 컴포넌트는 디폴트 기본 자식임)
-	springArm->SetupAttachment(RootComponent);
-	//springArm 위치를 바꾸자
-	springArm->SetRelativeLocation(FVector(0, 0, 0));
-	//springArm 각도 변경
-	springArm->SetRelativeRotation(FRotator(0, 0, 0));
-	springArm->TargetArmLength = 200;
-	springArm->ProbeChannel = ECollisionChannel::ECC_Visibility;
-	springArm->bUsePawnControlRotation = true;
-	springArm->SocketOffset = FVector(40, 35, 155);
-	springArm->bDoCollisionTest = false;
-	// camera setting
-	camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
-	//camera 를 springArm 의 자식으로 셋팅
-	camera->SetupAttachment(springArm);
-	//camera->SetupAttachment(GetMesh(), FName(TEXT("headSocket")));
-	camera->SetRelativeLocation(FVector(0, 0, 0));
-	camera->SetRelativeRotation(FRotator(-20, 0, 0));
+	Right_WeaponScene = CreateDefaultSubobject<USceneComponent>(TEXT("Right_WeaponScene"));
+	Right_WeaponScene->SetupAttachment(GetMesh(), TEXT("middle_01_r"));
+	Right_WeaponScene->SetRelativeLocation(FVector(-4,2, 5));
 }
 
 // Called when the game starts or when spawned
 void AHD_CharacterPlayer::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
+	AttachWeapon();
 }
 
 // Called every frame
@@ -57,5 +52,21 @@ void AHD_CharacterPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInput
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
+}
+
+void AHD_CharacterPlayer::AttachWeapon()
+{
+	// SpawnActorDeferred : BeginPlay
+	Left_Weapon = GetWorld()->SpawnActorDeferred<AHD_PlayerWeaponBase>(PlayerWeaponFactory, Left_WeaponScene->GetComponentTransform(), GetOwner());
+	Right_Weapon = GetWorld()->SpawnActorDeferred<AHD_PlayerWeaponBase>(PlayerWeaponFactory, Right_WeaponScene->GetComponentTransform(), GetOwner());
+	
+	UGameplayStatics::FinishSpawningActor(Left_Weapon, Left_WeaponScene->GetComponentTransform());
+	UGameplayStatics::FinishSpawningActor(Right_Weapon, Right_WeaponScene->GetComponentTransform());
+
+	Left_Weapon->AttachToComponent(Left_WeaponScene, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
+	Right_Weapon->AttachToComponent(Right_WeaponScene, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
+
+	Left_Weapon->SetOwner(GetOwner());
+	Right_Weapon->SetOwner(GetOwner());
 }
 

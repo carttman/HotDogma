@@ -9,6 +9,7 @@
 UENUM()
 enum class DragonState:uint8
 {
+	Sleep, // 초기 상태
 	Idle, // 대기
 	Shout, // 포효
 	Walk, // 걷기
@@ -44,14 +45,20 @@ public:
 
 #pragma region State Function
 	UFUNCTION()
+	void SleepState();
+
+	UFUNCTION()
 	void IdleState();
+
+	UFUNCTION()
+	void WalkState();
 
 	UFUNCTION()
 	void MoveState();
 #pragma endregion
 
 	UPROPERTY(EditAnywhere)
-	DragonState State = DragonState::Idle; //Default State를 Idle로 설정
+	DragonState State = DragonState::Sleep; //Default State를 Idle로 설정
 
 	UPROPERTY(BlueprintReadOnly, EditInstanceOnly)
 	class UHD_DragonAnim* Anim;
@@ -72,5 +79,10 @@ public:
 
 	// 타겟과 거리 내적값 추출
 	UFUNCTION()
-	double ChkDirectionFromCharacter();
+	double GetRadianFromCharacter();
+
+	UFUNCTION()
+	bool ChkCharacterIntoRadian();
+
+	
 };

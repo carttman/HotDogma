@@ -55,4 +55,15 @@ public:
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	class AHD_CharacterPlayer* Player;
+
+public:
+	UFUNCTION()
+	void AnimNotify_Damage_On();
+	UFUNCTION()
+	void AnimNotify_Damage_Off();
+
+	//UFUNCTION()
+	//void AnimNotify_Start_Hit();
+	//UFUNCTION()
+	//void AnimNotify_End_Hit();
 };

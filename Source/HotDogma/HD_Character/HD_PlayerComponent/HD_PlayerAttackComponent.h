@@ -24,5 +24,26 @@ public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
-		
+public:
+	void SetupPlayerInputComponent(class UEnhancedInputComponent* enhancedInputComponent);
+
+public:
+	void PlayerAttack();
+	void UpdatePlayerAttack(float DeltaTime);
+public:
+	UPROPERTY(EditAnywhere)
+	class UInputAction* IA_HD_Attack;
+public:
+	UPROPERTY(EditAnywhere)
+	class UAnimMontage* AM_BaseAttack;
+
+public:
+	UPROPERTY()
+	class AHD_CharacterBase* Player;
+
+	int32 ComboCount = 0;
+
+	float CurrComboTime = 0;
+	float MinComboTime = 0.5f;
+	float MaxComboTime = 1.4f;
 };

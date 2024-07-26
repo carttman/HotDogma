@@ -20,38 +20,6 @@ void UHD_PlayerAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 
 	if (Player)
 	{
-		// 앞 뒤 (dirV)
-		//dirV = FVector::DotProduct(Player->GetActorForwardVector(), Player->GetVelocity());
-
-		// 좌 우 (dirH)
-		//dirH = FVector::DotProduct(Player->GetActorRightVector(), Player->GetVelocity());
-
-		//0 ~ 360 --> -180 ~ 180
-		//pitchAngle = -Player->GetBaseAimRotation().Pitch;
-		
-		//pitchAngle = -Player->GetBaseAimRotation().GetNormalized().Pitch;
-
-		// GetVelocity의 크기가 0보다 크면 무브 true 로
-		//if (Player->GetVelocity().Length() > 0)
-		//{
-		//	ShouldMove = true;
-		//}
-		//else
-		//{
-		//	ShouldMove = false;
-		//}
-
-		//jumpVelocity = Player->GetVelocity().Z;
-
-		// 높이가 0보다 크면 falling
-		//if (jumpVelocity > 0)
-		//{
-		//	isFalling = true;
-		//}
-		//else if(jumpVelocity == 0)
-		//{
-		//	isFalling = false;
-		//}
 		Velocity = Player->GetCharacterMovement()->Velocity;
 		Speed = UKismetMathLibrary::VSizeXY(Velocity);
 		
@@ -61,4 +29,16 @@ void UHD_PlayerAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 		isFalling = Player->GetCharacterMovement()->IsFalling();
 		
 	}
+}
+
+void UHD_PlayerAnimInstance::AnimNotify_Damage_On()
+{
+	//캡슐 콜리전 on
+	UE_LOG(LogTemp, Warning, TEXT("On"));
+}
+
+void UHD_PlayerAnimInstance::AnimNotify_Damage_Off()
+{
+	//캡슐 콜리전 off
+	UE_LOG(LogTemp, Warning, TEXT("Off"));
 }

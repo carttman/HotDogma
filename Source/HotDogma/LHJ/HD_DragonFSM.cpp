@@ -3,6 +3,7 @@
 
 #include "../LHJ/HD_DragonFSM.h"
 
+#include "AIController.h"
 #include "HD_Dragon.h"
 #include "HD_DragonAnim.h"
 #include "HotDogma/HD_Character/HD_CharacterPlayer.h"
@@ -20,12 +21,6 @@ UHD_DragonFSM::UHD_DragonFSM()
 void UHD_DragonFSM::BeginPlay()
 {
 	Super::BeginPlay();
-
-	// NearTargetActor = UGameplayStatics::GetActorOfClass(GetWorld(), AHD_CharacterPlayer::StaticClass());
-	// if (!NearTargetActor)
-	// 	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("NearTargetActor Is NullPtr"));
-	// else
-	// 	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Blue, TEXT("NearTargetActor Is Not NullPtr"));
 
 	DragonActor = UGameplayStatics::GetActorOfClass(GetWorld(), AHD_Dragon::StaticClass());
 	if (!DragonActor)
@@ -55,7 +50,7 @@ void UHD_DragonFSM::BeginPlay()
 	else
 	{
 		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Blue, TEXT("Anim Is Not NullPtr"));
-		Anim->AnimState = State;
+		changeState(State);
 	}
 }
 #pragma endregion
@@ -72,7 +67,6 @@ void UHD_DragonFSM::TickComponent(float DeltaTime, ELevelTick TickType, FActorCo
 	{
 	case DragonState::Sleep:
 		SleepState();
-		
 		break;
 	case DragonState::Idle:
 		IdleState(DeltaTime);
@@ -90,35 +84,50 @@ void UHD_DragonFSM::SleepState()
 	if (Dragon->CharacterArr.Num() == 0)
 	{
 	}
-
+	NearTargetActor = UGameplayStatics::GetActorOfClass(GetWorld(), AHD_CharacterPlayer::StaticClass());
+	
 	// 일정거리 안에 플레이어가 들어오거나, 플레이어가 먼저 공격을 하면
 	// SleepEnd 애니메이션 재생을 하고,
 	// Idle 상태로 전환한다(노티파이 처리)
 	ChkCharacterIntoRadian();
 
-	if (Anim->bSleepEnd)
-		State = DragonState::Idle;
+	State = DragonState::Idle;
 }
 
 void UHD_DragonFSM::IdleState(float DeltaTime)
 {
-	if (!Anim->bPlayShoutAnim)
-	{
-		ShoutAnimCurrentTime += DeltaTime;
-
-		if (PlayShoutAnimTime <= ShoutAnimCurrentTime)
-			Anim->bPlayShoutAnim = true;
-	}
-
 	// 타겟을 지정한다.
-	for (int i = 0; i < Dragon->CharacterArr.Num(); i++)
+	ACharacter* ClosestCharacter = nullptr;
+	float MinDistance = FLT_MAX;
+
+	for (ACharacter* Character : Dragon->CharacterArr)
 	{
-		
+		if (Character && Dragon)
+		{
+			float Distance = FVector::Dist(Character->GetActorLocation(), Dragon->GetActorLocation());
+			if (Distance < MinDistance)
+			{
+				MinDistance = Distance;
+				ClosestCharacter = Character;
+			}
+		}
 	}
+
+	changeState(DragonState::Move);
 }
 
 void UHD_DragonFSM::MoveState(float DeltaTime)
 {
+	if (NearTargetActor)
+	{
+		// 날고있지 않을 때는 AI MOVE로 이동
+		if (!bFly)
+			MoveToLocation(NearTargetActor->GetActorLocation());
+		else
+		{
+			//날고있을 때는 P=P0+VT 사용
+		}
+	}
 }
 #pragma endregion
 
@@ -164,3 +173,23 @@ bool UHD_DragonFSM::ChkCharacterIntoRadian()
 	return bRtn;
 }
 #pragma endregion
+
+EPathFollowingRequestResult::Type UHD_DragonFSM::MoveToLocation(FVector targetLoc)
+{
+	FAIMoveRequest MoveRequest;
+	MoveRequest.SetGoalLocation(targetLoc);
+	MoveRequest.SetAcceptanceRadius(5.0f);
+
+	FNavPathSharedPtr NavPath;
+	FPathFollowingRequestResult Result = Dragon->AIController->MoveTo(MoveRequest, &NavPath);
+
+	return Result.Code;
+}
+
+void UHD_DragonFSM::changeState(DragonState NextState)
+{
+	if (Anim)
+		Anim->AnimState = NextState;
+
+	State = NextState;
+}

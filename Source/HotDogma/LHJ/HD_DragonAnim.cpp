@@ -15,6 +15,14 @@ void UHD_DragonAnim::NativeInitializeAnimation()
 		fsm = OwnerActor->FindComponentByClass<UHD_DragonFSM>();
 		//middleBoss = OwnerActor->FindComponentByClass<AHJ_MiddleBoss>();
 		Dragon = Cast<AHD_Dragon>(OwnerActor);
+
+		if(Dragon)
+		{
+			FVector velo = Dragon->GetVelocity();
+			FVector forwardVec = Dragon->GetActorForwardVector();
+			Speed = FVector::DotProduct(forwardVec, velo);
+			Direction = FVector::DotProduct(Dragon->GetActorRightVector(), velo);
+		}		
 	}
 }
 

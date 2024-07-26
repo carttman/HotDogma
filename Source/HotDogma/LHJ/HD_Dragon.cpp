@@ -3,6 +3,7 @@
 
 #include "../LHJ/HD_Dragon.h"
 
+#include "AIController.h"
 #include "EngineUtils.h"
 #include "HD_DragonFSM.h"
 #include "Components/CapsuleComponent.h"
@@ -45,6 +46,13 @@ void AHD_Dragon::BeginPlay()
 			if (!Character->GetActorLabel().Contains("Dragon"))
 				CharacterArr.Add(Character);
 		}
+	}
+
+	AIController = Cast<AAIController>(GetController());
+	if (!AIController)
+	{
+		AIController = GetWorld()->SpawnActor<AAIController>(AAIController::StaticClass(), GetActorLocation(), GetActorRotation());
+		AIController->Possess(this);
 	}
 }
 

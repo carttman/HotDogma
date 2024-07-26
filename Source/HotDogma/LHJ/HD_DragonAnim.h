@@ -36,12 +36,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void PlayShoutAnim();
 
-	UPROPERTY()
-	int32 PatternPageNum = 1;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Meta = (AllowPrivateAccess=true))
+	float Direction;
 
-	TArray<NormalAttackState> NormalAttackPattern1Page = {
-		NormalAttackState::Breath, NormalAttackState::ThunderMagic, NormalAttackState::HandPress
-	};
-
-	TArray<AirAttackState> AirAttackPattern;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Meta = (AllowPrivateAccess=true))
+	float Speed;	
 };

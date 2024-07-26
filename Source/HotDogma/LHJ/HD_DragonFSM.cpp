@@ -72,6 +72,7 @@ void UHD_DragonFSM::TickComponent(float DeltaTime, ELevelTick TickType, FActorCo
 	{
 	case DragonState::Sleep:
 		SleepState();
+		
 		break;
 	case DragonState::Idle:
 		IdleState(DeltaTime);

@@ -48,6 +48,16 @@ AHD_CharacterPlayer::AHD_CharacterPlayer()
 	//camera->SetupAttachment(GetMesh(), FName(TEXT("headSocket")));
 	camera->SetRelativeLocation(FVector(0, 0, 0));
 	camera->SetRelativeRotation(FRotator(-20, 0, 0));
+
+	Left_DaggerMesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("Left_DaggerMesh"));
+	Left_DaggerMesh->SetupAttachment(GetMesh(), TEXT("middle_01_l"));
+	Left_DaggerMesh->SetRelativeLocation(FVector(3.2,-3, -4.6));
+	Left_DaggerMesh->SetRelativeRotation(FRotator(0,-180,180));
+
+	Right_DaggerMesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("Right_DaggerMesh"));
+	Right_DaggerMesh->SetupAttachment(GetMesh(), TEXT("middle_01_r"));
+	Right_DaggerMesh->SetRelativeLocation(FVector(-4,2, 5));
+	//Left_DaggerMesh->SetRelativeRotation(FRotator(0,-180,180));
 }
 
 // Called when the game starts or when spawned

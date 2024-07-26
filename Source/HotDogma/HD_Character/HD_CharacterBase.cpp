@@ -7,6 +7,8 @@
 #include "EnhancedInputSubsystems.h"
 #include "HD_PlayerController.h"
 #include "Components/CapsuleComponent.h"
+#include "HD_PlayerComponent/HD_PlayerAttackComponent.h"
+#include "HD_PlayerComponent/PlayerStatusComponent.h"
 
 // Sets default values
 AHD_CharacterBase::AHD_CharacterBase()
@@ -20,6 +22,10 @@ AHD_CharacterBase::AHD_CharacterBase()
 	// 플레이어 캡슐 프로필
 	//GetCapsuleComponent()->SetCollisionProfileName(TEXT("PlayerColl"));
 	GetCapsuleComponent()->SetGenerateOverlapEvents(true);
+
+	PlayerAttackComponent = CreateDefaultSubobject<UHD_PlayerAttackComponent>(TEXT("PlayerAttackComponent"));
+	PlayerStatusComponent = CreateDefaultSubobject<UPlayerStatusComponent>(TEXT("PlayerStatusComponent"));
+	
 }
 
 // Called when the game starts or when spawned
@@ -39,6 +45,7 @@ void AHD_CharacterBase::BeginPlay()
 		//imc 맵핑
 		subSystem->AddMappingContext(imc_HDMapping, 0);
 	}
+
 }
 
 // Called every frame
@@ -60,6 +67,8 @@ void AHD_CharacterBase::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
 		enhancedInputComponent->BindAction(ia_DH_Look, ETriggerEvent::Triggered, this, &AHD_CharacterBase::EnhancedLook);
 		//enhancedInputComponent->BindAction(ia_DB_Jump, ETriggerEvent::Completed, this, &ACharacter::StopJumping);
 		enhancedInputComponent->BindAction(ia_DH_Jump, ETriggerEvent::Started, this, &AHD_CharacterBase::EnhancedJump);
+		enhancedInputComponent->BindAction(ia_DH_Attack, ETriggerEvent::Started, this, &AHD_CharacterBase::EnhancedAttack);
+		enhancedInputComponent->BindAction(ia_DH_Order, ETriggerEvent::Started, this, &AHD_CharacterBase::EnhancedOrder);
 		
 	}
 }
@@ -103,4 +112,12 @@ void AHD_CharacterBase::EnhancedLook(const FInputActionValue& InputActionValue)
 	AddControllerYawInput(dir.X);
 	AddControllerPitchInput(dir.Y);
 	//UE_LOG(LogTemp, , TEXT("%d"), x);
+}
+
+void AHD_CharacterBase::EnhancedAttack(const FInputActionValue& InputActionValue)
+{
+}
+
+void AHD_CharacterBase::EnhancedOrder(const FInputActionValue& InputActionValue)
+{
 }

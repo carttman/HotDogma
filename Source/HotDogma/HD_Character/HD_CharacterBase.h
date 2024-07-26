@@ -27,9 +27,6 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
-	void EnhancedMove(const FInputActionValue& InputActionValue);
-	void EnhancedJump(const FInputActionValue& InputActionValue);
-	void EnhancedLook(const FInputActionValue& InputActionValue);
 
 	//Input for Gameplay
 	UPROPERTY(EditAnywhere)
@@ -42,4 +39,20 @@ public:
 	class UInputAction* ia_DH_Look;
 	UPROPERTY(EditAnywhere)
 	class UInputAction* ia_DH_Jump;
+	UPROPERTY(EditAnywhere)
+	class UInputAction* ia_DH_Attack;
+	UPROPERTY(EditAnywhere)
+	class UInputAction* ia_DH_Order;
+
+	UPROPERTY(EditAnywhere)
+	class UHD_PlayerAttackComponent* PlayerAttackComponent;
+	UPROPERTY(EditAnywhere)
+	class UPlayerStatusComponent* PlayerStatusComponent;
+	
+public:
+	void EnhancedMove(const FInputActionValue& InputActionValue);
+	void EnhancedJump(const FInputActionValue& InputActionValue);
+	void EnhancedLook(const FInputActionValue& InputActionValue);
+	void EnhancedAttack(const FInputActionValue& InputActionValue);
+	void EnhancedOrder(const FInputActionValue& InputActionValue);
 };

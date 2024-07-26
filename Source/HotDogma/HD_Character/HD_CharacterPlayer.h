@@ -33,4 +33,10 @@ public:
 	class UCameraComponent* camera;
 	UPROPERTY(EditAnywhere)
 	class USpringArmComponent* springArm;
+
+	UPROPERTY(EditAnywhere)
+	class USkeletalMeshComponent* Left_DaggerMesh;
+
+	UPROPERTY(EditAnywhere)
+	class USkeletalMeshComponent* Right_DaggerMesh;
 };

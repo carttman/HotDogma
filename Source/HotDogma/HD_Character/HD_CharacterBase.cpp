@@ -11,6 +11,7 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "HD_PlayerComponent/HD_PlayerAttackComponent.h"
+#include "HD_PlayerComponent/HD_PlayerClimbComponent.h"
 #include "HD_PlayerComponent/PlayerStatusComponent.h"
 
 // Sets default values
@@ -62,6 +63,7 @@ AHD_CharacterBase::AHD_CharacterBase()
 	// Player 컴포넌트
 	PlayerAttackComponent = CreateDefaultSubobject<UHD_PlayerAttackComponent>(TEXT("PlayerAttackComponent"));
 	PlayerStatusComponent = CreateDefaultSubobject<UPlayerStatusComponent>(TEXT("PlayerStatusComponent"));
+	PlayerClimbComponent = CreateDefaultSubobject<UHD_PlayerClimbComponent>(TEXT("PlayerClimbComponent"));
 }
 
 // Called when the game starts or when spawned
@@ -105,13 +107,13 @@ void AHD_CharacterBase::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
 		enhancedInputComponent->BindAction(ia_DH_Order, ETriggerEvent::Started, this, &AHD_CharacterBase::EnhancedOrder);
 
 		PlayerAttackComponent->SetupPlayerInputComponent(enhancedInputComponent);
-		
+		PlayerClimbComponent->SetupPlayerInputComponent(enhancedInputComponent);
 	}
 }
 
 void AHD_CharacterBase::EnhancedMove(const FInputActionValue& InputActionValue)
 {
-	FVector2D MovementVector = InputActionValue.Get<FVector2D>();
+	MovementVector = InputActionValue.Get<FVector2D>();
 
 	if (Controller != nullptr)
 	{

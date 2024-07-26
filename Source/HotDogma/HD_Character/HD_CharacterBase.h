@@ -52,7 +52,11 @@ public:
 	class UHD_PlayerAttackComponent* PlayerAttackComponent;
 	UPROPERTY(EditAnywhere)
 	class UPlayerStatusComponent* PlayerStatusComponent;
-	
+	UPROPERTY(EditAnywhere)
+	class UHD_PlayerClimbComponent* PlayerClimbComponent;
+
+public:
+	FVector2D MovementVector;
 public:
 	void EnhancedMove(const FInputActionValue& InputActionValue);
 	void EnhancedJump(const FInputActionValue& InputActionValue);

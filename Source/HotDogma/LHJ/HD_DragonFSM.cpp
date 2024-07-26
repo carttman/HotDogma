@@ -74,10 +74,10 @@ void UHD_DragonFSM::TickComponent(float DeltaTime, ELevelTick TickType, FActorCo
 		SleepState();
 		break;
 	case DragonState::Idle:
-		IdleState();
+		IdleState(DeltaTime);
 		break;
-	case DragonState::Walk:
-		WalkState();
+	case DragonState::Move:
+		MoveState(DeltaTime);
 		break;
 	}
 }
@@ -88,9 +88,8 @@ void UHD_DragonFSM::SleepState()
 {
 	if (Dragon->CharacterArr.Num() == 0)
 	{
-		
 	}
-	
+
 	// 일정거리 안에 플레이어가 들어오거나, 플레이어가 먼저 공격을 하면
 	// SleepEnd 애니메이션 재생을 하고,
 	// Idle 상태로 전환한다(노티파이 처리)
@@ -100,19 +99,24 @@ void UHD_DragonFSM::SleepState()
 		State = DragonState::Idle;
 }
 
-void UHD_DragonFSM::IdleState()
+void UHD_DragonFSM::IdleState(float DeltaTime)
 {
+	if (!Anim->bPlayShoutAnim)
+	{
+		ShoutAnimCurrentTime += DeltaTime;
+
+		if (PlayShoutAnimTime <= ShoutAnimCurrentTime)
+			Anim->bPlayShoutAnim = true;
+	}
+
 	// 타겟을 지정한다.
 	for (int i = 0; i < Dragon->CharacterArr.Num(); i++)
 	{
+		
 	}
 }
 
-void UHD_DragonFSM::WalkState()
-{
-}
-
-void UHD_DragonFSM::MoveState()
+void UHD_DragonFSM::MoveState(float DeltaTime)
 {
 }
 #pragma endregion
@@ -140,8 +144,6 @@ double UHD_DragonFSM::GetRadianFromCharacter()
 bool UHD_DragonFSM::ChkCharacterIntoRadian()
 {
 	bool bRtn = false;
-	int32 ThresholdRadian = 500; // 인식 범위
-
 	// 월드에 있는 캐릭터를 가지고 와서 배열에 저장(BeginPlay에 작성)
 	// 임시로 캐릭터로 지정
 	// 일정 거리 안에 들어온 캐릭터가 있으면
@@ -154,6 +156,7 @@ bool UHD_DragonFSM::ChkCharacterIntoRadian()
 			{
 				// true 리턴
 				Anim->bSleepEnd = true;
+				break;
 			}
 		}
 	}

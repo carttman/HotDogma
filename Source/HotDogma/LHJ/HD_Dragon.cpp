@@ -19,7 +19,7 @@ AHD_Dragon::AHD_Dragon()
 
 	SkeletalComp = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("SkeletalComp"));
 	SetRootComponent(SkeletalComp);
-
+	SkeletalComp->SetGenerateOverlapEvents(true);
 	ConstructorHelpers::FObjectFinder<USkeletalMesh> tempSkeleton(TEXT(
 		"/Script/Engine.PhysicsAsset'/Game/LHJ/UnkaDragon/Meshes/UnkaDragon/SK_Unka_Realistic_TEST_PhysicsAsset.SK_Unka_Realistic_TEST_PhysicsAsset'"));
 	//(Pitch=0.000000,Yaw=-90.000000,Roll=0.000000)

@@ -2,7 +2,6 @@
 
 
 #include "../LHJ/HD_DragonAnim.h"
-
 #include "HD_Dragon.h"
 
 void UHD_DragonAnim::NativeInitializeAnimation()
@@ -16,13 +15,13 @@ void UHD_DragonAnim::NativeInitializeAnimation()
 		//middleBoss = OwnerActor->FindComponentByClass<AHJ_MiddleBoss>();
 		Dragon = Cast<AHD_Dragon>(OwnerActor);
 
-		if(Dragon)
+		if (Dragon)
 		{
 			FVector velo = Dragon->GetVelocity();
 			FVector forwardVec = Dragon->GetActorForwardVector();
 			Speed = FVector::DotProduct(forwardVec, velo);
 			Direction = FVector::DotProduct(Dragon->GetActorRightVector(), velo);
-		}		
+		}
 	}
 }
 
@@ -34,6 +33,26 @@ void UHD_DragonAnim::PlayShoutAnim()
 void UHD_DragonAnim::ChangeState(DragonState ChangeState)
 {
 	AnimState = ChangeState;
-	if(fsm)
+	if (fsm)
 		fsm->State = ChangeState;
+}
+
+void UHD_DragonAnim::ChangeNormalAttack(NormalAttackState ChangeState)
+{
+	AnimNormalAttackState = ChangeState;
+	if (fsm)
+		fsm->normalAttackState = ChangeState;
+}
+
+void UHD_DragonAnim::ChangeFlyAttack(FlyAttackState ChangeState)
+{
+	AnimFlyAttackStateState = ChangeState;
+	if (fsm)
+		fsm->flyAttackState = ChangeState;
+}
+
+void UHD_DragonAnim::StartFlyUpFunction()
+{
+	if (fsm)
+		fsm->bStartFlyPress = true;
 }

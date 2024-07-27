@@ -80,6 +80,9 @@ void UHD_DragonFSM::TickComponent(float DeltaTime, ELevelTick TickType, FActorCo
 	case DragonState::Move:
 		MoveState(DeltaTime);
 		break;
+	case DragonState::NormalAttack:
+		FlyPress(DeltaTime);
+		break;
 	}
 }
 #pragma endregion
@@ -91,7 +94,7 @@ void UHD_DragonFSM::SleepState()
 	{
 	}
 	NearTargetActor = UGameplayStatics::GetActorOfClass(GetWorld(), AHD_CharacterPlayer::StaticClass());
- 
+
 	// 일정거리 안에 플레이어가 들어오거나, 플레이어가 먼저 공격을 하면
 	// SleepEnd 애니메이션 재생을 하고,
 	// Idle 상태로 전환한다(노티파이 처리)
@@ -118,44 +121,99 @@ void UHD_DragonFSM::IdleState(float DeltaTime)
 			}
 		}
 	}
-
-	// if (ClosestCharacter)
-	// {
-	// 	State = DragonState::Move;
-	// 	if (Anim)
-	// 		Anim->AnimState = State;
-	// }
-	//changeState(DragonState::Move);
 }
-FVector targetVec ;
+
 void UHD_DragonFSM::MoveState(float DeltaTime)
 {
 	if (NearTargetActor)
 	{
-		FVector p0 = Dragon->GetActorLocation();
-		targetVec = NearTargetActor->GetActorLocation() - p0;
-		targetVec.Z = 0;
-		targetVec.Normalize();
-		//const FRotator YawRotation(0, targetVec.Rotation().Yaw, 0);
-		//float speed = Dragon->GetVelocity().Size();
-		// FVector dir_ = p0 + targetVec * speed * DeltaTime;
-		//
-		// Dragon->SetActorRotation(dir_.Rotation());
-		//FVector forwardVec = UKismetMathLibrary::GetForwardVector(YawRotation);
-		//Dragon->AddMovementInput(targetVec, 1.0f);
-
-		auto* ai = Cast<AAIController>(Dragon->Controller);
-
-		ai->MoveToLocation(NearTargetActor->GetActorLocation());
 		// 날고있지 않을 때는 AI MOVE로 이동
 		if (!bFly)
 		{
-			//auto result = MoveToLocation(NearTargetActor->GetActorLocation());
+			auto* ai = Cast<AAIController>(Dragon->Controller);
+			ai->MoveToLocation(NearTargetActor->GetActorLocation());
 		}
 		else
 		{
 			//날고있을 때는 P=P0+VT 사용
 		}
+	}
+}
+
+void UHD_DragonFSM::F_NormalAttackState(float DeltaTime)
+{
+	switch (normalAttackState)
+	{
+	case NormalAttackState::Scratch:
+		break;
+	}
+}
+
+float x, y, z;
+float Alpha = 0.f;
+FVector StartLocation, TargetLoc;
+float FallSpeed = 0.f; // 초기 낙하 속도
+
+void UHD_DragonFSM::FlyPress(float DeltaTime)
+{
+	if (!Dragon || !Anim)
+		return;
+
+	if (bStartFlyPress)
+	{
+		// 캐릭터의 movement가 flying이 아니면 설정한다.
+		if (!Dragon->GetCharacterMovement()->GetMovementName().Contains("Flying"))
+		{
+			Dragon->GetCharacterMovement()->SetMovementMode(MOVE_Flying);
+			TargetLoc = Dragon->GetActorLocation();
+		}
+
+		UKismetMathLibrary::BreakVector(Dragon->GetActorLocation(), x, y, z);
+
+		if (z < FlyPressHeight)
+		{
+			Dragon->AddMovementInput(FVector(0, 0, 1000));
+		}
+		else
+		{
+			Anim->bEndFlyUp = true;
+			bStartFlyPress = false;
+		}
+	}
+
+	if (Anim->bFlyPress)
+	{
+		// 낙하 시작
+		//Alpha += DeltaTime;
+		FallSpeed += 980.f * DeltaTime*1.5; // 중력 가속도 적용 (m/s^2)
+		FVector FallVelocity = FVector(0.f, 0.f, -FallSpeed); // 낙하 속도 설정
+		//FVector FallVelocity = FVector(0.f, 0.f, -3000.f); // 낙하 속도 설정
+		FVector CurrentLocation = Dragon->GetActorLocation();
+		FVector NewLocation = CurrentLocation + FallVelocity * DeltaTime;
+
+		Dragon->SetActorLocation(NewLocation);
+
+		// 땅에 닿았는지 체크 (여기서는 Z 축 0을 기준으로)
+		if (NewLocation.Z <= 89.f)
+		{
+			Dragon->GetCharacterMovement()->SetMovementMode(MOVE_Walking);
+			Anim->bEndFlyUp = true;
+			bStartFlyPress = false;
+			Anim->bFlyPress = false; // 낙하 완료 상태로 전환
+		}
+		// if (Dragon->GetActorLocation().Z > 89.650002)
+		// {
+		// 	Alpha += DeltaTime;
+		// 	StartLocation = Dragon->GetActorLocation();
+		// 	FVector newLoc = FMath::Lerp(StartLocation, TargetLoc, Alpha);
+		// 	Dragon->AddMovementInput(newLoc, 100.f, true);
+		// }
+		// else
+		// {
+		// 	Dragon->GetCharacterMovement()->SetMovementMode(MOVE_Walking);
+		// 	Anim->bEndFlyUp = true;
+		// 	bStartFlyPress = false;
+		// }
 	}
 }
 #pragma endregion

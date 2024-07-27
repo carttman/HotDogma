@@ -29,14 +29,24 @@ public:
 
 	UPROPERTY(EditAnywhere)
 	class UInputAction* IA_Player_Climb;
-
-	class AHD_CharacterBase* Player;
+	UPROPERTY(EditAnywhere)
+	class AHD_CharacterPlayer* Player;
 public:
 	void Climb();
 	void TraceMovement();
-	UFUNCTION(BlueprintCallable)
-	FVector GetMovementDirection();
+	//UFUNCTION(BlueprintCallable)
+	//FVector GetMovementDirection();
 
+	void ClimbMove();
+	
 	FHitResult Hit_F1;
 	FHitResult Hit_F2;
+	FHitResult Hit_R;
+
+	FVector Target_Location;
+	FRotator Target_Rotation;
+
+public:
+	void GrabWall();
+	
 };

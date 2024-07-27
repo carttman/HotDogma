@@ -3,6 +3,10 @@
 
 #include "../HD_Character/HD_CharacterPlayer.h"
 
+#include "EnhancedInputComponent.h"
+#include "HD_PlayerComponent/HD_PlayerAttackComponent.h"
+#include "HD_PlayerComponent/HD_PlayerClimbComponent.h"
+#include "HD_PlayerComponent/PlayerStatusComponent.h"
 #include "HD_PlayerItem/HD_PlayerWeaponBase.h"
 #include "Kismet/GameplayStatics.h"
 
@@ -30,6 +34,11 @@ AHD_CharacterPlayer::AHD_CharacterPlayer()
 	Right_WeaponScene = CreateDefaultSubobject<USceneComponent>(TEXT("Right_WeaponScene"));
 	Right_WeaponScene->SetupAttachment(GetMesh(), TEXT("middle_01_r"));
 	Right_WeaponScene->SetRelativeLocation(FVector(-4,2, 5));
+
+	// Player 컴포넌트
+	PlayerAttackComponent = CreateDefaultSubobject<UHD_PlayerAttackComponent>(TEXT("PlayerAttackComponent"));
+	PlayerStatusComponent = CreateDefaultSubobject<UPlayerStatusComponent>(TEXT("PlayerStatusComponent"));
+	PlayerClimbComponent = CreateDefaultSubobject<UHD_PlayerClimbComponent>(TEXT("PlayerClimbComponent"));
 }
 
 // Called when the game starts or when spawned
@@ -52,6 +61,12 @@ void AHD_CharacterPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInput
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
+	UEnhancedInputComponent* enhancedInputComponent = Cast<UEnhancedInputComponent>(PlayerInputComponent);
+	if (enhancedInputComponent != nullptr)
+	{
+		PlayerAttackComponent->SetupPlayerInputComponent(enhancedInputComponent);
+		PlayerClimbComponent->SetupPlayerInputComponent(enhancedInputComponent);
+	}
 }
 
 void AHD_CharacterPlayer::AttachWeapon()

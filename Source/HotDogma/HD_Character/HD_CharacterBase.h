@@ -48,12 +48,7 @@ public:
 	UPROPERTY(EditAnywhere)
 	class UInputAction* ia_DH_Order;
 
-	UPROPERTY(EditAnywhere)
-	class UHD_PlayerAttackComponent* PlayerAttackComponent;
-	UPROPERTY(EditAnywhere)
-	class UPlayerStatusComponent* PlayerStatusComponent;
-	UPROPERTY(EditAnywhere)
-	class UHD_PlayerClimbComponent* PlayerClimbComponent;
+	
 
 public:
 	FVector2D MovementVector;

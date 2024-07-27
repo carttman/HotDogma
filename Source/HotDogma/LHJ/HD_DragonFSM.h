@@ -4,40 +4,41 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
+#include "Navigation/PathFollowingComponent.h"
 #include "HD_DragonFSM.generated.h"
 
 UENUM()
 enum class DragonState:uint8
 {
-	Sleep,		// 초기 상태
-	Idle,		// 대기
-	Shout,		// 포효
-	Move,		// 걷기
-	Attack,		//공격
-	FlyUp,		// 이륙
-	FlyDown,	// 착륙
-	Groggy		// 그로기
+	Sleep, // 초기 상태
+	Idle, // 대기
+	Shout, // 포효
+	Move, // 걷기
+	Attack, //공격
+	FlyUp, // 이륙
+	FlyDown, // 착륙
+	Groggy // 그로기
 };
 
 UENUM()
 enum class NormalAttackState:uint8
 {
-	Breath,			// 브레스
-	Shout,			// 포효
-	HandPress,		// 손바닥 내려치기
-	Scratch,		// 할퀴기	
-	TailSlap,		// 꼬리치기
-	ThunderMagic,	// 전기마법공격
-	Meteor,			// 메테오
+	Breath, // 브레스
+	Shout, // 포효
+	HandPress, // 손바닥 내려치기
+	Scratch, // 할퀴기	
+	TailSlap, // 꼬리치기
+	ThunderMagic, // 전기마법공격
+	Meteor, // 메테오
 };
 
 UENUM()
 enum class AirAttackState:uint8
 {
-	FlyPress,		// 날아 올랐다가 찍기
-	FlyBreath,		// 공중 브레스
-	ThunderMagic,	// 전기마법공격
-	Meteor,			// 메테오
+	FlyPress, // 날아 올랐다가 찍기
+	FlyBreath, // 공중 브레스
+	ThunderMagic, // 전기마법공격
+	Meteor, // 메테오
 };
 
 UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
@@ -106,4 +107,25 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float PlayShoutAnimTime = 5.f;
 #pragma endregion
+
+#pragma region Move Function
+	//EPathFollowingRequestResult::Type MoveToLocation(FVector targetLoc);
+
+	UPROPERTY()
+	bool bFly = false;
+#pragma endregion
+
+#pragma region Attack
+	UPROPERTY()
+	int32 PatternPageNum = 1;
+
+	TArray<NormalAttackState> NormalAttackPattern1Page = {
+		NormalAttackState::Breath, NormalAttackState::ThunderMagic, NormalAttackState::HandPress
+	};
+
+	TArray<AirAttackState> AirAttackPattern;
+#pragma endregion
+
+	// UFUNCTION()
+	// void changeState(DragonState NextState);
 };

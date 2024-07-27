@@ -3,9 +3,12 @@
 
 #include "../LHJ/HD_Dragon.h"
 
+#include "AIController.h"
 #include "EngineUtils.h"
 #include "HD_DragonFSM.h"
 #include "Components/CapsuleComponent.h"
+#include "GameFramework/Character.h"
+#include "GameFramework/FloatingPawnMovement.h"
 
 // Sets default values
 AHD_Dragon::AHD_Dragon()
@@ -18,15 +21,20 @@ AHD_Dragon::AHD_Dragon()
 	// CapsuleComp->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 
 	SkeletalComp = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("SkeletalComp"));
-	SetRootComponent(SkeletalComp);
+	//SetRootComponent(SkeletalComp);
+	SkeletalComp->SetupAttachment(RootComponent);
 	SkeletalComp->SetGenerateOverlapEvents(true);
 	ConstructorHelpers::FObjectFinder<USkeletalMesh> tempSkeleton(TEXT(
-		"/Script/Engine.PhysicsAsset'/Game/LHJ/UnkaDragon/Meshes/UnkaDragon/SK_Unka_Realistic_TEST_PhysicsAsset.SK_Unka_Realistic_TEST_PhysicsAsset'"));
+		"/Script/Engine.SkeletalMesh'/Game/LHJ/UnkaDragon/Meshes/UnkaDragon/SK_Unka_Realistic.SK_Unka_Realistic'"));
 	//(Pitch=0.000000,Yaw=-90.000000,Roll=0.000000)
 	if (tempSkeleton.Succeeded())
 	{
 		SkeletalComp->SetSkeletalMesh(tempSkeleton.Object);
 	}
+	
+	// FloatingPawnMovement 컴포넌트 생성 및 추가
+	// MovementComponent = CreateDefaultSubobject<UFloatingPawnMovement>(TEXT("MovementComponent"));
+	// MovementComponent->MaxSpeed = 800.f;
 
 	fsm = CreateDefaultSubobject<UHD_DragonFSM>(TEXT("FSM"));
 }
@@ -46,6 +54,13 @@ void AHD_Dragon::BeginPlay()
 				CharacterArr.Add(Character);
 		}
 	}
+
+	// AIController = Cast<AAIController>(GetController());
+	// if (!AIController)
+	// {
+	// 	//AIController = GetWorld()->SpawnActor<AAIController>(AAIController::StaticClass(), GetActorLocation(), GetActorRotation());
+	// 	//AIController->Possess(this);
+	// }
 }
 
 // Called every frame

@@ -3,11 +3,11 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameFramework/Character.h"
+#include "GameFramework/Pawn.h"
 #include "HD_Dragon.generated.h"
 
 UCLASS()
-class HOTDOGMA_API AHD_Dragon : public ACharacter
+class HOTDOGMA_API AHD_Dragon : public APawn
 {
 	GENERATED_BODY()
 	
@@ -31,6 +31,9 @@ public:
 	// 스켈레탈 매쉬
 	UPROPERTY(EditAnywhere)
 	class USkeletalMeshComponent* SkeletalComp;
+	
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Movement, meta = (AllowPrivateAccess = "true"))
+	class UFloatingPawnMovement* MovementComponent;
 	
 	UPROPERTY()
 	class AAIController* AIController;

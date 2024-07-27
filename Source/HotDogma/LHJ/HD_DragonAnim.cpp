@@ -30,3 +30,10 @@ void UHD_DragonAnim::PlayShoutAnim()
 {
 	bPlayShoutAnim = true;
 }
+
+void UHD_DragonAnim::ChangeState(DragonState ChangeState)
+{
+	AnimState = ChangeState;
+	if(fsm)
+		fsm->State = ChangeState;
+}

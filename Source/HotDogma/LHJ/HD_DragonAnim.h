@@ -40,5 +40,8 @@ public:
 	float Direction;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Meta = (AllowPrivateAccess=true))
-	float Speed;	
+	float Speed;
+
+	UFUNCTION(BlueprintCallable)
+	void ChangeState(DragonState ChangeState);
 };

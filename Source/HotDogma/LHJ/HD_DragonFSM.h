@@ -115,7 +115,7 @@ public:
 	bool bFly = false;
 #pragma endregion
 
-#pragma region
+#pragma region Attack
 	UPROPERTY()
 	int32 PatternPageNum = 1;
 
@@ -126,6 +126,6 @@ public:
 	TArray<AirAttackState> AirAttackPattern;
 #pragma endregion
 
-	UFUNCTION()
-	void changeState(DragonState NextState);
+	// UFUNCTION()
+	// void changeState(DragonState NextState);
 };

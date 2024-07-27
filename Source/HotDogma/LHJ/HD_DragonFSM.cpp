@@ -50,7 +50,9 @@ void UHD_DragonFSM::BeginPlay()
 	else
 	{
 		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Blue, TEXT("Anim Is Not NullPtr"));
-		changeState(State);
+
+		if (Anim)
+			Anim->AnimState = State;
 	}
 }
 #pragma endregion
@@ -85,13 +87,13 @@ void UHD_DragonFSM::SleepState()
 	{
 	}
 	NearTargetActor = UGameplayStatics::GetActorOfClass(GetWorld(), AHD_CharacterPlayer::StaticClass());
-	
+
 	// 일정거리 안에 플레이어가 들어오거나, 플레이어가 먼저 공격을 하면
 	// SleepEnd 애니메이션 재생을 하고,
 	// Idle 상태로 전환한다(노티파이 처리)
 	ChkCharacterIntoRadian();
 
-	State = DragonState::Idle;
+	//State = DragonState::Idle;
 }
 
 void UHD_DragonFSM::IdleState(float DeltaTime)
@@ -113,7 +115,13 @@ void UHD_DragonFSM::IdleState(float DeltaTime)
 		}
 	}
 
-	changeState(DragonState::Move);
+	// if (ClosestCharacter)
+	// {
+	// 	State = DragonState::Move;
+	// 	if (Anim)
+	// 		Anim->AnimState = State;
+	// }
+	//changeState(DragonState::Move);
 }
 
 void UHD_DragonFSM::MoveState(float DeltaTime)
@@ -122,7 +130,9 @@ void UHD_DragonFSM::MoveState(float DeltaTime)
 	{
 		// 날고있지 않을 때는 AI MOVE로 이동
 		if (!bFly)
-			MoveToLocation(NearTargetActor->GetActorLocation());
+		{
+			auto result = MoveToLocation(NearTargetActor->GetActorLocation());
+		}
 		else
 		{
 			//날고있을 때는 P=P0+VT 사용
@@ -140,7 +150,6 @@ double UHD_DragonFSM::GetRadianFromCharacter()
 	{
 		dir = NearTargetActor->GetActorLocation() - DragonActor->GetActorLocation();
 		dir.Normalize();
-
 		FVector forward = DragonActor->GetActorForwardVector();
 
 		double dot = UKismetMathLibrary::Dot_VectorVector(forward, dir);
@@ -177,6 +186,7 @@ bool UHD_DragonFSM::ChkCharacterIntoRadian()
 EPathFollowingRequestResult::Type UHD_DragonFSM::MoveToLocation(FVector targetLoc)
 {
 	FAIMoveRequest MoveRequest;
+	Dragon->SetActorRotation((targetLoc - Dragon->GetActorLocation()).GetSafeNormal().Rotation());
 	MoveRequest.SetGoalLocation(targetLoc);
 	MoveRequest.SetAcceptanceRadius(5.0f);
 
@@ -186,10 +196,10 @@ EPathFollowingRequestResult::Type UHD_DragonFSM::MoveToLocation(FVector targetLo
 	return Result.Code;
 }
 
-void UHD_DragonFSM::changeState(DragonState NextState)
-{
-	if (Anim)
-		Anim->AnimState = NextState;
-
-	State = NextState;
-}
+// void UHD_DragonFSM::changeState(DragonState NextState)
+// {
+// 	if (Anim)
+// 		Anim->AnimState = NextState;
+//
+// 	State = NextState;
+// }

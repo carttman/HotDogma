@@ -92,7 +92,19 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float FlyPressHeight = 500; // 공중찍기 높이
+
+	UPROPERTY()
+	float x;
+	UPROPERTY()
+	float y;
+	UPROPERTY()
+	float z;
+	UPROPERTY()
+	float FallSpeed = 0.f; // 초기 낙하 속도
 #pragma endregion
+
+	UFUNCTION()
+	void NormalBreath(float DeltaTime);
 
 #pragma endregion
 

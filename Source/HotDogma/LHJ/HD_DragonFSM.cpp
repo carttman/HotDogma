@@ -81,7 +81,7 @@ void UHD_DragonFSM::TickComponent(float DeltaTime, ELevelTick TickType, FActorCo
 		MoveState(DeltaTime);
 		break;
 	case DragonState::NormalAttack:
-		FlyPress(DeltaTime);
+		F_NormalAttackState(DeltaTime);
 		break;
 	}
 }
@@ -146,14 +146,17 @@ void UHD_DragonFSM::F_NormalAttackState(float DeltaTime)
 	{
 	case NormalAttackState::Scratch:
 		break;
+	case NormalAttackState::JumpPress:
+		FlyPress(DeltaTime);
+		break;
+	case NormalAttackState::Breath:
+		NormalBreath(DeltaTime);
+		break;
 	}
 }
+#pragma endregion
 
-float x, y, z;
-float Alpha = 0.f;
-FVector StartLocation, TargetLoc;
-float FallSpeed = 0.f; // 초기 낙하 속도
-
+#pragma region Normal Attack Function
 void UHD_DragonFSM::FlyPress(float DeltaTime)
 {
 	if (!Dragon || !Anim)
@@ -165,7 +168,6 @@ void UHD_DragonFSM::FlyPress(float DeltaTime)
 		if (!Dragon->GetCharacterMovement()->GetMovementName().Contains("Flying"))
 		{
 			Dragon->GetCharacterMovement()->SetMovementMode(MOVE_Flying);
-			TargetLoc = Dragon->GetActorLocation();
 		}
 
 		UKismetMathLibrary::BreakVector(Dragon->GetActorLocation(), x, y, z);
@@ -197,24 +199,15 @@ void UHD_DragonFSM::FlyPress(float DeltaTime)
 		if (NewLocation.Z <= 89.f)
 		{
 			Dragon->GetCharacterMovement()->SetMovementMode(MOVE_Walking);
-			Anim->bEndFlyUp = true;
+			Anim->bEndFlyUp = false;
 			bStartFlyPress = false;
 			Anim->bFlyPress = false; // 낙하 완료 상태로 전환
 		}
-		// if (Dragon->GetActorLocation().Z > 89.650002)
-		// {
-		// 	Alpha += DeltaTime;
-		// 	StartLocation = Dragon->GetActorLocation();
-		// 	FVector newLoc = FMath::Lerp(StartLocation, TargetLoc, Alpha);
-		// 	Dragon->AddMovementInput(newLoc, 100.f, true);
-		// }
-		// else
-		// {
-		// 	Dragon->GetCharacterMovement()->SetMovementMode(MOVE_Walking);
-		// 	Anim->bEndFlyUp = true;
-		// 	bStartFlyPress = false;
-		// }
 	}
+}
+
+void UHD_DragonFSM::NormalBreath(float DeltaTime)
+{
 }
 #pragma endregion
 

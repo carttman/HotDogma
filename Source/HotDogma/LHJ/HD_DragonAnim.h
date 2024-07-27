@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "HD_DragonFSM.h"
 #include "Animation/AnimInstance.h"
+
 #include "HD_DragonAnim.generated.h"
 
 /**
@@ -21,6 +22,12 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "FSM")
 	DragonState AnimState;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "FSM")
+	NormalAttackState AnimNormalAttackState;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "FSM")
+	FlyAttackState AnimFlyAttackStateState;
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FSM")
 	class UHD_DragonFSM* fsm;
 
@@ -33,6 +40,12 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FSM")
 	bool bPlayShoutAnim = false;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FSM")
+	bool bFlyPress = false;	// 공중 찍기 시전
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FSM")
+	bool bEndFlyUp = false;	// 날아 오르기 완료
+
 	UFUNCTION(BlueprintCallable)
 	void PlayShoutAnim();
 
@@ -44,4 +57,13 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void ChangeState(DragonState ChangeState);
+
+	UFUNCTION(BlueprintCallable)
+	void ChangeNormalAttack(NormalAttackState ChangeState);
+
+	UFUNCTION(BlueprintCallable)
+	void ChangeFlyAttack(FlyAttackState ChangeState);
+
+	UFUNCTION(BlueprintCallable)
+	void StartFlyUpFunction();
 };

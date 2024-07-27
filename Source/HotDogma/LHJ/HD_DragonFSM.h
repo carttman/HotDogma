@@ -14,7 +14,8 @@ enum class DragonState:uint8
 	Idle, // 대기
 	Shout, // 포효
 	Move, // 걷기
-	Attack, //공격
+	NormalAttack, //일반공격
+	FlyAttack, //공중공격
 	FlyUp, // 이륙
 	FlyDown, // 착륙
 	Groggy // 그로기
@@ -30,10 +31,11 @@ enum class NormalAttackState:uint8
 	TailSlap, // 꼬리치기
 	ThunderMagic, // 전기마법공격
 	Meteor, // 메테오
+	JumpPress // 공중찍기
 };
 
 UENUM()
-enum class AirAttackState:uint8
+enum class FlyAttackState:uint8
 {
 	FlyPress, // 날아 올랐다가 찍기
 	FlyBreath, // 공중 브레스
@@ -68,10 +70,40 @@ public:
 
 	UFUNCTION()
 	void MoveState(float DeltaTime);
+
+	UFUNCTION()
+	void F_NormalAttackState(float DeltaTime);
+#pragma endregion
+
+#pragma region Normal Attack Function
+
+#pragma region FlyPress
+	UFUNCTION()
+	void FlyPress(float DeltaTime);
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float FlyPressCollTime = 10.f; // 공중찍기 스킬 쿨타임
+
+	UPROPERTY()
+	bool bUseFlyPress = true; // 공중찍기 스킬 사용 여부
+
+	UPROPERTY()
+	bool bStartFlyPress = false; // 공중찍기 시작
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float FlyPressHeight = 500; // 공중찍기 높이
+#pragma endregion
+
 #pragma endregion
 
 	UPROPERTY(EditAnywhere)
 	DragonState State = DragonState::Sleep; //Default State를 Idle로 설정
+
+	UPROPERTY(EditAnywhere)
+	NormalAttackState normalAttackState;
+
+	UPROPERTY(EditAnywhere)
+	FlyAttackState flyAttackState;
 
 	UPROPERTY(BlueprintReadOnly, EditInstanceOnly)
 	class UHD_DragonAnim* Anim;
@@ -123,7 +155,7 @@ public:
 		NormalAttackState::Breath, NormalAttackState::ThunderMagic, NormalAttackState::HandPress
 	};
 
-	TArray<AirAttackState> AirAttackPattern;
+	TArray<FlyAttackState> AirAttackPattern;
 #pragma endregion
 
 	// UFUNCTION()

@@ -21,7 +21,8 @@ AHD_Dragon::AHD_Dragon()
 	// CapsuleComp->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 
 	SkeletalComp = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("SkeletalComp"));
-	SetRootComponent(SkeletalComp);
+	//SetRootComponent(SkeletalComp);
+	SkeletalComp->SetupAttachment(RootComponent);
 	SkeletalComp->SetGenerateOverlapEvents(true);
 	ConstructorHelpers::FObjectFinder<USkeletalMesh> tempSkeleton(TEXT(
 		"/Script/Engine.SkeletalMesh'/Game/LHJ/UnkaDragon/Meshes/UnkaDragon/SK_Unka_Realistic.SK_Unka_Realistic'"));
@@ -32,8 +33,8 @@ AHD_Dragon::AHD_Dragon()
 	}
 	
 	// FloatingPawnMovement 컴포넌트 생성 및 추가
-	MovementComponent = CreateDefaultSubobject<UFloatingPawnMovement>(TEXT("MovementComponent"));
-	MovementComponent->MaxSpeed = 800.f;
+	// MovementComponent = CreateDefaultSubobject<UFloatingPawnMovement>(TEXT("MovementComponent"));
+	// MovementComponent->MaxSpeed = 800.f;
 
 	fsm = CreateDefaultSubobject<UHD_DragonFSM>(TEXT("FSM"));
 }
@@ -54,12 +55,12 @@ void AHD_Dragon::BeginPlay()
 		}
 	}
 
-	AIController = Cast<AAIController>(GetController());
-	if (!AIController)
-	{
-		AIController = GetWorld()->SpawnActor<AAIController>(AAIController::StaticClass(), GetActorLocation(), GetActorRotation());
-		AIController->Possess(this);
-	}
+	// AIController = Cast<AAIController>(GetController());
+	// if (!AIController)
+	// {
+	// 	//AIController = GetWorld()->SpawnActor<AAIController>(AAIController::StaticClass(), GetActorLocation(), GetActorRotation());
+	// 	//AIController->Possess(this);
+	// }
 }
 
 // Called every frame

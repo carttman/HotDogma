@@ -16,66 +16,11 @@
       <change beforePath="$PROJECT_DIR$/Content/LHJ/BluePrints/ABP_DragonAnim.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/LHJ/BluePrints/ABP_DragonAnim.uasset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Content/LHJ/BluePrints/BP_Dragon.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/LHJ/BluePrints/BP_Dragon.uasset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Content/LHJ/BluePrints/BS_Dragon.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/LHJ/BluePrints/BS_Dragon.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/LHJ/QuadrapedCreatures/MountainDragon/Animations/ANIM_MOUNTAIN_DRAGON_ClawsAttack2HitComboForward.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/LHJ/QuadrapedCreatures/MountainDragon/Animations/ANIM_MOUNTAIN_DRAGON_ClawsAttack2HitComboForward_RM.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/LHJ/QuadrapedCreatures/MountainDragon/Animations/ANIM_MOUNTAIN_DRAGON_FlyStationary.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/LHJ/QuadrapedCreatures/MountainDragon/Animations/ANIM_MOUNTAIN_DRAGON_FlyStationaryGetHit.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/LHJ/QuadrapedCreatures/MountainDragon/Animations/ANIM_MOUNTAIN_DRAGON_FlyStationarySpitFireBall.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/LHJ/QuadrapedCreatures/MountainDragon/Animations/ANIM_MOUNTAIN_DRAGON_FlyStationarySpreadFire.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/LHJ/QuadrapedCreatures/MountainDragon/Animations/ANIM_MOUNTAIN_DRAGON_FlyStationaryToFall.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/LHJ/QuadrapedCreatures/MountainDragon/Animations/ANIM_MOUNTAIN_DRAGON_FlyStationaryToLanding.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/LHJ/QuadrapedCreatures/MountainDragon/Animations/ANIM_MOUNTAIN_DRAGON_LeftClawsAttackForward.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/LHJ/QuadrapedCreatures/MountainDragon/Animations/ANIM_MOUNTAIN_DRAGON_LeftClawsAttackForward_RM.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/LHJ/QuadrapedCreatures/MountainDragon/Animations/ANIM_MOUNTAIN_DRAGON_bite.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/LHJ/QuadrapedCreatures/MountainDragon/Animations/ANIM_MOUNTAIN_DRAGON_biteGrabThrow.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/LHJ/QuadrapedCreatures/MountainDragon/Animations/ANIM_MOUNTAIN_DRAGON_death.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/LHJ/QuadrapedCreatures/MountainDragon/Animations/ANIM_MOUNTAIN_DRAGON_deathHitTheGround.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/LHJ/QuadrapedCreatures/MountainDragon/Animations/ANIM_MOUNTAIN_DRAGON_falling.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/LHJ/QuadrapedCreatures/MountainDragon/Animations/ANIM_MOUNTAIN_DRAGON_flyNormal.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/LHJ/QuadrapedCreatures/MountainDragon/Animations/ANIM_MOUNTAIN_DRAGON_flyNormalGetHit.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/LHJ/QuadrapedCreatures/MountainDragon/Animations/ANIM_MOUNTAIN_DRAGON_flyNormalToFall.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/LHJ/QuadrapedCreatures/MountainDragon/Animations/ANIM_MOUNTAIN_DRAGON_getHitFront.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/LHJ/QuadrapedCreatures/MountainDragon/Animations/ANIM_MOUNTAIN_DRAGON_getHitLeft.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/LHJ/QuadrapedCreatures/MountainDragon/Animations/ANIM_MOUNTAIN_DRAGON_getHitRight.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/LHJ/QuadrapedCreatures/MountainDragon/Animations/ANIM_MOUNTAIN_DRAGON_glide.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/LHJ/QuadrapedCreatures/MountainDragon/Animations/ANIM_MOUNTAIN_DRAGON_glidePosToLanding.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/LHJ/QuadrapedCreatures/MountainDragon/Animations/ANIM_MOUNTAIN_DRAGON_idleBreathe.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/LHJ/QuadrapedCreatures/MountainDragon/Animations/ANIM_MOUNTAIN_DRAGON_idleLookAround.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/LHJ/QuadrapedCreatures/MountainDragon/Animations/ANIM_MOUNTAIN_DRAGON_rightClawsAttackForward.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/LHJ/QuadrapedCreatures/MountainDragon/Animations/ANIM_MOUNTAIN_DRAGON_rightClawsAttackForward_RM.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/LHJ/QuadrapedCreatures/MountainDragon/Animations/ANIM_MOUNTAIN_DRAGON_run.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/LHJ/QuadrapedCreatures/MountainDragon/Animations/ANIM_MOUNTAIN_DRAGON_run_RM.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/LHJ/QuadrapedCreatures/MountainDragon/Animations/ANIM_MOUNTAIN_DRAGON_spitFireBall.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/LHJ/QuadrapedCreatures/MountainDragon/Animations/ANIM_MOUNTAIN_DRAGON_spreadFire.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/LHJ/QuadrapedCreatures/MountainDragon/Animations/ANIM_MOUNTAIN_DRAGON_takeOffToFlyStationary.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/LHJ/QuadrapedCreatures/MountainDragon/Animations/ANIM_MOUNTAIN_DRAGON_takeOffToFlyStationary_RM.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/LHJ/QuadrapedCreatures/MountainDragon/Animations/ANIM_MOUNTAIN_DRAGON_takeOffToGlide.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/LHJ/QuadrapedCreatures/MountainDragon/Animations/ANIM_MOUNTAIN_DRAGON_takeOffToGlide_RM.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/LHJ/QuadrapedCreatures/MountainDragon/Animations/ANIM_MOUNTAIN_DRAGON_turn90Left.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/LHJ/QuadrapedCreatures/MountainDragon/Animations/ANIM_MOUNTAIN_DRAGON_turn90Left_RM.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/LHJ/QuadrapedCreatures/MountainDragon/Animations/ANIM_MOUNTAIN_DRAGON_turn90Right.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/LHJ/QuadrapedCreatures/MountainDragon/Animations/ANIM_MOUNTAIN_DRAGON_turn90Right_RM.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/LHJ/QuadrapedCreatures/MountainDragon/Animations/ANIM_MOUNTAIN_DRAGON_walk.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/LHJ/QuadrapedCreatures/MountainDragon/Animations/ANIM_MOUNTAIN_DRAGON_walk_RM.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/LHJ/QuadrapedCreatures/MountainDragon/Maps/Overview.umap" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/LHJ/QuadrapedCreatures/MountainDragon/Materials/M_MOUNTAIN_DRAGON.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/LHJ/QuadrapedCreatures/MountainDragon/Meshes/MOUNTAIN_DRAGON_PhysicsAsset.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/LHJ/QuadrapedCreatures/MountainDragon/Meshes/MOUNTAIN_DRAGON_Skeleton.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/LHJ/QuadrapedCreatures/MountainDragon/Meshes/SK_MOUNTAIN_DRAGON.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/LHJ/QuadrapedCreatures/MountainDragon/Textures/T_MOUNTAIN_DRAGON_ALBEDO.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/LHJ/QuadrapedCreatures/MountainDragon/Textures/T_MOUNTAIN_DRAGON_AO.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/LHJ/QuadrapedCreatures/MountainDragon/Textures/T_MOUNTAIN_DRAGON_ILLUM.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/LHJ/QuadrapedCreatures/MountainDragon/Textures/T_MOUNTAIN_DRAGON_LEGACY.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/LHJ/QuadrapedCreatures/MountainDragon/Textures/T_MOUNTAIN_DRAGON_NRM.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/LHJ/QuadrapedCreatures/MountainDragon/Textures/T_MOUNTAIN_DRAGON_RoughnessSpecularMetallic.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/LHJ/UnkaDragon/Animations/Common/Unka_C_Idle_3.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/LHJ/UnkaDragon/Animations/Common/Unka_C_Idle_3.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/LHJ/UnkaDragon/Animations/Common/Unka_C_Sleep_End.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/LHJ/UnkaDragon/Animations/Common/Unka_C_Sleep_End.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/LHJ/UnkaDragon/Animations/InPlace/Unka_IP_Walk_Forward.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/LHJ/UnkaDragon/Animations/InPlace/Unka_IP_Walk_Forward.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/LHJ/UnkaDragon/Animations/Common/Unka_C_Sleep_Idle.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/LHJ/UnkaDragon/Animations/Common/Unka_C_Sleep_Idle.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/LHJ/UnkaDragon/Blueprints/BP_Unka.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/LHJ/UnkaDragon/Blueprints/BP_Unka.uasset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Content/Maps/CompanionLevel.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Maps/CompanionLevel.umap" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/HotDogma/LHJ/HD_Dragon.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/HotDogma/LHJ/HD_Dragon.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/HotDogma/LHJ/HD_Dragon.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/HotDogma/LHJ/HD_Dragon.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/HotDogma/LHJ/HD_DragonAnim.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/HotDogma/LHJ/HD_DragonAnim.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/HotDogma/LHJ/HD_DragonAnim.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/HotDogma/LHJ/HD_DragonAnim.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/HotDogma/LHJ/HD_DragonFSM.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/HotDogma/LHJ/HD_DragonFSM.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/HotDogma/LHJ/HD_DragonFSM.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/HotDogma/LHJ/HD_DragonFSM.h" afterDir="false" />
     </list>
@@ -132,6 +77,48 @@
     <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Intermediate/Build/Win64/UnrealEditor/Inc/HotDogma/UHT/HD_Dragon.gen.cpp" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Source/HotDogma/HD_Character/HD_CharacterBase.cpp" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Source/HotDogma/HD_Character/HD_CharacterBase.h" root0="FORCE_HIGHLIGHTING" />
@@ -149,6 +136,7 @@
     <setting file="file://$PROJECT_DIR$/Source/HotDogma/HD_Character/HD_PlayerItem/HD_PlayerWeaponBase.h" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Source/HotDogma/HD_GameModeBase/CHJ_GameMode.cpp" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Source/HotDogma/HD_GameModeBase/CHJ_GameMode.h" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/../../../Program Files/Microsoft Visual Studio/2022/Community/VC/Tools/MSVC/14.38.33130/include/atomic" root0="SKIP_HIGHLIGHTING" />
   </component>
   <component name="MetaFilesCheckinStateConfiguration" checkMetaFiles="true" />
   <component name="ProjectColorInfo">{
@@ -162,7 +150,7 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
-    "C++ 프로젝트.HotDogma.executor": "Run",
+    "C++ 프로젝트.HotDogma.executor": "Debug",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "git-widget-placeholder": "HAK__20240724",
     "ignore.virus.scanning.warn.message": "true",
@@ -176,9 +164,9 @@
   },
   "keyToStringList": {
     "rider.external.source.directories": [
-      "C:\\Users\\hakju\\AppData\\Roaming\\JetBrains\\Rider2024.1\\resharper-host\\DecompilerCache",
-      "C:\\Users\\hakju\\AppData\\Roaming\\JetBrains\\Rider2024.1\\resharper-host\\SourcesCache",
-      "C:\\Users\\hakju\\AppData\\Local\\Symbols\\src"
+      "C:\\Users\\Admin\\AppData\\Roaming\\JetBrains\\Rider2024.1\\resharper-host\\DecompilerCache",
+      "C:\\Users\\Admin\\AppData\\Roaming\\JetBrains\\Rider2024.1\\resharper-host\\SourcesCache",
+      "C:\\Users\\Admin\\AppData\\Local\\Symbols\\src"
     ]
   }
 }]]></component>
@@ -643,6 +631,7 @@
       <workItem from="1721985751633" duration="7962000" />
       <workItem from="1722008909641" duration="3042000" />
       <workItem from="1722037284443" duration="3030000" />
+      <workItem from="1722044688060" duration="8076000" />
     </task>
     <task id="LOCAL-00001" summary="retarget Attack Animation 추가 / 무기 에셋 추가">
       <option name="closed" value="true" />
@@ -688,5 +677,16 @@
     <MESSAGE value="Twin animation asset 추가 / 캐릭터 이동, 점프 애니메이션 추가" />
     <MESSAGE value="retarget Attack Animation 추가 / 무기 에셋 추가" />
     <option name="LAST_COMMIT_MESSAGE" value="retarget Attack Animation 추가 / 무기 에셋 추가" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
+          <url>file://$PROJECT_DIR$/Source/HotDogma/LHJ/HD_DragonFSM.cpp</url>
+          <line>167</line>
+          <option name="timeStamp" value="5" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>

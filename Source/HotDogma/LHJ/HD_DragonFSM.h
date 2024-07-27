@@ -109,7 +109,7 @@ public:
 #pragma endregion
 
 #pragma region Move Function
-	EPathFollowingRequestResult::Type MoveToLocation(FVector targetLoc);
+	//EPathFollowingRequestResult::Type MoveToLocation(FVector targetLoc);
 
 	UPROPERTY()
 	bool bFly = false;

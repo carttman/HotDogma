@@ -28,5 +28,20 @@ public:
 	class AHD_Dragon* Dragon;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FSM")
-	bool bSleepEnd = false;	// 플레이어 인지
+	bool bSleepEnd = false; // 플레이어 인지
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FSM")
+	bool bPlayShoutAnim = false;
+
+	UFUNCTION(BlueprintCallable)
+	void PlayShoutAnim();
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Meta = (AllowPrivateAccess=true))
+	float Direction;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Meta = (AllowPrivateAccess=true))
+	float Speed;
+
+	UFUNCTION(BlueprintCallable)
+	void ChangeState(DragonState ChangeState);
 };

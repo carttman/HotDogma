@@ -3,11 +3,15 @@
 
 #include "../LHJ/HD_DragonFSM.h"
 
+#include "AIController.h"
 #include "HD_Dragon.h"
 #include "HD_DragonAnim.h"
 #include "HotDogma/HD_Character/HD_CharacterPlayer.h"
 #include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetMathLibrary.h"
+#include "GameFramework/PlayerController.h"
+#include "GameFramework/CharacterMovementComponent.h"
+#include "Kismet/GameplayStatics.h"
 
 #pragma region [Constructor]
 UHD_DragonFSM::UHD_DragonFSM()
@@ -21,32 +25,26 @@ void UHD_DragonFSM::BeginPlay()
 {
 	Super::BeginPlay();
 
-	// NearTargetActor = UGameplayStatics::GetActorOfClass(GetWorld(), AHD_CharacterPlayer::StaticClass());
-	// if (!NearTargetActor)
-	// 	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("NearTargetActor Is NullPtr"));
-	// else
-	// 	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Blue, TEXT("NearTargetActor Is Not NullPtr"));
-
 	DragonActor = UGameplayStatics::GetActorOfClass(GetWorld(), AHD_Dragon::StaticClass());
 	if (!DragonActor)
 		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("DragonActor Is NullPtr"));
-	else
-		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Blue, TEXT("DragonActor Is Not NullPtr"));
+	// else
+	// 	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Blue, TEXT("DragonActor Is Not NullPtr"));
 
 	Dragon = Cast<AHD_Dragon>(GetOwner());
 	if (!Dragon)
 		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("Dragon Is NullPtr"));
-	else
-		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Blue, TEXT("Dragon Is Not NullPtr"));
+	// else
+	// 	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Blue, TEXT("Dragon Is Not NullPtr"));
 
 	if (Dragon->SkeletalComp->GetAnimInstance())
 	{
 		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Blue, TEXT("GetAnimInstance Is Not NullPtr"));
 	}
-	else
-	{
-		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("GetAnimInstance Is NullPtr"));
-	}
+	// else
+	// {
+	// 	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("GetAnimInstance Is NullPtr"));
+	// }
 
 	if (Dragon)
 		Anim = Cast<UHD_DragonAnim>(Dragon->SkeletalComp->GetAnimInstance());
@@ -54,8 +52,10 @@ void UHD_DragonFSM::BeginPlay()
 		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("Anim Is NullPtr"));
 	else
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Blue, TEXT("Anim Is Not NullPtr"));
-		Anim->AnimState = State;
+		// GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Blue, TEXT("Anim Is Not NullPtr"));
+
+		if (Anim)
+			Anim->AnimState = State;
 	}
 }
 #pragma endregion
@@ -67,17 +67,18 @@ void UHD_DragonFSM::TickComponent(float DeltaTime, ELevelTick TickType, FActorCo
 
 	//double dot = GetRadianFromCharacter();
 	//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("Player To Dragon Direction : %f"), dot));
-
+	FString myState = UEnum::GetValueOrBitfieldAsString(State);
+	DrawDebugString(GetWorld(), Dragon->GetActorLocation(), myState, 0, FColor::Yellow, 0);
 	switch (State)
 	{
 	case DragonState::Sleep:
 		SleepState();
 		break;
 	case DragonState::Idle:
-		IdleState();
+		IdleState(DeltaTime);
 		break;
-	case DragonState::Walk:
-		WalkState();
+	case DragonState::Move:
+		MoveState(DeltaTime);
 		break;
 	}
 }
@@ -88,32 +89,74 @@ void UHD_DragonFSM::SleepState()
 {
 	if (Dragon->CharacterArr.Num() == 0)
 	{
-		
 	}
-	
+	NearTargetActor = UGameplayStatics::GetActorOfClass(GetWorld(), AHD_CharacterPlayer::StaticClass());
+ 
 	// 일정거리 안에 플레이어가 들어오거나, 플레이어가 먼저 공격을 하면
 	// SleepEnd 애니메이션 재생을 하고,
 	// Idle 상태로 전환한다(노티파이 처리)
 	ChkCharacterIntoRadian();
 
-	if (Anim->bSleepEnd)
-		State = DragonState::Idle;
+	//State = DragonState::Idle;
 }
 
-void UHD_DragonFSM::IdleState()
+void UHD_DragonFSM::IdleState(float DeltaTime)
 {
 	// 타겟을 지정한다.
-	for (int i = 0; i < Dragon->CharacterArr.Num(); i++)
+	ACharacter* ClosestCharacter = nullptr;
+	float MinDistance = FLT_MAX;
+
+	for (ACharacter* Character : Dragon->CharacterArr)
 	{
+		if (Character && Dragon)
+		{
+			float Distance = FVector::Dist(Character->GetActorLocation(), Dragon->GetActorLocation());
+			if (Distance < MinDistance)
+			{
+				MinDistance = Distance;
+				ClosestCharacter = Character;
+			}
+		}
 	}
-}
 
-void UHD_DragonFSM::WalkState()
-{
+	// if (ClosestCharacter)
+	// {
+	// 	State = DragonState::Move;
+	// 	if (Anim)
+	// 		Anim->AnimState = State;
+	// }
+	//changeState(DragonState::Move);
 }
-
-void UHD_DragonFSM::MoveState()
+FVector targetVec ;
+void UHD_DragonFSM::MoveState(float DeltaTime)
 {
+	if (NearTargetActor)
+	{
+		FVector p0 = Dragon->GetActorLocation();
+		targetVec = NearTargetActor->GetActorLocation() - p0;
+		targetVec.Z = 0;
+		targetVec.Normalize();
+		//const FRotator YawRotation(0, targetVec.Rotation().Yaw, 0);
+		//float speed = Dragon->GetVelocity().Size();
+		// FVector dir_ = p0 + targetVec * speed * DeltaTime;
+		//
+		// Dragon->SetActorRotation(dir_.Rotation());
+		//FVector forwardVec = UKismetMathLibrary::GetForwardVector(YawRotation);
+		//Dragon->AddMovementInput(targetVec, 1.0f);
+
+		auto* ai = Cast<AAIController>(Dragon->Controller);
+
+		ai->MoveToLocation(NearTargetActor->GetActorLocation());
+		// 날고있지 않을 때는 AI MOVE로 이동
+		if (!bFly)
+		{
+			//auto result = MoveToLocation(NearTargetActor->GetActorLocation());
+		}
+		else
+		{
+			//날고있을 때는 P=P0+VT 사용
+		}
+	}
 }
 #pragma endregion
 
@@ -126,7 +169,6 @@ double UHD_DragonFSM::GetRadianFromCharacter()
 	{
 		dir = NearTargetActor->GetActorLocation() - DragonActor->GetActorLocation();
 		dir.Normalize();
-
 		FVector forward = DragonActor->GetActorForwardVector();
 
 		double dot = UKismetMathLibrary::Dot_VectorVector(forward, dir);
@@ -140,8 +182,6 @@ double UHD_DragonFSM::GetRadianFromCharacter()
 bool UHD_DragonFSM::ChkCharacterIntoRadian()
 {
 	bool bRtn = false;
-	int32 ThresholdRadian = 500; // 인식 범위
-
 	// 월드에 있는 캐릭터를 가지고 와서 배열에 저장(BeginPlay에 작성)
 	// 임시로 캐릭터로 지정
 	// 일정 거리 안에 들어온 캐릭터가 있으면
@@ -154,9 +194,31 @@ bool UHD_DragonFSM::ChkCharacterIntoRadian()
 			{
 				// true 리턴
 				Anim->bSleepEnd = true;
+				break;
 			}
 		}
 	}
 	return bRtn;
 }
 #pragma endregion
+
+// EPathFollowingRequestResult::Type UHD_DragonFSM::MoveToLocation(FVector targetLoc)
+// {
+// 	// FAIMoveRequest MoveRequest;
+// 	// Dragon->SetActorRotation((targetLoc - Dragon->GetActorLocation()).GetSafeNormal().Rotation());
+// 	// MoveRequest.SetGoalLocation(targetLoc);
+// 	// MoveRequest.SetAcceptanceRadius(5.0f);
+// 	//
+// 	// FNavPathSharedPtr NavPath;
+// 	// FPathFollowingRequestResult Result = Dragon->AIController->MoveTo(MoveRequest, &NavPath);
+// 	//
+// 	// return Result.Code;
+// }
+
+// void UHD_DragonFSM::changeState(DragonState NextState)
+// {
+// 	if (Anim)
+// 		Anim->AnimState = NextState;
+//
+// 	State = NextState;
+// }

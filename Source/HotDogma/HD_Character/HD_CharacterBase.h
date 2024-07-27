@@ -48,11 +48,10 @@ public:
 	UPROPERTY(EditAnywhere)
 	class UInputAction* ia_DH_Order;
 
-	UPROPERTY(EditAnywhere)
-	class UHD_PlayerAttackComponent* PlayerAttackComponent;
-	UPROPERTY(EditAnywhere)
-	class UPlayerStatusComponent* PlayerStatusComponent;
 	
+
+public:
+	FVector2D MovementVector;
 public:
 	void EnhancedMove(const FInputActionValue& InputActionValue);
 	void EnhancedJump(const FInputActionValue& InputActionValue);

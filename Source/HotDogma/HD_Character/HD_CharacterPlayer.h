@@ -40,6 +40,13 @@ public:
 	class AHD_PlayerWeaponBase* Right_Weapon;
 	UPROPERTY(EditAnywhere)
 	class AHD_PlayerWeaponBase* Left_Weapon;
+
+	UPROPERTY(EditAnywhere)
+	class UHD_PlayerAttackComponent* PlayerAttackComponent;
+	UPROPERTY(EditAnywhere)
+	class UPlayerStatusComponent* PlayerStatusComponent;
+	UPROPERTY(EditAnywhere)
+	class UHD_PlayerClimbComponent* PlayerClimbComponent;
 public:
 	void AttachWeapon();
 };

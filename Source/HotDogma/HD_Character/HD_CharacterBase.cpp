@@ -10,8 +10,7 @@
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/SpringArmComponent.h"
-#include "HD_PlayerComponent/HD_PlayerAttackComponent.h"
-#include "HD_PlayerComponent/PlayerStatusComponent.h"
+
 
 // Sets default values
 AHD_CharacterBase::AHD_CharacterBase()
@@ -30,6 +29,11 @@ AHD_CharacterBase::AHD_CharacterBase()
 	GetCharacterMovement()->MinAnalogWalkSpeed = 20.f;
 	GetCharacterMovement()->BrakingDecelerationWalking = 2000.f;
 	GetCharacterMovement()->BrakingDecelerationFalling = 1500.0f;
+	GetCharacterMovement()->GravityScale = 1.75f;
+	GetCharacterMovement()->MaxAcceleration = 1500.f;
+	GetCharacterMovement()->BrakingFrictionFactor = 1.0f;
+	GetCharacterMovement()->bUseSeparateBrakingFriction = true;
+	GetCharacterMovement()->SetFixedBrakingDistance(200.f);
 	
 	// 플레이어 메쉬 프로필
 	GetMesh()->SetCollisionProfileName(TEXT("PlayerMeshColl"));
@@ -59,9 +63,7 @@ AHD_CharacterBase::AHD_CharacterBase()
 	camera->SetRelativeLocation(FVector(0, 0, 0));
 	camera->SetRelativeRotation(FRotator(-20, 0, 0));
 
-	// Player 컴포넌트
-	PlayerAttackComponent = CreateDefaultSubobject<UHD_PlayerAttackComponent>(TEXT("PlayerAttackComponent"));
-	PlayerStatusComponent = CreateDefaultSubobject<UPlayerStatusComponent>(TEXT("PlayerStatusComponent"));
+	
 }
 
 // Called when the game starts or when spawned
@@ -104,14 +106,13 @@ void AHD_CharacterBase::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
 		enhancedInputComponent->BindAction(ia_DH_Jump, ETriggerEvent::Started, this, &AHD_CharacterBase::EnhancedJump);
 		enhancedInputComponent->BindAction(ia_DH_Order, ETriggerEvent::Started, this, &AHD_CharacterBase::EnhancedOrder);
 
-		PlayerAttackComponent->SetupPlayerInputComponent(enhancedInputComponent);
 		
 	}
 }
 
 void AHD_CharacterBase::EnhancedMove(const FInputActionValue& InputActionValue)
 {
-	FVector2D MovementVector = InputActionValue.Get<FVector2D>();
+	MovementVector = InputActionValue.Get<FVector2D>();
 
 	if (Controller != nullptr)
 	{

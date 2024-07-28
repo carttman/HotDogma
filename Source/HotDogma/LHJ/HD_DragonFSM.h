@@ -136,7 +136,7 @@ public:
 
 	// 타겟과 거리 내적값 추출
 	UFUNCTION()
-	double GetRadianFromCharacter();
+	float GetRadianFromCharacter();
 
 	UFUNCTION()
 	bool ChkCharacterIntoRadian();

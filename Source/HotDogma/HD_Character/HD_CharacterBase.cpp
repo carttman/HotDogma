@@ -10,6 +10,7 @@
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/SpringArmComponent.h"
+#include "HD_PlayerComponent/HD_PlayerClimbComponent.h"
 
 
 // Sets default values
@@ -63,7 +64,7 @@ AHD_CharacterBase::AHD_CharacterBase()
 	camera->SetRelativeLocation(FVector(0, 0, 0));
 	camera->SetRelativeRotation(FRotator(-20, 0, 0));
 
-	
+	PlayerClimbComponent = CreateDefaultSubobject<UHD_PlayerClimbComponent>(TEXT("PlayerClimbComponent"));
 }
 
 // Called when the game starts or when spawned
@@ -82,7 +83,7 @@ void AHD_CharacterBase::BeginPlay()
 		//imc 맵핑
 		subSystem->AddMappingContext(imc_HDMapping, 0);
 	}
-
+	
 }
 
 // Called every frame
@@ -106,7 +107,7 @@ void AHD_CharacterBase::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
 		enhancedInputComponent->BindAction(ia_DH_Jump, ETriggerEvent::Started, this, &AHD_CharacterBase::EnhancedJump);
 		enhancedInputComponent->BindAction(ia_DH_Order, ETriggerEvent::Started, this, &AHD_CharacterBase::EnhancedOrder);
 
-		
+		PlayerClimbComponent->SetupPlayerInputComponent(enhancedInputComponent);
 	}
 }
 
@@ -125,10 +126,30 @@ void AHD_CharacterBase::EnhancedMove(const FInputActionValue& InputActionValue)
 	
 		// get right vector 
 		const FVector RightDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
+		
+		switch (GetCharacterMovement()->MovementMode)
+		{
+		case MOVE_Walking:
 
-		// add movement 
-		AddMovementInput(ForwardDirection, MovementVector.Y);
-		AddMovementInput(RightDirection, MovementVector.X);
+			// add movement 
+				AddMovementInput(ForwardDirection, MovementVector.Y);
+				AddMovementInput(RightDirection, MovementVector.X);
+			// MovementMode가 None일 때 처리할 코드
+			break;
+		case MOVE_Falling:
+			
+			// add movement 
+				AddMovementInput(ForwardDirection, MovementVector.Y);
+				AddMovementInput(RightDirection, MovementVector.X);
+			break;
+		case MOVE_Flying:
+				//climb movement
+				PlayerClimbComponent->ClimbMovementEvent(GetActorRightVector(),MovementVector.X);
+				PlayerClimbComponent->ClimbMovementEvent(GetActorUpVector(), MovementVector.Y);
+			break;
+		default:
+			break;
+		}
 	}
 }
 
@@ -147,4 +168,30 @@ void AHD_CharacterBase::EnhancedLook(const FInputActionValue& InputActionValue)
 
 void AHD_CharacterBase::EnhancedOrder(const FInputActionValue& InputActionValue)
 {
+	float InputKey = InputActionValue.Get<float>();
+
+	if (InputKey == (1.0f))
+	{
+		UE_LOG(LogTemp, Log, TEXT("Skill 1 Activated"));
+		// 스킬 1 실행 코드
+	}
+	else if (InputKey == (2.0f))
+	{
+		UE_LOG(LogTemp, Log, TEXT("Skill 2 Activated"));
+		// 스킬 2 실행 코드
+	}
+	else if (InputKey == (3.0f))
+	{
+		UE_LOG(LogTemp, Log, TEXT("Skill 3 Activated"));
+		// 스킬 3 실행 코드
+	}
+	else if (InputKey == (4.0f))
+	{
+		UE_LOG(LogTemp, Log, TEXT("Skill 4 Activated"));
+		// 스킬 4 실행 코드
+	}
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Unknown Skill Key"));
+	}
 }

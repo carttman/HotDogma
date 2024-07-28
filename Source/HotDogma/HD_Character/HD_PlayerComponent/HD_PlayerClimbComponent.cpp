@@ -22,7 +22,11 @@ UHD_PlayerClimbComponent::UHD_PlayerClimbComponent()
 	{
 		IA_Player_Climb = TempIA.Object;
 	}
-	// ...
+	MyTimeline = CreateDefaultSubobject<UTimelineComponent>(TEXT("MyTimeline"));  // 타임라인 컴포넌트 생성
+	// 타임라인이 초기화될 때 호출되는 델리게이트 설정
+	InterpFunction.BindUFunction(this, FName("ClimbTimelineProgress")); // 타임라인 진행 함수 바인딩
+	TimelineFinished.BindUFunction(this, FName("OnClimbTimelineFinished")); // 타임라인 종료 함수 바인딩
+
 }
 
 
@@ -30,9 +34,7 @@ UHD_PlayerClimbComponent::UHD_PlayerClimbComponent()
 void UHD_PlayerClimbComponent::BeginPlay()
 {
 	Super::BeginPlay();
-	//Player = Cast<AHD_CharacterPlayer>(GetWorld()->GetFirstPlayerController()->GetCharacter());
-
-	//Target_Location = Player->GetActorLocation();
+	
 	AActor* Owner = GetOwner();
 	if (Owner)
 	{
@@ -52,6 +54,16 @@ void UHD_PlayerClimbComponent::BeginPlay()
 	{
 		UE_LOG(LogTemp, Warning, TEXT("GetOwner() returned null"));
 	}
+	
+	if (FloatCurve)
+	{
+		MyTimeline->AddInterpFloat(FloatCurve, InterpFunction); // 커브와 델리게이트 연결
+		MyTimeline->SetTimelineFinishedFunc(TimelineFinished); // 타임라인 종료 델리게이트 설정
+
+		MyTimeline->SetLooping(false);  // 타임라인이 반복되지 않도록 설정
+		MyTimeline->SetIgnoreTimeDilation(true); // 시간 변형을 무시하도록 설정
+		
+	}
 }
 
 
@@ -60,6 +72,7 @@ void UHD_PlayerClimbComponent::TickComponent(float DeltaTime, ELevelTick TickTyp
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 	
+	MyTimeline->TickComponent(DeltaTime, ELevelTick::LEVELTICK_TimeOnly, nullptr); // 타임라인을 매 프레임마다 업데이트
 }
 
 void UHD_PlayerClimbComponent::SetupPlayerInputComponent(UEnhancedInputComponent* enhancedInputComponent)
@@ -71,110 +84,87 @@ void UHD_PlayerClimbComponent::SetupPlayerInputComponent(UEnhancedInputComponent
 
 void UHD_PlayerClimbComponent::Climb()
 {
-	//TraceMovement();
-	//ClimbMove();
-	GrabWall();
+	if(Player->GetCharacterMovement()->MovementMode != MOVE_Flying)
+	{
+		if(AttachToSurfaceCaculation(100.f, Climb_OutHit))
+		{
+			Player->GetCharacterMovement()->SetMovementMode(MOVE_Flying);
+			Player->GetCharacterMovement()->bOrientRotationToMovement = false;
+			
+			FVector TargetLocation = Player->GetCapsuleComponent()->GetScaledCapsuleRadius() * Climb_OutHit.Normal + Climb_OutHit.Location;
+			FRotator TargetRotation = UKismetMathLibrary::MakeRotFromX(Climb_OutHit.Normal * -1);
+			bool bEaseIn = false;
+			bool bEaseOut = false;
+			float OverTime = 0.2f;
+			bool bForceShortestRotationPath = false;
+
+			FLatentActionInfo LatentInfo;
+			LatentInfo.CallbackTarget = this; // 현재 클래스의 인스턴스를 콜백 타겟으로 설정
+			//LatentInfo.ExecutionFunction = FName("OnMoveCompleted"); // 완료 시 호출할 함수 이름
+			//LatentInfo.Linkage = 0;
+			//LatentInfo.UUID = 1;
+
+			UKismetSystemLibrary::MoveComponentTo(Player->GetCapsuleComponent(),TargetLocation,TargetRotation,bEaseIn,bEaseOut,
+				OverTime,bForceShortestRotationPath, EMoveComponentAction::Move,LatentInfo);
+		}
+	}
+	else StopClimbing();
 }
-
-void UHD_PlayerClimbComponent::TraceMovement()
+//벽에 닿았는가?
+bool UHD_PlayerClimbComponent::AttachToSurfaceCaculation(float Attach_Distance, FHitResult& OutHit)
 {
-	 // FHitResult OutHit;
-	 // FVector Start = Player->GetActorLocation();
-	 // FVector End = Player->GetActorLocation() + GetMovementDirection() * 1000 + Player->GetActorUpVector() * -500;
-	 // ECollisionChannel TraceChannel = ECC_Visibility;
-	 // FCollisionQueryParams  params;
-	 // params.AddIgnoredActor(Player);
-	 // bool bHit = GetWorld()->LineTraceSingleByChannel(OutHit, Start, End, TraceChannel, params);
-	 //
-	 // if(bHit)
-	 // {
-	 // 	DrawDebugLine(GetWorld(), Start, OutHit.ImpactPoint, FColor::Red, false, 3.0f);
-	 // 	Hit_F1 = OutHit;
-	 // 	
-	 // }
-	// else
-	// {
-	// 	DrawDebugLine(GetWorld(), Start, End, FColor::Blue, false, 3.0f);
-	// }
-	//
-	// FVector End_2 = Player->GetActorLocation() + GetMovementDirection() * 1100 + Player->GetActorUpVector() * -500;
-	// bool bHit_2 = GetWorld()->LineTraceSingleByChannel(OutHit, Start, End_2, TraceChannel, params);
-	// if(bHit_2)
-	// {
-	// 	DrawDebugLine(GetWorld(), Start, OutHit.ImpactPoint, FColor::Red, false, 3.0f);
-	// 	Hit_F2 = OutHit;
-	// }
-	//
-	// FVector End_3 = Player->GetActorLocation() + GetMovementDirection() * 1000 + Player->GetActorUpVector() * -500 + GetMovementDirection().RotateAngleAxis(90, Player->GetActorUpVector()) * 100;
-	// bool bHit_3 = GetWorld()->LineTraceSingleByChannel(OutHit, Start, End_3, TraceChannel, params);
-	// if(bHit_3)
-	// {
-	// 	DrawDebugLine(GetWorld(), Start, OutHit.ImpactPoint, FColor::Red, false, 3.0f);
-	// 	Hit_R = OutHit;
-	// }
-	// Target_Location = Hit_F1.Location + Hit_F1.Normal * 60;
-	//
-	// Target_Rotation = UKismetMathLibrary::MakeRotationFromAxes(UKismetMathLibrary::GetDirectionUnitVector(Hit_F1.Location, Hit_F2.Location), UKismetMathLibrary::GetDirectionUnitVector(Hit_F1.Location, Hit_R.Location), Hit_F1.Normal);
-}
-
-// FVector UHD_PlayerClimbComponent::GetMovementDirection()
-// {//Player->MovementVector.X
-// 	// FVector Direction = Player->GetActorForwardVector() * Player->MovementVector.X + Player->GetActorRightVector() * Player->MovementVector.Y;
-// 	// Direction.Normalize();
-// 	// return Direction;
-// }
-
-void UHD_PlayerClimbComponent::ClimbMove()
-{
-	
-	// if(UKismetMathLibrary::Abs(Player->MovementVector.X) + UKismetMathLibrary::Abs(Player->MovementVector.Y) > 0)
-	// {
-	// 	if(UKismetMathLibrary::Vector_Distance(Target_Location, Player->GetActorLocation()) > 2)
-	// 	{
-	// 		Player->AddMovementInput(UKismetMathLibrary::GetDirectionUnitVector(Player->GetActorLocation(), Target_Location));
-	// 		Player->SetActorRotation(UKismetMathLibrary::RLerp(Player->GetActorRotation(), Target_Rotation, 0.01f, true));
-	// 		
-	// 	}
-	// }
-}
-
-void UHD_PlayerClimbComponent::GrabWall()
-{
-	FHitResult OutHit;
-	FVector Start = Player->GetMesh()->GetSocketLocation(FName("pelvis"));
-	FVector End = Player->GetMesh()->GetSocketLocation(FName("pelvis")) + Player->GetActorForwardVector() * 200;
+	FVector Start = Player->GetActorLocation();
+	FVector End = Player->GetActorLocation() + Player->GetActorForwardVector() * Attach_Distance;
 	ECollisionChannel TraceChannel = ECC_Visibility;
 	FCollisionQueryParams params;
 	params.AddIgnoredActor(Player);
 	bool bHit = GetWorld()->LineTraceSingleByChannel(OutHit, Start, End, TraceChannel, params);
-	 
+	
 	if(bHit)
 	{
 		DrawDebugLine(GetWorld(), Start, OutHit.ImpactPoint, FColor::Red, false, 3.0f);
-		
-		
-		FVector Start_2 = Player->GetMesh()->GetSocketLocation(FName("head"));
-		FVector End_2 = Player->GetMesh()->GetSocketLocation(FName("head")) + Player->GetActorForwardVector() * 200;
-		bool bHit_2 = GetWorld()->LineTraceSingleByChannel(OutHit, Start_2, End_2, TraceChannel, params);
-		
-		if(bHit_2)
-		{
-			DrawDebugLine(GetWorld(), Start_2, OutHit.ImpactPoint, FColor::Red, false, 3.0f);
-			Player->GetCharacterMovement()->SetMovementMode(MOVE_Flying);
-			FRotator NewRot = UKismetMathLibrary::Conv_VectorToRotator(OutHit.Normal * -1);
-			FVector NewLoc = OutHit.Location + OutHit.Normal * 60;
-			FLatentActionInfo latentInfo;
-			latentInfo.CallbackTarget = this;
-			
-			Player->GetCharacterMovement()->StopMovementImmediately();
-			UKismetSystemLibrary::MoveComponentTo(Player->GetCapsuleComponent(),NewLoc, FRotator(0,NewRot.Yaw,0),
-				false, false, 0.4f, false, EMoveComponentAction::Move, latentInfo);
-		}
-		 
 	}
 	else
 	{
-		DrawDebugLine(GetWorld(), Start, End, FColor::Blue, false, 3.0f);
+		DrawDebugLine(GetWorld(), Start, End, FColor::Green, false, 3.0f);
 	}
+	return bHit; //hit 성공여부 리턴
 }
- 
+
+void UHD_PlayerClimbComponent::ClimbMovementEvent(FVector WorldDirection, float ScaleValue)
+{
+	//딜리게이트
+	//OnClimbMovement.Broadcast();
+	//trace 성공했다면
+	if(AttachToSurfaceCaculation(120.f, Climb_OutHit))
+	{
+		Player->AddMovementInput(WorldDirection, ScaleValue);
+		
+		// 타임라인 시작 (원하는 시점에 호출 가능)
+		MyTimeline->PlayFromStart();
+		
+	}
+	else StopClimbing();
+}
+
+void UHD_PlayerClimbComponent::ClimbTimelineProgress(float Value) // output value
+{
+	FRotator NewRot = UKismetMathLibrary::RLerp(Player->GetActorRotation(),
+		UKismetMathLibrary::MakeRotFromX(Climb_OutHit.Normal * -1.0f), Value, false);
+	UE_LOG(LogTemp, Warning, TEXT("%.2f"), Value);
+	//벽 타고 있을 때 방향 회전
+	Player->SetActorRotation(NewRot);
+}
+
+void UHD_PlayerClimbComponent::OnClimbTimelineFinished()
+{
+}
+
+void UHD_PlayerClimbComponent::StopClimbing()
+{
+	Player->GetCharacterMovement()->SetMovementMode(MOVE_Falling);
+	Player->GetCharacterMovement()->bOrientRotationToMovement = true;
+	Player->SetActorRotation(FRotator(0, Player->GetActorRotation().Yaw,  0));
+}
+
+

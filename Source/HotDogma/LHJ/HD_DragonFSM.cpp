@@ -37,13 +37,13 @@ void UHD_DragonFSM::BeginPlay()
 	// else
 	// 	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Blue, TEXT("Dragon Is Not NullPtr"));
 
-	if (Dragon->SkeletalComp->GetAnimInstance())
+	if (!Dragon->SkeletalComp->GetAnimInstance())
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Blue, TEXT("GetAnimInstance Is Not NullPtr"));
+		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("GetAnimInstance Is NullPtr"));
 	}
 	// else
 	// {
-	// 	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("GetAnimInstance Is NullPtr"));
+	//	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Blue, TEXT("GetAnimInstance Is Not NullPtr"));
 	// }
 
 	if (Dragon)
@@ -105,6 +105,13 @@ void UHD_DragonFSM::SleepState()
 
 void UHD_DragonFSM::IdleState(float DeltaTime)
 {
+	if (Anim)
+	{
+		// 꼬리치기 변수 초기화
+		if (Anim->chkAngle)
+			Anim->chkAngle = false;
+	}
+	
 	// 타겟을 지정한다.
 	ACharacter* ClosestCharacter = nullptr;
 	float MinDistance = FLT_MAX;
@@ -121,6 +128,9 @@ void UHD_DragonFSM::IdleState(float DeltaTime)
 			}
 		}
 	}
+
+	// Anim->ChangeState(DragonState::NormalAttack);
+	// Anim->ChangeNormalAttack(NormalAttackState::Shout);
 }
 
 void UHD_DragonFSM::MoveState(float DeltaTime)
@@ -151,6 +161,25 @@ void UHD_DragonFSM::F_NormalAttackState(float DeltaTime)
 		break;
 	case NormalAttackState::Breath:
 		NormalBreath(DeltaTime);
+		break;
+	case NormalAttackState::TailSlap:
+		if (Anim)
+		{
+			Anim->InnerAngle = GetRadianFromCharacter();
+			Anim->chkAngle = true;
+		}
+		else
+		{
+			State = DragonState::Idle;
+		}
+		break;
+	case NormalAttackState::HandPress:
+		break;
+	case NormalAttackState::Shout:
+		break;
+	case NormalAttackState::Meteor:
+		break;
+	case NormalAttackState::ThunderMagic:
 		break;
 	}
 }
@@ -187,7 +216,7 @@ void UHD_DragonFSM::FlyPress(float DeltaTime)
 	{
 		// 낙하 시작
 		//Alpha += DeltaTime;
-		FallSpeed += 980.f * DeltaTime*1.5; // 중력 가속도 적용 (m/s^2)
+		FallSpeed += 980.f * DeltaTime * 1.5; // 중력 가속도 적용 (m/s^2)
 		FVector FallVelocity = FVector(0.f, 0.f, -FallSpeed); // 낙하 속도 설정
 		//FVector FallVelocity = FVector(0.f, 0.f, -3000.f); // 낙하 속도 설정
 		FVector CurrentLocation = Dragon->GetActorLocation();
@@ -212,21 +241,24 @@ void UHD_DragonFSM::NormalBreath(float DeltaTime)
 #pragma endregion
 
 #pragma region [Check direction from character]
-double UHD_DragonFSM::GetRadianFromCharacter()
+float UHD_DragonFSM::GetRadianFromCharacter()
 {
-	double dRtn = 0;
+	float fRtn = 0;
 
 	if (NearTargetActor && DragonActor)
 	{
 		dir = NearTargetActor->GetActorLocation() - DragonActor->GetActorLocation();
 		dir.Normalize();
-		FVector forward = DragonActor->GetActorForwardVector();
+		FVector forward = DragonActor->GetActorRightVector();
 
 		double dot = UKismetMathLibrary::Dot_VectorVector(forward, dir);
-		dRtn = dot;
+		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red,
+		                                 FString::Printf(TEXT("Player To Dragon Direction : %f"), dot));
+
+		fRtn = dot;
 	}
 
-	return dRtn;
+	return fRtn;
 }
 
 // 일정 범위 내에 플레이어가 있는지 확인

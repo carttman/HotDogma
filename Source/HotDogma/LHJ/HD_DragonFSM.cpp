@@ -173,6 +173,14 @@ void UHD_DragonFSM::F_NormalAttackState(float DeltaTime)
 			State = DragonState::Idle;
 		}
 		break;
+	case NormalAttackState::HandPress:
+		break;
+	case NormalAttackState::Shout:
+		break;
+	case NormalAttackState::Meteor:
+		break;
+	case NormalAttackState::ThunderMagic:
+		break;
 	}
 }
 #pragma endregion

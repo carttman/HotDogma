@@ -128,6 +128,9 @@ void UHD_DragonFSM::IdleState(float DeltaTime)
 			}
 		}
 	}
+
+	// Anim->ChangeState(DragonState::NormalAttack);
+	// Anim->ChangeNormalAttack(NormalAttackState::Shout);
 }
 
 void UHD_DragonFSM::MoveState(float DeltaTime)

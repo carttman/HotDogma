@@ -47,10 +47,10 @@ public:
 	bool bEndFlyUp = false; // 날아 오르기 완료
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FSM")
-	float InnerAngle = 0.f;	// 캐릭터와 내적 값
+	float InnerAngle = 0.f; // 캐릭터와 내적 값
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FSM")
-	bool chkAngle=false;
+	bool chkAngle = false;
 
 	UFUNCTION(BlueprintCallable)
 	void PlayShoutAnim();

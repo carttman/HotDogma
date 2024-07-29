@@ -23,10 +23,7 @@ public:
 	DragonState AnimState;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "FSM")
-	NormalAttackState AnimNormalAttackState;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "FSM")
-	FlyAttackState AnimFlyAttackStateState;
+	AttackState AnimNormalAttackState;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FSM")
 	class UHD_DragonFSM* fsm;
@@ -55,6 +52,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FSM")
 	bool isFly=false;	// 공중이동 전용
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FSM")
+	bool isGroggy=false;	// 그로기 전용
+
 	UFUNCTION(BlueprintCallable)
 	void PlayShoutAnim();
 
@@ -68,11 +68,22 @@ public:
 	void ChangeState(DragonState ChangeState);
 
 	UFUNCTION(BlueprintCallable)
-	void ChangeNormalAttack(NormalAttackState ChangeState);
-
-	UFUNCTION(BlueprintCallable)
-	void ChangeFlyAttack(FlyAttackState ChangeState);
+	void ChangeNormalAttack(AttackState ChangeState);
 
 	UFUNCTION(BlueprintCallable)
 	void StartFlyUpFunction();
+
+	//=======================
+	UFUNCTION()
+	void AnimNotify_SleepEnd();		// 주변 캐릭터 인지
+
+	UFUNCTION()
+	void AnimNotify_StartFight();	// 전투 시작(포효 시작)
+
+	UFUNCTION()
+	void AnimNotify_endShout();		// 전투 시작 포효 종료
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FSM")
+	bool bEndStartAnim=false;
+	//=========================
 };

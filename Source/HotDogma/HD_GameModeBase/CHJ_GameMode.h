@@ -13,5 +13,22 @@ UCLASS()
 class HOTDOGMA_API ACHJ_GameMode : public AGameModeBase
 {
 	GENERATED_BODY()
-	
+public:
+	virtual void BeginPlay() override;
+	void CommandCompanion(int num);
+	// Pos에서 가장 가까운 드래곤을 찾는다.
+	APawn* GetEnemy(FVector Pos);
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "CompanionManager")
+	bool bCompanionsSpawn = false;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "CompanionManager")
+	TSubclassOf<class AHD_CompanionManager> CompanionManagerFactory;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "CompanionManager")
+	class AHD_CompanionManager* CompanionManager;
+
+	/*UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Dragon")
+	TSubclassOf<class AHD_Dragon> DragonFactory;*/
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Dragon")
+	TArray<APawn*> Dragons;
 };

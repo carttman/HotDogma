@@ -49,4 +49,6 @@ public:
 	// class UHD_PlayerClimbComponent* PlayerClimbComponent;
 public:
 	void AttachWeapon();
+
+	
 };

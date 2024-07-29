@@ -11,7 +11,7 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "HD_PlayerComponent/HD_PlayerClimbComponent.h"
-
+#include "CableComponent.h"
 
 // Sets default values
 AHD_CharacterBase::AHD_CharacterBase()
@@ -65,6 +65,9 @@ AHD_CharacterBase::AHD_CharacterBase()
 	camera->SetRelativeRotation(FRotator(-20, 0, 0));
 
 	PlayerClimbComponent = CreateDefaultSubobject<UHD_PlayerClimbComponent>(TEXT("PlayerClimbComponent"));
+	
+	CableCompoent = CreateDefaultSubobject<UCableComponent>(TEXT("CableComponent"));
+	CableCompoent->SetupAttachment(GetMesh(), TEXT("pelvis"));
 }
 
 // Called when the game starts or when spawned
@@ -130,11 +133,10 @@ void AHD_CharacterBase::EnhancedMove(const FInputActionValue& InputActionValue)
 		switch (GetCharacterMovement()->MovementMode)
 		{
 		case MOVE_Walking:
-
+			// Walking일 때
 			// add movement 
 				AddMovementInput(ForwardDirection, MovementVector.Y);
 				AddMovementInput(RightDirection, MovementVector.X);
-			// MovementMode가 None일 때 처리할 코드
 			break;
 		case MOVE_Falling:
 			
@@ -143,7 +145,7 @@ void AHD_CharacterBase::EnhancedMove(const FInputActionValue& InputActionValue)
 				AddMovementInput(RightDirection, MovementVector.X);
 			break;
 		case MOVE_Flying:
-				//climb movement
+				//climb movement : 무중력 상태일 때, 매달리는 함수 -> inputX값을 UpVector로.
 				PlayerClimbComponent->ClimbMovementEvent(GetActorRightVector(),MovementVector.X);
 				PlayerClimbComponent->ClimbMovementEvent(GetActorUpVector(), MovementVector.Y);
 			break;

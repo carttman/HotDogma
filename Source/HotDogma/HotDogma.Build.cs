@@ -11,7 +11,7 @@ public class HotDogma : ModuleRules
 		PublicDependencyModuleNames.AddRange(new string[]
 		{
 			"Core", "CoreUObject", "Engine", "InputCore", "EnhancedInput", "AIModule", "NavigationSystem", "UMG",
-			"Niagara"
+			"Niagara", "CableComponent"
 		});
 
 		PrivateDependencyModuleNames.AddRange(new string[] { });

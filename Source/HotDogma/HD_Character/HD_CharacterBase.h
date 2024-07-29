@@ -58,4 +58,8 @@ public:
 	void EnhancedJump(const FInputActionValue& InputActionValue);
 	void EnhancedLook(const FInputActionValue& InputActionValue);
 	void EnhancedOrder(const FInputActionValue& InputActionValue);
+
+public:
+	UPROPERTY(EditAnywhere)
+	class UCableComponent* CableCompoent;
 };

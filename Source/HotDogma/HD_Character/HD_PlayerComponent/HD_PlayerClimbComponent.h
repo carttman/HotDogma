@@ -34,6 +34,11 @@ public:
 	class UInputAction* IA_Player_Climb;
 	UPROPERTY(EditAnywhere)
 	class AHD_CharacterPlayer* Player;
+	
+	UPROPERTY(EditAnywhere)
+	class AHD_Dragon* Dragon;
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<class AHD_Dragon> DragonClass;
 public:
 	FHitResult Climb_OutHit;
 	void Climb();
@@ -66,4 +71,6 @@ public:
 	void OnClimbTimelineFinished(); // 타임라인 종료 함수
 
 	void StopClimbing();
+
+	void AttachToCable();
 };

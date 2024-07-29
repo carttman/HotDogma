@@ -52,6 +52,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FSM")
 	bool chkAngle = false;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FSM")
+	bool isFly=false;	// 공중이동 전용
+
 	UFUNCTION(BlueprintCallable)
 	void PlayShoutAnim();
 

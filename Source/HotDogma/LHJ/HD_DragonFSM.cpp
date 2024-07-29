@@ -83,6 +83,14 @@ void UHD_DragonFSM::TickComponent(float DeltaTime, ELevelTick TickType, FActorCo
 	case DragonState::NormalAttack:
 		F_NormalAttackState(DeltaTime);
 		break;
+	case DragonState::FlyUp:
+		Anim->isFly = true;
+		bFly = true;
+		break;
+	case DragonState::FlyDown:
+		Anim->isFly = false;
+		bFly = false;
+		break;
 	}
 }
 #pragma endregion
@@ -111,7 +119,7 @@ void UHD_DragonFSM::IdleState(float DeltaTime)
 		if (Anim->chkAngle)
 			Anim->chkAngle = false;
 	}
-	
+
 	// 타겟을 지정한다.
 	ACharacter* ClosestCharacter = nullptr;
 	float MinDistance = FLT_MAX;
@@ -155,13 +163,6 @@ void UHD_DragonFSM::F_NormalAttackState(float DeltaTime)
 	switch (normalAttackState)
 	{
 	case NormalAttackState::Scratch:
-		break;
-	case NormalAttackState::JumpPress:
-		FlyPress(DeltaTime);
-		break;
-	case NormalAttackState::Breath:
-		NormalBreath(DeltaTime);
-		break;
 	case NormalAttackState::TailSlap:
 		if (Anim)
 		{
@@ -172,6 +173,12 @@ void UHD_DragonFSM::F_NormalAttackState(float DeltaTime)
 		{
 			State = DragonState::Idle;
 		}
+		break;
+	case NormalAttackState::JumpPress:
+		FlyPress(DeltaTime);
+		break;
+	case NormalAttackState::Breath:
+		NormalBreath(DeltaTime);
 		break;
 	case NormalAttackState::HandPress:
 		break;

@@ -78,6 +78,9 @@ public:
 #pragma region Normal Attack Function
 
 #pragma region FlyPress
+	UPROPERTY()
+	bool bFly = false;
+	
 	UFUNCTION()
 	void FlyPress(float DeltaTime);
 
@@ -136,7 +139,7 @@ public:
 
 	// 타겟과 거리 내적값 추출
 	UFUNCTION()
-	double GetRadianFromCharacter();
+	float GetRadianFromCharacter();
 
 	UFUNCTION()
 	bool ChkCharacterIntoRadian();
@@ -150,13 +153,6 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float PlayShoutAnimTime = 5.f;
-#pragma endregion
-
-#pragma region Move Function
-	//EPathFollowingRequestResult::Type MoveToLocation(FVector targetLoc);
-
-	UPROPERTY()
-	bool bFly = false;
 #pragma endregion
 
 #pragma region Attack

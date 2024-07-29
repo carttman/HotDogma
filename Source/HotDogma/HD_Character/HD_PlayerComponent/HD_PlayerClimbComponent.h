@@ -4,8 +4,11 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
+#include "Components/TimelineComponent.h"
 #include "HD_PlayerClimbComponent.generated.h"
 
+// 델리게이트 선언
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FClimbMovement);
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class HOTDOGMA_API UHD_PlayerClimbComponent : public UActorComponent
@@ -31,22 +34,43 @@ public:
 	class UInputAction* IA_Player_Climb;
 	UPROPERTY(EditAnywhere)
 	class AHD_CharacterPlayer* Player;
+	
+	UPROPERTY(EditAnywhere)
+	class AHD_Dragon* Dragon;
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<class AHD_Dragon> DragonClass;
 public:
+	FHitResult Climb_OutHit;
 	void Climb();
-	void TraceMovement();
-	//UFUNCTION(BlueprintCallable)
-	//FVector GetMovementDirection();
-
-	void ClimbMove();
 	
-	FHitResult Hit_F1;
-	FHitResult Hit_F2;
-	FHitResult Hit_R;
+	bool AttachToSurfaceCaculation(float Attach_Distance, FHitResult& OutHit);
 
-	FVector Target_Location;
-	FRotator Target_Rotation;
+	// 델리게이트 인스턴스
+	UPROPERTY(BlueprintAssignable, Category = "CustomEvent")
+	FClimbMovement OnClimbMovement;
 
+	void ClimbMovementEvent(FVector WorldDirection, float ScaleValue);
+	
 public:
-	void GrabWall();
+	UPROPERTY()
+	UTimelineComponent* MyTimeline;
+
+	UPROPERTY()
+	FTimeline CurveTimeline;
 	
+	UPROPERTY(EditAnywhere, Category = "Timeline")
+	UCurveFloat* FloatCurve;
+
+	FOnTimelineFloat InterpFunction; // 타임라인의 값이 변경될 때 호출될 델리게이트
+	FOnTimelineEvent TimelineFinished;  // 타임라인이 끝났을 때 호출될 델리게이트
+
+	UFUNCTION()
+	void ClimbTimelineProgress(float Value); // 타임라인 진행 함수
+
+	UFUNCTION()
+	void OnClimbTimelineFinished(); // 타임라인 종료 함수
+
+	void StopClimbing();
+
+	void AttachToCable();
 };

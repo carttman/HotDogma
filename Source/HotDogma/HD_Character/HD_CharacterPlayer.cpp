@@ -38,7 +38,7 @@ AHD_CharacterPlayer::AHD_CharacterPlayer()
 	// Player 컴포넌트
 	PlayerAttackComponent = CreateDefaultSubobject<UHD_PlayerAttackComponent>(TEXT("PlayerAttackComponent"));
 	PlayerStatusComponent = CreateDefaultSubobject<UPlayerStatusComponent>(TEXT("PlayerStatusComponent"));
-	PlayerClimbComponent = CreateDefaultSubobject<UHD_PlayerClimbComponent>(TEXT("PlayerClimbComponent"));
+	//PlayerClimbComponent = CreateDefaultSubobject<UHD_PlayerClimbComponent>(TEXT("PlayerClimbComponent"));
 }
 
 // Called when the game starts or when spawned
@@ -65,7 +65,7 @@ void AHD_CharacterPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInput
 	if (enhancedInputComponent != nullptr)
 	{
 		PlayerAttackComponent->SetupPlayerInputComponent(enhancedInputComponent);
-		PlayerClimbComponent->SetupPlayerInputComponent(enhancedInputComponent);
+		//PlayerClimbComponent->SetupPlayerInputComponent(enhancedInputComponent);
 	}
 }
 

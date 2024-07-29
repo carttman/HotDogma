@@ -44,12 +44,14 @@ void AHD_CompanionCharacter::Tick(float DeltaTime)
 		if (gameMode != nullptr)
 		{
 			TargetPawn = gameMode->GetEnemy(GetActorLocation());
-
-			// 드래곤과의 거리를 계산한다.
-			float EnemyDistance = FVector::Dist(GetActorLocation(), TargetPawn->GetActorLocation());
-			if (EnemyDistance < 2000)
+			if (TargetPawn != nullptr)
 			{
-				SetState(ECompanionState::State_Battle);
+				// 드래곤과의 거리를 계산한다.
+				float EnemyDistance = FVector::Dist(GetActorLocation(), TargetPawn->GetActorLocation());
+				if (EnemyDistance < 2000)
+				{
+					SetState(ECompanionState::State_Battle);
+				}
 			}
 		}
 	}
@@ -58,17 +60,20 @@ void AHD_CompanionCharacter::Tick(float DeltaTime)
 		// 전투 상태에서는 드래곤을 공격한다.
 		if (AIController)
 		{
-			// 드래곤과의 거리
-			float Distance = FVector::Dist(GetActorLocation(), TargetPawn->GetActorLocation());
-			if (Distance > 200)
+			if (TargetPawn != nullptr)
 			{
-				// 드래곤을 향해 이동한다.
-				AIController->MoveToActor(TargetPawn, 100.0f);
-			}
-			else
-			{
-				// 드래곤을 공격한다.
-				UE_LOG(LogTemp, Warning, TEXT("Attack"));
+				// 드래곤과의 거리
+				float Distance = FVector::Dist(GetActorLocation(), TargetPawn->GetActorLocation());
+				if (Distance > 200)
+				{
+					// 드래곤을 향해 이동한다.
+					AIController->MoveToActor(TargetPawn, 100.0f);
+				}
+				else
+				{
+					// 드래곤을 공격한다.
+					UE_LOG(LogTemp, Warning, TEXT("Attack"));
+				}
 			}
 		}
 	}

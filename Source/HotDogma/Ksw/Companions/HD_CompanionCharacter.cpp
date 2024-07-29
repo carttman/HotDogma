@@ -205,7 +205,7 @@ void AHD_CompanionCharacter::SetMovePoint(const FVector& chacterPos, const FVect
 	SetState(ECompanionState::State_Run);
 	MovePoint = Point;
 	CharcterPoint = chacterPos;
-	if (AIController)
+	if (AIController != nullptr)
 	{
 		AIController->MoveToLocation(MovePoint, -1.0f, true, true, true);
 	}

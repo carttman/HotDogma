@@ -11,18 +11,17 @@ UENUM()
 enum class DragonState:uint8
 {
 	Sleep, // 초기 상태
-	Idle, // 대기
 	Shout, // 포효
+	Idle, // 대기
 	Move, // 걷기
-	NormalAttack, //일반공격
-	FlyAttack, //공중공격
-	FlyUp, // 이륙
-	FlyDown, // 착륙
-	Groggy // 그로기
+	Fly, // 이륙
+	Attack, //일반공격
+	Groggy, // 그로기
+	Death,	// 사망
 };
 
 UENUM()
-enum class NormalAttackState:uint8
+enum class AttackState:uint8
 {
 	Breath, // 브레스
 	Shout, // 포효
@@ -31,16 +30,8 @@ enum class NormalAttackState:uint8
 	TailSlap, // 꼬리치기
 	ThunderMagic, // 전기마법공격
 	Meteor, // 메테오
-	JumpPress // 공중찍기
-};
-
-UENUM()
-enum class FlyAttackState:uint8
-{
-	FlyPress, // 날아 올랐다가 찍기
+	JumpPress, // 공중찍기
 	FlyBreath, // 공중 브레스
-	ThunderMagic, // 전기마법공격
-	Meteor, // 메테오
 };
 
 UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
@@ -115,10 +106,7 @@ public:
 	DragonState State = DragonState::Sleep; //Default State를 Idle로 설정
 
 	UPROPERTY(EditAnywhere)
-	NormalAttackState normalAttackState;
-
-	UPROPERTY(EditAnywhere)
-	FlyAttackState flyAttackState;
+	AttackState normalAttackState;
 
 	UPROPERTY(BlueprintReadOnly, EditInstanceOnly)
 	class UHD_DragonAnim* Anim;
@@ -141,6 +129,8 @@ public:
 	UFUNCTION()
 	float GetRadianFromCharacter();
 
+	bool chkCharacterUsingSleep=false;
+	
 	UFUNCTION()
 	bool ChkCharacterIntoRadian();
 
@@ -159,13 +149,9 @@ public:
 	UPROPERTY()
 	int32 PatternPageNum = 1;
 
-	TArray<NormalAttackState> NormalAttackPattern1Page = {
-		NormalAttackState::Breath, NormalAttackState::ThunderMagic, NormalAttackState::HandPress
+	TArray<AttackState> AttackPattern1Page = {
+		AttackState::Breath, AttackState::ThunderMagic, AttackState::HandPress
 	};
-
-	TArray<FlyAttackState> AirAttackPattern;
 #pragma endregion
 
-	// UFUNCTION()
-	// void changeState(DragonState NextState);
 };

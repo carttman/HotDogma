@@ -12,6 +12,7 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "HD_PlayerComponent/HD_PlayerClimbComponent.h"
 #include "CableComponent.h"
+#include "MotionWarpingComponent.h"
 
 // Sets default values
 AHD_CharacterBase::AHD_CharacterBase()
@@ -68,6 +69,9 @@ AHD_CharacterBase::AHD_CharacterBase()
 	
 	CableCompoent = CreateDefaultSubobject<UCableComponent>(TEXT("CableComponent"));
 	CableCompoent->SetupAttachment(GetMesh(), TEXT("pelvis"));
+	CableCompoent->EndLocation = FVector(0,0,0);
+
+	MotionWarpingComponent = CreateDefaultSubobject<UMotionWarpingComponent>(TEXT("MotionWarpingComponent"));
 }
 
 // Called when the game starts or when spawned
@@ -136,6 +140,7 @@ void AHD_CharacterBase::EnhancedMove(const FInputActionValue& InputActionValue)
 			// Walking일 때
 			// add movement 
 				AddMovementInput(ForwardDirection, MovementVector.Y);
+			
 				AddMovementInput(RightDirection, MovementVector.X);
 			break;
 		case MOVE_Falling:
@@ -147,7 +152,9 @@ void AHD_CharacterBase::EnhancedMove(const FInputActionValue& InputActionValue)
 		case MOVE_Flying:
 				//climb movement : 무중력 상태일 때, 매달리는 함수 -> inputX값을 UpVector로.
 				PlayerClimbComponent->ClimbMovementEvent(GetActorRightVector(),MovementVector.X);
+				Climb_LeftRight = MovementVector.X;
 				PlayerClimbComponent->ClimbMovementEvent(GetActorUpVector(), MovementVector.Y);
+				Climb_UpDown = MovementVector.Y;
 			break;
 		default:
 			break;

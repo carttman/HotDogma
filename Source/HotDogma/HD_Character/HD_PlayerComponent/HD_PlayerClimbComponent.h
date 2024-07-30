@@ -34,7 +34,8 @@ public:
 	class UInputAction* IA_Player_Climb;
 	UPROPERTY(EditAnywhere)
 	class AHD_CharacterPlayer* Player;
-	
+	UPROPERTY(EditAnywhere)
+	class UHD_PlayerAnimInstance* PlayerAnim;
 	UPROPERTY(EditAnywhere)
 	class AHD_Dragon* Dragon;
 	UPROPERTY(EditAnywhere)
@@ -44,7 +45,7 @@ public:
 	void Climb();
 	
 	bool AttachToSurfaceCaculation(float Attach_Distance, FHitResult& OutHit);
-
+	bool bHit_AttachToSurfaceCaculation;
 	// 델리게이트 인스턴스
 	UPROPERTY(BlueprintAssignable, Category = "CustomEvent")
 	FClimbMovement OnClimbMovement;
@@ -73,4 +74,11 @@ public:
 	void StopClimbing();
 
 	void AttachToCable();
+
+	void LedgeMantleCaculation();
+	
+	
+	UPROPERTY(EditAnywhere)
+	class UAnimMontage* LedgeMontage;
+	
 };

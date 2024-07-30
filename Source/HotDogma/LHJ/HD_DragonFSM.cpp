@@ -74,22 +74,23 @@ void UHD_DragonFSM::TickComponent(float DeltaTime, ELevelTick TickType, FActorCo
 	case DragonState::Sleep:
 		SleepState();
 		break;
+	case DragonState::Shout:
+		break;
 	case DragonState::Idle:
 		IdleState(DeltaTime);
 		break;
 	case DragonState::Move:
 		MoveState(DeltaTime);
 		break;
-	case DragonState::NormalAttack:
+	case DragonState::Attack:
 		F_NormalAttackState(DeltaTime);
 		break;
-	case DragonState::FlyUp:
+	case DragonState::Fly:
 		Anim->isFly = true;
 		bFly = true;
 		break;
-	case DragonState::FlyDown:
-		Anim->isFly = false;
-		bFly = false;
+	case  DragonState::Groggy:
+	case  DragonState::Death:
 		break;
 	}
 }
@@ -100,13 +101,14 @@ void UHD_DragonFSM::SleepState()
 {
 	if (Dragon->CharacterArr.Num() == 0)
 	{
-	}
 	NearTargetActor = UGameplayStatics::GetActorOfClass(GetWorld(), AHD_CharacterPlayer::StaticClass());
+	}
 
 	// 일정거리 안에 플레이어가 들어오거나, 플레이어가 먼저 공격을 하면
 	// SleepEnd 애니메이션 재생을 하고,
 	// Idle 상태로 전환한다(노티파이 처리)
-	ChkCharacterIntoRadian();
+	if(!chkCharacterUsingSleep)
+		ChkCharacterIntoRadian();
 
 	//State = DragonState::Idle;
 }
@@ -162,8 +164,8 @@ void UHD_DragonFSM::F_NormalAttackState(float DeltaTime)
 {
 	switch (normalAttackState)
 	{
-	case NormalAttackState::Scratch:
-	case NormalAttackState::TailSlap:
+	case AttackState::Scratch:
+	case AttackState::TailSlap:
 		if (Anim)
 		{
 			Anim->InnerAngle = GetRadianFromCharacter();
@@ -174,19 +176,19 @@ void UHD_DragonFSM::F_NormalAttackState(float DeltaTime)
 			State = DragonState::Idle;
 		}
 		break;
-	case NormalAttackState::JumpPress:
+	case AttackState::JumpPress:
 		FlyPress(DeltaTime);
 		break;
-	case NormalAttackState::Breath:
+	case AttackState::Breath:
 		NormalBreath(DeltaTime);
 		break;
-	case NormalAttackState::HandPress:
+	case AttackState::HandPress:
 		break;
-	case NormalAttackState::Shout:
+	case AttackState::Shout:
 		break;
-	case NormalAttackState::Meteor:
+	case AttackState::Meteor:
 		break;
-	case NormalAttackState::ThunderMagic:
+	case AttackState::ThunderMagic:
 		break;
 	}
 }
@@ -284,6 +286,7 @@ bool UHD_DragonFSM::ChkCharacterIntoRadian()
 			{
 				// true 리턴
 				Anim->bSleepEnd = true;
+				chkCharacterUsingSleep=true;
 				break;
 			}
 		}
@@ -291,24 +294,3 @@ bool UHD_DragonFSM::ChkCharacterIntoRadian()
 	return bRtn;
 }
 #pragma endregion
-
-// EPathFollowingRequestResult::Type UHD_DragonFSM::MoveToLocation(FVector targetLoc)
-// {
-// 	// FAIMoveRequest MoveRequest;
-// 	// Dragon->SetActorRotation((targetLoc - Dragon->GetActorLocation()).GetSafeNormal().Rotation());
-// 	// MoveRequest.SetGoalLocation(targetLoc);
-// 	// MoveRequest.SetAcceptanceRadius(5.0f);
-// 	//
-// 	// FNavPathSharedPtr NavPath;
-// 	// FPathFollowingRequestResult Result = Dragon->AIController->MoveTo(MoveRequest, &NavPath);
-// 	//
-// 	// return Result.Code;
-// }
-
-// void UHD_DragonFSM::changeState(DragonState NextState)
-// {
-// 	if (Anim)
-// 		Anim->AnimState = NextState;
-//
-// 	State = NextState;
-// }

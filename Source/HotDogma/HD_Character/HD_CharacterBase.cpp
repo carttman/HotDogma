@@ -12,6 +12,8 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "HD_PlayerComponent/HD_PlayerClimbComponent.h"
 #include "CableComponent.h"
+#include "MotionWarpingComponent.h"
+#include "HotDogma/HD_GameModeBase/CHJ_GameMode.h"
 
 // Sets default values
 AHD_CharacterBase::AHD_CharacterBase()
@@ -68,6 +70,9 @@ AHD_CharacterBase::AHD_CharacterBase()
 	
 	CableCompoent = CreateDefaultSubobject<UCableComponent>(TEXT("CableComponent"));
 	CableCompoent->SetupAttachment(GetMesh(), TEXT("pelvis"));
+	CableCompoent->EndLocation = FVector(0,0,0);
+
+	MotionWarpingComponent = CreateDefaultSubobject<UMotionWarpingComponent>(TEXT("MotionWarpingComponent"));
 }
 
 // Called when the game starts or when spawned
@@ -136,6 +141,7 @@ void AHD_CharacterBase::EnhancedMove(const FInputActionValue& InputActionValue)
 			// Walking일 때
 			// add movement 
 				AddMovementInput(ForwardDirection, MovementVector.Y);
+			
 				AddMovementInput(RightDirection, MovementVector.X);
 			break;
 		case MOVE_Falling:
@@ -147,7 +153,9 @@ void AHD_CharacterBase::EnhancedMove(const FInputActionValue& InputActionValue)
 		case MOVE_Flying:
 				//climb movement : 무중력 상태일 때, 매달리는 함수 -> inputX값을 UpVector로.
 				PlayerClimbComponent->ClimbMovementEvent(GetActorRightVector(),MovementVector.X);
+				Climb_LeftRight = MovementVector.X;
 				PlayerClimbComponent->ClimbMovementEvent(GetActorUpVector(), MovementVector.Y);
+				Climb_UpDown = MovementVector.Y;
 			break;
 		default:
 			break;
@@ -171,29 +179,24 @@ void AHD_CharacterBase::EnhancedLook(const FInputActionValue& InputActionValue)
 void AHD_CharacterBase::EnhancedOrder(const FInputActionValue& InputActionValue)
 {
 	float InputKey = InputActionValue.Get<float>();
-
-	if (InputKey == (1.0f))
+	// gamemode를 가져온다.
+	ACHJ_GameMode* gameMode = Cast<ACHJ_GameMode>(GetWorld()->GetAuthGameMode());
+	if (gameMode == nullptr) return;
+	float value = InputActionValue.Get<float>();
+	if (FMath::IsNearlyEqual(value, 1.f))
 	{
-		UE_LOG(LogTemp, Log, TEXT("Skill 1 Activated"));
-		// 스킬 1 실행 코드
+		gameMode->CommandCompanion(0);
 	}
-	else if (InputKey == (2.0f))
+	else if (FMath::IsNearlyEqual(value, 2.f))
 	{
-		UE_LOG(LogTemp, Log, TEXT("Skill 2 Activated"));
-		// 스킬 2 실행 코드
+		gameMode->CommandCompanion(1);
 	}
-	else if (InputKey == (3.0f))
+	else if (FMath::IsNearlyEqual(value, 3.f))
 	{
-		UE_LOG(LogTemp, Log, TEXT("Skill 3 Activated"));
-		// 스킬 3 실행 코드
+		gameMode->CommandCompanion(2);
 	}
-	else if (InputKey == (4.0f))
+	else if (FMath::IsNearlyEqual(value, 4.f))
 	{
-		UE_LOG(LogTemp, Log, TEXT("Skill 4 Activated"));
-		// 스킬 4 실행 코드
-	}
-	else
-	{
-		UE_LOG(LogTemp, Warning, TEXT("Unknown Skill Key"));
+		gameMode->CommandCompanion(3);
 	}
 }

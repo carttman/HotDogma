@@ -50,9 +50,12 @@ public:
 	
 	UPROPERTY(EditAnywhere)
 	class UHD_PlayerClimbComponent* PlayerClimbComponent;
-	
+	UPROPERTY(EditAnywhere)
+	class UMotionWarpingComponent* MotionWarpingComponent;
 public:
 	FVector2D MovementVector;
+	float Climb_UpDown;
+	float Climb_LeftRight;
 public:
 	void EnhancedMove(const FInputActionValue& InputActionValue);
 	void EnhancedJump(const FInputActionValue& InputActionValue);
@@ -62,4 +65,7 @@ public:
 public:
 	UPROPERTY(EditAnywhere)
 	class UCableComponent* CableCompoent;
+
+	UPROPERTY(EditAnywhere)
+	class AHD_Dragon* DDDDDragon;
 };

@@ -58,12 +58,27 @@ public:
 
 	class AHD_PlayerWeaponBase* Left_Weapon;
 	class AHD_PlayerWeaponBase* Right_Weapon;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	bool IsClimbing = false;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float Climb_LR;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float Climb_UD;
+	
 public:
 	UFUNCTION()
 	void AnimNotify_Damage_On();
 	UFUNCTION()
 	void AnimNotify_Damage_Off();
 
+	UFUNCTION()
+	void PlayMontageNotifyBegin(FName NotifyName, const FBranchingPointNotifyPayload& BranchingPointNotifyPayload);
+
+	UPROPERTY(EditAnywhere)
+	UAnimMontage* LedgeMontage;
+	
 	//UFUNCTION()
 	//void AnimNotify_Start_Hit();
 	//UFUNCTION()

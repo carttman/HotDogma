@@ -5,6 +5,7 @@
 #include "HD_CompanionCharacter.h"
 #include "Kismet/GameplayStatics.h"
 #include "NavigationSystem.h"
+#include "HotDogma/Ksw/CompanionComponents/HD_CompanionStateComponent.h"
 
 // Sets default values
 AHD_CompanionManager::AHD_CompanionManager()
@@ -39,15 +40,15 @@ void AHD_CompanionManager::BeginPlay()
 	Formations.Add(FVector(0, 300, 0));
 	auto* Sorcerer = GetWorld()->SpawnActor<AHD_CompanionCharacter>(SorcererCompanionFactory, PlayerPawn->GetActorLocation() + Formations[0], FRotator::ZeroRotator);
 
-	Companions.Add(Sorcerer);
+	Companions.Add(Sorcerer->GetCompanionStateComp());
 	// 생성할 위치를 설정
 	Formations.Add(FVector(300, -100, 0));
 	auto* Warrior1 = GetWorld()->SpawnActor<AHD_CompanionCharacter>(WarriorCompanionFactory, PlayerPawn->GetActorLocation() + Formations[1], FRotator::ZeroRotator);
-	Companions.Add(Warrior1);
+	Companions.Add(Warrior1->GetCompanionStateComp());
 	// 생성할 위치를 설정
 	Formations.Add(FVector(500, 0, 0));
 	auto* Warrior2 = GetWorld()->SpawnActor<AHD_CompanionCharacter>(WarriorCompanion2Factory, PlayerPawn->GetActorLocation() + Formations[2], FRotator::ZeroRotator);
-	Companions.Add(Warrior2);
+	Companions.Add(Warrior2->GetCompanionStateComp());
 
 	//for (int i = 0; i < 10; i++)
 	//{
@@ -60,9 +61,11 @@ void AHD_CompanionManager::BeginPlay()
 
 	//		auto* Warrior = GetWorld()->SpawnActor<AHD_CompanionCharacter>(WarriorCompanionFactory, PlayerPawn->GetActorLocation() + FormationByPlayer, FRotator::ZeroRotator);
 	//		if (nullptr != Warrior)
-	//			Companions.Add(Warrior);
+	//			Companions.Add(Warrior->GetCompanionStateComp());
 	//	}
 	//}
+
+	SetCommand(ECompanionCommand::Command_Following);
 }
 
 // Called every frame
@@ -161,7 +164,7 @@ void AHD_CompanionManager::TickHelp(float DeltaTime)
 	}
 }
 
-void AHD_CompanionManager::MoveBoid(AHD_CompanionCharacter* Companion, FVector Pos)
+void AHD_CompanionManager::MoveBoid(UHD_CompanionStateComponent* Companion, FVector Pos)
 {
 	FVector PlayerLocation = PlayerPawn->GetActorLocation();
 	if (!ChangeCommand && Companion->CurrentState == ECompanionState::State_Wait)
@@ -180,5 +183,13 @@ void AHD_CompanionManager::SetCommand(ECompanionCommand Command)
 {
 	CurrentCommand = Command;
 	ChangeCommand = true;
+
+	for (int i = 0; i < Companions.Num(); i++)
+	{
+		if (nullptr != Companions[i])
+		{
+			Companions[i]->SetCommand(CurrentCommand);
+		}
+	}
 }
 

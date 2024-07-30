@@ -3,6 +3,7 @@
 
 #include "HD_CompanionCharacter.h"
 #include "HotDogma/Ksw/CompanionComponents/HD_CompanionStateComponent.h"
+#include "Components/ArrowComponent.h"
 
 // Sets default values
 AHD_CompanionCharacter::AHD_CompanionCharacter()
@@ -11,6 +12,8 @@ AHD_CompanionCharacter::AHD_CompanionCharacter()
 	PrimaryActorTick.bCanEverTick = true;
 
 	CompanionStateComp = CreateDefaultSubobject<UHD_CompanionStateComponent>(TEXT("CompanionStateComp"));
+	ArrowComp = CreateDefaultSubobject<UArrowComponent>(TEXT("ArrowComp"));
+	ArrowComp->SetupAttachment(RootComponent);
 }
 
 // Called when the game starts or when spawned

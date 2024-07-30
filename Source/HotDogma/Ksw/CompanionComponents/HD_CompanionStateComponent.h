@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
+#include "HotDogma/Ksw/Companions/HD_CompanionManager.h"
 #include "HD_CompanionStateComponent.generated.h"
 
 // Enum으로 상태 관리
@@ -33,6 +34,11 @@ public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
+	void WaitTick(float DeltaTime);
+	void RunTick(float DeltaTime);
+	virtual void BattleTick(float DeltaTime);
+	void HelpTick(float DeltaTime);
+	void SetCommand(ECompanionCommand Command){ CurrentCommand = Command; }
 
 	// boids
 	// separation : 다른 개체들과의 거리를 유지
@@ -55,9 +61,16 @@ public:
 	FVector MovePoint;
 	FVector CharcterPoint;
 	ECompanionState CurrentState;
+	ECompanionCommand CurrentCommand;
+	
+	UPROPERTY()
+	class AHD_CompanionManager* CompanionManager;
 
 	UPROPERTY()
 	class AAIController* AIController;
+	
+	UPROPERTY()
+	ACharacter* Me;
 
 	UPROPERTY()
 	class APawn* TargetPawn;

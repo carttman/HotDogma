@@ -64,6 +64,8 @@ void AHD_CompanionManager::BeginPlay()
 	//			Companions.Add(Warrior->GetCompanionStateComp());
 	//	}
 	//}
+
+	SetCommand(ECompanionCommand::Command_Following);
 }
 
 // Called every frame
@@ -181,5 +183,13 @@ void AHD_CompanionManager::SetCommand(ECompanionCommand Command)
 {
 	CurrentCommand = Command;
 	ChangeCommand = true;
+
+	for (int i = 0; i < Companions.Num(); i++)
+	{
+		if (nullptr != Companions[i])
+		{
+			Companions[i]->SetCommand(CurrentCommand);
+		}
+	}
 }
 

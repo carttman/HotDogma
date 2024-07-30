@@ -31,4 +31,7 @@ public:
 	class UHD_CompanionStateComponent* CompanionStateComp;
 
 	class UHD_CompanionStateComponent* GetCompanionStateComp() { return CompanionStateComp; }
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Companion")
+	class UArrowComponent* ArrowComp;
 };

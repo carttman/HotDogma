@@ -73,11 +73,7 @@ public:
 	UFUNCTION()
 	void AnimNotify_Damage_Off();
 
-	UFUNCTION()
-	void PlayMontageNotifyBegin(FName NotifyName, const FBranchingPointNotifyPayload& BranchingPointNotifyPayload);
-
-	UPROPERTY(EditAnywhere)
-	UAnimMontage* LedgeMontage;
+	
 	
 	//UFUNCTION()
 	//void AnimNotify_Start_Hit();

@@ -141,7 +141,6 @@ void AHD_CharacterBase::EnhancedMove(const FInputActionValue& InputActionValue)
 			// Walking일 때
 			// add movement 
 				AddMovementInput(ForwardDirection, MovementVector.Y);
-			
 				AddMovementInput(RightDirection, MovementVector.X);
 			break;
 		case MOVE_Falling:
@@ -151,7 +150,7 @@ void AHD_CharacterBase::EnhancedMove(const FInputActionValue& InputActionValue)
 				AddMovementInput(RightDirection, MovementVector.X);
 			break;
 		case MOVE_Flying:
-				//climb movement : 무중력 상태일 때, 매달리는 함수 -> inputX값을 UpVector로.
+				//climb movement : 무중력 상태일 때, 매달리는 함수 -> inputX값을 UpVector로 바꾸고 Z축으로 이동시킴
 				PlayerClimbComponent->ClimbMovementEvent(GetActorRightVector(),MovementVector.X);
 				Climb_LeftRight = MovementVector.X;
 				PlayerClimbComponent->ClimbMovementEvent(GetActorUpVector(), MovementVector.Y);

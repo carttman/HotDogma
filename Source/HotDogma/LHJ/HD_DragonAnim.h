@@ -73,7 +73,7 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void StartFlyUpFunction();
 
-	//=======================
+	//=======================전투시작
 	UFUNCTION()
 	void AnimNotify_SleepEnd();		// 주변 캐릭터 인지
 
@@ -85,5 +85,20 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FSM")
 	bool bEndStartAnim=false;
+	//=========================도약찍기
+	UFUNCTION()
+	void AnimNotify_bPress();
+
+	UFUNCTION()
+	void AnimNotify_StartFlyPress();
+
+	UFUNCTION()
+	void AnimNotify_PressEnd();
+	//=========================꼬리치기, 손바닥 내려치기 변수 초기화
+	UFUNCTION()
+	void AnimNotify_EndTailSlap();
+
+	UFUNCTION()
+	void AnimNotify_EndScratch();
 	//=========================
 };

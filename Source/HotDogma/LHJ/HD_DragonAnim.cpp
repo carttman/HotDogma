@@ -3,6 +3,7 @@
 
 #include "../LHJ/HD_DragonAnim.h"
 #include "HD_Dragon.h"
+#include "Kismet/KismetSystemLibrary.h"
 
 void UHD_DragonAnim::NativeInitializeAnimation()
 {
@@ -50,18 +51,52 @@ void UHD_DragonAnim::StartFlyUpFunction()
 		fsm->bStartFlyPress = true;
 }
 
+#pragma region 전투시작 전 Notify
 void UHD_DragonAnim::AnimNotify_SleepEnd()
 {
-	bSleepEnd=false;
+	bSleepEnd = false;
 }
 
 void UHD_DragonAnim::AnimNotify_StartFight()
 {
-	bPlayShoutAnim=true;
+	bPlayShoutAnim = true;
 }
 
 void UHD_DragonAnim::AnimNotify_endShout()
 {
-	bPlayShoutAnim=false;
-	bEndStartAnim=true;
+	bPlayShoutAnim = false;
+	bEndStartAnim = true;
 }
+#pragma endregion
+
+#pragma region 도약찍기 Notify
+void UHD_DragonAnim::AnimNotify_bPress()
+{
+	FLatentActionInfo LatentInfo;
+	LatentInfo.CallbackTarget = this; // or other relevant setup for LatentInfo
+	UKismetSystemLibrary::Delay(this, 2.f, LatentInfo);
+	bFlyPress = true;
+}
+
+void UHD_DragonAnim::AnimNotify_StartFlyPress()
+{
+	StartFlyUpFunction();
+}
+
+void UHD_DragonAnim::AnimNotify_PressEnd()
+{
+	bFlyPress = false;
+}
+#pragma endregion
+
+#pragma region 꼬리치기, 손바닥 내려치기 Notify
+void UHD_DragonAnim::AnimNotify_EndTailSlap()
+{
+	chkAngle = false;
+}
+
+void UHD_DragonAnim::AnimNotify_EndScratch()
+{
+	chkAngle = false;
+}
+#pragma endregion

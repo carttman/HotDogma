@@ -77,6 +77,8 @@ public:
 
 	void LedgeMantleCaculation();
 	
+	UFUNCTION()
+	void PlayMontageNotifyBegin(FName NotifyName, const FBranchingPointNotifyPayload& BranchingPointNotifyPayload);
 	
 	UPROPERTY(EditAnywhere)
 	class UAnimMontage* LedgeMontage;

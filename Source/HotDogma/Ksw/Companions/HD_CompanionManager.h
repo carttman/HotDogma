@@ -38,7 +38,7 @@ public:
 	void TickWait(float DeltaTime);
 	void TickHelp(float DeltaTime);
 
-	void MoveBoid(class AHD_CompanionCharacter* Companion, FVector Pos);
+	void MoveBoid(class UHD_CompanionStateComponent* Companion, FVector Pos);
 
 	// 블루프린트 호출가능
 	UFUNCTION(BlueprintCallable)
@@ -54,7 +54,7 @@ public:
 	TSubclassOf<class AHD_CompanionCharacter> WarriorCompanion2Factory;
 
 	UPROPERTY(EditAnywhere)
-	TArray<class AHD_CompanionCharacter*> Companions;
+	TArray<class UHD_CompanionStateComponent*> Companions;
 
 	TArray<FVector> Formations;
 

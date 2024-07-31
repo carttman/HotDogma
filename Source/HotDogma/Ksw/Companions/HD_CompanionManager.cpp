@@ -6,6 +6,8 @@
 #include "Kismet/GameplayStatics.h"
 #include "NavigationSystem.h"
 #include "HotDogma/Ksw/CompanionComponents/HD_CompanionStateComponent.h"
+#include "../CompanionComponents/HD_SorcererStateComponent.h"
+#include "../CompanionComponents/HD_WarriorStateComponent.h"
 
 // Sets default values
 AHD_CompanionManager::AHD_CompanionManager()
@@ -35,20 +37,27 @@ void AHD_CompanionManager::BeginPlay()
 	}
 
 	// 적이 생성된 기본 위치를 가져옴
-
 	// 생성할 위치를 설정
-	Formations.Add(FVector(0, 300, 0));
-	auto* Sorcerer = GetWorld()->SpawnActor<AHD_CompanionCharacter>(SorcererCompanionFactory, PlayerPawn->GetActorLocation() + Formations[0], FRotator::ZeroRotator);
-
-	Companions.Add(Sorcerer->GetCompanionStateComp());
-	// 생성할 위치를 설정
-	Formations.Add(FVector(300, -100, 0));
-	auto* Warrior1 = GetWorld()->SpawnActor<AHD_CompanionCharacter>(WarriorCompanionFactory, PlayerPawn->GetActorLocation() + Formations[1], FRotator::ZeroRotator);
-	Companions.Add(Warrior1->GetCompanionStateComp());
-	// 생성할 위치를 설정
-	Formations.Add(FVector(500, 0, 0));
-	auto* Warrior2 = GetWorld()->SpawnActor<AHD_CompanionCharacter>(WarriorCompanion2Factory, PlayerPawn->GetActorLocation() + Formations[2], FRotator::ZeroRotator);
-	Companions.Add(Warrior2->GetCompanionStateComp());
+	{
+		Formations.Add(FVector(0, 300, 0));
+		auto* Sorcerer = GetWorld()->SpawnActor<AHD_CompanionCharacter>(SorcererCompanionFactory, PlayerPawn->GetActorLocation() + Formations[0], FRotator::ZeroRotator);
+		
+		Companions.Add(Sorcerer->SetupCompanionStateComp(false));
+	}
+	
+	{
+		// 생성할 위치를 설정
+		Formations.Add(FVector(300, -100, 0));
+		auto* Warrior1 = GetWorld()->SpawnActor<AHD_CompanionCharacter>(WarriorCompanionFactory, PlayerPawn->GetActorLocation() + Formations[1], FRotator::ZeroRotator);
+		
+		Companions.Add(Warrior1->SetupCompanionStateComp(true));
+	}
+	{
+		// 생성할 위치를 설정
+		Formations.Add(FVector(500, 0, 0));
+		auto* Warrior2 = GetWorld()->SpawnActor<AHD_CompanionCharacter>(WarriorCompanion2Factory, PlayerPawn->GetActorLocation() + Formations[2], FRotator::ZeroRotator);
+		Companions.Add(Warrior2->SetupCompanionStateComp(true));
+	}
 
 	//for (int i = 0; i < 10; i++)
 	//{
@@ -77,7 +86,7 @@ void AHD_CompanionManager::Tick(float DeltaTime)
 	{
 		if (nullptr != Companions[i])
 		{
-			Companions[i]->Flocking(Companions, PlayerPawn->GetActorLocation(), SeparationValue, AlignmentValue, CohesionValue);
+			//Companions[i]->Flocking(Companions, PlayerPawn->GetActorLocation(), SeparationValue, AlignmentValue, CohesionValue);
 		}
 	}
 

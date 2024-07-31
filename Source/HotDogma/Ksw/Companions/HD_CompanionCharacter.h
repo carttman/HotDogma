@@ -26,12 +26,14 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) override;
 
 	UPROPERTY(EditAnywhere, Category = "Companion")
 	class UHD_CompanionStateComponent* CompanionStateComp;
 
-	class UHD_CompanionStateComponent* GetCompanionStateComp() { return CompanionStateComp; }
+	class UHD_CompanionStateComponent* SetupCompanionStateComp(bool isWarrior);
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Companion")
-	class UArrowComponent* ArrowComp;
+	UPROPERTY(EditAnywhere, Category = "Companion")
+	class UPlayerStatusComponent* PlayerStatusComp;
+	
 };

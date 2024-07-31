@@ -64,11 +64,30 @@ void UHD_CompanionStateComponent::TickComponent(float DeltaTime, ELevelTick Tick
 
 void UHD_CompanionStateComponent::WaitTick(float DeltaTime)
 {
-	float Distance = FVector::Dist(GetOwner()->GetActorLocation(), MovePoint);
-	if (Distance > 100)
+	if (CurrentCommand != ECompanionCommand::Command_Wait)
 	{
-		SetState(ECompanionState::State_Run);
+		float Distance = FVector::Dist(GetOwner()->GetActorLocation(), MovePoint);
+		if (Distance > 100)
+		{
+			SetState(ECompanionState::State_Run);
+		}
+
+		ACHJ_GameMode* gameMode = Cast<ACHJ_GameMode>(GetWorld()->GetAuthGameMode());
+		if (gameMode != nullptr)
+		{
+			TargetPawn = gameMode->GetEnemy(GetOwner()->GetActorLocation());
+			if (TargetPawn != nullptr)
+			{
+				// 드래곤과의 거리를 계산한다.
+				float EnemyDistance = FVector::Dist(GetOwner()->GetActorLocation(), TargetPawn->GetActorLocation());
+				if (EnemyDistance < 2000)
+				{
+					SetState(ECompanionState::State_Battle);
+				}
+			}
+		}
 	}
+	
 }
 
 void UHD_CompanionStateComponent::RunTick(float DeltaTime)
@@ -118,12 +137,13 @@ void UHD_CompanionStateComponent::BattleTick(float DeltaTime)
 		if (Dist > 2500)
 		{
 			UE_LOG(LogTemp, Warning, TEXT("Following"));
-			// 플레이어를 따라간다.
+			// 드래곤을 지켜보며 플레이어를 따라간다.
 			if (AIController)
 			{
 				AIController->MoveToActor(Player, 100.0f);
 			}
 
+			// 드래곤과 충분히 멀어진 경우 전투 상태를 푼다.
 			{
 				float Distance = FVector::Dist(TargetPawn->GetActorLocation(), Me->GetActorLocation());
 				if (Distance > 2000)
@@ -140,28 +160,16 @@ void UHD_CompanionStateComponent::BattleTick(float DeltaTime)
 	}
 
 	// 자식이 구현한다.
-	// 전투 상태에서는 드래곤을 공격한다.
-	if (AIController)
-	{
-		if (TargetPawn != nullptr)
-		{
-			// 드래곤과의 거리
-			float Distance = FVector::Dist(Me->GetActorLocation(), TargetPawn->GetActorLocation());
-			if (Distance > 200)
-			{
-				// 드래곤을 향해 이동한다.
-				AIController->MoveToActor(TargetPawn, 100.0f);
-			}
-			else
-			{
-				// 드래곤을 공격한다.
-				UE_LOG(LogTemp, Warning, TEXT("Attack"));
-			}
-		}
-	}
+	AttackTick(DeltaTime);
+
 }
 
 void UHD_CompanionStateComponent::HelpTick(float DeltaTime)
+{
+
+}
+
+void UHD_CompanionStateComponent::AttackTick(float DeltaTime)
 {
 
 }

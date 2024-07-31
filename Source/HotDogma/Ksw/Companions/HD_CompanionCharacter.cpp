@@ -4,23 +4,23 @@
 #include "HD_CompanionCharacter.h"
 #include "HotDogma/Ksw/CompanionComponents/HD_CompanionStateComponent.h"
 #include "Components/ArrowComponent.h"
+#include "../CompanionComponents/HD_WarriorStateComponent.h"
+#include "../CompanionComponents/HD_SorcererStateComponent.h"
+#include "HotDogma/HD_Character/HD_PlayerComponent/PlayerStatusComponent.h"
 
 // Sets default values
 AHD_CompanionCharacter::AHD_CompanionCharacter()
 {
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
+	PlayerStatusComp = CreateDefaultSubobject<UPlayerStatusComponent>(TEXT("PlayerStatusComp"));
 
-	CompanionStateComp = CreateDefaultSubobject<UHD_CompanionStateComponent>(TEXT("CompanionStateComp"));
-	ArrowComp = CreateDefaultSubobject<UArrowComponent>(TEXT("ArrowComp"));
-	ArrowComp->SetupAttachment(RootComponent);
 }
 
 // Called when the game starts or when spawned
 void AHD_CompanionCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-	
 }
 
 // Called every frame
@@ -35,4 +35,33 @@ void AHD_CompanionCharacter::SetupPlayerInputComponent(UInputComponent* PlayerIn
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
+}
+
+float AHD_CompanionCharacter::TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser)
+{
+	float Damage = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
+
+	if (Damage > 0.f)
+	{
+	}
+
+	return Damage;
+}
+
+class UHD_CompanionStateComponent* AHD_CompanionCharacter::SetupCompanionStateComp(bool isWarrior)
+{
+	if (isWarrior)
+	{
+		CompanionStateComp = NewObject<UHD_WarriorStateComponent>(this, UHD_WarriorStateComponent::StaticClass(), TEXT("CompanionStateComp"));
+		CompanionStateComp->RegisterComponent();
+		// CompanionStateComp->AttachTo(RootComponent);
+	}
+	else
+	{
+		CompanionStateComp = NewObject<UHD_SorcererStateComponent>(this, UHD_SorcererStateComponent::StaticClass(), TEXT("CompanionStateComp"));
+		CompanionStateComp->RegisterComponent();
+		//CompanionStateComp->AttachTo(RootComponent);
+	}
+
+	return CompanionStateComp;
 }

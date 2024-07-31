@@ -36,9 +36,11 @@ public:
 
 	void WaitTick(float DeltaTime);
 	void RunTick(float DeltaTime);
-	virtual void BattleTick(float DeltaTime);
+	void BattleTick(float DeltaTime);
 	void HelpTick(float DeltaTime);
 	void SetCommand(ECompanionCommand Command){ CurrentCommand = Command; }
+
+	virtual void AttackTick(float DeltaTime);
 
 	// boids
 	// separation : 다른 개체들과의 거리를 유지

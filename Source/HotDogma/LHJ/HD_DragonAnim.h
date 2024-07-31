@@ -55,9 +55,6 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FSM")
 	bool isGroggy=false;	// 그로기 전용
 
-	UFUNCTION(BlueprintCallable)
-	void PlayShoutAnim();
-
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Meta = (AllowPrivateAccess=true))
 	float Direction;
 
@@ -68,12 +65,12 @@ public:
 	void ChangeState(DragonState ChangeState);
 
 	UFUNCTION(BlueprintCallable)
-	void ChangeNormalAttack(AttackState ChangeState);
+	void ChangeAttackState(AttackState ChangeState);
 
 	UFUNCTION(BlueprintCallable)
 	void StartFlyUpFunction();
 
-	//=======================
+	//=======================전투시작
 	UFUNCTION()
 	void AnimNotify_SleepEnd();		// 주변 캐릭터 인지
 
@@ -85,5 +82,26 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FSM")
 	bool bEndStartAnim=false;
+	//=========================도약찍기
+	UFUNCTION()
+	void AnimNotify_bPress();
+
+	UFUNCTION()
+	void AnimNotify_StartFlyPress();
+
+	UFUNCTION()
+	void AnimNotify_PressEnd();
+	//=========================꼬리치기, 손바닥 내려치기 변수 초기화
+	UFUNCTION()
+	void AnimNotify_EndTailSlap();
+
+	UFUNCTION()
+	void AnimNotify_EndScratch();
 	//=========================
+	UFUNCTION()
+	void AnimNotify_StartAttack();
+	
+	UFUNCTION()
+	void AnimNotify_EndAttack();
+
 };

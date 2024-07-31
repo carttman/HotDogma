@@ -47,9 +47,10 @@ void UHD_PlayerClimbComponent::BeginPlay()
 	}
 	else UE_LOG(LogTemp, Warning, TEXT("GetOwner() returned null"));
 	//드래곤 셋팅
-	Dragon = Cast<AHD_Dragon>(UGameplayStatics::GetActorOfClass(GetWorld(), DragonClass));
-	if(Dragon)UE_LOG(LogTemp, Warning, TEXT("This is: %s"), *Dragon->GetName())
-	else UE_LOG(LogTemp, Warning, TEXT("This is: None "));
+	//Dragon = Cast<AHD_Dragon>(Player->Dragon->GetOwner());
+	// // 	Cast<AHD_Dragon>(UGameplayStatics::GetActorOfClass(GetWorld(), DragonClass));
+	// if(Dragon)UE_LOG(LogTemp, Warning, TEXT("TO ClimbComp-> This is: %s"), *Dragon->GetName())
+	//else UE_LOG(LogTemp, Warning, TEXT("This is: None "));
 	// 타임라인 커브가 있다면
 	if (FloatCurve)
 	{
@@ -70,7 +71,11 @@ void UHD_PlayerClimbComponent::TickComponent(float DeltaTime, ELevelTick TickTyp
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 	MyTimeline->TickComponent(DeltaTime, ELevelTick::LEVELTICK_TimeOnly, nullptr); // 타임라인을 매 프레임마다 업데이트
-	
+	if(Dragon == nullptr)
+	{
+		Dragon = Cast<AHD_Dragon>(Player->Dragon);
+		if(Dragon)UE_LOG(LogTemp, Warning, TEXT("TO ClimbComp-> This is: %s"), *Dragon->GetName());
+	}
 }
 
 void UHD_PlayerClimbComponent::SetupPlayerInputComponent(UEnhancedInputComponent* enhancedInputComponent)
@@ -107,7 +112,6 @@ void UHD_PlayerClimbComponent::Climb()
 			UKismetSystemLibrary::MoveComponentTo(Player->GetCapsuleComponent(),TargetLocation,TargetRotation,false,false,
 				0.2f,false, EMoveComponentAction::Move,LatentInfo);
 		}
-		
 	}
 	else StopClimbing(); //벽타기 취소
 }

@@ -4,24 +4,26 @@
 #include "../../HD_Character/HD_PlayerComponent/HD_PlayerAttackComponent.h"
 
 #include "EnhancedInputComponent.h"
+#include "GameFramework/CharacterMovementComponent.h"
 #include "HotDogma/HD_Character/HD_CharacterPlayer.h"
+#include "HotDogma/HD_Character/HD_PlayerAnimInstance.h"
 
-// Sets default values for this component's properties
+
 UHD_PlayerAttackComponent::UHD_PlayerAttackComponent()
 {
-	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
-	// off to improve performance if you don't need them.
+	
 	PrimaryComponentTick.bCanEverTick = true;
 
-	// ...
+	
 }
 
 
-// Called when the game starts
+
 void UHD_PlayerAttackComponent::BeginPlay()
 {
 	Super::BeginPlay();
 	Player = Cast<AHD_CharacterBase>(GetOwner());
+	PlayerAnim = Cast<UHD_PlayerAnimInstance>(Player->GetMesh()->GetAnimInstance());
 	// ...
 	
 }
@@ -38,6 +40,27 @@ void UHD_PlayerAttackComponent::TickComponent(float DeltaTime, ELevelTick TickTy
 void UHD_PlayerAttackComponent::SetupPlayerInputComponent(UEnhancedInputComponent* enhancedInputComponent)
 {
 	enhancedInputComponent->BindAction(IA_HD_Attack, ETriggerEvent::Started, this, &UHD_PlayerAttackComponent::PlayerAttack);
+	enhancedInputComponent->BindAction(IA_HD_Skill, ETriggerEvent::Started, this, &UHD_PlayerAttackComponent::EnhancedSkill);
+}
+
+
+
+void UHD_PlayerAttackComponent::EnhancedSkill(const FInputActionValue& InputActionValue)
+{
+	float value = InputActionValue.Get<float>();
+	if (FMath::IsNearlyEqual(value, 1.f))
+	{
+		Skill_Splitter();
+	}
+	else if (FMath::IsNearlyEqual(value, 2.f))
+	{
+	}
+	else if (FMath::IsNearlyEqual(value, 3.f))
+	{
+	}
+	else if (FMath::IsNearlyEqual(value, 4.f))
+	{
+	}
 }
 
 void UHD_PlayerAttackComponent::PlayerAttack()
@@ -115,6 +138,12 @@ void UHD_PlayerAttackComponent::UpdatePlayerAttack(float DeltaTime)
 			ComboCount = 0;
 		}
 	}
+}
+
+void UHD_PlayerAttackComponent::Skill_Splitter()
+{	// 루트모션을 위한 flying 모드 변경
+	Player->GetCharacterMovement()->SetMovementMode(MOVE_Flying);
+	PlayerAnim->Montage_Play(AM_Splitter, 1);
 }
 
 

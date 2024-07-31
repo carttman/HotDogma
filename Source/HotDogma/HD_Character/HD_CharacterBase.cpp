@@ -13,6 +13,7 @@
 #include "HD_PlayerComponent/HD_PlayerClimbComponent.h"
 #include "CableComponent.h"
 #include "MotionWarpingComponent.h"
+#include "HD_PlayerComponent/PlayerStatusComponent.h"
 #include "HotDogma/HD_GameModeBase/CHJ_GameMode.h"
 
 // Sets default values
@@ -67,6 +68,7 @@ AHD_CharacterBase::AHD_CharacterBase()
 	camera->SetRelativeRotation(FRotator(-20, 0, 0));
 
 	PlayerClimbComponent = CreateDefaultSubobject<UHD_PlayerClimbComponent>(TEXT("PlayerClimbComponent"));
+	PlayerStatusComponent = CreateDefaultSubobject<UPlayerStatusComponent>(TEXT("PlayerStatusComponent"));
 	
 	CableCompoent = CreateDefaultSubobject<UCableComponent>(TEXT("CableComponent"));
 	CableCompoent->SetupAttachment(GetMesh(), TEXT("pelvis"));
@@ -92,6 +94,12 @@ void AHD_CharacterBase::BeginPlay()
 		subSystem->AddMappingContext(imc_HDMapping, 0);
 	}
 	
+	PlayerGameMode = Cast<ACHJ_GameMode>(GetWorld()->GetAuthGameMode());
+	if (PlayerGameMode != nullptr)
+	{
+		Dragon = PlayerGameMode->GetEnemy(GetOwner()->GetActorLocation());
+		if (Dragon != nullptr) UE_LOG(LogTemp, Warning, TEXT("TO CharacterBase -> Get : %s"), *Dragon->GetName());
+	}
 }
 
 // Called every frame
@@ -118,6 +126,7 @@ void AHD_CharacterBase::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
 		PlayerClimbComponent->SetupPlayerInputComponent(enhancedInputComponent);
 	}
 }
+
 
 void AHD_CharacterBase::EnhancedMove(const FInputActionValue& InputActionValue)
 {
@@ -179,23 +188,52 @@ void AHD_CharacterBase::EnhancedOrder(const FInputActionValue& InputActionValue)
 {
 	float InputKey = InputActionValue.Get<float>();
 	// gamemode를 가져온다.
-	ACHJ_GameMode* gameMode = Cast<ACHJ_GameMode>(GetWorld()->GetAuthGameMode());
-	if (gameMode == nullptr) return;
+	
+	if (PlayerGameMode == nullptr) return;
 	float value = InputActionValue.Get<float>();
 	if (FMath::IsNearlyEqual(value, 1.f))
 	{
-		gameMode->CommandCompanion(0);
+		PlayerGameMode->CommandCompanion(0);
 	}
 	else if (FMath::IsNearlyEqual(value, 2.f))
 	{
-		gameMode->CommandCompanion(1);
+		PlayerGameMode->CommandCompanion(1);
 	}
 	else if (FMath::IsNearlyEqual(value, 3.f))
 	{
-		gameMode->CommandCompanion(2);
+		PlayerGameMode->CommandCompanion(2);
 	}
 	else if (FMath::IsNearlyEqual(value, 4.f))
 	{
-		gameMode->CommandCompanion(3);
+		PlayerGameMode->CommandCompanion(3);
 	}
+}
+
+// void AHD_CharacterBase::EnhancedSkill(const FInputActionValue& InputActionValue)
+// {
+// 	float value = InputActionValue.Get<float>();
+// 	if (FMath::IsNearlyEqual(value, 1.f))
+// 	{
+// 		// Skill_Splitter();
+// 	}
+// 	else if (FMath::IsNearlyEqual(value, 2.f))
+// 	{
+// 	}
+// 	else if (FMath::IsNearlyEqual(value, 3.f))
+// 	{
+// 	}
+// 	else if (FMath::IsNearlyEqual(value, 4.f))
+// 	{
+// 	}
+// }
+
+float AHD_CharacterBase::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator,
+                                    AActor* DamageCauser)
+{
+	float damage = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
+	UE_LOG(LogTemp, Warning, TEXT("%s Takes Damage : %f"), *GetName(), damage);
+	PlayerStatusComponent->CurrHP -= damage;
+	UE_LOG(LogTemp, Warning, TEXT("%s Takes Damage : %f"), *GetName(), PlayerStatusComponent->CurrHP);
+	
+	return damage;
 }

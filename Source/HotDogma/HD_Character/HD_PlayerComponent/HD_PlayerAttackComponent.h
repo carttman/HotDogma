@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "InputActionValue.h"
 #include "Components/ActorComponent.h"
 #include "HD_PlayerAttackComponent.generated.h"
 
@@ -26,13 +27,16 @@ public:
 
 public:
 	void SetupPlayerInputComponent(class UEnhancedInputComponent* enhancedInputComponent);
-
+	void EnhancedSkill(const FInputActionValue& InputActionValue);
 public:
 	void PlayerAttack();
 	void UpdatePlayerAttack(float DeltaTime);
+	void Skill_Splitter();
 public:
 	UPROPERTY(EditAnywhere)
 	class UInputAction* IA_HD_Attack;
+	UPROPERTY(EditAnywhere)
+	class UInputAction* IA_HD_Skill;
 public:
 	UPROPERTY(EditAnywhere)
 	class UAnimMontage* AM_BaseAttack;
@@ -40,10 +44,16 @@ public:
 public:
 	UPROPERTY()
 	class AHD_CharacterBase* Player;
-
+	UPROPERTY()
+	class UHD_PlayerAnimInstance* PlayerAnim;
+	
 	int32 ComboCount = 0;
 
 	float CurrComboTime = 0;
 	float MinComboTime = 0.5f;
 	float MaxComboTime = 1.4f;
+
+public:
+	UPROPERTY(EditAnywhere)
+	class UAnimMontage* AM_Splitter;
 };

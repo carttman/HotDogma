@@ -16,29 +16,18 @@ AHD_CharacterPlayer::AHD_CharacterPlayer()
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 	
-	// Left_Dagger = CreateDefaultSubobject<UChildActorComponent>(TEXT("Left_Dagger"));
-	// Left_Dagger->SetupAttachment(GetMesh(), TEXT("middle_01_l"));
-	// Left_Dagger->SetRelativeLocation(FVector(3.2,-3, -4.6));
-	// Left_Dagger->SetRelativeRotation(FRotator(0,-180,180));
-	// Left_Dagger->SetChildActorClass(PlayerWeaponBase);
-	//
-	// Right_Dagger = CreateDefaultSubobject<UChildActorComponent>(TEXT("Right_Dagger"));
-	// Right_Dagger->SetupAttachment(GetMesh(), TEXT("middle_01_r"));
-	// Right_Dagger->SetRelativeLocation(FVector(-4,2, 5));
-	// Right_Dagger->SetChildActorClass(PlayerWeaponBase);
 	Left_WeaponScene = CreateDefaultSubobject<USceneComponent>(TEXT("Left_WeaponScene"));
 	Left_WeaponScene->SetupAttachment(GetMesh(), TEXT("middle_01_l"));
-	Left_WeaponScene->SetRelativeLocation(FVector(3.2,-3, -4.6));
+	Left_WeaponScene->SetRelativeLocation(FVector(7.2,-3, -26.6));
 	Left_WeaponScene->SetRelativeRotation(FRotator(0,-180,180));
-
+	
 	Right_WeaponScene = CreateDefaultSubobject<USceneComponent>(TEXT("Right_WeaponScene"));
 	Right_WeaponScene->SetupAttachment(GetMesh(), TEXT("middle_01_r"));
-	Right_WeaponScene->SetRelativeLocation(FVector(-4,2, 5));
+	Right_WeaponScene->SetRelativeLocation(FVector(-4,1, 26));
 
 	// Player 컴포넌트
 	PlayerAttackComponent = CreateDefaultSubobject<UHD_PlayerAttackComponent>(TEXT("PlayerAttackComponent"));
-	PlayerStatusComponent = CreateDefaultSubobject<UPlayerStatusComponent>(TEXT("PlayerStatusComponent"));
-	//PlayerClimbComponent = CreateDefaultSubobject<UHD_PlayerClimbComponent>(TEXT("PlayerClimbComponent"));
+	//PlayerStatusComponent = CreateDefaultSubobject<UPlayerStatusComponent>(TEXT("PlayerStatusComponent"));
 }
 
 // Called when the game starts or when spawned
@@ -65,9 +54,14 @@ void AHD_CharacterPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInput
 	if (enhancedInputComponent != nullptr)
 	{
 		PlayerAttackComponent->SetupPlayerInputComponent(enhancedInputComponent);
-		//PlayerClimbComponent->SetupPlayerInputComponent(enhancedInputComponent);
 	}
 }
+
+// FVector AHD_CharacterPlayer::ConstrainAnimRootMotionVelocity(const FVector& RootMotionVelocity,
+// 	const FVector& CurrentVelocity) const
+// {
+// 	return RootMotionVelocity;
+// }
 
 void AHD_CharacterPlayer::AttachWeapon()
 {

@@ -26,7 +26,8 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
-	
+	//virtual FVector ConstrainAnimRootMotionVelocity(const FVector& RootMotionVelocity, const FVector& CurrentVelocity) const ;
+	//virtual void ConstrainAnimRootMotionVelocity
 public:
 	UPROPERTY(EditAnywhere)
 	class USceneComponent* Left_WeaponScene;
@@ -43,8 +44,8 @@ public:
 
 	UPROPERTY(EditAnywhere)
 	class UHD_PlayerAttackComponent* PlayerAttackComponent;
-	UPROPERTY(EditAnywhere)
-	class UPlayerStatusComponent* PlayerStatusComponent;
+	// UPROPERTY(EditAnywhere)
+	// class UPlayerStatusComponent* PlayerStatusComponent;
 	// UPROPERTY(EditAnywhere)
 	// class UHD_PlayerClimbComponent* PlayerClimbComponent;
 public:

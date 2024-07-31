@@ -27,6 +27,9 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+public:	
+	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) override;
+
 	//camera
 	UPROPERTY(EditAnywhere)
 	class UCameraComponent* camera;
@@ -44,12 +47,16 @@ public:
 	class UInputAction* ia_DH_Look;
 	UPROPERTY(EditAnywhere)
 	class UInputAction* ia_DH_Jump;
+	// UPROPERTY(EditAnywhere)
+	// class UInputAction* IA_HD_Skill;
 	
 	UPROPERTY(EditAnywhere)
 	class UInputAction* ia_DH_Order;
 	
-	UPROPERTY(EditAnywhere)
+	UPROPERTY()
 	class UHD_PlayerClimbComponent* PlayerClimbComponent;
+	UPROPERTY(EditAnywhere)
+	class UPlayerStatusComponent* PlayerStatusComponent;
 	UPROPERTY(EditAnywhere)
 	class UMotionWarpingComponent* MotionWarpingComponent;
 public:
@@ -61,11 +68,14 @@ public:
 	void EnhancedJump(const FInputActionValue& InputActionValue);
 	void EnhancedLook(const FInputActionValue& InputActionValue);
 	void EnhancedOrder(const FInputActionValue& InputActionValue);
-
+	//void EnhancedSkill(const FInputActionValue& InputActionValue);
 public:
-	UPROPERTY(EditAnywhere)
+	UPROPERTY()
 	class UCableComponent* CableCompoent;
 
-	UPROPERTY(EditAnywhere)
-	class AHD_Dragon* DDDDDragon;
+	UPROPERTY()
+	APawn* Dragon;
+
+	UPROPERTY()
+	class ACHJ_GameMode* PlayerGameMode;
 };

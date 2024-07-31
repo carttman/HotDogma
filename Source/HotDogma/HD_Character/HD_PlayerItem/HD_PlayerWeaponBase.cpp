@@ -4,7 +4,11 @@
 #include "../../HD_Character/HD_PlayerItem/HD_PlayerWeaponBase.h"
 
 #include "Components/CapsuleComponent.h"
+#include "Engine/DamageEvents.h"
+#include "HotDogma/HD_Character/HD_CharacterPlayer.h"
+#include "HotDogma/HD_Character/HD_PlayerAnimInstance.h"
 #include "HotDogma/LHJ/HD_Dragon.h"
+#include "Kismet/GameplayStatics.h"
 
 // Sets default values
 AHD_PlayerWeaponBase::AHD_PlayerWeaponBase()
@@ -21,7 +25,7 @@ AHD_PlayerWeaponBase::AHD_PlayerWeaponBase()
 	WeaponMeshComp->SetCollisionProfileName(TEXT("WeaponMeshColl"));
 
 	WeaponMeshComp->SetRelativeLocation(FVector(0, 0, -30));
-	WeaponMeshComp->SetRelativeScale3D(FVector(2, 2, 2));
+	WeaponMeshComp->SetRelativeScale3D(FVector(1.5, 1.5, 1.5));
 }
 
 // Called when the game starts or when spawned
@@ -32,7 +36,11 @@ void AHD_PlayerWeaponBase::BeginPlay()
 	CapsuleComp->OnComponentBeginOverlap.AddDynamic(this, &AHD_PlayerWeaponBase::OnOverlapBegin);
 	CapsuleComp->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	
-	Dragon = Cast<AHD_Dragon>(GetOwner());
+	Player = Cast<AHD_CharacterPlayer>(GetWorld()->GetFirstPlayerController()->GetPawn());
+	PlayerAnim = Cast<UHD_PlayerAnimInstance>(Player->GetMesh()->GetAnimInstance());
+	if(Player) UE_LOG(LogTemp, Warning, TEXT("Weapon : Player cast successful"))
+	else UE_LOG(LogTemp, Warning, TEXT(" Weapon : Player cast failed"));
+	
 }
 
 // Called every frame
@@ -43,11 +51,14 @@ void AHD_PlayerWeaponBase::Tick(float DeltaTime)
 }
 
 void AHD_PlayerWeaponBase::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor,
-	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+                                          UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	if(OtherActor == Dragon)
+	if(OtherActor == Player->Dragon)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("coll"));
+		//UE_LOG(LogTemp, Warning, TEXT("Hit Dragon"));
+		FDamageEvent DamageEvent;
+		UGameplayStatics::ApplyDamage(OtherActor, 10.0f, Player->GetController(), this, UDamageType::StaticClass());
+		CapsuleComp->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	}
 }
 

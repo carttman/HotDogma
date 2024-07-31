@@ -17,7 +17,7 @@ enum class DragonState:uint8
 	Fly, // 이륙
 	Attack, //일반공격
 	Groggy, // 그로기
-	Death,	// 사망
+	Death, // 사망
 };
 
 UENUM()
@@ -31,7 +31,8 @@ enum class AttackState:uint8
 	ThunderMagic, // 전기마법공격
 	Meteor, // 메테오
 	JumpPress, // 공중찍기
-	FlyBreath, // 공중 브레스
+	//FlyBreath, // 공중 브레스
+	None, // 빈값
 };
 
 UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
@@ -66,12 +67,12 @@ public:
 	void F_NormalAttackState(float DeltaTime);
 #pragma endregion
 
-#pragma region Normal Attack Function
+#pragma region Attack Function
 
 #pragma region FlyPress
 	UPROPERTY()
 	bool bFly = false;
-	
+
 	UFUNCTION()
 	void FlyPress(float DeltaTime);
 
@@ -102,18 +103,23 @@ public:
 
 #pragma endregion
 
+#pragma region Attack Properties
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float AttackDist = 3000.f; // 공격범위
+#pragma endregion
+
 	UPROPERTY(EditAnywhere)
 	DragonState State = DragonState::Sleep; //Default State를 Idle로 설정
 
 	UPROPERTY(EditAnywhere)
-	AttackState normalAttackState;
+	AttackState normalAttackState = AttackState::None;
 
 	UPROPERTY(BlueprintReadOnly, EditInstanceOnly)
 	class UHD_DragonAnim* Anim;
 
 	// 가까운 플레이어
 	UPROPERTY(EditAnywhere)
-	class AActor* NearTargetActor;
+	class ACharacter* NearTargetActor;
 
 	// 내 위치
 	UPROPERTY(EditAnywhere)
@@ -129,20 +135,26 @@ public:
 	UFUNCTION()
 	float GetRadianFromCharacter();
 
-	bool chkCharacterUsingSleep=false;
-	
+	bool chkCharacterUsingSleep = false;
+
 	UFUNCTION()
 	bool ChkCharacterIntoRadian();
 
 #pragma region Idle Variable
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	int32 ThresholdRadian = 2500;
+	int32 ThresholdRadian = 3500;
 
 	UPROPERTY()
 	float ShoutAnimCurrentTime = 0.f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float PlayShoutAnimTime = 5.f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float DuringIdleTime = 1.f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float CurrIdleTime;
 #pragma endregion
 
 #pragma region Attack
@@ -152,6 +164,12 @@ public:
 	TArray<AttackState> AttackPattern1Page = {
 		AttackState::Breath, AttackState::ThunderMagic, AttackState::HandPress
 	};
-#pragma endregion
 
+	UPROPERTY()
+	bool isAttack = false;
+
+	int int_rand=0;
+
+	void ChooseAttackState();
+#pragma endregion
 };

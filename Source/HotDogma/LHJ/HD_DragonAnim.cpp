@@ -26,11 +26,6 @@ void UHD_DragonAnim::NativeInitializeAnimation()
 	}
 }
 
-void UHD_DragonAnim::PlayShoutAnim()
-{
-	bPlayShoutAnim = true;
-}
-
 void UHD_DragonAnim::ChangeState(DragonState ChangeState)
 {
 	AnimState = ChangeState;
@@ -38,7 +33,7 @@ void UHD_DragonAnim::ChangeState(DragonState ChangeState)
 		fsm->State = ChangeState;
 }
 
-void UHD_DragonAnim::ChangeNormalAttack(AttackState ChangeState)
+void UHD_DragonAnim::ChangeAttackState(AttackState ChangeState)
 {
 	AnimNormalAttackState = ChangeState;
 	if (fsm)
@@ -66,6 +61,7 @@ void UHD_DragonAnim::AnimNotify_endShout()
 {
 	bPlayShoutAnim = false;
 	bEndStartAnim = true;
+	ChangeState(DragonState::Idle);
 }
 #pragma endregion
 
@@ -100,3 +96,14 @@ void UHD_DragonAnim::AnimNotify_EndScratch()
 	chkAngle = false;
 }
 #pragma endregion
+
+void UHD_DragonAnim::AnimNotify_StartAttack()
+{
+	fsm->isAttack = true;	
+}
+
+void UHD_DragonAnim::AnimNotify_EndAttack()
+{
+	ChangeState(DragonState::Idle);
+	fsm->isAttack = false;
+}

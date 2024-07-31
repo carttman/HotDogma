@@ -55,9 +55,6 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FSM")
 	bool isGroggy=false;	// 그로기 전용
 
-	UFUNCTION(BlueprintCallable)
-	void PlayShoutAnim();
-
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Meta = (AllowPrivateAccess=true))
 	float Direction;
 
@@ -68,7 +65,7 @@ public:
 	void ChangeState(DragonState ChangeState);
 
 	UFUNCTION(BlueprintCallable)
-	void ChangeNormalAttack(AttackState ChangeState);
+	void ChangeAttackState(AttackState ChangeState);
 
 	UFUNCTION(BlueprintCallable)
 	void StartFlyUpFunction();
@@ -101,4 +98,10 @@ public:
 	UFUNCTION()
 	void AnimNotify_EndScratch();
 	//=========================
+	UFUNCTION()
+	void AnimNotify_StartAttack();
+	
+	UFUNCTION()
+	void AnimNotify_EndAttack();
+
 };

@@ -31,16 +31,19 @@ public:
 	// 스켈레탈 매쉬
 	UPROPERTY(EditAnywhere)
 	class USkeletalMeshComponent* SkeletalComp;
-	
-	// UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Movement, meta = (AllowPrivateAccess = "true"))
-	// class UFloatingPawnMovement* MovementComponent;
-	
-	// UPROPERTY()
-	// class AAIController* AIController;
 
 	UPROPERTY(EditAnywhere)
 	class UHD_DragonFSM* fsm;
 	
 	UPROPERTY()
-	TArray<class ACharacter*> CharacterArr;	// 공격 대상 인지 
+	TArray<class ACharacter*> CharacterArr;	// 공격 대상 인지
+
+	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) override;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float MaxHP = 100;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float CurrHP = MaxHP;
+	
 };

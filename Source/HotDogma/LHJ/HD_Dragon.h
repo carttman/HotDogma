@@ -37,5 +37,13 @@ public:
 	
 	UPROPERTY()
 	TArray<class ACharacter*> CharacterArr;	// 공격 대상 인지
+
+	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) override;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float MaxHP = 100;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float CurrHP = MaxHP;
 	
 };

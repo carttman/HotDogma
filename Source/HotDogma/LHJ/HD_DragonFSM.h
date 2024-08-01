@@ -53,18 +53,30 @@ public:
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType,
 	                           FActorComponentTickFunction* ThisTickFunction) override;
 
+	UPROPERTY()
+	class AAIController *ai;
+	
 #pragma region State Function
 	UFUNCTION()
 	void SleepState();
 
 	UFUNCTION()
-	void IdleState(float DeltaTime);
+	void IdleState(const float& DeltaTime);
 
 	UFUNCTION()
-	void MoveState(float DeltaTime);
+	void MoveState(const float& DeltaTime);
 
 	UFUNCTION()
-	void F_NormalAttackState(float DeltaTime);
+	void F_NormalAttackState(const float& DeltaTime);
+
+	UPROPERTY()
+	float al = 0;
+
+	UPROPERTY()
+	bool bRotate=false;
+
+	UFUNCTION()
+	void RotateToTarget(const float& DeltaTime);
 #pragma endregion
 
 #pragma region Attack Function
@@ -105,7 +117,7 @@ public:
 
 #pragma region Attack Properties
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	float AttackDist = 3000.f; // 공격범위
+	float AttackDist = 2000.f; // 공격범위
 #pragma endregion
 
 	UPROPERTY(EditAnywhere)
@@ -172,4 +184,8 @@ public:
 
 	void ChooseAttackState();
 #pragma endregion
+
+	
+
+	
 };

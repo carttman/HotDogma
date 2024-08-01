@@ -16,13 +16,13 @@ void UHD_DragonAnim::NativeInitializeAnimation()
 		//middleBoss = OwnerActor->FindComponentByClass<AHJ_MiddleBoss>();
 		Dragon = Cast<AHD_Dragon>(OwnerActor);
 
-		if (Dragon)
-		{
-			FVector velo = Dragon->GetVelocity();
-			FVector forwardVec = Dragon->GetActorForwardVector();
-			Speed = FVector::DotProduct(forwardVec, velo);
-			Direction = FVector::DotProduct(Dragon->GetActorRightVector(), velo);
-		}
+		// if (Dragon)
+		// {
+		// 	FVector velo = Dragon->GetVelocity();
+		// 	FVector forwardVec = Dragon->GetActorForwardVector();
+		// 	Speed = FVector::DotProduct(forwardVec, velo);
+		// 	Direction = FVector::DotProduct(Dragon->GetActorRightVector(), velo);
+		// }
 	}
 }
 
@@ -61,6 +61,8 @@ void UHD_DragonAnim::AnimNotify_endShout()
 {
 	bPlayShoutAnim = false;
 	bEndStartAnim = true;
+
+	fsm->bRotate = true;
 	ChangeState(DragonState::Idle);
 }
 #pragma endregion
@@ -99,11 +101,16 @@ void UHD_DragonAnim::AnimNotify_EndScratch()
 
 void UHD_DragonAnim::AnimNotify_StartAttack()
 {
-	fsm->isAttack = true;	
+	fsm->isAttack = true;
 }
 
 void UHD_DragonAnim::AnimNotify_EndAttack()
 {
 	ChangeState(DragonState::Idle);
-	fsm->isAttack = false;
+	fsm->isAttack = false;	
+}
+
+void UHD_DragonAnim::AnimNotify_RotateFire()
+{
+	fsm->BreathTimeline.PlayFromStart();
 }

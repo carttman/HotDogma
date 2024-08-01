@@ -50,10 +50,10 @@ public:
 	bool chkAngle = false;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FSM")
-	bool isFly=false;	// 공중이동 전용
+	bool isFly = false; // 공중이동 전용
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FSM")
-	bool isGroggy=false;	// 그로기 전용
+	bool isGroggy = false; // 그로기 전용
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Meta = (AllowPrivateAccess=true))
 	float Direction;
@@ -72,16 +72,16 @@ public:
 
 	//=======================전투시작
 	UFUNCTION()
-	void AnimNotify_SleepEnd();		// 주변 캐릭터 인지
+	void AnimNotify_SleepEnd(); // 주변 캐릭터 인지
 
 	UFUNCTION()
-	void AnimNotify_StartFight();	// 전투 시작(포효 시작)
+	void AnimNotify_StartFight(); // 전투 시작(포효 시작)
 
 	UFUNCTION()
-	void AnimNotify_endShout();		// 전투 시작 포효 종료
+	void AnimNotify_endShout(); // 전투 시작 포효 종료
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FSM")
-	bool bEndStartAnim=false;
+	bool bEndStartAnim = false;
 	//=========================도약찍기
 	UFUNCTION()
 	void AnimNotify_bPress();
@@ -97,11 +97,13 @@ public:
 
 	UFUNCTION()
 	void AnimNotify_EndScratch();
-	//=========================
+	//=========================공격 시작, 종료
 	UFUNCTION()
 	void AnimNotify_StartAttack();
-	
+
 	UFUNCTION()
 	void AnimNotify_EndAttack();
-
+	//=========================
+	UFUNCTION()
+	void AnimNotify_RotateFire();
 };

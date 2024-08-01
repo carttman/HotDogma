@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
+#include "Components/TimelineComponent.h"
 #include "Navigation/PathFollowingComponent.h"
 #include "HD_DragonFSM.generated.h"
 
@@ -53,18 +54,30 @@ public:
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType,
 	                           FActorComponentTickFunction* ThisTickFunction) override;
 
+	UPROPERTY()
+	class AAIController* ai;
+
 #pragma region State Function
 	UFUNCTION()
 	void SleepState();
 
 	UFUNCTION()
-	void IdleState(float DeltaTime);
+	void IdleState(const float& DeltaTime);
 
 	UFUNCTION()
-	void MoveState(float DeltaTime);
+	void MoveState(const float& DeltaTime);
 
 	UFUNCTION()
-	void F_NormalAttackState(float DeltaTime);
+	void F_NormalAttackState(const float& DeltaTime);
+
+	UPROPERTY()
+	float al = 0;
+
+	UPROPERTY()
+	bool bRotate = false;
+
+	UFUNCTION()
+	void RotateToTarget(const float& DeltaTime);
 #pragma endregion
 
 #pragma region Attack Function
@@ -105,7 +118,7 @@ public:
 
 #pragma region Attack Properties
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	float AttackDist = 3000.f; // 공격범위
+	float AttackDist = 2000.f; // 공격범위
 #pragma endregion
 
 	UPROPERTY(EditAnywhere)
@@ -168,8 +181,32 @@ public:
 	UPROPERTY()
 	bool isAttack = false;
 
-	int int_rand=0;
+	int int_rand = 0;
 
 	void ChooseAttackState();
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int NowUsedSkillCnt = 0; // 지상에서 사용한 스킬 개수(올라갈때 초기화)
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int RequiredSkillCnt = 4; // 다음 공중 올라갈 때까지 필요한 스킬 사용 개수
 #pragma endregion
+
+#pragma region	Fly Property
+	bool chkOnceFly = false; // 한번이라도 날았는지 확인
+
+	int ApplySkillAsFly; // 공중에서 사용할 스킬 개수
+#pragma endregion
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category="Breath")
+	class UCurveFloat* BreathCurve;
+
+	UPROPERTY()
+	FTimeline BreathTimeline;
+
+	UFUNCTION()
+	void BreathRStart(float Alpha);
+
+	UFUNCTION()
+	void BreathREnd();
 };

@@ -23,6 +23,19 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	// 공격 추적용
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	class UCapsuleComponent* TargetPoint1;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	class UCapsuleComponent* TargetPoint2;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	class UCapsuleComponent* TargetPoint3;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	class UCapsuleComponent* TargetPoint4;
+
 	// 더미 콜리전
 	// NoCollision 처리할건데 충돌처리 문제나면 변경하기
 	UPROPERTY(EditAnywhere)

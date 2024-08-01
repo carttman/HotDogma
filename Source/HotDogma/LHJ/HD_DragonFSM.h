@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
+#include "Components/TimelineComponent.h"
 #include "Navigation/PathFollowingComponent.h"
 #include "HD_DragonFSM.generated.h"
 
@@ -54,8 +55,8 @@ public:
 	                           FActorComponentTickFunction* ThisTickFunction) override;
 
 	UPROPERTY()
-	class AAIController *ai;
-	
+	class AAIController* ai;
+
 #pragma region State Function
 	UFUNCTION()
 	void SleepState();
@@ -73,7 +74,7 @@ public:
 	float al = 0;
 
 	UPROPERTY()
-	bool bRotate=false;
+	bool bRotate = false;
 
 	UFUNCTION()
 	void RotateToTarget(const float& DeltaTime);
@@ -180,12 +181,32 @@ public:
 	UPROPERTY()
 	bool isAttack = false;
 
-	int int_rand=0;
+	int int_rand = 0;
 
 	void ChooseAttackState();
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int NowUsedSkillCnt = 0; // 지상에서 사용한 스킬 개수(올라갈때 초기화)
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int RequiredSkillCnt = 4; // 다음 공중 올라갈 때까지 필요한 스킬 사용 개수
 #pragma endregion
 
-	
+#pragma region	Fly Property
+	bool chkOnceFly = false; // 한번이라도 날았는지 확인
 
-	
+	int ApplySkillAsFly; // 공중에서 사용할 스킬 개수
+#pragma endregion
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category="Breath")
+	class UCurveFloat* BreathCurve;
+
+	UPROPERTY()
+	FTimeline BreathTimeline;
+
+	UFUNCTION()
+	void BreathRStart(float Alpha);
+
+	UFUNCTION()
+	void BreathREnd();
 };

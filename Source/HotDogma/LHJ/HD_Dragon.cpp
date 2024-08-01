@@ -3,6 +3,7 @@
 
 #include "../LHJ/HD_Dragon.h"
 #include "HD_DragonFSM.h"
+#include "Components/CapsuleComponent.h"
 #include "GameFramework/Character.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Kismet/GameplayStatics.h"
@@ -22,7 +23,27 @@ AHD_Dragon::AHD_Dragon()
 	}
 
 	fsm = CreateDefaultSubobject<UHD_DragonFSM>(TEXT("FSM"));
-	//fsm->RegisterComponent();
+	//RootComponent->RegisterComponent();
+
+	TargetPoint1 = CreateDefaultSubobject<UCapsuleComponent>(TEXT("TargetPoint1"));
+	TargetPoint1->SetupAttachment(SkeletalComp,TEXT("L-HorseLink"));
+	TargetPoint1->SetCapsuleHalfHeight(60.f);
+	TargetPoint1->SetCapsuleRadius(30.f);
+	
+	TargetPoint2 = CreateDefaultSubobject<UCapsuleComponent>(TEXT("TargetPoint2"));
+	TargetPoint2->SetupAttachment(SkeletalComp,TEXT("R-HorseLink"));
+	TargetPoint2->SetCapsuleHalfHeight(60.f);
+	TargetPoint2->SetCapsuleRadius(30.f);
+
+	TargetPoint3 = CreateDefaultSubobject<UCapsuleComponent>(TEXT("TargetPoint3"));
+	TargetPoint3->SetupAttachment(SkeletalComp,TEXT("R-Forearm"));
+	TargetPoint3->SetCapsuleHalfHeight(60.f);
+	TargetPoint3->SetCapsuleRadius(30.f);
+
+	TargetPoint4 = CreateDefaultSubobject<UCapsuleComponent>(TEXT("TargetPoint4"));
+	TargetPoint4->SetupAttachment(SkeletalComp,TEXT("L-Forearm"));
+	TargetPoint4->SetCapsuleHalfHeight(60.f);
+	TargetPoint4->SetCapsuleRadius(30.f);	
 }
 
 void AHD_Dragon::BeginPlay()

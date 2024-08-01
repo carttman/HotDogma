@@ -51,7 +51,7 @@ void UHD_DragonFSM::BeginPlay()
 		Anim = Cast<UHD_DragonAnim>(Dragon->SkeletalComp->GetAnimInstance());
 		ai = Cast<AAIController>(Dragon->Controller);
 	}
-	
+
 	if (!Anim)
 		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("Anim Is NullPtr"));
 	else
@@ -64,6 +64,15 @@ void UHD_DragonFSM::BeginPlay()
 			Anim->ChangeAttackState(AttackState::None);
 		}
 	}
+
+	FOnTimelineFloat ProgressUpdate;
+	ProgressUpdate.BindUFunction(this, FName("BreathRStart"));
+
+	FOnTimelineEvent FinishedEvent;
+	FinishedEvent.BindUFunction(this, FName("BreathREnd"));
+
+	BreathTimeline.AddInterpFloat(BreathCurve, ProgressUpdate);
+	BreathTimeline.SetTimelineFinishedFunc(FinishedEvent);
 }
 #pragma endregion
 
@@ -76,10 +85,14 @@ void UHD_DragonFSM::TickComponent(float DeltaTime, ELevelTick TickType, FActorCo
 	//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("Player To Dragon Direction : %f"), dot));
 	FString myState = UEnum::GetValueOrBitfieldAsString(State);
 	DrawDebugString(GetWorld(), Dragon->GetActorLocation(), myState, 0, FColor::Yellow, 0);
-	myState = UEnum::GetValueOrBitfieldAsString(Anim->AnimNormalAttackState);
-	DrawDebugString(
-		GetWorld(), FVector(Dragon->GetActorLocation().X, Dragon->GetActorLocation().Y,
-		                    Dragon->GetActorLocation().Z - 50), myState, 0, FColor::Yellow, 0);
+	if (Anim)
+	{
+		myState = UEnum::GetValueOrBitfieldAsString(Anim->AnimNormalAttackState);
+		DrawDebugString(
+			GetWorld(), FVector(Dragon->GetActorLocation().X, Dragon->GetActorLocation().Y,
+			                    Dragon->GetActorLocation().Z - 50), myState, 0, FColor::Yellow, 0);
+	}
+
 
 	// if(State==DragonState::Attack||State==DragonState::Move)
 	// {
@@ -97,10 +110,10 @@ void UHD_DragonFSM::TickComponent(float DeltaTime, ELevelTick TickType, FActorCo
 	// 	FRotator SmoothRotation = FMath::RInterpTo(CurrentRotation, TargetRotation, DeltaTime, 3.0f);
 	// 	Dragon->SetActorRotation(SmoothRotation);
 	// }
-
-	if(State!=DragonState::Move)
+	BreathTimeline.TickTimeline(DeltaTime);
+	if (State != DragonState::Move)
 		ai->StopMovement();
-	
+
 	//공격중일 때는 상태 변환 x
 	if (!isAttack)
 	{
@@ -137,7 +150,6 @@ void UHD_DragonFSM::TickComponent(float DeltaTime, ELevelTick TickType, FActorCo
 			break;
 		}
 	}
-	
 }
 #pragma endregion
 
@@ -178,15 +190,12 @@ void UHD_DragonFSM::IdleState(const float& DeltaTime)
 	// 가까운 캐릭터를 공격대상으로 지정
 	for (ACharacter* Character : Dragon->CharacterArr)
 	{
-		if (Character && Dragon)
+		float Distance = FVector::Dist(Character->GetActorLocation(), Dragon->GetActorLocation());
+		if (Distance < MinDistance)
 		{
-			float Distance = FVector::Dist(Character->GetActorLocation(), Dragon->GetActorLocation());
-			if (Distance < MinDistance)
-			{
-				MinDistance = Distance;
-				ClosestCharacter = Character;
-				NearTargetActor = ClosestCharacter;
-			}
+			MinDistance = Distance;
+			ClosestCharacter = Character;
+			NearTargetActor = ClosestCharacter;
 		}
 	}
 
@@ -199,6 +208,14 @@ void UHD_DragonFSM::IdleState(const float& DeltaTime)
 		// 전체 체력 75프로 이하로 깍이면 Fly State진입
 		// 스킬 1~2개 사용하고 내려오도록 설정
 		// 내려온 다음, 땅에서 최소 스킬을 4개 이상 써야 다시 올라갈수 있도록 설정
+		if (Dragon->MaxHP * 0.75 >= Dragon->CurrHP)
+		{
+			if (!chkOnceFly)
+			{
+				Anim->isFly = true;
+				chkOnceFly = true;
+			}
+		}
 
 		// 공격 범위 내에 들어오면
 		if (NearTargetActor && MinDistance < AttackDist)
@@ -283,7 +300,6 @@ void UHD_DragonFSM::F_NormalAttackState(const float& DeltaTime)
 {
 	// 공격패턴을 정해서 상태 전이
 	// 정해진 공격 패턴의 스킬 쿨타임이 남아 있다면 다시 패턴 지정
-	
 }
 #pragma endregion
 
@@ -496,4 +512,14 @@ void UHD_DragonFSM::RotateToTarget(const float& DeltaTime)
 		FRotator realrealROt = UKismetMathLibrary::RLerp(curRot, realRot, al, true);
 		Dragon->SetActorRotation(realrealROt);
 	}
+}
+
+void UHD_DragonFSM::BreathRStart(float Alpha)
+{
+	FRotator nowRotator = Dragon->GetActorRotation();
+	Dragon->SetActorRotation(FRotator(nowRotator.Pitch, nowRotator.Yaw + Alpha * 6, nowRotator.Roll));
+}
+
+void UHD_DragonFSM::BreathREnd()
+{
 }

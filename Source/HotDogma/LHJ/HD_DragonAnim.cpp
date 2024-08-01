@@ -107,5 +107,10 @@ void UHD_DragonAnim::AnimNotify_StartAttack()
 void UHD_DragonAnim::AnimNotify_EndAttack()
 {
 	ChangeState(DragonState::Idle);
-	fsm->isAttack = false;
+	fsm->isAttack = false;	
+}
+
+void UHD_DragonAnim::AnimNotify_RotateFire()
+{
+	fsm->BreathTimeline.PlayFromStart();
 }

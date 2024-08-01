@@ -14,7 +14,26 @@ UHD_PlayerAttackComponent::UHD_PlayerAttackComponent()
 	
 	PrimaryComponentTick.bCanEverTick = true;
 
-	
+	ConstructorHelpers::FObjectFinder<UInputAction> TempIA_Attack(TEXT("/Script/EnhancedInput.InputAction'/Game/CHJ/Input/IA_Player_Attack.IA_Player_Attack'"));
+	if(TempIA_Attack.Succeeded())
+	{
+		IA_HD_Attack = TempIA_Attack.Object; // ia 셋팅
+	}
+	ConstructorHelpers::FObjectFinder<UInputAction> TempIA_Skill(TEXT("/Script/EnhancedInput.InputAction'/Game/CHJ/Input/IA_Player_Skill.IA_Player_Skill'"));
+	if(TempIA_Skill.Succeeded())
+	{
+		IA_HD_Skill = TempIA_Skill.Object; // ia 셋팅
+	}
+	ConstructorHelpers::FObjectFinder<UAnimMontage> Temp_SPMontage(TEXT("/Script/Engine.AnimMontage'/Game/CHJ/Player_Animation/Attack/Skill_Splitter/AM_Splitter.AM_Splitter'"));
+	if(Temp_SPMontage.Succeeded())
+	{
+		AM_Splitter = Temp_SPMontage.Object; 
+	}
+	ConstructorHelpers::FObjectFinder<UAnimMontage> Temp_BAMontage(TEXT("/Script/Engine.AnimMontage'/Game/CHJ/Player_Animation/Attack/AM_BaseAttack.AM_BaseAttack'"));
+	if(Temp_BAMontage.Succeeded())
+	{
+		AM_BaseAttack = Temp_BAMontage.Object; 
+	}
 }
 
 
@@ -25,7 +44,10 @@ void UHD_PlayerAttackComponent::BeginPlay()
 	Player = Cast<AHD_CharacterBase>(GetOwner());
 	PlayerAnim = Cast<UHD_PlayerAnimInstance>(Player->GetMesh()->GetAnimInstance());
 	// ...
-	
+	if(AM_Splitter)
+	{
+		PlayerAnim->OnPlayMontageNotifyBegin.AddDynamic(this, &UHD_PlayerAttackComponent::PlayMontageNotifyBegin_Splitter);
+	}
 }
 
 
@@ -35,6 +57,8 @@ void UHD_PlayerAttackComponent::TickComponent(float DeltaTime, ELevelTick TickTy
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
 	UpdatePlayerAttack(DeltaTime);
+	if(IsSplitting)Update_Skill_Splitter();
+	
 }
 
 void UHD_PlayerAttackComponent::SetupPlayerInputComponent(UEnhancedInputComponent* enhancedInputComponent)
@@ -142,8 +166,37 @@ void UHD_PlayerAttackComponent::UpdatePlayerAttack(float DeltaTime)
 
 void UHD_PlayerAttackComponent::Skill_Splitter()
 {	// 루트모션을 위한 flying 모드 변경
+	IsSplitting = true;
 	Player->GetCharacterMovement()->SetMovementMode(MOVE_Flying);
 	PlayerAnim->Montage_Play(AM_Splitter, 1);
+}
+
+void UHD_PlayerAttackComponent::Update_Skill_Splitter()
+{
+	if(Player->GetCharacterMovement()->Velocity.IsZero()) // 착지했을 때
+	{
+		PlayerAnim->Montage_JumpToSection(FName("Splitter_End"), AM_Splitter);
+		Player->GetCharacterMovement()->SetMovementMode(MOVE_Walking);
+		Player->GetCharacterMovement()->GravityScale = 1.75f;
+		IsSplitting = false;
+	}
+}
+
+void UHD_PlayerAttackComponent::PlayMontageNotifyBegin_Splitter(FName NotifyName,
+                                                                const FBranchingPointNotifyPayload& BranchingPointNotifyPayload)
+{
+	if(NotifyName == FName("Splitter_Start"))
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Notify %s has begun!"), *NotifyName.ToString());
+	}
+	if(NotifyName == FName("Falling")) //롤링 시작할 때
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Notify %s has begun!"), *NotifyName.ToString());
+		Player->GetCharacterMovement()->SetMovementMode(MOVE_Falling);
+		Player->GetCharacterMovement()->GravityScale = 0.5f;
+		UE_LOG(LogTemp, Warning, TEXT("%s"), *FString(__FUNCTION__));
+	}
+	//if(NotifyName == FName("Splitter_Land"))
 }
 
 

@@ -32,6 +32,7 @@ public:
 	void PlayerAttack();
 	void UpdatePlayerAttack(float DeltaTime);
 	void Skill_Splitter();
+	void Update_Skill_Splitter();
 public:
 	UPROPERTY(EditAnywhere)
 	class UInputAction* IA_HD_Attack;
@@ -56,4 +57,9 @@ public:
 public:
 	UPROPERTY(EditAnywhere)
 	class UAnimMontage* AM_Splitter;
+
+	UFUNCTION()
+	void PlayMontageNotifyBegin_Splitter(FName NotifyName, const FBranchingPointNotifyPayload& BranchingPointNotifyPayload);
+
+	bool IsSplitting = false;
 };

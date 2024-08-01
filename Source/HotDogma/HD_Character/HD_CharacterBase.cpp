@@ -38,6 +38,8 @@ AHD_CharacterBase::AHD_CharacterBase()
 	GetCharacterMovement()->BrakingFrictionFactor = 1.0f;
 	GetCharacterMovement()->bUseSeparateBrakingFriction = true;
 	GetCharacterMovement()->SetFixedBrakingDistance(200.f);
+	GetCharacterMovement()->MaxFlySpeed = 150.f;
+	GetCharacterMovement()->BrakingDecelerationFlying = 3000.f;
 	
 	// 플레이어 메쉬 프로필
 	GetMesh()->SetCollisionProfileName(TEXT("PlayerMeshColl"));
@@ -60,6 +62,7 @@ AHD_CharacterBase::AHD_CharacterBase()
 	springArm->bUsePawnControlRotation = true;
 	springArm->SocketOffset = FVector(40, 35, 155);
 	springArm->bDoCollisionTest = false;
+	springArm->SocketOffset = FVector(-100, 35, 250);
 	
 	// camera setting
 	camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
@@ -159,11 +162,14 @@ void AHD_CharacterBase::EnhancedMove(const FInputActionValue& InputActionValue)
 				AddMovementInput(RightDirection, MovementVector.X);
 			break;
 		case MOVE_Flying:
-				//climb movement : 무중력 상태일 때, 매달리는 함수 -> inputX값을 UpVector로 바꾸고 Z축으로 이동시킴
-				PlayerClimbComponent->ClimbMovementEvent(GetActorRightVector(),MovementVector.X);
-				Climb_LeftRight = MovementVector.X;
-				PlayerClimbComponent->ClimbMovementEvent(GetActorUpVector(), MovementVector.Y);
-				Climb_UpDown = MovementVector.Y;
+				if(PlayerClimbComponent->IsClimbing)
+				{
+					//climb movement : 무중력 상태일 때, 매달리는 함수 -> inputX값을 UpVector로 바꾸고 Z축으로 이동시킴
+					PlayerClimbComponent->ClimbMovementEvent(GetActorRightVector(),MovementVector.X);
+					Climb_LeftRight = MovementVector.X;
+					PlayerClimbComponent->ClimbMovementEvent(GetActorUpVector(), MovementVector.Y);
+					Climb_UpDown = MovementVector.Y;
+				}
 			break;
 		default:
 			break;

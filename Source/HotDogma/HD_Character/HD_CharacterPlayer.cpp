@@ -5,8 +5,6 @@
 
 #include "EnhancedInputComponent.h"
 #include "HD_PlayerComponent/HD_PlayerAttackComponent.h"
-#include "HD_PlayerComponent/HD_PlayerClimbComponent.h"
-#include "HD_PlayerComponent/PlayerStatusComponent.h"
 #include "HD_PlayerItem/HD_PlayerWeaponBase.h"
 #include "Kismet/GameplayStatics.h"
 
@@ -27,7 +25,6 @@ AHD_CharacterPlayer::AHD_CharacterPlayer()
 
 	// Player 컴포넌트
 	PlayerAttackComponent = CreateDefaultSubobject<UHD_PlayerAttackComponent>(TEXT("PlayerAttackComponent"));
-	//PlayerStatusComponent = CreateDefaultSubobject<UPlayerStatusComponent>(TEXT("PlayerStatusComponent"));
 }
 
 // Called when the game starts or when spawned
@@ -56,12 +53,6 @@ void AHD_CharacterPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInput
 		PlayerAttackComponent->SetupPlayerInputComponent(enhancedInputComponent);
 	}
 }
-
-// FVector AHD_CharacterPlayer::ConstrainAnimRootMotionVelocity(const FVector& RootMotionVelocity,
-// 	const FVector& CurrentVelocity) const
-// {
-// 	return RootMotionVelocity;
-// }
 
 void AHD_CharacterPlayer::AttachWeapon()
 {

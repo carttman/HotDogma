@@ -32,14 +32,13 @@ public:
 
 	UPROPERTY(EditAnywhere)
 	class UInputAction* IA_Player_Climb;
-	UPROPERTY(EditAnywhere)
+	UPROPERTY()
 	class AHD_CharacterPlayer* Player;
-	UPROPERTY(EditAnywhere)
+	UPROPERTY()
 	class UHD_PlayerAnimInstance* PlayerAnim;
-	UPROPERTY(EditAnywhere)
+	UPROPERTY()
 	class AHD_Dragon* Dragon;
-	UPROPERTY(EditAnywhere)
-	TSubclassOf<class AHD_Dragon> DragonClass;
+	
 public:
 	FHitResult Climb_OutHit;
 	void Climb();
@@ -67,14 +66,10 @@ public:
 
 	UFUNCTION()
 	void ClimbTimelineProgress(float Value); // 타임라인 진행 함수
-
 	UFUNCTION()
 	void OnClimbTimelineFinished(); // 타임라인 종료 함수
-
 	void StopClimbing();
-
 	void AttachToCable();
-
 	void LedgeMantleCaculation();
 	
 	UFUNCTION()
@@ -82,5 +77,6 @@ public:
 	
 	UPROPERTY(EditAnywhere)
 	class UAnimMontage* LedgeMontage;
-	
+
+	bool IsClimbing = false;
 };

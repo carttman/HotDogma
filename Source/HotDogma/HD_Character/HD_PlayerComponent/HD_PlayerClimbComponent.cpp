@@ -25,6 +25,11 @@ UHD_PlayerClimbComponent::UHD_PlayerClimbComponent()
 	{
 		IA_Player_Climb = TempIA.Object; // ia 셋팅
 	}
+	ConstructorHelpers::FObjectFinder<UAnimMontage> Temp_CMontage(TEXT("/Script/Engine.AnimMontage'/Game/CHJ/Player_Animation/Move/Climb/AM_Ledge.AM_Ledge'"));
+	if(Temp_CMontage.Succeeded())
+	{
+		LedgeMontage = Temp_CMontage.Object;
+	}
 	
 	MyTimeline = CreateDefaultSubobject<UTimelineComponent>(TEXT("MyTimeline"));  // 타임라인 컴포넌트 생성
 	// 타임라인이 초기화될 때 호출되는 델리게이트 설정
@@ -46,11 +51,7 @@ void UHD_PlayerClimbComponent::BeginPlay()
 		else UE_LOG(LogTemp, Warning, TEXT("Player cast failed"));
 	}
 	else UE_LOG(LogTemp, Warning, TEXT("GetOwner() returned null"));
-	//드래곤 셋팅
-	//Dragon = Cast<AHD_Dragon>(Player->Dragon->GetOwner());
-	// // 	Cast<AHD_Dragon>(UGameplayStatics::GetActorOfClass(GetWorld(), DragonClass));
-	// if(Dragon)UE_LOG(LogTemp, Warning, TEXT("TO ClimbComp-> This is: %s"), *Dragon->GetName())
-	//else UE_LOG(LogTemp, Warning, TEXT("This is: None "));
+	
 	// 타임라인 커브가 있다면
 	if (FloatCurve)
 	{
@@ -76,6 +77,7 @@ void UHD_PlayerClimbComponent::TickComponent(float DeltaTime, ELevelTick TickTyp
 		Dragon = Cast<AHD_Dragon>(Player->Dragon);
 		if(Dragon)UE_LOG(LogTemp, Warning, TEXT("TO ClimbComp-> This is: %s"), *Dragon->GetName());
 	}
+	
 }
 
 void UHD_PlayerClimbComponent::SetupPlayerInputComponent(UEnhancedInputComponent* enhancedInputComponent)
@@ -85,11 +87,15 @@ void UHD_PlayerClimbComponent::SetupPlayerInputComponent(UEnhancedInputComponent
 }
 
 void UHD_PlayerClimbComponent::Climb()
-{	// Flying 모드(벽타기 상태)가 아니라면 벽타기 진입
+{
+	if(IsClimbing) return;
+	// Flying 모드(벽타기 상태)가 아니라면 벽타기 진입
 	if(Player->GetCharacterMovement()->MovementMode != MOVE_Flying) 
 	{	//Attach_Distance만큼 라.트 쐈을때, 벽에 닿았다면
 		if(AttachToSurfaceCaculation(200.f, Climb_OutHit))
 		{	// Flying 모드로 변경
+			IsClimbing = true;
+			if(IsClimbing)
 			Player->GetCharacterMovement()->SetMovementMode(MOVE_Flying);
 			Player->GetCharacterMovement()->bOrientRotationToMovement = false;
 			
@@ -173,6 +179,7 @@ void UHD_PlayerClimbComponent::StopClimbing()
 	Player->GetCharacterMovement()->SetMovementMode(MOVE_Falling);
 	Player->GetCharacterMovement()->bOrientRotationToMovement = true;
 	Player->SetActorRotation(FRotator(0, Player->GetActorRotation().Yaw,  0));
+	IsClimbing = false;
 }
 // 케이블 컴포넌트 붙이기
 void UHD_PlayerClimbComponent::AttachToCable()
@@ -243,6 +250,7 @@ void UHD_PlayerClimbComponent::LedgeMantleCaculation()
 					Player->MotionWarpingComponent->AddOrUpdateWarpTarget(ledge_MW_Target);
 					Player->MotionWarpingComponent->AddOrUpdateWarpTarget(ledge_MW_Target_2);
 					PlayerAnim->Montage_Play(LedgeMontage, 1.0f);	
+					//Player->SetActorEnableCollision(false);
 					Player->SetActorEnableCollision(false);
 					Player->springArm->bDoCollisionTest = false;
 					return;
@@ -263,11 +271,14 @@ void UHD_PlayerClimbComponent::LedgeMantleCaculation()
 void UHD_PlayerClimbComponent::PlayMontageNotifyBegin(FName NotifyName,
 	const FBranchingPointNotifyPayload& BranchingPointNotifyPayload)
 {
+	if(NotifyName == FName("Climb"))
+	{
 	UE_LOG(LogTemp, Warning, TEXT("Notify %s has begun!"), *NotifyName.ToString());
 	UE_LOG(LogTemp, Warning, TEXT("%s"), *FString(__FUNCTION__));
 	Player->SetActorEnableCollision(true);
 	Player->springArm->bDoCollisionTest = true;
 	Player->PlayerClimbComponent->StopClimbing();
+	}
 }
 
 

@@ -26,8 +26,6 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
-	//virtual FVector ConstrainAnimRootMotionVelocity(const FVector& RootMotionVelocity, const FVector& CurrentVelocity) const ;
-	//virtual void ConstrainAnimRootMotionVelocity
 public:
 	UPROPERTY(EditAnywhere)
 	class USceneComponent* Left_WeaponScene;
@@ -37,19 +35,14 @@ public:
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<class AHD_PlayerWeaponBase> PlayerWeaponFactory;
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY()
 	class AHD_PlayerWeaponBase* Right_Weapon;
-	UPROPERTY(EditAnywhere)
+	UPROPERTY()
 	class AHD_PlayerWeaponBase* Left_Weapon;
 
 	UPROPERTY(EditAnywhere)
 	class UHD_PlayerAttackComponent* PlayerAttackComponent;
-	// UPROPERTY(EditAnywhere)
-	// class UPlayerStatusComponent* PlayerStatusComponent;
-	// UPROPERTY(EditAnywhere)
-	// class UHD_PlayerClimbComponent* PlayerClimbComponent;
+
 public:
 	void AttachWeapon();
-
-	
 };

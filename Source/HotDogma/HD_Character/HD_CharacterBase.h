@@ -53,7 +53,7 @@ public:
 	UPROPERTY(EditAnywhere)
 	class UInputAction* ia_DH_Order;
 	
-	UPROPERTY()
+	UPROPERTY(EditAnywhere)
 	class UHD_PlayerClimbComponent* PlayerClimbComponent;
 	UPROPERTY(EditAnywhere)
 	class UPlayerStatusComponent* PlayerStatusComponent;
@@ -68,9 +68,8 @@ public:
 	void EnhancedJump(const FInputActionValue& InputActionValue);
 	void EnhancedLook(const FInputActionValue& InputActionValue);
 	void EnhancedOrder(const FInputActionValue& InputActionValue);
-	//void EnhancedSkill(const FInputActionValue& InputActionValue);
 public:
-	UPROPERTY()
+	UPROPERTY(EditAnywhere)
 	class UCableComponent* CableCompoent;
 
 	UPROPERTY()

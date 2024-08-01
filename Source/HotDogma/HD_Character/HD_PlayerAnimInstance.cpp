@@ -55,7 +55,7 @@ void UHD_PlayerAnimInstance::AnimNotify_Damage_On()
 	if(Right_Weapon == nullptr) Right_Weapon = Cast<AHD_PlayerWeaponBase>(Player->Right_Weapon);
 	
 	//캡슐 콜리전 on
-	UE_LOG(LogTemp, Warning, TEXT("On"));
+	//UE_LOG(LogTemp, Warning, TEXT("On"));
 	Left_Weapon->CapsuleComp->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
 	Right_Weapon->CapsuleComp->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
 }
@@ -63,7 +63,7 @@ void UHD_PlayerAnimInstance::AnimNotify_Damage_On()
 void UHD_PlayerAnimInstance::AnimNotify_Damage_Off()
 {
 	//캡슐 콜리전 off
-	UE_LOG(LogTemp, Warning, TEXT("Off"));
+	//UE_LOG(LogTemp, Warning, TEXT("Off"));
 	Left_Weapon->CapsuleComp->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	Right_Weapon->CapsuleComp->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 }

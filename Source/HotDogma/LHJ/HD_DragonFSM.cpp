@@ -47,14 +47,18 @@ void UHD_DragonFSM::BeginPlay()
 	// }
 
 	if (Dragon)
+	{
 		Anim = Cast<UHD_DragonAnim>(Dragon->SkeletalComp->GetAnimInstance());
+		ai = Cast<AAIController>(Dragon->Controller);
+	}
+	
 	if (!Anim)
 		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("Anim Is NullPtr"));
 	else
 	{
 		// GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Blue, TEXT("Anim Is Not NullPtr"));
 
-		if(Anim)
+		if (Anim)
 		{
 			Anim->ChangeState(DragonState::Sleep);
 			Anim->ChangeAttackState(AttackState::None);
@@ -77,8 +81,28 @@ void UHD_DragonFSM::TickComponent(float DeltaTime, ELevelTick TickType, FActorCo
 		GetWorld(), FVector(Dragon->GetActorLocation().X, Dragon->GetActorLocation().Y,
 		                    Dragon->GetActorLocation().Z - 50), myState, 0, FColor::Yellow, 0);
 
+	// if(State==DragonState::Attack||State==DragonState::Move)
+	// {
+	// 	// State가 Move이거나 Attack일 경우, Lerp를 사용해서 플레이어를 향해 쳐다보도록 한다.
+	// 	FVector TargetLocation = NearTargetActor->GetActorLocation();
+	// 	FVector DragonLocation = Dragon->GetActorLocation();
+	// 	FVector TargetDirection = (TargetLocation - DragonLocation).GetSafeNormal();
+	//
+	// 	// 드래곤이 향할 방향을 계산하여 Rotator로 변환
+	// 	FRotator TargetRotation = TargetDirection.Rotation();
+	// 	FRotator CurrentRotation = Dragon->GetActorRotation();
+	// 	
+	// 	//auto LerpValue = FMath::Lerp(Dragon->GetActorForwardVector(), NearTargetActor->GetActorLocation(), DeltaTime*10);
+	// 	//FRotator LerpRotation = FMath::Lerp(CurrentRotation, TargetRotation, DeltaTime);
+	// 	FRotator SmoothRotation = FMath::RInterpTo(CurrentRotation, TargetRotation, DeltaTime, 3.0f);
+	// 	Dragon->SetActorRotation(SmoothRotation);
+	// }
+
+	if(State!=DragonState::Move)
+		ai->StopMovement();
+	
 	//공격중일 때는 상태 변환 x
-	if(!isAttack)
+	if (!isAttack)
 	{
 		switch (State)
 		{
@@ -135,7 +159,7 @@ void UHD_DragonFSM::SleepState()
 	//State = DragonState::Idle;
 }
 
-void UHD_DragonFSM::IdleState(float DeltaTime)
+void UHD_DragonFSM::IdleState(const float& DeltaTime)
 {
 	if (Anim)
 	{
@@ -143,7 +167,7 @@ void UHD_DragonFSM::IdleState(float DeltaTime)
 		if (Anim->chkAngle)
 			Anim->chkAngle = false;
 
-		if(!isAttack)
+		if (!isAttack)
 			Anim->ChangeAttackState(AttackState::None);
 	}
 
@@ -167,11 +191,11 @@ void UHD_DragonFSM::IdleState(float DeltaTime)
 	}
 
 	// <><><> 공격 받는 부분에 어그로 이동 추가
-	CurrIdleTime+=DeltaTime;
-	if(CurrIdleTime>=DuringIdleTime)
+	CurrIdleTime += DeltaTime;
+	if (CurrIdleTime >= DuringIdleTime)
 	{
-		CurrIdleTime=0.f;
-		
+		CurrIdleTime = 0.f;
+
 		// 전체 체력 75프로 이하로 깍이면 Fly State진입
 		// 스킬 1~2개 사용하고 내려오도록 설정
 		// 내려온 다음, 땅에서 최소 스킬을 4개 이상 써야 다시 올라갈수 있도록 설정
@@ -190,40 +214,72 @@ void UHD_DragonFSM::IdleState(float DeltaTime)
 			Anim->ChangeState(DragonState::Move);
 		}
 	}
-	
 }
 
-void UHD_DragonFSM::MoveState(float DeltaTime)
+
+void UHD_DragonFSM::MoveState(const float& DeltaTime)
 {
 	if (NearTargetActor)
 	{
 		//Distance랑 Speed만 동기화
-		float Distance = FVector::Dist(NearTargetActor->GetActorLocation(), Dragon->GetActorLocation());
-		Anim->Direction = Distance;
-		Anim->Speed = Dragon->GetCharacterMovement()->GetMaxSpeed();
 
-		auto* ai = Cast<AAIController>(Dragon->Controller);
+		Anim->Speed = 0.75f;
+		FVector ForwardVec = Dragon->GetActorForwardVector();
+		FVector CurrentLocation = Dragon->GetActorLocation();
+		FVector TargetVec = NearTargetActor->GetActorLocation() - CurrentLocation;
+		float TargetDot = FVector::DotProduct(ForwardVec, TargetVec);
+
+		float MagnitudeCurrent = CurrentLocation.Size();
+		//UE_LOG(LogTemp, Warning, TEXT("MagnitudeCurrent %f"), MagnitudeCurrent);
+		float MagnitudeDirection = TargetVec.Size();
+		float RadianValue = FMath::Acos(TargetDot);
+
+		float DegreeValue = FMath::RadiansToDegrees(RadianValue);
+		Anim->Direction = DegreeValue;
+
+		// if (bRotate)
+		// {
+		// 	RotateToTarget(DeltaTime);
+		// }
+
+		// FVector StartLoc = Dragon->GetActorLocation();
+		// FRotator curRot = Dragon->GetActorRotation();
+		// FVector TargetLoc = NearTargetActor->GetActorLocation();
+		// FRotator realRot = UKismetMathLibrary::FindLookAtRotation(StartLoc, TargetLoc);
+		//
+		//
+		// al += DeltaTime / 5;
+		//
+		//
+		// if (al > 1)
+		// {
+		// 	al = 0;
+		// }
+		// else
+		// {
+		// 	FRotator realrealROt = UKismetMathLibrary::RLerp(curRot, realRot, al, true);
+		// 	Dragon->SetActorRotation(realrealROt);
+		// }
+
+		// else
+		// {
+		//ai->MoveToActor(NearTargetActor);
 		ai->MoveToLocation(NearTargetActor->GetActorLocation());
 
+		float Distance = FVector::Dist(NearTargetActor->GetActorLocation(), Dragon->GetActorLocation());
 		if (Distance <= AttackDist)
 		{
 			Anim->ChangeState(DragonState::Idle);
 		}
-		//NearTargetActor->GetActorLocation()
-		// // 날고있지 않을 때는 AI MOVE로 이동
-		// if (!bFly)
-		// {
-		// 	
-		// }
-		// else
-		// {
-		// 	//날고있을 때는 P=P0+VT 사용
-		// }
+		//}
+
+
+		//Dragon->SetActorRotation(realRot); 
 	}
 }
 
 
-void UHD_DragonFSM::F_NormalAttackState(float DeltaTime)
+void UHD_DragonFSM::F_NormalAttackState(const float& DeltaTime)
 {
 	// 공격패턴을 정해서 상태 전이
 	// 정해진 공격 패턴의 스킬 쿨타임이 남아 있다면 다시 패턴 지정
@@ -370,51 +426,74 @@ void UHD_DragonFSM::ChooseAttackState()
 		// Breath, Shout, HandPress, Scratch, TailSlap, JumpPress, ThunderMagic, Methor
 		// 20		30		30			30		30			20		10				10
 		int_rand = FMath::RandRange(1, 180);
-		if(int_rand>170)
+		if (int_rand > 170)
 		{
 			//Methor
 			//Anim->ChangeAttackState(AttackState::Meteor);
 			Anim->ChangeState(DragonState::Idle);
 		}
-		else if(int_rand>160)
+		else if (int_rand > 160)
 		{
 			//ThunderMagic
 			//Anim->ChangeAttackState(AttackState::ThunderMagic);
 			Anim->ChangeState(DragonState::Idle);
 		}
-		else if(int_rand>140)
+		else if (int_rand > 140)
 		{
 			//JumpPress
 			Anim->ChangeAttackState(AttackState::JumpPress);
 		}
-		else if(int_rand>110)
+		else if (int_rand > 110)
 		{
 			//TailSlap
 			Anim->InnerAngle = GetRadianFromCharacter();
 			Anim->chkAngle = true;
 			Anim->ChangeAttackState(AttackState::TailSlap);
 		}
-		else if(int_rand>80)
+		else if (int_rand > 80)
 		{
 			//Scratch
 			Anim->InnerAngle = GetRadianFromCharacter();
 			Anim->chkAngle = true;
 			Anim->ChangeAttackState(AttackState::Scratch);
 		}
-		else if(int_rand>50)
+		else if (int_rand > 50)
 		{
 			//HandPress
 			Anim->ChangeAttackState(AttackState::HandPress);
 		}
-		else if(int_rand>20)
+		else if (int_rand > 20)
 		{
 			//Shout
 			Anim->ChangeAttackState(AttackState::Shout);
 		}
-		else if(int_rand>0)
+		else if (int_rand > 0)
 		{
 			//Breath
 			Anim->ChangeAttackState(AttackState::Breath);
 		}
+	}
+}
+
+void UHD_DragonFSM::RotateToTarget(const float& DeltaTime)
+{
+	FVector StartLoc = Dragon->GetActorLocation();
+	FRotator curRot = Dragon->GetActorRotation();
+	FVector TargetLoc = NearTargetActor->GetActorLocation();
+	FRotator realRot = UKismetMathLibrary::FindLookAtRotation(StartLoc, TargetLoc);
+
+
+	al += DeltaTime / 10;
+
+
+	if (al > 1)
+	{
+		al = 0;
+		bRotate = false;
+	}
+	else
+	{
+		FRotator realrealROt = UKismetMathLibrary::RLerp(curRot, realRot, al, true);
+		Dragon->SetActorRotation(realrealROt);
 	}
 }

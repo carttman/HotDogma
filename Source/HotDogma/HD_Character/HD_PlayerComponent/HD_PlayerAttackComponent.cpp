@@ -4,9 +4,15 @@
 #include "../../HD_Character/HD_PlayerComponent/HD_PlayerAttackComponent.h"
 
 #include "EnhancedInputComponent.h"
+#include "MotionWarpingComponent.h"
+#include "RootMotionModifier.h"
+#include "Camera/CameraComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "HotDogma/HD_Character/HD_CharacterPlayer.h"
 #include "HotDogma/HD_Character/HD_PlayerAnimInstance.h"
+#include "HotDogma/LHJ/HD_Dragon.h"
+#include "Kismet/KismetMathLibrary.h"
+#include "Kismet/KismetSystemLibrary.h"
 
 
 UHD_PlayerAttackComponent::UHD_PlayerAttackComponent()
@@ -29,10 +35,15 @@ UHD_PlayerAttackComponent::UHD_PlayerAttackComponent()
 	{
 		AM_Splitter = Temp_SPMontage.Object; 
 	}
-	ConstructorHelpers::FObjectFinder<UAnimMontage> Temp_BAMontage(TEXT("/Script/Engine.AnimMontage'/Game/CHJ/Player_Animation/Attack/AM_BaseAttack.AM_BaseAttack'"));
+	ConstructorHelpers::FObjectFinder<UAnimMontage> Temp_BAMontage(TEXT("/Script/Engine.AnimMontage'/Game/CHJ/Player_Animation/Attack/BaseAttack/AM_BaseAttack.AM_BaseAttack'"));
 	if(Temp_BAMontage.Succeeded())
 	{
 		AM_BaseAttack = Temp_BAMontage.Object; 
+	}
+	ConstructorHelpers::FObjectFinder<UAnimMontage> Temp_SCMontage(TEXT("/Script/Engine.AnimMontage'/Game/CHJ/Player_Animation/Attack/Cutting_Wind/AM_Cutting_Wind.AM_Cutting_Wind'"));
+	if(Temp_SCMontage.Succeeded())
+	{
+		AM_Cutting = Temp_SCMontage.Object; 
 	}
 }
 
@@ -43,11 +54,10 @@ void UHD_PlayerAttackComponent::BeginPlay()
 	Super::BeginPlay();
 	Player = Cast<AHD_CharacterBase>(GetOwner());
 	PlayerAnim = Cast<UHD_PlayerAnimInstance>(Player->GetMesh()->GetAnimInstance());
+	Dragon = Cast<AHD_Dragon>(Player->Dragon);
 	// ...
-	if(AM_Splitter)
-	{
-		PlayerAnim->OnPlayMontageNotifyBegin.AddDynamic(this, &UHD_PlayerAttackComponent::PlayMontageNotifyBegin_Splitter);
-	}
+	if(AM_Splitter) PlayerAnim->OnPlayMontageNotifyBegin.AddDynamic(this, &UHD_PlayerAttackComponent::PlayMontageNotifyBegin_Splitter);
+	if(AM_Cutting) PlayerAnim->OnPlayMontageNotifyBegin.AddDynamic(this, &UHD_PlayerAttackComponent::PlayMontageNotifyBegin_Cutting);
 }
 
 
@@ -58,7 +68,8 @@ void UHD_PlayerAttackComponent::TickComponent(float DeltaTime, ELevelTick TickTy
 
 	UpdatePlayerAttack(DeltaTime);
 	if(IsSplitting)Update_Skill_Splitter();
-	
+
+	Player->camera->FieldOfView = FMath::Lerp(Player->camera->FieldOfView, TargetFOV, DeltaTime * 7);
 }
 
 void UHD_PlayerAttackComponent::SetupPlayerInputComponent(UEnhancedInputComponent* enhancedInputComponent)
@@ -78,6 +89,7 @@ void UHD_PlayerAttackComponent::EnhancedSkill(const FInputActionValue& InputActi
 	}
 	else if (FMath::IsNearlyEqual(value, 2.f))
 	{
+		Skill_Cutting();
 	}
 	else if (FMath::IsNearlyEqual(value, 3.f))
 	{
@@ -195,8 +207,84 @@ void UHD_PlayerAttackComponent::PlayMontageNotifyBegin_Splitter(FName NotifyName
 		Player->GetCharacterMovement()->SetMovementMode(MOVE_Falling);
 		Player->GetCharacterMovement()->GravityScale = 0.5f;
 		UE_LOG(LogTemp, Warning, TEXT("%s"), *FString(__FUNCTION__));
+		TargetFOV = 105;
 	}
-	//if(NotifyName == FName("Splitter_Land"))
+	if(NotifyName == FName("Splitter_Land"))
+	{
+		TargetFOV = 90;
+	}
+	
 }
 
 
+
+void UHD_PlayerAttackComponent::Skill_Cutting()
+{
+	PlayerAnim->Montage_Play(AM_Cutting, 1);
+}
+
+void UHD_PlayerAttackComponent::Update_Skill_Cuttring()
+{
+	// 타겟의 위치를 업데이트
+	
+}
+
+void UHD_PlayerAttackComponent::Cutting_GetTarget()
+{
+	FVector Start = Player->GetActorLocation();
+	FVector End = Player->GetActorLocation();
+	ECollisionChannel CollisionChannel = ECC_GameTraceChannel6;
+	TArray<FHitResult> OutHits;
+	TArray<AActor*> ActorsToIgnore;
+	ActorsToIgnore.Add(Player);
+	CuttingHit = UKismetSystemLibrary::SphereTraceMulti(GetWorld(), Start, End, 1000.f, UEngineTypes::ConvertToTraceType(CollisionChannel), false,
+		ActorsToIgnore,EDrawDebugTrace::ForDuration,OutHits,true);
+
+	for (auto& Hit : OutHits)
+	{
+		if (IsValid(Hit.GetActor()))
+		{
+			//UE_LOG(LogTemp, Warning, TEXT("Hit Actor: %s"), *Hit.GetActor()->GetName());
+			UE_LOG(LogTemp, Warning, TEXT("Hit Actor: %s Cutting_TargetLoc : %.f, %.f, %.f"), *Hit.GetActor()->GetName(),Hit.GetActor()->GetActorLocation().X, Hit.GetActor()->GetActorLocation().Y, Hit.GetActor()->GetActorLocation().Z);
+			FVector Cutting_TargetLoc = Hit.GetActor()->GetActorLocation(); //- Player->GetActorLocation();
+			//UE_LOG(LogTemp, Warning, TEXT("Cutting_TargetLoc : %.f, %.f, %.f"), Cutting_TargetLoc.X, Cutting_TargetLoc.Y, Cutting_TargetLoc.Z);
+			//UE_LOG(LogTemp, Warning, TEXT("Player->GetActorLocation() : %.f, %.f, %.f"), Player->GetActorLocation().X, Player->GetActorLocation().Y, Player->GetActorLocation().Z);
+			FVector newLoc = Cutting_TargetLoc - Player->GetActorLocation();
+			newLoc.Normalize();
+			
+			Cutting_Target_Rot = UKismetMathLibrary::MakeRotFromX(newLoc);
+			//Cutting_Target_Rot = Cutting_TargetLoc;
+			break;
+		}
+	}
+}
+
+void UHD_PlayerAttackComponent::PlayMontageNotifyBegin_Cutting(FName NotifyName, const FBranchingPointNotifyPayload& BranchingPointNotifyPayload)
+{
+	if(NotifyName == FName("Cutting_Run_Start"))
+	{
+		FMotionWarpingTarget Cutting_MW_Target;
+		Cutting_GetTarget();
+		if(CuttingHit)
+		{
+			Player->SetActorRotation(Cutting_Target_Rot);
+			Cutting_MW_Target.Rotation = Cutting_Target_Rot; //Player->GetActorRotation();
+			UE_LOG(LogTemp, Warning, TEXT("Cutting_Target_Rot : %.f"), Cutting_Target_Rot.Yaw);
+		}
+		UE_LOG(LogTemp, Warning, TEXT("Notify %s has begun!"), *NotifyName.ToString());
+		Cutting_MW_Target.Name = FName("Cutting_Boost");
+		Cutting_MW_Target.Location = FVector( (Player->GetActorLocation().X + Player->GetActorForwardVector().X * 600) ,Player->GetActorLocation().Y + Player->GetActorForwardVector().Y * 600 ,Player->GetActorLocation().Z);
+		Cutting_MW_Target.Rotation = Player->GetActorRotation();
+		Player->MotionWarpingComponent->AddOrUpdateWarpTarget(Cutting_MW_Target);
+		TargetFOV = 105;
+		//만약 공격 범위 내에 타겟이 있다면
+		//타겟 위치로 회전
+		//if(Cutting_TargetLoc <= Cutting_Attack_Range)
+	}
+	if(NotifyName == FName("Cutting_Attack_Start")) 
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Notify %s has begun!"), *NotifyName.ToString());
+		UE_LOG(LogTemp, Warning, TEXT("%s"), *FString(__FUNCTION__));
+		TargetFOV = 90;
+	}
+}

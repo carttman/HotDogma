@@ -31,8 +31,6 @@ public:
 public:
 	void PlayerAttack();
 	void UpdatePlayerAttack(float DeltaTime);
-	void Skill_Splitter();
-	void Update_Skill_Splitter();
 public:
 	UPROPERTY(EditAnywhere)
 	class UInputAction* IA_HD_Attack;
@@ -47,9 +45,10 @@ public:
 	class AHD_CharacterBase* Player;
 	UPROPERTY()
 	class UHD_PlayerAnimInstance* PlayerAnim;
-	
-	int32 ComboCount = 0;
+	UPROPERTY()
+	class AHD_Dragon* Dragon;
 
+	int32 ComboCount = 0;
 	float CurrComboTime = 0;
 	float MinComboTime = 0.5f;
 	float MaxComboTime = 1.4f;
@@ -60,6 +59,21 @@ public:
 
 	UFUNCTION()
 	void PlayMontageNotifyBegin_Splitter(FName NotifyName, const FBranchingPointNotifyPayload& BranchingPointNotifyPayload);
+	void Skill_Splitter();
+	void Update_Skill_Splitter();
 
 	bool IsSplitting = false;
+	float TargetFOV = 90;
+public:
+	UPROPERTY(EditAnywhere)
+	class UAnimMontage* AM_Cutting;
+
+	UFUNCTION()
+	void PlayMontageNotifyBegin_Cutting(FName NotifyName, const FBranchingPointNotifyPayload& BranchingPointNotifyPayload);
+	void Skill_Cutting();
+	void Update_Skill_Cuttring();
+	void Cutting_GetTarget();
+	bool CuttingHit;
+	FRotator Cutting_Target_Rot;
+	float Cutting_Attack_Range = 600.f;
 };

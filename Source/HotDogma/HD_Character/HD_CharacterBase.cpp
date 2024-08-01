@@ -215,23 +215,6 @@ void AHD_CharacterBase::EnhancedOrder(const FInputActionValue& InputActionValue)
 	}
 }
 
-// void AHD_CharacterBase::EnhancedSkill(const FInputActionValue& InputActionValue)
-// {
-// 	float value = InputActionValue.Get<float>();
-// 	if (FMath::IsNearlyEqual(value, 1.f))
-// 	{
-// 		// Skill_Splitter();
-// 	}
-// 	else if (FMath::IsNearlyEqual(value, 2.f))
-// 	{
-// 	}
-// 	else if (FMath::IsNearlyEqual(value, 3.f))
-// 	{
-// 	}
-// 	else if (FMath::IsNearlyEqual(value, 4.f))
-// 	{
-// 	}
-// }
 
 float AHD_CharacterBase::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator,
                                     AActor* DamageCauser)

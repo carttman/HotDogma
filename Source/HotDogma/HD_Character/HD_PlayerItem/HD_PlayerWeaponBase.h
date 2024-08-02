@@ -33,6 +33,7 @@ public:
 	UPROPERTY(EditAnywhere)
 	class USkeletalMeshComponent* WeaponMeshComp;
 
+	bool IsWeaponHit = false;
 public:
 	UPROPERTY()
 	class AHD_CharacterPlayer* Player;

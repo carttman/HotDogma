@@ -44,7 +44,14 @@ public:
 	UPROPERTY()
 	class AHD_CharacterBase* Player;
 	UPROPERTY()
+	class AHD_CharacterPlayer* CharacterPlayer;
+	UPROPERTY()
 	class UHD_PlayerAnimInstance* PlayerAnim;
+	UPROPERTY()
+	class AHD_PlayerWeaponBase* Left_Weapon;
+	UPROPERTY()
+	class AHD_PlayerWeaponBase* Right_Weapon;
+
 	UPROPERTY()
 	class AHD_Dragon* Dragon;
 
@@ -75,5 +82,15 @@ public:
 	void Cutting_GetTarget();
 	bool CuttingHit;
 	FRotator Cutting_Target_Rot;
-	float Cutting_Attack_Range = 600.f;
+	float Cutting_Attack_Range = 200.f;
+
+	bool IsCutting = false;
+
+	void SlowDownTime(float SlowDownFactor, float Duration);
+	// 타임 딜레이션을 복원하는 함수
+	void RestoreTimeDilation();
+	// 원래 타임 딜레이션
+	float OriginalTimeDilation;
+	// 타임 딜레이션 타이머 핸들
+	FTimerHandle TimeDilationTimerHandle;
 };

@@ -190,11 +190,13 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int RequiredSkillCnt = 4; // 다음 공중 올라갈 때까지 필요한 스킬 사용 개수
+
+	int CurrUsedSkillCnt;	// 현재 사용한 스킬 개수
 #pragma endregion
 
 #pragma region	Fly Property
-	bool chkOnceFly = false; // 한번이라도 날았는지 확인
-
+	bool chkOnceFly = false; // 한번이라도 날았는지 확인	
+	
 	int ApplySkillAsFly; // 공중에서 사용할 스킬 개수
 #pragma endregion
 

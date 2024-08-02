@@ -93,26 +93,35 @@ void UHD_DragonFSM::TickComponent(float DeltaTime, ELevelTick TickType, FActorCo
 			                    Dragon->GetActorLocation().Z - 50), myState, 0, FColor::Yellow, 0);
 	}
 
-
-	// if(State==DragonState::Attack||State==DragonState::Move)
-	// {
-	// 	// State가 Move이거나 Attack일 경우, Lerp를 사용해서 플레이어를 향해 쳐다보도록 한다.
-	// 	FVector TargetLocation = NearTargetActor->GetActorLocation();
-	// 	FVector DragonLocation = Dragon->GetActorLocation();
-	// 	FVector TargetDirection = (TargetLocation - DragonLocation).GetSafeNormal();
-	//
-	// 	// 드래곤이 향할 방향을 계산하여 Rotator로 변환
-	// 	FRotator TargetRotation = TargetDirection.Rotation();
-	// 	FRotator CurrentRotation = Dragon->GetActorRotation();
-	// 	
-	// 	//auto LerpValue = FMath::Lerp(Dragon->GetActorForwardVector(), NearTargetActor->GetActorLocation(), DeltaTime*10);
-	// 	//FRotator LerpRotation = FMath::Lerp(CurrentRotation, TargetRotation, DeltaTime);
-	// 	FRotator SmoothRotation = FMath::RInterpTo(CurrentRotation, TargetRotation, DeltaTime, 3.0f);
-	// 	Dragon->SetActorRotation(SmoothRotation);
-	// }
 	BreathTimeline.TickTimeline(DeltaTime);
 	if (State != DragonState::Move)
 		ai->StopMovement();
+
+	// 전체 체력 75프로 이하로 깍이면 Fly State진입
+	// 스킬 1~2개 사용하고 내려오도록 설정
+	// 내려온 다음, 땅에서 최소 스킬을 4개 이상 써야 다시 올라갈수 있도록 설정
+	if (!chkOnceFly)
+	{
+		// 최초로 75%보다 낮아지면 하늘로 날아오른다.
+		if (Dragon->MaxHP * 0.75 >= Dragon->CurrHP)
+		{
+			State = DragonState::Fly;
+			CurrUsedSkillCnt=0;
+			chkOnceFly = true;
+		}
+	}
+	// else
+	// {
+	// 	// 날고있는 상태이고, 정해진 개수만큼 스킬을 사용했을 때
+	// 	if (bFly && CurrUsedSkillCnt == ApplySkillAsFly)
+	// 	{
+	// 		State = DragonState::Fly;
+	// 		CurrUsedSkillCnt = 0;
+	// 	}
+	//
+	// 	if(!bFly)
+	// 		CurrUsedSkillCnt = 0;
+	// }
 
 	//공격중일 때는 상태 변환 x
 	if (!isAttack)
@@ -205,21 +214,13 @@ void UHD_DragonFSM::IdleState(const float& DeltaTime)
 	{
 		CurrIdleTime = 0.f;
 
-		// 전체 체력 75프로 이하로 깍이면 Fly State진입
-		// 스킬 1~2개 사용하고 내려오도록 설정
-		// 내려온 다음, 땅에서 최소 스킬을 4개 이상 써야 다시 올라갈수 있도록 설정
-		if (Dragon->MaxHP * 0.75 >= Dragon->CurrHP)
-		{
-			if (!chkOnceFly)
-			{
-				Anim->isFly = true;
-				chkOnceFly = true;
-			}
-		}
-
 		// 공격 범위 내에 들어오면
 		if (NearTargetActor && MinDistance < AttackDist)
 		{
+			// 공중에서 스킬 사용개수 지정
+			if (CurrUsedSkillCnt == 0)
+				ApplySkillAsFly = FMath::RandRange(1, 2);
+
 			// 공격 상태로 전이
 			ChooseAttackState();
 			Anim->ChangeState(DragonState::Attack);

@@ -106,4 +106,7 @@ public:
 	//=========================
 	UFUNCTION()
 	void AnimNotify_RotateFire();
+
+	UFUNCTION()
+	void AnimNotify_EndFlyUp();
 };

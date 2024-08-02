@@ -102,15 +102,21 @@ void UHD_DragonAnim::AnimNotify_EndScratch()
 void UHD_DragonAnim::AnimNotify_StartAttack()
 {
 	fsm->isAttack = true;
+	fsm->CurrUsedSkillCnt++;
 }
 
 void UHD_DragonAnim::AnimNotify_EndAttack()
 {
 	ChangeState(DragonState::Idle);
-	fsm->isAttack = false;	
+	fsm->isAttack = false;
 }
 
 void UHD_DragonAnim::AnimNotify_RotateFire()
 {
 	fsm->BreathTimeline.PlayFromStart();
+}
+
+void UHD_DragonAnim::AnimNotify_EndFlyUp()
+{
+	ChangeState(DragonState::Idle);
 }

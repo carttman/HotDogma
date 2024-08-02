@@ -7,6 +7,7 @@
 #include "Engine/DamageEvents.h"
 #include "HotDogma/HD_Character/HD_CharacterPlayer.h"
 #include "HotDogma/HD_Character/HD_PlayerAnimInstance.h"
+#include "HotDogma/HD_Character/HD_PlayerComponent/HD_PlayerAttackComponent.h"
 #include "HotDogma/LHJ/HD_Dragon.h"
 #include "Kismet/GameplayStatics.h"
 
@@ -55,9 +56,16 @@ void AHD_PlayerWeaponBase::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, A
 {
 	if(OtherActor == Player->Dragon)
 	{
+		IsWeaponHit = true;
 		//UE_LOG(LogTemp, Warning, TEXT("Hit Dragon"));
 		FDamageEvent DamageEvent;
 		UGameplayStatics::ApplyDamage(OtherActor, 10.0f, Player->GetController(), this, UDamageType::StaticClass());
+
+		// if(Player->PlayerAttackComponent->IsCutting)
+		// {
+		// 	UE_LOG(LogTemp, Warning, TEXT("Slow"));
+		// 	//Player->PlayerAttackComponent->SlowDownTime(0.3f,0.1f);
+		// }
 		CapsuleComp->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	}
 }

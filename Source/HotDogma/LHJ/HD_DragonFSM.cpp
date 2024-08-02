@@ -212,7 +212,7 @@ void UHD_DragonFSM::IdleState(const float& DeltaTime)
 		if (NearTargetActor && MinDistance < AttackDist)
 		{
 			// 공중에서 스킬 사용개수 지정
-			if (CurrUsedSkillCnt == 0)
+			if (Anim->chkUsingSkillCnt)
 				ApplySkillAsFly = FMath::RandRange(1, 2);
 
 			// 공격 상태로 전이
@@ -511,8 +511,11 @@ void UHD_DragonFSM::RotateToTarget(const float& DeltaTime)
 
 void UHD_DragonFSM::BreathRStart(float Alpha)
 {
-	FRotator nowRotator = Dragon->GetActorRotation();
-	Dragon->SetActorRotation(FRotator(nowRotator.Pitch, nowRotator.Yaw + Alpha * 6, nowRotator.Roll));
+	//Dragon->SetActorRotation(FRotator(NowRotator.Pitch, NowRotator.Yaw + Alpha * 6, NowRotator.Roll));
+
+	// Value는 0에서 1까지의 값으로, 360도를 회전하도록 설정
+	float NewYaw = FMath::Lerp(0.0f, 360.0f, Alpha);
+	Dragon->SetActorRotation(FRotator(NowRotator.Pitch, NowRotator.Yaw + NewYaw, NowRotator.Roll));
 }
 
 void UHD_DragonFSM::BreathREnd()

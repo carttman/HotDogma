@@ -114,8 +114,8 @@ void UHD_DragonAnim::AnimNotify_EndAttack()
 		// 최초로 75%보다 낮아지면 하늘로 날아오른다.
 		if (Dragon->MaxHP * 0.75 >= Dragon->CurrHP)
 		{
-			fsm->State = DragonState::Fly;
-			fsm->CurrUsedSkillCnt = 0;
+			ChangeAttackState(AttackState::None);
+			ChangeState(DragonState::Fly);
 			fsm->chkOnceFly = true;
 		}
 	}
@@ -125,6 +125,7 @@ void UHD_DragonAnim::AnimNotify_EndAttack()
 
 void UHD_DragonAnim::AnimNotify_RotateFire()
 {
+	fsm->NowRotator = Dragon->GetActorRotation();
 	fsm->BreathTimeline.PlayFromStart();
 }
 
@@ -136,6 +137,8 @@ void UHD_DragonAnim::AnimNotify_StartFlyUp()
 void UHD_DragonAnim::AnimNotify_EndFlyUp()
 {
 	ChangeState(DragonState::Idle);
+	fsm->CurrUsedSkillCnt = 0;
+	chkUsingSkillCnt = true;
 }
 
 void UHD_DragonAnim::AnimNotify_StartFlyDown()
@@ -145,5 +148,25 @@ void UHD_DragonAnim::AnimNotify_StartFlyDown()
 
 void UHD_DragonAnim::AnimNotify_EndFlyDown()
 {
+	fsm->isAttack = false;
+	fsm->CurrUsedSkillCnt = 0;
+	chkUsingSkillCnt = false;
+}
+
+void UHD_DragonAnim::AnimNotify_StartFlyAttack()
+{
+	fsm->isAttack = true;
+	fsm->CurrUsedSkillCnt++;
+}
+
+void UHD_DragonAnim::AnimNotify_EndFlyAttack()
+{
+	ChangeState(DragonState::Idle);
+	// 날고있는 상태이고, 정해진 개수만큼 스킬을 사용했을 때
+	if (fsm->CurrUsedSkillCnt == fsm->ApplySkillAsFly)
+	{
+		ChangeState(DragonState::FlyDown);
+	}
+
 	fsm->isAttack = false;
 }

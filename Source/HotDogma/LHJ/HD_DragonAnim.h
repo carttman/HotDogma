@@ -58,6 +58,8 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Meta = (AllowPrivateAccess=true))
 	float Direction;
 
+	bool chkUsingSkillCnt = false;
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Meta = (AllowPrivateAccess=true))
 	float Speed;
 
@@ -109,13 +111,19 @@ public:
 
 	UFUNCTION()
 	void AnimNotify_StartFlyUp();
-	
+
 	UFUNCTION()
 	void AnimNotify_EndFlyUp();
 
 	UFUNCTION()
 	void AnimNotify_StartFlyDown();
-	
+
 	UFUNCTION()
 	void AnimNotify_EndFlyDown();
+
+	UFUNCTION()
+	void AnimNotify_StartFlyAttack();
+
+	UFUNCTION()
+	void AnimNotify_EndFlyAttack();
 };

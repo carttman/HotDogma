@@ -189,6 +189,8 @@ public:
 	int RequiredSkillCnt = 4; // 다음 공중 올라갈 때까지 필요한 스킬 사용 개수
 
 	int CurrUsedSkillCnt;	// 현재 사용한 스킬 개수
+
+	FRotator NowRotator;
 #pragma endregion
 
 #pragma region	Fly Property

@@ -100,16 +100,16 @@ void UHD_DragonFSM::TickComponent(float DeltaTime, ELevelTick TickType, FActorCo
 	// 전체 체력 75프로 이하로 깍이면 Fly State진입
 	// 스킬 1~2개 사용하고 내려오도록 설정
 	// 내려온 다음, 땅에서 최소 스킬을 4개 이상 써야 다시 올라갈수 있도록 설정
-	if (!chkOnceFly)
-	{
-		// 최초로 75%보다 낮아지면 하늘로 날아오른다.
-		if (Dragon->MaxHP * 0.75 >= Dragon->CurrHP)
-		{
-			State = DragonState::Fly;
-			CurrUsedSkillCnt=0;
-			chkOnceFly = true;
-		}
-	}
+	// if (!chkOnceFly)
+	// {
+	// 	// 최초로 75%보다 낮아지면 하늘로 날아오른다.
+	// 	if (Dragon->MaxHP * 0.75 >= Dragon->CurrHP)
+	// 	{
+	// 		State = DragonState::Fly;
+	// 		CurrUsedSkillCnt = 0;
+	// 		chkOnceFly = true;
+	// 	}
+	// }
 	// else
 	// {
 	// 	// 날고있는 상태이고, 정해진 개수만큼 스킬을 사용했을 때
@@ -143,16 +143,10 @@ void UHD_DragonFSM::TickComponent(float DeltaTime, ELevelTick TickType, FActorCo
 			F_NormalAttackState(DeltaTime);
 			break;
 		case DragonState::Fly:
-			if (bFly)
-			{
-				Anim->isFly = false;
-				bFly = false;
-			}
-			else
-			{
-				Anim->isFly = true;
-				bFly = true;
-			}
+			Anim->isFly = true;
+			break;
+		case DragonState::FlyDown:
+			Anim->isFly = false;
 			break;
 		case DragonState::Groggy:
 		case DragonState::Death:

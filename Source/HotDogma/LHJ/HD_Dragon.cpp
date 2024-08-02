@@ -43,7 +43,7 @@ AHD_Dragon::AHD_Dragon()
 	TargetPoint4 = CreateDefaultSubobject<UCapsuleComponent>(TEXT("TargetPoint4"));
 	TargetPoint4->SetupAttachment(SkeletalComp,TEXT("L-Forearm"));
 	TargetPoint4->SetCapsuleHalfHeight(60.f);
-	TargetPoint4->SetCapsuleRadius(30.f);	
+	TargetPoint4->SetCapsuleRadius(30.f);
 }
 
 void AHD_Dragon::BeginPlay()

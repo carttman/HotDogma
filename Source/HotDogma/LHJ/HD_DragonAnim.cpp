@@ -63,6 +63,7 @@ void UHD_DragonAnim::AnimNotify_endShout()
 	bEndStartAnim = true;
 
 	fsm->bRotate = true;
+
 	ChangeState(DragonState::Idle);
 }
 #pragma endregion
@@ -108,6 +109,17 @@ void UHD_DragonAnim::AnimNotify_StartAttack()
 void UHD_DragonAnim::AnimNotify_EndAttack()
 {
 	ChangeState(DragonState::Idle);
+	if (!fsm->chkOnceFly)
+	{
+		// 최초로 75%보다 낮아지면 하늘로 날아오른다.
+		if (Dragon->MaxHP * 0.75 >= Dragon->CurrHP)
+		{
+			fsm->State = DragonState::Fly;
+			fsm->CurrUsedSkillCnt = 0;
+			fsm->chkOnceFly = true;
+		}
+	}
+
 	fsm->isAttack = false;
 }
 
@@ -116,7 +128,22 @@ void UHD_DragonAnim::AnimNotify_RotateFire()
 	fsm->BreathTimeline.PlayFromStart();
 }
 
+void UHD_DragonAnim::AnimNotify_StartFlyUp()
+{
+	fsm->isAttack = true;
+}
+
 void UHD_DragonAnim::AnimNotify_EndFlyUp()
 {
 	ChangeState(DragonState::Idle);
+}
+
+void UHD_DragonAnim::AnimNotify_StartFlyDown()
+{
+	fsm->isAttack = true;
+}
+
+void UHD_DragonAnim::AnimNotify_EndFlyDown()
+{
+	fsm->isAttack = false;
 }

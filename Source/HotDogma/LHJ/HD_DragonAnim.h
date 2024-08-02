@@ -108,5 +108,14 @@ public:
 	void AnimNotify_RotateFire();
 
 	UFUNCTION()
+	void AnimNotify_StartFlyUp();
+	
+	UFUNCTION()
 	void AnimNotify_EndFlyUp();
+
+	UFUNCTION()
+	void AnimNotify_StartFlyDown();
+	
+	UFUNCTION()
+	void AnimNotify_EndFlyDown();
 };

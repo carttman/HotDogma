@@ -75,7 +75,7 @@ void UHD_PlayerAttackComponent::TickComponent(float DeltaTime, ELevelTick TickTy
 	UpdatePlayerAttack(DeltaTime);
 	if(IsSplitting)Update_Skill_Splitter();
 	if(IsCutting)Update_Skill_Cuttring();
-	Player->camera->FieldOfView = FMath::Lerp(Player->camera->FieldOfView, TargetFOV, DeltaTime * 7);
+	//Player->camera->FieldOfView = FMath::Lerp(Player->camera->FieldOfView, TargetFOV, DeltaTime * 7);
 }
 
 void UHD_PlayerAttackComponent::SetupPlayerInputComponent(UEnhancedInputComponent* enhancedInputComponent)

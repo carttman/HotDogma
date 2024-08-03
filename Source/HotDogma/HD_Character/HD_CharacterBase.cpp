@@ -13,6 +13,7 @@
 #include "HD_PlayerComponent/HD_PlayerClimbComponent.h"
 #include "CableComponent.h"
 #include "MotionWarpingComponent.h"
+#include "Components/ArrowComponent.h"
 #include "HD_PlayerComponent/PlayerStatusComponent.h"
 #include "HotDogma/HD_GameModeBase/CHJ_GameMode.h"
 
@@ -53,22 +54,22 @@ AHD_CharacterBase::AHD_CharacterBase()
 	GetMesh()->SetRelativeRotation(FRotator(0, -90, 0));
 
 	//SpringArm 셋팅
-	springArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("springArm"));
-	springArm->SetupAttachment(RootComponent);
-	springArm->SetRelativeLocation(FVector(0, 0, 0));
-	springArm->SetRelativeRotation(FRotator(0, 0, 0));
-	springArm->TargetArmLength = 200;
-	springArm->ProbeChannel = ECollisionChannel::ECC_Visibility;
-	springArm->bUsePawnControlRotation = true;
-	springArm->SocketOffset = FVector(40, 35, 155);
-	springArm->bDoCollisionTest = false;
-	springArm->SocketOffset = FVector(-100, 35, 250);
+	 springArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("springArm"));
+	 springArm->SetupAttachment(RootComponent);
+	 springArm->SetRelativeLocation(FVector(0, 0, 0));
+	 springArm->SetRelativeRotation(FRotator(0, 0, 0));
+	 springArm->TargetArmLength = 200;
+	 springArm->ProbeChannel = ECollisionChannel::ECC_Visibility;
+	 springArm->bUsePawnControlRotation = true;
+	 springArm->SocketOffset = FVector(40, 35, 155);
+	 springArm->bDoCollisionTest = false;
+	 springArm->SocketOffset = FVector(-100, 35, 250);
 	
 	// camera setting
-	camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
-	camera->SetupAttachment(springArm);
-	camera->SetRelativeLocation(FVector(0, 0, 0));
-	camera->SetRelativeRotation(FRotator(-20, 0, 0));
+	 camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
+	 camera->SetupAttachment(springArm);
+	 camera->SetRelativeLocation(FVector(0, 0, 0));
+	 camera->SetRelativeRotation(FRotator(-20, 0, 0));
 
 	PlayerClimbComponent = CreateDefaultSubobject<UHD_PlayerClimbComponent>(TEXT("PlayerClimbComponent"));
 	PlayerStatusComponent = CreateDefaultSubobject<UPlayerStatusComponent>(TEXT("PlayerStatusComponent"));
@@ -78,6 +79,11 @@ AHD_CharacterBase::AHD_CharacterBase()
 	CableCompoent->EndLocation = FVector(0,0,0);
 
 	MotionWarpingComponent = CreateDefaultSubobject<UMotionWarpingComponent>(TEXT("MotionWarpingComponent"));
+
+	CameraPoint = CreateDefaultSubobject<UArrowComponent>(TEXT("CameraPoint"));
+	CameraPoint->SetupAttachment(RootComponent);
+	CameraPoint->SetRelativeLocation(FVector(-440,0,170));
+	CameraPoint->SetRelativeRotation(FRotator(-10, 0, 0));
 }
 
 // Called when the game starts or when spawned

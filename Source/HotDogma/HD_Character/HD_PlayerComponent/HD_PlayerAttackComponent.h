@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "InputActionValue.h"
 #include "Components/ActorComponent.h"
+#include "Components/TimelineComponent.h"
 #include "HD_PlayerAttackComponent.generated.h"
 
 
@@ -87,6 +88,26 @@ public:
 
 	bool IsCutting = false;
 
+	void RotatingCamera();
+	FTimerHandle CutterTimerHandle;
+
+	// Timeline Component
+	UPROPERTY()
+	class UTimelineComponent* YawRotationTimeline;
+	// Float Curve for Timeline
+	UPROPERTY(EditAnywhere, Category = "Timeline")
+	class UCurveFloat* YawCurve;
+	// Timeline Function
+	UFUNCTION()
+	void HandleYawRotation(float Value);
+	// Input function to trigger timeline
+	void RotateCamera();
+
+protected:
+	// Timeline Progress Function
+	FOnTimelineFloat YawRotationProgress;
+	
+public:
 	void SlowDownTime(float SlowDownFactor, float Duration);
 	// 타임 딜레이션을 복원하는 함수
 	void RestoreTimeDilation();

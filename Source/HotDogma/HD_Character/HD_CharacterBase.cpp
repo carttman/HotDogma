@@ -63,9 +63,11 @@ AHD_CharacterBase::AHD_CharacterBase()
 	 springArm->bUsePawnControlRotation = true;
 	 springArm->SocketOffset = FVector(40, 35, 155);
 	 springArm->bDoCollisionTest = false;
-	 springArm->SocketOffset = FVector(-100, 35, 250);
+	 springArm->SocketOffset = FVector(-100, 0, 200);
 	 springArm->bEnableCameraLag = true;
 	 springArm->bEnableCameraRotationLag = true;
+	 springArm->CameraLagSpeed = 6.0f;
+	 springArm->CameraRotationLagSpeed = 6.0f;
 	
 	// camera setting
 	 camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));

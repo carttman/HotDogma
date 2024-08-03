@@ -5,6 +5,7 @@
 
 #include "CableComponent.h"
 #include "EnhancedInputComponent.h"
+#include "HD_PlayerAttackComponent.h"
 #include "MotionWarpingComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
@@ -88,10 +89,12 @@ void UHD_PlayerClimbComponent::SetupPlayerInputComponent(UEnhancedInputComponent
 
 void UHD_PlayerClimbComponent::Climb()
 {
-	if(IsClimbing) return;
+	if(Player->PlayerAttackComponent->IsSplitting || Player->PlayerAttackComponent->IsCutting) return;
 	// Flying 모드(벽타기 상태)가 아니라면 벽타기 진입
 	if(Player->GetCharacterMovement()->MovementMode != MOVE_Flying) 
-	{	//Attach_Distance만큼 라.트 쐈을때, 벽에 닿았다면
+	{
+		if(IsClimbing) return;
+		//Attach_Distance만큼 라.트 쐈을때, 벽에 닿았다면
 		if(AttachToSurfaceCaculation(200.f, Climb_OutHit))
 		{	// Flying 모드로 변경
 			IsClimbing = true;
@@ -216,7 +219,7 @@ void UHD_PlayerClimbComponent::LedgeMantleCaculation()
 	if(ledge_bHit){}//DrawDebugLine(GetWorld(), Start, OutHit.ImpactPoint, FColor::Purple, false, 3.0f);
 	else // 벽타기 하다가 충돌이 안되고 있다면
 	{
-		DrawDebugLine(GetWorld(), ledge_Start, ledge_End, FColor::Purple, false, 3.0f);
+		//DrawDebugLine(GetWorld(), ledge_Start, ledge_End, FColor::Purple, false, 3.0f);
 		
 		FHitResult ledge_OutHit_2;
 		FCollisionQueryParams ledge_params_2;
@@ -234,7 +237,7 @@ void UHD_PlayerClimbComponent::LedgeMantleCaculation()
 			
 			if(ledge_bHit_2) // 앞으로 쏜 것 중 하나라도 맞았으면 파쿠르 시작
 			{
-				DrawDebugLine(GetWorld(), ledge_Start_2, ledge_End_2, FColor::Blue, false, 3.0f);
+				//DrawDebugLine(GetWorld(), ledge_Start_2, ledge_End_2, FColor::Blue, false, 3.0f);
 				switch (ledge_bHit_2)
 				{
 				case 1:	// 모션 워핑 
@@ -246,7 +249,7 @@ void UHD_PlayerClimbComponent::LedgeMantleCaculation()
 					ledge_MW_Target_2.Location = FVector(ledge_OutHit_2.Location.X + Player->GetActorForwardVector().X * 60, ledge_OutHit_2.Location.Y + Player->GetActorForwardVector().Y * 60,Player->GetActorLocation().Z + 100.f);
 					ledge_MW_Target_2.Rotation = Player->GetActorRotation();
 				
-					DrawDebugSphere(GetWorld(), ledge_OutHit_2.Location, 30.f, 12, FColor::Black, false, 3.f);
+					//DrawDebugSphere(GetWorld(), ledge_OutHit_2.Location, 30.f, 12, FColor::Black, false, 3.f);
 					Player->MotionWarpingComponent->AddOrUpdateWarpTarget(ledge_MW_Target);
 					Player->MotionWarpingComponent->AddOrUpdateWarpTarget(ledge_MW_Target_2);
 					PlayerAnim->Montage_Play(LedgeMontage, 1.0f);	
@@ -261,7 +264,7 @@ void UHD_PlayerClimbComponent::LedgeMantleCaculation()
 			}
 			else
 			{
-				DrawDebugLine(GetWorld(), ledge_Start_2, ledge_End_2, FColor::Blue, false, 3.0f);
+				//DrawDebugLine(GetWorld(), ledge_Start_2, ledge_End_2, FColor::Blue, false, 3.0f);
 				
 			}
 		}

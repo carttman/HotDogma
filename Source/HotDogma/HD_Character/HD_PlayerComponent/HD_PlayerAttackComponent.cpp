@@ -75,7 +75,7 @@ void UHD_PlayerAttackComponent::TickComponent(float DeltaTime, ELevelTick TickTy
 	UpdatePlayerAttack(DeltaTime);
 	if(IsSplitting)Update_Skill_Splitter();
 	if(IsCutting)Update_Skill_Cuttring();
-	//Player->camera->FieldOfView = FMath::Lerp(Player->camera->FieldOfView, TargetFOV, DeltaTime * 7);
+	Player->camera->FieldOfView = FMath::Lerp(Player->camera->FieldOfView, TargetFOV, DeltaTime * 7);
 }
 
 void UHD_PlayerAttackComponent::SetupPlayerInputComponent(UEnhancedInputComponent* enhancedInputComponent)
@@ -109,61 +109,27 @@ void UHD_PlayerAttackComponent::PlayerAttack()
 {
 	if (ComboCount == 0)
 	{
+		PlayerAnim->Montage_Play(AM_BaseAttack, 1.1);
+		UE_LOG(LogTemp, Warning, TEXT("1"))
 		ComboCount++;
 		CurrComboTime = 0;
-
-		// 단검 아이템에 있는 애님몽타주 실행
-		Player->PlayAnimMontage(AM_BaseAttack, 1, FName("Attack_1"));
 	}
-	else if (ComboCount == 1)
-	{
-		// 콤보최소시간 <= 현재시간 이고 현재시간 <= 최대시간
-		if (MinComboTime <= CurrComboTime && CurrComboTime <= MaxComboTime)
+	PlayerBaseAttackPlay(1,FName("Attack_2"));
+	PlayerBaseAttackPlay(2,FName("Attack_3"));
+	PlayerBaseAttackPlay(3,FName("Attack_4"));
+}
+
+void UHD_PlayerAttackComponent::PlayerBaseAttackPlay(int32 ComboCnt, FName SectionName)
+{
+	if (ComboCount == ComboCnt)
+	{	//최소시간 <= 현재시간 , 현재시간 <= 최대시간 -> 최소 최대시간 사이에 현재시간 있다면
+		if(MinComboTime <= CurrComboTime && CurrComboTime <= MaxComboTime)
 		{
 			ComboCount++;
 			CurrComboTime = 0;
-
-			// 단검 아이템에 있는 애님몽타주 실행
-			Player->PlayAnimMontage(AM_BaseAttack, 1, FName("Attack_2"));
+			PlayerAnim->Montage_JumpToSection(SectionName, AM_BaseAttack);
 		}
 	}
-	else if (ComboCount == 2)
-	{
-		// 콤보최소시간 <= 현재시간 이고 현재시간 <= 최대시간
-		if (MinComboTime <= CurrComboTime && CurrComboTime <= MaxComboTime)
-		{
-			ComboCount++;
-			CurrComboTime = 0;
-
-			// 단검 아이템에 있는 애님몽타주 실행
-			Player->PlayAnimMontage(AM_BaseAttack, 1, FName("Attack_3"));
-		}
-	}
-	else if (ComboCount == 3)
-	{
-		// 콤보최소시간 <= 현재시간 이고 현재시간 <= 최대시간
-		if (MinComboTime <= CurrComboTime && CurrComboTime <= MaxComboTime)
-		{
-			ComboCount++;
-			CurrComboTime = 0;
-
-			// 단검 아이템에 있는 애님몽타주 실행
-			Player->PlayAnimMontage(AM_BaseAttack, 1, FName("Attack_4"));
-		}
-	}
-	else if (ComboCount == 4)
-	{
-		// 콤보최소시간 <= 현재시간 이고 현재시간 <= 최대시간
-		if (MinComboTime <= CurrComboTime && CurrComboTime <= MaxComboTime)
-		{
-			ComboCount++;
-			CurrComboTime = 0;
-
-			// 단검 아이템에 있는 애님몽타주 실행
-			Player->PlayAnimMontage(AM_BaseAttack, 1, FName("Attack_5"));
-		}
-	}
-	
 }
 
 void UHD_PlayerAttackComponent::UpdatePlayerAttack(float DeltaTime)
@@ -182,11 +148,17 @@ void UHD_PlayerAttackComponent::UpdatePlayerAttack(float DeltaTime)
 	}
 }
 
+
 void UHD_PlayerAttackComponent::Skill_Splitter()
 {	// 루트모션을 위한 flying 모드 변경
+	if(IsSplitting) return;
 	IsSplitting = true;
 	Player->GetCharacterMovement()->SetMovementMode(MOVE_Flying);
 	PlayerAnim->Montage_Play(AM_Splitter, 1);
+	if(Player->GetCharacterMovement()->Velocity.Z > 100 && PlayerAnim->isFalling) // 공중에 있다면 바로 뺑뺑이
+	{
+		PlayerAnim->Montage_JumpToSection(FName("Splitter_Start"), AM_Splitter);
+	}
 }
 
 void UHD_PlayerAttackComponent::Update_Skill_Splitter()
@@ -205,15 +177,22 @@ void UHD_PlayerAttackComponent::PlayMontageNotifyBegin_Splitter(FName NotifyName
 {
 	if(NotifyName == FName("Splitter_Start"))
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Notify %s has begun!"), *NotifyName.ToString());
+		//UE_LOG(LogTemp, Warning, TEXT("Notify %s has begun!"), *NotifyName.ToString());
 	}
 	if(NotifyName == FName("Falling")) //롤링 시작할 때
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Notify %s has begun!"), *NotifyName.ToString());
+		//UE_LOG(LogTemp, Warning, TEXT("Notify %s has begun!"), *NotifyName.ToString());
 		Player->GetCharacterMovement()->SetMovementMode(MOVE_Falling);
 		Player->GetCharacterMovement()->GravityScale = 0.5f;
-		UE_LOG(LogTemp, Warning, TEXT("%s"), *FString(__FUNCTION__));
 		TargetFOV = 105;
+		//UE_LOG(LogTemp, Warning, TEXT("%s"), *FString(__FUNCTION__));
+	}
+	if(NotifyName == FName("Splitter_Move"))
+	{
+		FMotionWarpingTarget Splitter_MW_Target;
+		Splitter_MW_Target.Name = FName("Splitter_Move");
+		Splitter_MW_Target.Location = FVector( (Player->GetActorLocation().X + Player->GetActorForwardVector().X * 30) ,Player->GetActorLocation().Y + Player->GetActorForwardVector().Y * 30, Player->GetActorLocation().Z);
+		Player->MotionWarpingComponent->AddOrUpdateWarpTarget(Splitter_MW_Target);
 	}
 	if(NotifyName == FName("Splitter_Land"))
 	{
@@ -311,7 +290,7 @@ void UHD_PlayerAttackComponent::PlayMontageNotifyBegin_Cutting(FName NotifyName,
 	{
 		CharacterPlayer->Left_Weapon->CapsuleComp->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
 		CharacterPlayer->Right_Weapon->CapsuleComp->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
-		//Right_Weapon->CapsuleComp->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
+		SlowDownTime(0.5f, 0.1f);
 	}
 	if(NotifyName == FName("Damage_Off_Cutter"))
 	{
@@ -324,13 +303,10 @@ void UHD_PlayerAttackComponent::SlowDownTime(float SlowDownFactor, float Duratio
 {
 	// 현재 글로벌 타임 딜레이션 저장
 	OriginalTimeDilation = UGameplayStatics::GetGlobalTimeDilation(GetWorld());
-
 	// 새로운 글로벌 타임 딜레이션 설정
 	UGameplayStatics::SetGlobalTimeDilation(GetWorld(), SlowDownFactor);
-
 	// 원래 타임 딜레이션을 복원하는 타이머 설정
 	GetWorld()->GetTimerManager().SetTimer(TimeDilationTimerHandle, this, &UHD_PlayerAttackComponent::RestoreTimeDilation, Duration, false);
-
 }
 
 void UHD_PlayerAttackComponent::RestoreTimeDilation()

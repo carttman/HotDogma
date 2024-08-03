@@ -64,6 +64,8 @@ AHD_CharacterBase::AHD_CharacterBase()
 	 springArm->SocketOffset = FVector(40, 35, 155);
 	 springArm->bDoCollisionTest = false;
 	 springArm->SocketOffset = FVector(-100, 35, 250);
+	 springArm->bEnableCameraLag = true;
+	 springArm->bEnableCameraRotationLag = true;
 	
 	// camera setting
 	 camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
@@ -127,11 +129,14 @@ void AHD_CharacterBase::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
 	UEnhancedInputComponent* enhancedInputComponent = Cast<UEnhancedInputComponent>(PlayerInputComponent);
 	if (enhancedInputComponent != nullptr)
 	{
-		enhancedInputComponent->BindAction(ia_DH_Move, ETriggerEvent::Triggered, this, &AHD_CharacterBase::EnhancedMove);
-		enhancedInputComponent->BindAction(ia_DH_Look, ETriggerEvent::Triggered, this, &AHD_CharacterBase::EnhancedLook);
-		enhancedInputComponent->BindAction(ia_DH_Jump, ETriggerEvent::Started, this, &AHD_CharacterBase::EnhancedJump);
-		enhancedInputComponent->BindAction(ia_DH_Order, ETriggerEvent::Started, this, &AHD_CharacterBase::EnhancedOrder);
+		enhancedInputComponent->BindAction(IA_HD_Move, ETriggerEvent::Triggered, this, &AHD_CharacterBase::EnhancedMove);
+		enhancedInputComponent->BindAction(IA_HD_Look, ETriggerEvent::Triggered, this, &AHD_CharacterBase::EnhancedLook);
+		enhancedInputComponent->BindAction(IA_HD_Jump, ETriggerEvent::Started, this, &AHD_CharacterBase::EnhancedJump);
+		enhancedInputComponent->BindAction(IA_HD_Order, ETriggerEvent::Started, this, &AHD_CharacterBase::EnhancedOrder);
+		enhancedInputComponent->BindAction(IA_HD_Run, ETriggerEvent::Triggered, this, &AHD_CharacterBase::EnhancedRun);
+		enhancedInputComponent->BindAction(IA_HD_Run, ETriggerEvent::Completed, this, &AHD_CharacterBase::EnhancedRun);
 
+		
 		PlayerClimbComponent->SetupPlayerInputComponent(enhancedInputComponent);
 	}
 }
@@ -219,6 +224,13 @@ void AHD_CharacterBase::EnhancedOrder(const FInputActionValue& InputActionValue)
 	{
 		PlayerGameMode->CommandCompanion(3);
 	}
+}
+
+void AHD_CharacterBase::EnhancedRun(const FInputActionValue& InputActionValue)
+{
+	bool IsRun = InputActionValue.Get<bool>();
+	if(IsRun)GetCharacterMovement()->MaxWalkSpeed = 800.f;
+	else GetCharacterMovement()->MaxWalkSpeed = 500.f;
 }
 
 

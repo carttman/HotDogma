@@ -42,16 +42,16 @@ public:
 	
 	//player input
 	UPROPERTY(EditAnywhere)
-	class UInputAction* ia_DH_Move;
+	class UInputAction* IA_HD_Move;
 	UPROPERTY(EditAnywhere)
-	class UInputAction* ia_DH_Look;
+	class UInputAction* IA_HD_Look;
 	UPROPERTY(EditAnywhere)
-	class UInputAction* ia_DH_Jump;
-	// UPROPERTY(EditAnywhere)
-	// class UInputAction* IA_HD_Skill;
+	class UInputAction* IA_HD_Jump;
+	UPROPERTY(EditAnywhere)
+	class UInputAction* IA_HD_Run;
 	
 	UPROPERTY(EditAnywhere)
-	class UInputAction* ia_DH_Order;
+	class UInputAction* IA_HD_Order;
 	
 	UPROPERTY(EditAnywhere)
 	class UHD_PlayerClimbComponent* PlayerClimbComponent;
@@ -68,6 +68,7 @@ public:
 	void EnhancedJump(const FInputActionValue& InputActionValue);
 	void EnhancedLook(const FInputActionValue& InputActionValue);
 	void EnhancedOrder(const FInputActionValue& InputActionValue);
+	void EnhancedRun(const FInputActionValue& InputActionValue);
 public:
 	UPROPERTY(EditAnywhere)
 	class UCableComponent* CableCompoent;

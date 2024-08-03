@@ -31,6 +31,7 @@ public:
 public:
 	void PlayerAttack();
 	void UpdatePlayerAttack(float DeltaTime);
+	void PlayerBaseAttackPlay(int32 ComboCnt, FName SectionName);
 public:
 	UPROPERTY(EditAnywhere)
 	class UInputAction* IA_HD_Attack;
@@ -57,8 +58,8 @@ public:
 
 	int32 ComboCount = 0;
 	float CurrComboTime = 0;
-	float MinComboTime = 0.5f;
-	float MaxComboTime = 1.4f;
+	float MinComboTime = 0.3f;
+	float MaxComboTime = 1.0f;
 
 public:
 	UPROPERTY(EditAnywhere)

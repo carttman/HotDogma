@@ -19,7 +19,6 @@ void AHD_PlayerCamera::BeginPlay()
 	if(Player) UE_LOG(LogTemp, Warning, TEXT("camera : Player cast successful"))
 	else UE_LOG(LogTemp, Warning, TEXT("camera : Player cast failed"));
 	
-	
 }
 
 void AHD_PlayerCamera::Tick(float DeltaTime)
@@ -28,7 +27,7 @@ void AHD_PlayerCamera::Tick(float DeltaTime)
 	
 	// SetActorLocation(GetActorLocation() + GetActorForwardVector() *  CameraSpeed * DeltaTime);
 	SetActorLocation(Player->CameraPoint->GetRelativeLocation() + Player->GetActorForwardVector() * CameraSpeed * DeltaTime);
-	UE_LOG(LogTemp, Warning, TEXT("1"));
+	//UE_LOG(LogTemp, Warning, TEXT("1"));
 }
 
 void AHD_PlayerCamera::AutoActivateForPlayer(APlayerController* PlayerController)

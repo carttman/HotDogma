@@ -433,6 +433,7 @@ void UHD_DragonFSM::ChooseAttackState()
 	}
 	else
 	{
+		//Anim->ChangeAttackState(AttackState::TailSlap);
 		// 지상에 있을때 사용가능 스킬 - 8개
 		// Breath, Shout, HandPress, Scratch, TailSlap, JumpPress, ThunderMagic, Methor
 		// 20		30		30			30		30			20		10				10
@@ -483,7 +484,7 @@ void UHD_DragonFSM::ChooseAttackState()
 			//Breath
 			Anim->ChangeAttackState(AttackState::Breath);
 		}
-	}
+	 }
 }
 
 void UHD_DragonFSM::RotateToTarget(const float& DeltaTime)

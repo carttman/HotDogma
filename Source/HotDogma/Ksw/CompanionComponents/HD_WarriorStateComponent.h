@@ -11,6 +11,7 @@ UENUM(BlueprintType)
 enum class EWarriorBattleState : uint8
 {
 	State_CombatCheck UMETA(DisplayName = "CombatCheck"),
+	State_FindAttackPoint UMETA(DisplayName = "공격 지점"),
 	State_MightySweep UMETA(DisplayName = "기본공격"),
 	State_ChargedSlash UMETA(DisplayName = "충전 공격"),
 	State_HeavenwardSunder UMETA(DisplayName = "올려 치기"),
@@ -25,6 +26,38 @@ class HOTDOGMA_API UHD_WarriorStateComponent : public UHD_CompanionStateComponen
 {
 	GENERATED_BODY()
 public:
+	virtual void StartBattle();
 	virtual void AttackTick(float DeltaTime);
 
+	void CombatCheck();
+	bool FindAttackPoint();
+	void MightySweep();
+	void ChargedSlash();
+	void HeavenwardSunder();
+	void IndomitableLash();
+
+	EWarriorBattleState CurrentBattleState;
+
+
+	FVector AttackPoint;
+
+	// MightySweep
+	int CurrentCombo = 0;
+	float CurrentAttackTime = 0.0f;
+	float MinComboTime = 0.5f;
+	float MaxComboTime = 0.7f;
+	float MightySweepRange = 200.0f;
+	float MightySweepDamage = 10.0f;
+
+	// ChargedSlash
+	float ChargedSlashRange = 300.0f;
+	float ChargedSlashDamage = 20.0f;
+
+	// HeavenwardSunder
+	float HeavenwardSunderRange = 400.0f;
+	float HeavenwardSunderDamage = 30.0f;
+
+	// IndomitableLash
+	float IndomitableLashRange = 500.0f;
+	float IndomitableLashDamage = 40.0f;
 };

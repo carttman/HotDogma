@@ -50,16 +50,14 @@ public:
 	TArray<EWarriorBattleState> PatternList;
 
 	int32 PatternIndex = 0;
-	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Warrior")
-
 	FVector AttackPoint;
 	
+	float CurrentAttackTime = 0.0f;
+	
 	float CombatTime = 1.0f;
-
+	
 	// MightySweep
 	int CurrentCombo = 0;
-	float CurrentAttackTime = 0.0f;
 	float MinComboTime = 1.0f;
 	float MaxComboTime = 2.0f;
 	float MightySweepRange = 100.0f;

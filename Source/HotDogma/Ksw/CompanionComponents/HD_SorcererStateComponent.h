@@ -33,6 +33,56 @@ public:
 	virtual void StartBattle();
 	virtual void AttackTick(float DeltaTime);
 
+	void SetBattleState(ESorcererBattleState state);
+
+	void CombatCheck();
+
+	void MagickBolt();
+	void HighHagol();
+	void HighLevin();
+	void Levitate();
+	void ArgentSuccor();
+	void Galvanize();
+
+	void PatternRotting();
+	ESorcererBattleState NextPattern();
+	ESorcererBattleState CurrentBattleState;
+
+	bool FindAttackPoint();
+	FVector AttackPoint;
+
+	UPROPERTY()
+	TArray<ESorcererBattleState> PatternList;
+
+	int32 PatternIndex = 0;
+
 	UPROPERTY()
 	class UHD_SorcererAnimInstance* SorcererAnimInstance;
+
+	float CurrentAttackTime = 0.0f;
+
+	float CombatTime = 1.0f;
+
+	// MightySweep
+	float MagickBoltRange = 1000.0f;
+	float MagickBoltTime = 1.0f;
+
+	// HighHagol
+	float HighHagolRange = 1000.0f;
+	float HighHagolTime = 1.0f;
+
+	// HighLevin
+	float HighLevinRange = 1000.0f;
+	float HighLevinTime = 1.0f;
+
+	// Levitate
+	float LevitateTime = 5.0f;
+
+	// ArgentSuccor
+	float ArgentSuccorRange = 1000.0f;
+	float ArgentSuccorTime = 1.0f;
+	// Galvanize
+
+	float GalvanizeRange = 1000.0f;
+	float GalvanizeTime = 1.0f;
 };

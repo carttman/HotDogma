@@ -5,6 +5,8 @@
 #include "HotDogma/Ksw/Companions/HD_CompanionManager.h"
 #include "HotDogma/LHJ/HD_Dragon.h"
 #include "EngineUtils.h"
+#include "HotDogma/HD_Character/HD_PlayerComponent/HD_PlayerCamera.h"
+#include "Kismet/GameplayStatics.h"
 
 void ACHJ_GameMode::BeginPlay()
 {
@@ -13,24 +15,43 @@ void ACHJ_GameMode::BeginPlay()
 		CompanionManager = GetWorld()->SpawnActor<AHD_CompanionManager>(CompanionManagerFactory);
 	}
 
-	// µå·¡°ïÀ» Ã£¾ÆµĞ´Ù.
+	// ï¿½å·¡ï¿½ï¿½ï¿½ï¿½ Ã£ï¿½ÆµĞ´ï¿½.
 	for (TActorIterator<AHD_Dragon> ActorItr(GetWorld()); ActorItr; ++ActorItr)
 	{
 		Dragons.Add(*ActorItr);
 	}
+
+	// // í”Œë ˆì´ì–´ ì»¨íŠ¸ë¡¤ëŸ¬ ê°€ì ¸ì˜¤ê¸°(0ë²ˆ)
+	// APlayerController* PlayerController = UGameplayStatics::GetPlayerController(GetWorld(), 0);
+	// if (PlayerController)
+	// {
+	// 	// ì¹´ë©”ë¼ ì•¡í„° ì°¾ê¸°
+	// 	TArray<AActor*> FoundActors;
+	// 	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AHD_PlayerCamera::StaticClass(), FoundActors);
+	//
+	// 	if (FoundActors.Num() > 0)
+	// 	{
+	// 		AHD_PlayerCamera* PlayerCamera = Cast<AHD_PlayerCamera>(FoundActors[0]);
+	// 		if (PlayerCamera)
+	// 		{
+	// 			// ì»¨íŠ¸ë¡¤ëŸ¬ì— ì¹´ë©”ë¼ ìë™ í™œì„±í™”
+	// 			PlayerCamera->AutoActivateForPlayer(PlayerController);
+	// 		}
+	// 	}
+	// }
 }
 
 void ACHJ_GameMode::CommandCompanion(int num)
 {
 	UE_LOG(LogTemp, Warning, TEXT("CommandCompanion"));
 
-	// µ¿·á Ä³¸¯ÅÍ¿¡°Ô ¸í·ÉÀ» ³»¸°´Ù.
+	// ï¿½ï¿½ï¿½ï¿½ Ä³ï¿½ï¿½ï¿½Í¿ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½.
 	if (CompanionManager) CompanionManager->SetCommand(ECompanionCommand(num));
 }
 
 APawn* ACHJ_GameMode::GetEnemy(FVector Pos)
 {
-		// °¡Àå °¡±î¿î µå·¡°ïÀ» Ã£´Â´Ù.
+		// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½å·¡ï¿½ï¿½ï¿½ï¿½ Ã£ï¿½Â´ï¿½.
 	APawn* ClosestDragon = nullptr;
 	float MinDistance = 9999999999.0f;
 

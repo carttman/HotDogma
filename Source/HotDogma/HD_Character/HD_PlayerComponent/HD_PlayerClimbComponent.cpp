@@ -252,7 +252,7 @@ void UHD_PlayerClimbComponent::LedgeMantleCaculation()
 					PlayerAnim->Montage_Play(LedgeMontage, 1.0f);	
 					//Player->SetActorEnableCollision(false);
 					Player->SetActorEnableCollision(false);
-					Player->springArm->bDoCollisionTest = false;
+					//Player->springArm->bDoCollisionTest = false;
 					return;
 					
 				default:
@@ -276,7 +276,7 @@ void UHD_PlayerClimbComponent::PlayMontageNotifyBegin(FName NotifyName,
 	UE_LOG(LogTemp, Warning, TEXT("Notify %s has begun!"), *NotifyName.ToString());
 	UE_LOG(LogTemp, Warning, TEXT("%s"), *FString(__FUNCTION__));
 	Player->SetActorEnableCollision(true);
-	Player->springArm->bDoCollisionTest = true;
+	//Player->springArm->bDoCollisionTest = true;
 	Player->PlayerClimbComponent->StopClimbing();
 	}
 }

@@ -31,10 +31,10 @@ public:
 	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) override;
 
 	//camera
-	UPROPERTY(EditAnywhere)
-	class UCameraComponent* camera;
-	UPROPERTY(EditAnywhere)
-	class USpringArmComponent* springArm;
+	 UPROPERTY(EditAnywhere)
+	 class UCameraComponent* camera;
+	 UPROPERTY(EditAnywhere)
+	 class USpringArmComponent* springArm;
 	
 	//Input for Gameplay
 	UPROPERTY(EditAnywhere)
@@ -77,4 +77,7 @@ public:
 
 	UPROPERTY()
 	class ACHJ_GameMode* PlayerGameMode;
+
+	UPROPERTY(EditAnywhere)
+	class UArrowComponent* CameraPoint;
 };

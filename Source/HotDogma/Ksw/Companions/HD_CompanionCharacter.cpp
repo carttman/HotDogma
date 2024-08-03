@@ -41,10 +41,8 @@ float AHD_CompanionCharacter::TakeDamage(float DamageAmount, struct FDamageEvent
 {
 	float Damage = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
 
-	if (Damage > 0.f)
-	{
-	}
-
+	UE_LOG(LogTemp, Warning, TEXT("Companion Take Damage : %f"), Damage);
+	
 	return Damage;
 }
 

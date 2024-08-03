@@ -163,41 +163,46 @@ void UHD_WarriorStateComponent::MightySweep()
 					if (Distance > MightySweepRange)
 					{
 						// 드래곤을 향해 이동한다.
-						AIController->MoveToLocation(AttackPoint, MightySweepRange - 10.0f);
+						AIController->MoveToLocation(AttackPoint, MightySweepRange - 20.0f, false);
 						// 대상으로 회전한다.
 						FRotator LookAt = UKismetMathLibrary::FindLookAtRotation(Me->GetActorLocation(), AttackPoint);
 						AIController->SetControlRotation(LookAt);
+						UE_LOG(LogTemp, Warning, TEXT("MightySweep First Move"));
 					}
 					else
 					{
 						// 드래곤을 공격한다.
 						// 몽타주 실행
+						UE_LOG(LogTemp, Warning, TEXT("MightySweep First Attack"));
 						WarriorAnimInstance->PlayAttackMontage(CurrentCombo);
 						CurrentCombo++;
 						CurrentAttackTime = 0.0f;
-						UE_LOG(LogTemp, Warning, TEXT("MightySweep"));
+
 					}
 				}
 				else
 				{
+					UE_LOG(LogTemp, Warning, TEXT("MightySweep First Not Find"));
 					// 다음 공격
 					SetBattleState(EWarriorBattleState::State_CombatCheck);
 				}
 			}
 		}
 	}
-	else if (CurrentCombo < 5)
+	// 다음 콤보를 넣는다.
+	else if (CurrentCombo < 4)
 	{
+		bool ComboAttackFailed = false;
 		if (MinComboTime < CurrentAttackTime && CurrentAttackTime < MaxComboTime)
 		{
-			// 몽타주가 끝났다면.
 			if (FindAttackPoint())
 			{
 				float Distance = FVector::Dist(Me->GetActorLocation(), AttackPoint);
-				if (MightySweepRange < Distance && Distance < MightySweepRange + 100.0f)
+				if (MightySweepRange < Distance && Distance < MightySweepRange + 200.0f)
 				{
+					UE_LOG(LogTemp, Warning, TEXT("MightySweep Move"));
 					// 드래곤을 향해 이동한다.
-					AIController->MoveToLocation(AttackPoint, MightySweepRange - 10.0f);
+					AIController->MoveToLocation(AttackPoint, MightySweepRange - 20.0f, false);
 					// 대상으로 회전한다.
 					FRotator LookAt = UKismetMathLibrary::FindLookAtRotation(Me->GetActorLocation(), AttackPoint);
 					AIController->SetControlRotation(LookAt);
@@ -217,6 +222,8 @@ void UHD_WarriorStateComponent::MightySweep()
 				else
 				{
 					// 다음 공격
+
+					UE_LOG(LogTemp, Warning, TEXT("MightySweep Range Failed %f"), Distance);
 					SetBattleState(EWarriorBattleState::State_CombatCheck);
 				}
 			}
@@ -224,20 +231,23 @@ void UHD_WarriorStateComponent::MightySweep()
 			{
 				//
 				SetBattleState(EWarriorBattleState::State_CombatCheck);
-				UE_LOG(LogTemp, Warning, TEXT("MightySweep Failed"), CurrentCombo);
+				UE_LOG(LogTemp, Warning, TEXT("MightySweep Find AttackPoint Failed"));
 
 			}
 		}
-		else if (MaxComboTime < CurrentAttackTime)
+		else if (MaxComboTime <= CurrentAttackTime)
 		{
 			// 다음 공격
+			UE_LOG(LogTemp, Warning, TEXT("MightySweep CurrentAttackTime Failed %f"), CurrentAttackTime);
 			SetBattleState(EWarriorBattleState::State_CombatCheck);
 		}
 	}
 	else
 	{
-		if (MinComboTime < CurrentAttackTime && CurrentAttackTime < MaxComboTime)
+		// 모든 콤보가 종료됨
+		if (MinComboTime < CurrentAttackTime)
 		{
+			UE_LOG(LogTemp, Warning, TEXT("MightySweep End Combo"), CurrentAttackTime);
 			SetBattleState(EWarriorBattleState::State_CombatCheck);
 		}
 	}

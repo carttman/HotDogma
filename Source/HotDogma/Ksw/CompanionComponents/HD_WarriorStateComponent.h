@@ -61,8 +61,8 @@ public:
 	int CurrentCombo = 0;
 	float CurrentAttackTime = 0.0f;
 	float MinComboTime = 1.0f;
-	float MaxComboTime = 1.5f;
-	float MightySweepRange = 50.0f;
+	float MaxComboTime = 2.0f;
+	float MightySweepRange = 100.0f;
 	float MightySweepDamage = 10.0f;
 
 	// ChargedSlash

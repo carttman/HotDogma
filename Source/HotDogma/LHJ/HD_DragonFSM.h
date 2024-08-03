@@ -5,7 +5,6 @@
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
 #include "Components/TimelineComponent.h"
-#include "Navigation/PathFollowingComponent.h"
 #include "HD_DragonFSM.generated.h"
 
 UENUM()
@@ -16,6 +15,7 @@ enum class DragonState:uint8
 	Idle, // 대기
 	Move, // 걷기
 	Fly, // 이륙
+	FlyDown, // 착륙
 	Attack, //일반공격
 	Groggy, // 그로기
 	Death, // 사망
@@ -83,9 +83,6 @@ public:
 #pragma region Attack Function
 
 #pragma region FlyPress
-	UPROPERTY()
-	bool bFly = false;
-
 	UFUNCTION()
 	void FlyPress(float DeltaTime);
 
@@ -155,7 +152,7 @@ public:
 
 #pragma region Idle Variable
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	int32 ThresholdRadian = 3500;
+	int32 ThresholdRadian = 6000;
 
 	UPROPERTY()
 	float ShoutAnimCurrentTime = 0.f;
@@ -190,11 +187,15 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int RequiredSkillCnt = 4; // 다음 공중 올라갈 때까지 필요한 스킬 사용 개수
+
+	int CurrUsedSkillCnt;	// 현재 사용한 스킬 개수
+
+	FRotator NowRotator;
 #pragma endregion
 
 #pragma region	Fly Property
-	bool chkOnceFly = false; // 한번이라도 날았는지 확인
-
+	bool chkOnceFly = false; // 한번이라도 날았는지 확인	
+	
 	int ApplySkillAsFly; // 공중에서 사용할 스킬 개수
 #pragma endregion
 

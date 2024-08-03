@@ -3,10 +3,13 @@
 
 #include "../LHJ/HD_Dragon.h"
 #include "HD_DragonFSM.h"
+#include "Components/ArrowComponent.h"
+#include "Components/BoxComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/Character.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Kismet/GameplayStatics.h"
+#include "Particles/ParticleSystemComponent.h"
 
 AHD_Dragon::AHD_Dragon()
 {
@@ -21,6 +24,8 @@ AHD_Dragon::AHD_Dragon()
 	{
 		SkeletalComp->SetSkeletalMesh(tempSkeleton.Object);
 	}
+	SkeletalComp->SetCollisionProfileName(FName("DragonMeshColl"));
+	SkeletalComp->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
 
 	fsm = CreateDefaultSubobject<UHD_DragonFSM>(TEXT("FSM"));
 	//RootComponent->RegisterComponent();
@@ -29,21 +34,57 @@ AHD_Dragon::AHD_Dragon()
 	TargetPoint1->SetupAttachment(SkeletalComp,TEXT("L-HorseLink"));
 	TargetPoint1->SetCapsuleHalfHeight(60.f);
 	TargetPoint1->SetCapsuleRadius(30.f);
-	
+	TargetPoint1->SetCollisionProfileName(FName("DragonMeshColl"));
+	TargetPoint1->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
+
 	TargetPoint2 = CreateDefaultSubobject<UCapsuleComponent>(TEXT("TargetPoint2"));
 	TargetPoint2->SetupAttachment(SkeletalComp,TEXT("R-HorseLink"));
 	TargetPoint2->SetCapsuleHalfHeight(60.f);
 	TargetPoint2->SetCapsuleRadius(30.f);
+	TargetPoint2->SetCollisionProfileName(FName("DragonMeshColl"));
+	TargetPoint2->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
 
 	TargetPoint3 = CreateDefaultSubobject<UCapsuleComponent>(TEXT("TargetPoint3"));
 	TargetPoint3->SetupAttachment(SkeletalComp,TEXT("R-Forearm"));
 	TargetPoint3->SetCapsuleHalfHeight(60.f);
 	TargetPoint3->SetCapsuleRadius(30.f);
+	TargetPoint3->SetCollisionProfileName(FName("DragonMeshColl"));
+	TargetPoint3->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
 
 	TargetPoint4 = CreateDefaultSubobject<UCapsuleComponent>(TEXT("TargetPoint4"));
 	TargetPoint4->SetupAttachment(SkeletalComp,TEXT("L-Forearm"));
 	TargetPoint4->SetCapsuleHalfHeight(60.f);
-	TargetPoint4->SetCapsuleRadius(30.f);	
+	TargetPoint4->SetCapsuleRadius(30.f);
+	TargetPoint4->SetCollisionProfileName(FName("DragonMeshColl"));
+	TargetPoint4->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
+
+	// Tongue에 SocketComponent 설치
+	FireScene = CreateDefaultSubobject<USceneComponent>(TEXT("FireScene"));
+	FireScene->SetupAttachment(SkeletalComp, TEXT("Fire_Socket"));
+
+	FireCollision = CreateDefaultSubobject<UBoxComponent>(TEXT("FireCollision"));
+	FireCollision->SetupAttachment(FireScene);
+	FireCollision->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+
+	HandCollision_R = CreateDefaultSubobject<UCapsuleComponent>(TEXT("HandCollision_R"));
+	HandCollision_R->SetupAttachment(SkeletalComp,TEXT("R-Finger2"));
+	HandCollision_R->SetRelativeRotation(FRotator(90, 0, 0));
+	HandCollision_R->SetCollisionProfileName(FName("DragonAttack"));
+	HandCollision_R->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+
+	HandCollision_L = CreateDefaultSubobject<UCapsuleComponent>(TEXT("HandCollision_L"));
+	HandCollision_L->SetupAttachment(SkeletalComp,TEXT("L-Finger2"));
+	HandCollision_L->SetRelativeRotation(FRotator(90, 0, 0));
+	HandCollision_L->SetCollisionProfileName(FName("DragonAttack"));
+	HandCollision_L->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+
+	TailCollision = CreateDefaultSubobject<UCapsuleComponent>(TEXT("TailCollision"));
+	TailCollision->SetupAttachment(SkeletalComp,TEXT("Tail05"));
+	TailCollision->SetRelativeLocationAndRotation(FVector(43, -15, 0), FRotator(90, 0, 0));
+	TailCollision->SetCapsuleHalfHeight(157);
+	TailCollision->SetCapsuleRadius(37);
+	TailCollision->SetCollisionProfileName(FName("DragonAttack"));
+	TailCollision->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 }
 
 void AHD_Dragon::BeginPlay()
@@ -80,6 +121,11 @@ void AHD_Dragon::Tick(float DeltaTime)
 			}
 		}
 	}
+}
+
+void AHD_Dragon::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp,
+                                int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
 }
 
 float AHD_Dragon::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator,

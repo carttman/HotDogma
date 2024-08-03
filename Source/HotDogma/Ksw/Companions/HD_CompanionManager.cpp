@@ -40,23 +40,31 @@ void AHD_CompanionManager::BeginPlay()
 	// 생성할 위치를 설정
 	{
 		Formations.Add(FVector(0, 300, 0));
-		auto* Sorcerer = GetWorld()->SpawnActor<AHD_CompanionCharacter>(SorcererCompanionFactory, PlayerPawn->GetActorLocation() + Formations[0], FRotator::ZeroRotator);
-		
-		Companions.Add(Sorcerer->SetupCompanionStateComp(false));
+		auto* Sorcerer = GetWorld()->SpawnActor<AHD_CompanionCharacter>(SorcererCompanionFactory, PlayerPawn->GetActorLocation() + FVector(0, 100, 0), FRotator::ZeroRotator);
+		if (Sorcerer)
+		{
+			Companions.Add(Sorcerer->SetupCompanionStateComp(false));
+		}
 	}
 	
 	{
 		// 생성할 위치를 설정
 		Formations.Add(FVector(300, -100, 0));
-		auto* Warrior1 = GetWorld()->SpawnActor<AHD_CompanionCharacter>(WarriorCompanionFactory, PlayerPawn->GetActorLocation() + Formations[1], FRotator::ZeroRotator);
-		
-		Companions.Add(Warrior1->SetupCompanionStateComp(true));
+		auto* Warrior1 = GetWorld()->SpawnActor<AHD_CompanionCharacter>(WarriorCompanionFactory, PlayerPawn->GetActorLocation() + FVector(100, -100, 0), FRotator::ZeroRotator);
+		if (Warrior1)
+		{
+			Companions.Add(Warrior1->SetupCompanionStateComp(true));
+		}
 	}
+
 	{
 		// 생성할 위치를 설정
 		Formations.Add(FVector(500, 0, 0));
-		auto* Warrior2 = GetWorld()->SpawnActor<AHD_CompanionCharacter>(WarriorCompanion2Factory, PlayerPawn->GetActorLocation() + Formations[2], FRotator::ZeroRotator);
-		Companions.Add(Warrior2->SetupCompanionStateComp(true));
+		auto* Warrior2 = GetWorld()->SpawnActor<AHD_CompanionCharacter>(WarriorCompanion2Factory, PlayerPawn->GetActorLocation() + FVector(200, 0, 0), FRotator::ZeroRotator);
+		if (Warrior2)
+		{
+			Companions.Add(Warrior2->SetupCompanionStateComp(true));
+		}
 	}
 
 	//for (int i = 0; i < 10; i++)

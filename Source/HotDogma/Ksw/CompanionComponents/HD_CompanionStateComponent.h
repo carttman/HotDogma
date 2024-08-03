@@ -77,5 +77,8 @@ public:
 	UPROPERTY()
 	class APawn* TargetPawn;
 
+	UPROPERTY()
+	UAnimInstance* AnimInstance;
+
 	FVector Acc;
 };

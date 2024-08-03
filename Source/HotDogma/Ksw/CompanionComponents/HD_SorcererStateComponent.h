@@ -24,7 +24,15 @@ UCLASS()
 class HOTDOGMA_API UHD_SorcererStateComponent : public UHD_CompanionStateComponent
 {
 	GENERATED_BODY()
+
+protected:
+	// Called when the game starts
+	virtual void BeginPlay() override;
+
 public:
+	virtual void StartBattle();
 	virtual void AttackTick(float DeltaTime);
 
+	UPROPERTY()
+	class UHD_SorcererAnimInstance* SorcererAnimInstance;
 };

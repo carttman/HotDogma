@@ -25,6 +25,11 @@ UCLASS()
 class HOTDOGMA_API UHD_WarriorStateComponent : public UHD_CompanionStateComponent
 {
 	GENERATED_BODY()
+
+protected:
+	// Called when the game starts
+	virtual void BeginPlay() override;
+
 public:
 	virtual void StartBattle();
 	virtual void AttackTick(float DeltaTime);
@@ -35,18 +40,29 @@ public:
 	void ChargedSlash();
 	void HeavenwardSunder();
 	void IndomitableLash();
+	void SetBattleState(EWarriorBattleState State);
 
+	void PatternRotting();
+	EWarriorBattleState NextPattern();
 	EWarriorBattleState CurrentBattleState;
 
+	UPROPERTY()
+	TArray<EWarriorBattleState> PatternList;
+
+	int32 PatternIndex = 0;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Warrior")
 
 	FVector AttackPoint;
+	
+	float CombatTime = 1.0f;
 
 	// MightySweep
 	int CurrentCombo = 0;
 	float CurrentAttackTime = 0.0f;
-	float MinComboTime = 0.5f;
-	float MaxComboTime = 0.7f;
-	float MightySweepRange = 200.0f;
+	float MinComboTime = 1.0f;
+	float MaxComboTime = 1.5f;
+	float MightySweepRange = 50.0f;
 	float MightySweepDamage = 10.0f;
 
 	// ChargedSlash
@@ -60,4 +76,9 @@ public:
 	// IndomitableLash
 	float IndomitableLashRange = 500.0f;
 	float IndomitableLashDamage = 40.0f;
+
+
+	UPROPERTY()
+	class UHD_WarriorAnimInstance* WarriorAnimInstance;
+
 };

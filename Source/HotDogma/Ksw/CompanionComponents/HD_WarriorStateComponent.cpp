@@ -8,34 +8,55 @@
 #include "HotDogma/Ksw/Companions/HD_CompanionCharacter.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Kismet/KismetMathLibrary.h"
+#include "Animation/AnimInstance.h"
+#include "HotDogma/Ksw/Companions/HD_WarriorAnimInstance.h"
+#include "EngineUtils.h"
+#include "Kismet/GameplayStatics.h"
+
+void UHD_WarriorStateComponent::BeginPlay()
+{
+	Super::BeginPlay();
+	WarriorAnimInstance = Cast<UHD_WarriorAnimInstance>(AnimInstance);
+
+	// 전투 패턴을 세팅한다.
+	PatternList.Add(EWarriorBattleState::State_MightySweep);
+	PatternList.Add(EWarriorBattleState::State_ChargedSlash);
+	PatternList.Add(EWarriorBattleState::State_HeavenwardSunder);
+	PatternList.Add(EWarriorBattleState::State_IndomitableLash);
+}
 
 void UHD_WarriorStateComponent::StartBattle()
 {
 	// 전투 상태로 전환
 	CurrentBattleState = EWarriorBattleState::State_CombatCheck;
+	WarriorAnimInstance = Cast<UHD_WarriorAnimInstance>(AnimInstance);
 }
 
 void UHD_WarriorStateComponent::AttackTick(float DeltaTime)
 {
 	Super::AttackTick(DeltaTime);
-	
+	CurrentAttackTime += DeltaTime;
 	switch (CurrentBattleState)
 	{
 		case EWarriorBattleState::State_CombatCheck:
 			CombatCheck();
 			break;
-		case EWarriorBattleState::State_FindAttackPoint:
-			FindAttackPoint();
-			break;
 		case EWarriorBattleState::State_MightySweep:
+			MightySweep();
 			break;
 		case EWarriorBattleState::State_ChargedSlash:
+			ChargedSlash();
 			break;
 		case EWarriorBattleState::State_HeavenwardSunder:
+			HeavenwardSunder();
 			break;
 		case EWarriorBattleState::State_IndomitableLash:
+			IndomitableLash();
 			break;
 	}
+
+	FString myState = UEnum::GetValueOrBitfieldAsString(CurrentBattleState);
+	DrawDebugString(GetWorld(), GetOwner()->GetActorLocation() + FVector(0, 0, 100), myState, 0, FColor::Yellow, 0);
 }
 
 void UHD_WarriorStateComponent::CombatCheck()
@@ -47,16 +68,24 @@ void UHD_WarriorStateComponent::CombatCheck()
 		{
 			// 드래곤과의 거리
 			float Distance = FVector::Dist(Me->GetActorLocation(), TargetPawn->GetActorLocation());
-			FindAttackPoint();
-			if (Distance > 500)
+			// FindAttackPoint();
+			if (Distance > 700)
 			{
-				// 드래곤을 향해 이동한다.
-				AIController->MoveToActor(TargetPawn, 200.0f);
+				// 타겟 대상으로 좌우로 조금씩 이동한다.
+				AIController->MoveToActor(TargetPawn, 300.0f);
 			}
 			else
 			{
-				// 드래곤을 공격한다.
-				FindAttackPoint();
+				if (CombatTime < CurrentAttackTime)
+				{
+					// 드래곤을 공격한다.
+					//SetBattleState(NextPattern());
+					SetBattleState(EWarriorBattleState::State_MightySweep);
+				}
+				else
+				{
+					// 타겟을 원점으로 원형으로 이동시킨다.
+				}
 			}
 		}
 	}
@@ -77,7 +106,16 @@ bool UHD_WarriorStateComponent::FindAttackPoint()
 		FHitResult HitResult;
 		FCollisionQueryParams CollisionParams;
 		
-		CollisionParams.AddIgnoredActor(Me);
+		// 플레이어, 동료를 무시한다.
+		// HD_CompanionCharacter 타입을 무시한다.
+		for (TActorIterator<AHD_CompanionCharacter> ActorItr(GetWorld()); ActorItr; ++ActorItr)
+		{
+			CollisionParams.AddIgnoredActor(*ActorItr);
+		}
+
+		// 플레이어를 가져온다.
+		AHD_CompanionCharacter* Player = Cast<AHD_CompanionCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
+		CollisionParams.AddIgnoredActor(Player);
 
 		GetWorld()->LineTraceSingleByChannel(HitResult, Start, End, ECollisionChannel::ECC_GameTraceChannel5, CollisionParams);
 
@@ -86,7 +124,6 @@ bool UHD_WarriorStateComponent::FindAttackPoint()
 			DrawDebugLine(GetWorld(), Start, HitResult.ImpactPoint, FColor::Red, false, 0.1f, 0, 1.0f);
 			if (IsAttackPoint)
 			{
-
 				int dist = FVector::Dist(Me->GetActorLocation(), AttackPoint);
 				int dist2 = FVector::Dist(Me->GetActorLocation(), HitResult.ImpactPoint);
 				if (dist > dist2)
@@ -98,7 +135,8 @@ bool UHD_WarriorStateComponent::FindAttackPoint()
 			{
 				AttackPoint = HitResult.ImpactPoint;
 			}
-			
+
+			IsAttackPoint = true;
 		}
 		else
 		{
@@ -119,31 +157,88 @@ void UHD_WarriorStateComponent::MightySweep()
 			if (TargetPawn != nullptr)
 			{
 				// 드래곤과의 거리
-				float Distance = FVector::Dist(Me->GetActorLocation(), AttackPoint);
-				FindAttackPoint();
-				if (Distance > MightySweepRange)
+				if (FindAttackPoint())
 				{
-					// 드래곤을 향해 이동한다.
-					AIController->MoveToLocation(AttackPoint, 200.0f);
+					float Distance = FVector::Dist(Me->GetActorLocation(), AttackPoint);
+					if (Distance > MightySweepRange)
+					{
+						// 드래곤을 향해 이동한다.
+						AIController->MoveToLocation(AttackPoint, MightySweepRange - 10.0f);
+						// 대상으로 회전한다.
+						FRotator LookAt = UKismetMathLibrary::FindLookAtRotation(Me->GetActorLocation(), AttackPoint);
+						AIController->SetControlRotation(LookAt);
+					}
+					else
+					{
+						// 드래곤을 공격한다.
+						// 몽타주 실행
+						WarriorAnimInstance->PlayAttackMontage(CurrentCombo);
+						CurrentCombo++;
+						CurrentAttackTime = 0.0f;
+						UE_LOG(LogTemp, Warning, TEXT("MightySweep"));
+					}
 				}
 				else
 				{
-					// 드래곤을 공격한다.
-					// 몽타주 실행
+					// 다음 공격
+					SetBattleState(EWarriorBattleState::State_CombatCheck);
 				}
 			}
 		}
 	}
+	else if (CurrentCombo < 5)
+	{
+		if (MinComboTime < CurrentAttackTime && CurrentAttackTime < MaxComboTime)
+		{
+			// 몽타주가 끝났다면.
+			if (FindAttackPoint())
+			{
+				float Distance = FVector::Dist(Me->GetActorLocation(), AttackPoint);
+				if (MightySweepRange < Distance && Distance < MightySweepRange + 100.0f)
+				{
+					// 드래곤을 향해 이동한다.
+					AIController->MoveToLocation(AttackPoint, MightySweepRange - 10.0f);
+					// 대상으로 회전한다.
+					FRotator LookAt = UKismetMathLibrary::FindLookAtRotation(Me->GetActorLocation(), AttackPoint);
+					AIController->SetControlRotation(LookAt);
+				}
+				else if (Distance < MightySweepRange)
+				{
+					// 대상으로 회전한다.
+					FRotator LookAt = UKismetMathLibrary::FindLookAtRotation(Me->GetActorLocation(), AttackPoint);
+					AIController->SetControlRotation(LookAt);
+
+					// 다음 공격
+					UE_LOG(LogTemp, Warning, TEXT("MightySweep %d"), CurrentCombo);
+					Cast<UHD_WarriorAnimInstance>(AnimInstance)->PlayAttackMontage(CurrentCombo);
+					CurrentAttackTime = 0.0f;
+					CurrentCombo++;
+				}
+				else
+				{
+					// 다음 공격
+					SetBattleState(EWarriorBattleState::State_CombatCheck);
+				}
+			}
+			else
+			{
+				//
+				SetBattleState(EWarriorBattleState::State_CombatCheck);
+				UE_LOG(LogTemp, Warning, TEXT("MightySweep Failed"), CurrentCombo);
+
+			}
+		}
+		else if (MaxComboTime < CurrentAttackTime)
+		{
+			// 다음 공격
+			SetBattleState(EWarriorBattleState::State_CombatCheck);
+		}
+	}
 	else
 	{
-		// 몽타주가 끝났다면.
-		if (FindAttackPoint())
+		if (MinComboTime < CurrentAttackTime && CurrentAttackTime < MaxComboTime)
 		{
-			float Distance = FVector::Dist(Me->GetActorLocation(), AttackPoint);
-			if (Distance < MightySweepRange)
-			{
-				// 다음 공격
-			}
+			SetBattleState(EWarriorBattleState::State_CombatCheck);
 		}
 	}
 }
@@ -161,4 +256,37 @@ void UHD_WarriorStateComponent::HeavenwardSunder()
 void UHD_WarriorStateComponent::IndomitableLash()
 {
 
+}
+
+void UHD_WarriorStateComponent::SetBattleState(EWarriorBattleState State)
+{
+	CurrentBattleState = State;
+	CurrentAttackTime = 0.0f;
+	CurrentCombo = 0;
+}
+
+void UHD_WarriorStateComponent::PatternRotting()
+{
+	// 랜덤 셔플 마지막 3번은 변경하지 않는다.
+	for (int i = 0; i < PatternList.Num(); i++)
+	{
+		int32 RandomInt = FMath::RandRange(0, PatternList.Num() - 1);
+		EWarriorBattleState Temp = PatternList[i];
+		PatternList[i] = PatternList[RandomInt];
+		PatternList[RandomInt] = Temp;
+	}
+}
+
+EWarriorBattleState UHD_WarriorStateComponent::NextPattern()
+{
+	if (PatternIndex < PatternList.Num())
+	{
+		return PatternList[PatternIndex++];
+	}
+	else
+	{
+		PatternRotting();
+		PatternIndex = 0;
+		return PatternList[PatternIndex++];
+	}
 }

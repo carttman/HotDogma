@@ -8,6 +8,7 @@
 #include "HotDogma/Ksw/Companions/HD_CompanionCharacter.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Kismet/KismetMathLibrary.h"
+#include "Animation/AnimInstance.h"
 
 // Sets default values for this component's properties
 UHD_CompanionStateComponent::UHD_CompanionStateComponent()
@@ -35,6 +36,8 @@ void UHD_CompanionStateComponent::BeginPlay()
 
 	Acc = FVector(FMath::RandRange(-1, 1), FMath::RandRange(-1, 1), FMath::RandRange(-1, 1));
 	Acc.Normalize();
+
+	AnimInstance = Cast<UAnimInstance>(Me->GetMesh()->GetAnimInstance());
 }
 
 // Called every frame
@@ -122,20 +125,20 @@ void UHD_CompanionStateComponent::RunTick(float DeltaTime)
 void UHD_CompanionStateComponent::BattleTick(float DeltaTime)
 {
 	Me->GetCharacterMovement()->MaxWalkSpeed = 400;
-	Me->GetCharacterMovement()->bOrientRotationToMovement = false;
 	// 몬스터를 바라본다.
-
-	FRotator LookAt = UKismetMathLibrary::FindLookAtRotation(Me->GetActorLocation(), TargetPawn->GetActorLocation());
-	Me->SetActorRotation(LookAt);
 
 	if (CurrentCommand == ECompanionCommand::Command_Following)
 	{
-		Me->GetCharacterMovement()->MaxWalkSpeed = 300;
 		// 플레이어와 거리가 멀어질 경우
 		auto* Player = GetWorld()->GetFirstPlayerController()->GetPawn();
 		float Dist = FVector::Dist(Player->GetActorLocation(), TargetPawn->GetActorLocation());
 		if (Dist > 2500)
 		{
+			Me->GetCharacterMovement()->MaxWalkSpeed = 300;
+			Me->GetCharacterMovement()->bOrientRotationToMovement = false;
+			FRotator LookAt = UKismetMathLibrary::FindLookAtRotation(Me->GetActorLocation(), TargetPawn->GetActorLocation());
+			Me->SetActorRotation(LookAt);
+
 			UE_LOG(LogTemp, Warning, TEXT("Following"));
 			// 드래곤을 지켜보며 플레이어를 따라간다.
 			if (AIController)
@@ -159,6 +162,7 @@ void UHD_CompanionStateComponent::BattleTick(float DeltaTime)
 		}
 	}
 
+	Me->GetCharacterMovement()->bOrientRotationToMovement = true;
 	// 자식이 구현한다.
 	AttackTick(DeltaTime);
 

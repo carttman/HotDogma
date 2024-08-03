@@ -7,6 +7,19 @@
 #include "HotDogma/Ksw/Companions/HD_CompanionCharacter.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Kismet/KismetMathLibrary.h"
+#include "Animation/AnimInstance.h"
+#include "HotDogma/Ksw/Companions/HD_SorcererAnimInstance.h"
+
+void UHD_SorcererStateComponent::BeginPlay()
+{
+	Super::BeginPlay();
+
+	SorcererAnimInstance = Cast<UHD_SorcererAnimInstance>(Me->GetMesh()->GetAnimInstance());
+}
+
+void UHD_SorcererStateComponent::StartBattle()
+{
+}
 
 void UHD_SorcererStateComponent::AttackTick(float DeltaTime)
 {
@@ -27,7 +40,7 @@ void UHD_SorcererStateComponent::AttackTick(float DeltaTime)
 			else
 			{
 				// 드래곤을 공격한다.
-				UE_LOG(LogTemp, Warning, TEXT("Attack"));
+				// UE_LOG(LogTemp, Warning, TEXT("Attack"));
 			}
 		}
 	}

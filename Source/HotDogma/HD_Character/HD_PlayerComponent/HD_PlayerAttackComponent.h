@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "InputActionValue.h"
 #include "Components/ActorComponent.h"
+#include "Components/TimelineComponent.h"
 #include "HD_PlayerAttackComponent.generated.h"
 
 
@@ -31,6 +32,7 @@ public:
 public:
 	void PlayerAttack();
 	void UpdatePlayerAttack(float DeltaTime);
+	void PlayerBaseAttackPlay(int32 ComboCnt, FName SectionName);
 public:
 	UPROPERTY(EditAnywhere)
 	class UInputAction* IA_HD_Attack;
@@ -44,14 +46,21 @@ public:
 	UPROPERTY()
 	class AHD_CharacterBase* Player;
 	UPROPERTY()
+	class AHD_CharacterPlayer* CharacterPlayer;
+	UPROPERTY()
 	class UHD_PlayerAnimInstance* PlayerAnim;
+	UPROPERTY()
+	class AHD_PlayerWeaponBase* Left_Weapon;
+	UPROPERTY()
+	class AHD_PlayerWeaponBase* Right_Weapon;
+
 	UPROPERTY()
 	class AHD_Dragon* Dragon;
 
 	int32 ComboCount = 0;
 	float CurrComboTime = 0;
-	float MinComboTime = 0.5f;
-	float MaxComboTime = 1.4f;
+	float MinComboTime = 0.3f;
+	float MaxComboTime = 1.0f;
 
 public:
 	UPROPERTY(EditAnywhere)
@@ -75,5 +84,35 @@ public:
 	void Cutting_GetTarget();
 	bool CuttingHit;
 	FRotator Cutting_Target_Rot;
-	float Cutting_Attack_Range = 600.f;
+	float Cutting_Attack_Range = 200.f;
+
+	bool IsCutting = false;
+
+	void RotatingCamera();
+	FTimerHandle CutterTimerHandle;
+
+	// Timeline Component
+	UPROPERTY()
+	class UTimelineComponent* YawRotationTimeline;
+	// Float Curve for Timeline
+	UPROPERTY(EditAnywhere, Category = "Timeline")
+	class UCurveFloat* YawCurve;
+	// Timeline Function
+	UFUNCTION()
+	void HandleYawRotation(float Value);
+	// Input function to trigger timeline
+	void RotateCamera();
+
+protected:
+	// Timeline Progress Function
+	FOnTimelineFloat YawRotationProgress;
+	
+public:
+	void SlowDownTime(float SlowDownFactor, float Duration);
+	// 타임 딜레이션을 복원하는 함수
+	void RestoreTimeDilation();
+	// 원래 타임 딜레이션
+	float OriginalTimeDilation;
+	// 타임 딜레이션 타이머 핸들
+	FTimerHandle TimeDilationTimerHandle;
 };

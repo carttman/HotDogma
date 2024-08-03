@@ -13,6 +13,7 @@
 #include "HD_PlayerComponent/HD_PlayerClimbComponent.h"
 #include "CableComponent.h"
 #include "MotionWarpingComponent.h"
+#include "Components/ArrowComponent.h"
 #include "HD_PlayerComponent/PlayerStatusComponent.h"
 #include "HotDogma/HD_GameModeBase/CHJ_GameMode.h"
 
@@ -53,22 +54,26 @@ AHD_CharacterBase::AHD_CharacterBase()
 	GetMesh()->SetRelativeRotation(FRotator(0, -90, 0));
 
 	//SpringArm 셋팅
-	springArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("springArm"));
-	springArm->SetupAttachment(RootComponent);
-	springArm->SetRelativeLocation(FVector(0, 0, 0));
-	springArm->SetRelativeRotation(FRotator(0, 0, 0));
-	springArm->TargetArmLength = 200;
-	springArm->ProbeChannel = ECollisionChannel::ECC_Visibility;
-	springArm->bUsePawnControlRotation = true;
-	springArm->SocketOffset = FVector(40, 35, 155);
-	springArm->bDoCollisionTest = false;
-	springArm->SocketOffset = FVector(-100, 35, 250);
+	 springArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("springArm"));
+	 springArm->SetupAttachment(RootComponent);
+	 springArm->SetRelativeLocation(FVector(0, 0, 0));
+	 springArm->SetRelativeRotation(FRotator(0, 0, 0));
+	 springArm->TargetArmLength = 200;
+	 springArm->ProbeChannel = ECollisionChannel::ECC_Visibility;
+	 springArm->bUsePawnControlRotation = true;
+	 springArm->SocketOffset = FVector(40, 35, 155);
+	 springArm->bDoCollisionTest = false;
+	 springArm->SocketOffset = FVector(-100, 0, 200);
+	 springArm->bEnableCameraLag = true;
+	 springArm->bEnableCameraRotationLag = true;
+	 springArm->CameraLagSpeed = 6.0f;
+	 springArm->CameraRotationLagSpeed = 6.0f;
 	
 	// camera setting
-	camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
-	camera->SetupAttachment(springArm);
-	camera->SetRelativeLocation(FVector(0, 0, 0));
-	camera->SetRelativeRotation(FRotator(-20, 0, 0));
+	 camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
+	 camera->SetupAttachment(springArm);
+	 camera->SetRelativeLocation(FVector(0, 0, 0));
+	 camera->SetRelativeRotation(FRotator(-20, 0, 0));
 
 	PlayerClimbComponent = CreateDefaultSubobject<UHD_PlayerClimbComponent>(TEXT("PlayerClimbComponent"));
 	PlayerStatusComponent = CreateDefaultSubobject<UPlayerStatusComponent>(TEXT("PlayerStatusComponent"));
@@ -78,6 +83,11 @@ AHD_CharacterBase::AHD_CharacterBase()
 	CableCompoent->EndLocation = FVector(0,0,0);
 
 	MotionWarpingComponent = CreateDefaultSubobject<UMotionWarpingComponent>(TEXT("MotionWarpingComponent"));
+
+	CameraPoint = CreateDefaultSubobject<UArrowComponent>(TEXT("CameraPoint"));
+	CameraPoint->SetupAttachment(RootComponent);
+	CameraPoint->SetRelativeLocation(FVector(-440,0,170));
+	CameraPoint->SetRelativeRotation(FRotator(-10, 0, 0));
 }
 
 // Called when the game starts or when spawned
@@ -121,11 +131,14 @@ void AHD_CharacterBase::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
 	UEnhancedInputComponent* enhancedInputComponent = Cast<UEnhancedInputComponent>(PlayerInputComponent);
 	if (enhancedInputComponent != nullptr)
 	{
-		enhancedInputComponent->BindAction(ia_DH_Move, ETriggerEvent::Triggered, this, &AHD_CharacterBase::EnhancedMove);
-		enhancedInputComponent->BindAction(ia_DH_Look, ETriggerEvent::Triggered, this, &AHD_CharacterBase::EnhancedLook);
-		enhancedInputComponent->BindAction(ia_DH_Jump, ETriggerEvent::Started, this, &AHD_CharacterBase::EnhancedJump);
-		enhancedInputComponent->BindAction(ia_DH_Order, ETriggerEvent::Started, this, &AHD_CharacterBase::EnhancedOrder);
+		enhancedInputComponent->BindAction(IA_HD_Move, ETriggerEvent::Triggered, this, &AHD_CharacterBase::EnhancedMove);
+		enhancedInputComponent->BindAction(IA_HD_Look, ETriggerEvent::Triggered, this, &AHD_CharacterBase::EnhancedLook);
+		enhancedInputComponent->BindAction(IA_HD_Jump, ETriggerEvent::Started, this, &AHD_CharacterBase::EnhancedJump);
+		enhancedInputComponent->BindAction(IA_HD_Order, ETriggerEvent::Started, this, &AHD_CharacterBase::EnhancedOrder);
+		enhancedInputComponent->BindAction(IA_HD_Run, ETriggerEvent::Triggered, this, &AHD_CharacterBase::EnhancedRun);
+		enhancedInputComponent->BindAction(IA_HD_Run, ETriggerEvent::Completed, this, &AHD_CharacterBase::EnhancedRun);
 
+		
 		PlayerClimbComponent->SetupPlayerInputComponent(enhancedInputComponent);
 	}
 }
@@ -213,6 +226,13 @@ void AHD_CharacterBase::EnhancedOrder(const FInputActionValue& InputActionValue)
 	{
 		PlayerGameMode->CommandCompanion(3);
 	}
+}
+
+void AHD_CharacterBase::EnhancedRun(const FInputActionValue& InputActionValue)
+{
+	bool IsRun = InputActionValue.Get<bool>();
+	if(IsRun)GetCharacterMovement()->MaxWalkSpeed = 800.f;
+	else GetCharacterMovement()->MaxWalkSpeed = 500.f;
 }
 
 

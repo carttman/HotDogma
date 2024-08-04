@@ -81,7 +81,7 @@ public:
 	class UBoxComponent* FireCollision;
 
 	UPROPERTY(EditAnywhere)
-	float MaxFireCollsionSize = 10;
+	float MaxFireCollisionSize = 10;
 
 	UPROPERTY()
 	float CurrFireCollisionSize = 0;

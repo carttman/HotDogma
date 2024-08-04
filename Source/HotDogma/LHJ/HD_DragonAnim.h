@@ -2,13 +2,9 @@
 
 #pragma once
 
-#include <map>
-#include <vector>
-
 #include "CoreMinimal.h"
 #include "HD_DragonFSM.h"
 #include "Animation/AnimInstance.h"
-
 #include "HD_DragonAnim.generated.h"
 
 /**
@@ -157,22 +153,5 @@ public:
 
 	UFUNCTION()
 	void AnimNotify_EndBreath();
-	//=================================데미지 값
-	UPROPERTY(EditAnywhere)
-	float Damage_JumpPress = 10.f; // 점프찍기
-
-	UPROPERTY(EditAnywhere)
-	float Damage_HandPress = 10.f; // 짓누르기
-
-	UPROPERTY(EditAnywhere)
-	float Damage_TailSlap = 10.f; // 꼬리치기
-
-	UPROPERTY(EditAnywhere)
-	float Damage_Scratch = 10.f; // 할퀴기
-
-	UPROPERTY(EditAnywhere)
-	float Damage_Methor = 10.f; // 메테오
-
-	UPROPERTY(EditAnywhere)
-	float Damage_Thunder = 10.f; // 번개
+	
 };

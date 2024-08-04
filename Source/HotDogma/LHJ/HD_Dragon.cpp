@@ -3,15 +3,12 @@
 
 #include "../LHJ/HD_Dragon.h"
 
-#include "HD_DragonAnim.h"
 #include "HD_DragonFSM.h"
-#include "Components/ArrowComponent.h"
 #include "Components/BoxComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/Character.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Kismet/GameplayStatics.h"
-#include "Particles/ParticleSystemComponent.h"
 
 AHD_Dragon::AHD_Dragon()
 {
@@ -136,7 +133,7 @@ void AHD_Dragon::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* Oth
 		UE_LOG(LogTemp, Warning, TEXT("Overlap Actor Name : %s"), *OtherActor->GetName());
 		DamageActorSet.Add(OtherActor);
 
-		UGameplayStatics::ApplyDamage(OtherActor, fsm->Anim->Damage_Scratch, GetController(), this, UDamageType::StaticClass());
+		UGameplayStatics::ApplyDamage(OtherActor, fsm->Damage_Scratch, GetController(), this, UDamageType::StaticClass());
 	}
 }
 

@@ -3,9 +3,7 @@
 
 #include "../LHJ/HD_DragonAnim.h"
 #include "HD_Dragon.h"
-#include "Components/BoxComponent.h"
 #include "Components/CapsuleComponent.h"
-#include "Engine/DamageEvents.h"
 #include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "Kismet/KismetSystemLibrary.h"
@@ -99,7 +97,7 @@ void UHD_DragonAnim::AnimNotify_AttackJumpPress()
 	{
 		for (auto OtherActor : DamageActorSet)
 		{
-			UGameplayStatics::ApplyDamage(OtherActor, Damage_JumpPress, Dragon->GetController(), Dragon,
+			UGameplayStatics::ApplyDamage(OtherActor, fsm->Damage_JumpPress, Dragon->GetController(), Dragon,
 			                              UDamageType::StaticClass());
 		}
 
@@ -114,7 +112,7 @@ void UHD_DragonAnim::AnimNotify_AttackHandPress()
 	{
 		for (auto OtherActor : DamageActorSet)
 		{
-			UGameplayStatics::ApplyDamage(OtherActor, Damage_HandPress, Dragon->GetController(), Dragon,
+			UGameplayStatics::ApplyDamage(OtherActor, fsm->Damage_HandPress, Dragon->GetController(), Dragon,
 			                              UDamageType::StaticClass());
 		}
 

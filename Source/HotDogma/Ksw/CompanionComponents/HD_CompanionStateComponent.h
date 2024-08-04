@@ -72,7 +72,7 @@ public:
 	class AAIController* AIController;
 	
 	UPROPERTY()
-	ACharacter* Me;
+	class AHD_CompanionCharacter* Me;
 
 	UPROPERTY()
 	class APawn* TargetPawn;

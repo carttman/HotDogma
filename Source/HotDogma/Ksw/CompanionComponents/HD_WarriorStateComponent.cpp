@@ -12,6 +12,7 @@
 #include "HotDogma/Ksw/Companions/HD_WarriorAnimInstance.h"
 #include "EngineUtils.h"
 #include "Kismet/GameplayStatics.h"
+#include "Components/CapsuleComponent.h"
 
 void UHD_WarriorStateComponent::BeginPlay()
 {
@@ -121,6 +122,12 @@ bool UHD_WarriorStateComponent::FindAttackPoint()
 		if (HitResult.bBlockingHit)
 		{
 			DrawDebugLine(GetWorld(), Start, HitResult.ImpactPoint, FColor::Red, false, 0.1f, 0, 1.0f);
+			// 히트된게 캡슐이면 무시한다.
+			if (HitResult.Component->IsA<UCapsuleComponent>())
+			{
+				continue;
+			}
+
 			if (IsAttackPoint)
 			{
 				int dist = FVector::Dist(Me->GetActorLocation(), AttackPoint);

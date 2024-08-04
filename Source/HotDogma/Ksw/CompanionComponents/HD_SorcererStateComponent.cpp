@@ -11,6 +11,9 @@
 #include "HotDogma/Ksw/Companions/HD_SorcererAnimInstance.h"
 #include <HotDogma/LHJ/HD_Dragon.h>
 #include "Components/CapsuleComponent.h"
+#include <HotDogma/Ksw/HD_Projectile.h>
+#include "Components/ArrowComponent.h"
+#include "Components/SceneComponent.h"
 
 void UHD_SorcererStateComponent::BeginPlay()
 {
@@ -20,11 +23,11 @@ void UHD_SorcererStateComponent::BeginPlay()
 	
 	// 전투 패턴을 세팅한다.
 	PatternList.Add(ESorcererBattleState::State_MagickBolt);
-	PatternList.Add(ESorcererBattleState::State_HighHagol);
-	PatternList.Add(ESorcererBattleState::State_HighLevin);
+	//PatternList.Add(ESorcererBattleState::State_HighHagol);
+	//PatternList.Add(ESorcererBattleState::State_HighLevin);
 	PatternList.Add(ESorcererBattleState::State_Levitate);
-	PatternList.Add(ESorcererBattleState::State_ArgentSuccor);
-	PatternList.Add(ESorcererBattleState::State_Galvanize);
+	//PatternList.Add(ESorcererBattleState::State_ArgentSuccor);
+	//PatternList.Add(ESorcererBattleState::State_Galvanize);
 }
 
 void UHD_SorcererStateComponent::StartBattle()
@@ -49,7 +52,8 @@ void UHD_SorcererStateComponent::AttackTick(float DeltaTime)
 			break;
 		case ESorcererBattleState::State_HighLevin:
 			break;
-		case ESorcererBattleState::State_Levitate:						
+		case ESorcererBattleState::State_Levitate:
+			Levitate();
 			break;
 		case ESorcererBattleState::State_ArgentSuccor:
 			break;
@@ -65,6 +69,7 @@ void UHD_SorcererStateComponent::SetBattleState(ESorcererBattleState state)
 {
 	CurrentBattleState = state;
 	CurrentAttackTime = 0.0f;
+	
 }
 
 void UHD_SorcererStateComponent::CombatCheck()
@@ -86,7 +91,7 @@ void UHD_SorcererStateComponent::CombatCheck()
 				if (CombatTime < CurrentAttackTime)
 				{
 					// 드래곤을 공격한다.
-					SetBattleState(ESorcererBattleState::State_MagickBolt);
+					SetBattleState(ESorcererBattleState::State_Levitate);
 				}
 				else
 				{
@@ -99,20 +104,51 @@ void UHD_SorcererStateComponent::CombatCheck()
 
 void UHD_SorcererStateComponent::MagickBolt()
 {
-	//if (nullptr == SorcererAnimInstance)
-	//{
-	//	return;
-	//}
+	// 시작
+	if (! bCastingMagickBolt)
+	{
+		// 캐스팅 애니메이션을 실행한다.
+		SorcererAnimInstance->PlayAttackMontage(0);
+		bCastingMagickBolt = true;
 
-	//// 공격 애니메이션을 실행한다.
-	//SorcererAnimInstance->PlayMagickBolt();
+		return;
+	}
 
-	//// 공격 위치를 찾는다.
-	//if (FindAttackPoint())
-	//{
-	//	// 공격 위치로 이동한다.
-	//	AIController->MoveToLocation(AttackPoint, 100.0f);
-	//}
+	float AttackTime = MagickBoltTime;
+	if (MagickBoltCount == 0)
+	{
+		AttackTime += MagickBoltCastTime;
+	}
+
+	if (AttackTime < CurrentAttackTime)
+	{
+		if (MagickBoltCount < MaxMagickBoltCount)
+		{
+			SorcererAnimInstance->PlayAttackMontage(1);
+			// 볼트를 발사한다.
+			// 타겟을 찾는다.
+			if (FindAttackPoint())
+			{
+				// 볼트를 스폰하고 타겟을 향해 발사한다.
+				FVector StartLocation = Me->GetActorLocation();
+				FVector EndLocation = AttackPoint;
+				// 볼트를 스폰한다.
+				AHD_Projectile* MagickBolt = GetWorld()->SpawnActor<AHD_Projectile>(MagickBoltFactory, Me->ArrowComp->GetComponentTransform());
+				MagickBolt->SetTarget(AttackPoint);
+			}
+
+			MagickBoltCount++;
+			CurrentAttackTime = 0.0f;
+		}
+		else
+		{
+			SorcererAnimInstance->PlayAttackMontage(2);
+			// 캐스팅을 종료한다.
+			bCastingMagickBolt = false;
+			MagickBoltCount = 0;
+			SetBattleState(ESorcererBattleState::State_CombatCheck);
+		}
+	}
 }
 
 void UHD_SorcererStateComponent::HighHagol()
@@ -125,6 +161,47 @@ void UHD_SorcererStateComponent::HighLevin()
 
 void UHD_SorcererStateComponent::Levitate()
 {
+	if (nullptr == SorcererAnimInstance)
+	{
+		return;
+	}
+	if (SorcererAnimInstance->bLevitate)
+	{
+		// 높이 제한
+		if (Me->GetActorLocation().Z < 300)
+		{
+			Me->AddMovementInput(FVector(0, 0, 0.5), 1);
+		}
+		else
+		{
+			SetBattleState(ESorcererBattleState::State_MagickBolt);
+		}
+		
+		return;
+	}
+
+	UE_LOG(LogTemp, Warning, TEXT("Levitate"));
+
+	// 부유 애니메이션을 실행한다.
+	SorcererAnimInstance->PlayLevitate();
+
+	// 중력을 제거하고 캐릭터를 올린다.
+	// 무브먼트 모드 변경
+	Me->GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_Flying);
+
+	// 천천히 올린다.
+	Me->AddMovementInput(FVector(0, 0, 0.5), 1);
+
+	// 5초 후에 중력을 다시 적용한다.
+	GetWorld()->GetTimerManager().SetTimer(LevitateTimerHandle, this, &UHD_SorcererStateComponent::EndLevitate, LevitateTime, false);
+}
+
+void UHD_SorcererStateComponent::EndLevitate()
+{
+	// 중력을 다시 적용한다.
+	Me->GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_Walking);
+	SorcererAnimInstance->EndLevitate();
+
 }
 
 void UHD_SorcererStateComponent::ArgentSuccor()

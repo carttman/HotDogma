@@ -35,5 +35,8 @@ public:
 
 	UPROPERTY(EditAnywhere, Category = "Companion")
 	class UPlayerStatusComponent* PlayerStatusComp;
+
+	UPROPERTY(EditAnywhere, Category = "Companion")
+	class UArrowComponent* ArrowComp;
 	
 };

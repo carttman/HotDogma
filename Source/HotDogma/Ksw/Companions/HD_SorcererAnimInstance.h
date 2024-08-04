@@ -23,4 +23,10 @@ public:
 	UAnimMontage* DieMontage;
 
 	void PlayAttackMontage(int combo);
+
+	void PlayLevitate();
+	void EndLevitate();
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	bool bLevitate = false;
 };

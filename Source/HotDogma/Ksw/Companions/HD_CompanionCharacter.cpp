@@ -15,6 +15,8 @@ AHD_CompanionCharacter::AHD_CompanionCharacter()
 	PrimaryActorTick.bCanEverTick = true;
 	PlayerStatusComp = CreateDefaultSubobject<UPlayerStatusComponent>(TEXT("PlayerStatusComp"));
 
+	ArrowComp = CreateDefaultSubobject<UArrowComponent>(TEXT("ArrowComp"));
+	ArrowComp->SetupAttachment(RootComponent);
 }
 
 // Called when the game starts or when spawned
@@ -52,13 +54,11 @@ class UHD_CompanionStateComponent* AHD_CompanionCharacter::SetupCompanionStateCo
 	{
 		CompanionStateComp = NewObject<UHD_WarriorStateComponent>(this, UHD_WarriorStateComponent::StaticClass(), TEXT("CompanionStateComp"));
 		CompanionStateComp->RegisterComponent();
-		// CompanionStateComp->AttachTo(RootComponent);
 	}
 	else
 	{
 		CompanionStateComp = NewObject<UHD_SorcererStateComponent>(this, UHD_SorcererStateComponent::StaticClass(), TEXT("CompanionStateComp"));
 		CompanionStateComp->RegisterComponent();
-		//CompanionStateComp->AttachTo(RootComponent);
 	}
 
 	return CompanionStateComp;

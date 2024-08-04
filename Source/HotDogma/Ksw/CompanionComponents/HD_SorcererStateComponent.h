@@ -44,6 +44,9 @@ public:
 	void ArgentSuccor();
 	void Galvanize();
 
+	UFUNCTION()
+	void EndLevitate();
+
 	void PatternRotting();
 	ESorcererBattleState NextPattern();
 	ESorcererBattleState CurrentBattleState;
@@ -56,6 +59,9 @@ public:
 
 	int32 PatternIndex = 0;
 
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<class AHD_Projectile> MagickBoltFactory;
+
 	UPROPERTY()
 	class UHD_SorcererAnimInstance* SorcererAnimInstance;
 
@@ -63,9 +69,13 @@ public:
 
 	float CombatTime = 1.0f;
 
-	// MightySweep
+	// MagickBolt
+	bool bCastingMagickBolt = false;
+	float MagickBoltCastTime = 0.5f;
 	float MagickBoltRange = 1000.0f;
-	float MagickBoltTime = 1.0f;
+	float MagickBoltTime = 0.3f;
+	int32 MagickBoltCount = 0;
+	int32 MaxMagickBoltCount = 12;
 
 	// HighHagol
 	float HighHagolRange = 1000.0f;
@@ -76,7 +86,8 @@ public:
 	float HighLevinTime = 1.0f;
 
 	// Levitate
-	float LevitateTime = 5.0f;
+	float LevitateTime = 10.0f;
+	FTimerHandle LevitateTimerHandle;
 
 	// ArgentSuccor
 	float ArgentSuccorRange = 1000.0f;
@@ -85,4 +96,7 @@ public:
 
 	float GalvanizeRange = 1000.0f;
 	float GalvanizeTime = 1.0f;
+
+	UPROPERTY(EditAnywhere, Category = "Companion")
+	class UArrowComponent* ArrowComp;
 };

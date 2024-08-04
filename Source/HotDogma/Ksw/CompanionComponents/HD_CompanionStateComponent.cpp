@@ -28,7 +28,7 @@ void UHD_CompanionStateComponent::BeginPlay()
 
 	// AI 컨트롤러를 생성하고 설정한다.
 	// 랜덤 백터 생성
-	Me = Cast<ACharacter>(GetOwner());
+	Me = Cast<AHD_CompanionCharacter>(GetOwner());
 	if (Me != nullptr)
 	{
 		AIController = Cast<AAIController>(Me->GetController());
@@ -83,7 +83,7 @@ void UHD_CompanionStateComponent::WaitTick(float DeltaTime)
 			{
 				// 드래곤과의 거리를 계산한다.
 				float EnemyDistance = FVector::Dist(GetOwner()->GetActorLocation(), TargetPawn->GetActorLocation());
-				if (EnemyDistance < 2000)
+				if (EnemyDistance < 1500)
 				{
 					SetState(ECompanionState::State_Battle);
 				}
@@ -114,7 +114,7 @@ void UHD_CompanionStateComponent::RunTick(float DeltaTime)
 		{
 			// 드래곤과의 거리를 계산한다.
 			float EnemyDistance = FVector::Dist(GetOwner()->GetActorLocation(), TargetPawn->GetActorLocation());
-			if (EnemyDistance < 2000)
+			if (EnemyDistance < 1500)
 			{
 				SetState(ECompanionState::State_Battle);
 			}
@@ -132,7 +132,7 @@ void UHD_CompanionStateComponent::BattleTick(float DeltaTime)
 		// 플레이어와 거리가 멀어질 경우
 		auto* Player = GetWorld()->GetFirstPlayerController()->GetPawn();
 		float Dist = FVector::Dist(Player->GetActorLocation(), TargetPawn->GetActorLocation());
-		if (Dist > 2500)
+		if (Dist > 2000)
 		{
 			Me->GetCharacterMovement()->MaxWalkSpeed = 300;
 			Me->GetCharacterMovement()->bOrientRotationToMovement = false;
@@ -149,7 +149,7 @@ void UHD_CompanionStateComponent::BattleTick(float DeltaTime)
 			// 드래곤과 충분히 멀어진 경우 전투 상태를 푼다.
 			{
 				float Distance = FVector::Dist(TargetPawn->GetActorLocation(), Me->GetActorLocation());
-				if (Distance > 2000)
+				if (Distance > 1500)
 				{
 					Me->GetCharacterMovement()->MaxWalkSpeed = 600;
 					Me->GetCharacterMovement()->bOrientRotationToMovement = true;

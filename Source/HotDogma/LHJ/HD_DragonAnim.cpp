@@ -151,8 +151,7 @@ bool UHD_DragonAnim::GetAttackPress(const float& AttackDistance)
 
 			JumpPress_Target_Rot = UKismetMathLibrary::MakeRotFromX(newLoc);
 
-			if (Hit.GetActor()->Tags.Num() > 0 && (Hit.GetActor()->Tags[0].ToString().Equals("HD_Player") || Hit.
-				GetActor()->Tags[0].ToString().Equals("CompanionCharacter")))
+			if (Hit.GetActor()->Tags.Num() > 0 && (Hit.GetActor()->Tags[0].ToString().Equals("HD_Player")))
 			{
 				if (!DamageActorSet.Contains(Hit.GetActor()))
 				{

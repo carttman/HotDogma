@@ -82,7 +82,7 @@ void UHD_DragonFSM::TickComponent(float DeltaTime, ELevelTick TickType, FActorCo
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
-	//double dot = GetRadianFromCharacter();
+	//double dot = GetRadianFrwomCharacter();
 	//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("Player To Dragon Direction : %f"), dot));
 	FString myState = UEnum::GetValueOrBitfieldAsString(State);
 	DrawDebugString(GetWorld(), Dragon->GetActorLocation(), myState, nullptr, FColor::Yellow, 0);
@@ -98,14 +98,22 @@ void UHD_DragonFSM::TickComponent(float DeltaTime, ELevelTick TickType, FActorCo
 	if (State != DragonState::Move)
 		ai->StopMovement();
 
+
+	if (NearTargetActor)
+		//ai->SetControlRotation((NearTargetActor->GetActorLocation() - Dragon->GetActorLocation()).Rotation());
+		RotateToTarget(DeltaTime);
+
+	// Dragon->SetActorRotation(
+	// 	(NearTargetActor->GetActorLocation() - Dragon->GetActorLocation()).Rotation().Quaternion());
+
 	//공격중일 때는 상태 변환 x
 	if (!isAttack)
 	{
-		if(RndAttackPattern.size()==0)
+		if (RndAttackPattern.size() == 0)
 		{
 			ShuffleAttackPattern();
 		}
-		
+
 		switch (State)
 		{
 		case DragonState::Sleep:
@@ -139,19 +147,11 @@ void UHD_DragonFSM::TickComponent(float DeltaTime, ELevelTick TickType, FActorCo
 #pragma region [State Function]
 void UHD_DragonFSM::SleepState()
 {
-	// 테스트용
-	// if (Dragon->CharacterArr.Num() == 0)
-	// {
-	// 	NearTargetActor = UGameplayStatics::GetActorOfClass(GetWorld(), AHD_CharacterPlayer::StaticClass());
-	// }
-
 	// 일정거리 안에 플레이어가 들어오거나, 플레이어가 먼저 공격을 하면
 	// SleepEnd 애니메이션 재생을 하고,
 	// Idle 상태로 전환한다(노티파이 처리)
 	if (!chkCharacterUsingSleep)
 		ChkCharacterIntoRadian();
-
-	//State = DragonState::Idle;
 }
 
 void UHD_DragonFSM::IdleState(const float& DeltaTime)
@@ -182,7 +182,7 @@ void UHD_DragonFSM::IdleState(const float& DeltaTime)
 		}
 	}
 
-	// <><><> 공격 받는 부분에 어그로 이동 추가
+	// <><><> 공격 받는 부분에 어그로 이동 추가 (일단...보류)
 	CurrIdleTime += DeltaTime;
 	if (CurrIdleTime >= DuringIdleTime)
 	{
@@ -196,8 +196,13 @@ void UHD_DragonFSM::IdleState(const float& DeltaTime)
 				ApplySkillAsFly = FMath::RandRange(1, 2);
 
 			// 공격 상태로 전이
-			ChooseAttackState();
-			Anim->ChangeState(DragonState::Attack);
+
+			bool b = RotateToTarget(DeltaTime);
+			if (b)
+			{
+				ChooseAttackState();
+				Anim->ChangeState(DragonState::Attack);
+			}
 		}
 		else
 		{
@@ -412,8 +417,8 @@ void UHD_DragonFSM::ChooseAttackState()
 		// }
 		//else if (int_rand > 140)
 
-//=================================================
-		
+		//=================================================
+
 		// int_rand = FMath::RandRange(1, 160);
 		// if (int_rand > 140)
 		// {
@@ -449,9 +454,9 @@ void UHD_DragonFSM::ChooseAttackState()
 		// 	//Breath
 		// 	Anim->ChangeAttackState(AttackState::Breath);
 		// }
-		
+
 		//=================================================TEST
-		if(RndAttackPattern.size()>0)
+		if (RndAttackPattern.size() > 0)
 		{
 			AttackState attack = RndAttackPattern[0];
 			Anim->ChangeAttackState(attack);
@@ -467,28 +472,33 @@ void UHD_DragonFSM::ChooseAttackState()
 	}
 }
 
-// void UHD_DragonFSM::RotateToTarget(const float& DeltaTime)
-// {
-// 	FVector StartLoc = Dragon->GetActorLocation();
-// 	FRotator curRot = Dragon->GetActorRotation();
-// 	FVector TargetLoc = NearTargetActor->GetActorLocation();
-// 	FRotator realRot = UKismetMathLibrary::FindLookAtRotation(StartLoc, TargetLoc);
-//
-//
-// 	al += DeltaTime / 10;
-//
-//
-// 	if (al > 1)
-// 	{
-// 		al = 0;
-// 		bRotate = false;
-// 	}
-// 	else
-// 	{
-// 		FRotator realrealRot = UKismetMathLibrary::RLerp(curRot, realRot, al, true);
-// 		Dragon->SetActorRotation(realrealRot);
-// 	}
-// }
+bool UHD_DragonFSM::RotateToTarget(const float& DeltaTime)
+{
+	FVector StartLoc = Dragon->GetActorLocation();
+	FRotator curRot = Dragon->GetActorRotation();
+	FVector TargetLoc = NearTargetActor->GetActorLocation();
+	FRotator realRot = UKismetMathLibrary::FindLookAtRotation(StartLoc, TargetLoc);
+	bool EndRotate = false;
+
+	al += DeltaTime / 100;
+
+	float r = GetRadianFromCharacter();
+
+	//UE_LOG(LogTemp, Warning, TEXT("%f"), r);
+	if (al > 1 || (r > -0.1 && r <= 0.1))
+	{
+		al = 0;
+		bRotate = false;
+		EndRotate = true;
+	}
+	else
+	{
+		FRotator realrealRot = UKismetMathLibrary::RLerp(curRot, realRot, al, true);
+		Dragon->SetActorRotation(realrealRot);
+	}
+
+	return EndRotate;
+}
 
 void UHD_DragonFSM::BreathRStart(const float& Alpha)
 {

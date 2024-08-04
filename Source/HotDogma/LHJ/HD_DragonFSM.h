@@ -78,8 +78,8 @@ public:
 	UPROPERTY()
 	bool bRotate = false;
 
-	// UFUNCTION()
-	// void RotateToTarget(const float& DeltaTime);
+	UFUNCTION()
+	bool RotateToTarget(const float& DeltaTime);
 #pragma endregion
 
 #pragma region Attack Function

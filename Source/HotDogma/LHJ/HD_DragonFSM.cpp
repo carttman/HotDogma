@@ -293,8 +293,12 @@ void UHD_DragonFSM::MoveState(const float& DeltaTime)
 
 void UHD_DragonFSM::F_NormalAttackState(const float& DeltaTime)
 {
-	// 공격패턴을 정해서 상태 전이
 	// 정해진 공격 패턴의 스킬 쿨타임이 남아 있다면 다시 패턴 지정
+	if (normalAttackState == AttackState::Scratch || normalAttackState == AttackState::TailSlap)
+	{
+		Anim->InnerAngle = GetRadianFromCharacter();
+		Anim->chkAngle = true;
+	}
 }
 #pragma endregion
 
@@ -362,9 +366,9 @@ float UHD_DragonFSM::GetRadianFromCharacter()
 	{
 		dir = NearTargetActor->GetActorLocation() - DragonActor->GetActorLocation();
 		dir.Normalize();
-		FVector forward = DragonActor->GetActorRightVector();
+		FVector rightVec = DragonActor->GetActorRightVector();
 
-		double dot = UKismetMathLibrary::Dot_VectorVector(forward, dir);
+		double dot = UKismetMathLibrary::Dot_VectorVector(rightVec, dir);
 		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red,
 		                                 FString::Printf(TEXT("Player To Dragon Direction : %f"), dot));
 
@@ -405,27 +409,22 @@ void UHD_DragonFSM::ChooseAttackState()
 	{
 		// 공중날고 있을때 사용가능 스킬 - 3개
 		// Breath, ThunderMagic, Methor
-		// 일정 확률로 Move
-		// 30 20 20 10
-		int_rand = FMath::RandRange(1, 80);
-		if (int_rand > 70)
-		{
-			//Move
-			Anim->ChangeState(DragonState::Idle);
-		}
-		else if (int_rand > 50)
-		{
-			//ThunderMagic
-			//Anim->ChangeAttackState(AttackState::ThunderMagic);
-			Anim->ChangeState(DragonState::Idle);
-		}
-		else if (int_rand > 30)
-		{
-			//Methor
-			//Anim->ChangeAttackState(AttackState::Meteor);
-			Anim->ChangeState(DragonState::Idle);
-		}
-		else if (int_rand > 0)
+		// 30 20 20
+		int_rand = FMath::RandRange(1, 70);
+		// if (int_rand > 50)
+		// {
+		// 	//ThunderMagic
+		// 	//Anim->ChangeAttackState(AttackState::ThunderMagic);
+		// 	Anim->ChangeState(DragonState::Idle);
+		// }
+		// else if (int_rand > 30)
+		// {
+		// 	//Methor
+		// 	//Anim->ChangeAttackState(AttackState::Meteor);
+		// 	Anim->ChangeState(DragonState::Idle);
+		// }
+		// else if (int_rand > 0)
+		if (int_rand > 0)
 		{
 			//Breath
 			Anim->ChangeAttackState(AttackState::Breath);
@@ -433,24 +432,26 @@ void UHD_DragonFSM::ChooseAttackState()
 	}
 	else
 	{
-		//Anim->ChangeAttackState(AttackState::TailSlap);
 		// 지상에 있을때 사용가능 스킬 - 8개
 		// Breath, Shout, HandPress, Scratch, TailSlap, JumpPress, ThunderMagic, Methor
 		// 20		30		30			30		30			20		10				10
-		int_rand = FMath::RandRange(1, 180);
-		if (int_rand > 170)
-		{
-			//Methor
-			//Anim->ChangeAttackState(AttackState::Meteor);
-			Anim->ChangeState(DragonState::Idle);
-		}
-		else if (int_rand > 160)
-		{
-			//ThunderMagic
-			//Anim->ChangeAttackState(AttackState::ThunderMagic);
-			Anim->ChangeState(DragonState::Idle);
-		}
-		else if (int_rand > 140)
+		//int_rand = FMath::RandRange(1, 180);
+		// if (int_rand > 170)
+		// {
+		// 	//Methor
+		// 	//Anim->ChangeAttackState(AttackState::Meteor);
+		// 	Anim->ChangeState(DragonState::Idle);
+		// }
+		// else if (int_rand > 160)
+		// {
+		// 	//ThunderMagic
+		// 	//Anim->ChangeAttackState(AttackState::ThunderMagic);
+		// 	Anim->ChangeState(DragonState::Idle);
+		// }
+		//else if (int_rand > 140)
+		
+		int_rand = FMath::RandRange(1, 160);
+		if (int_rand > 140)
 		{
 			//JumpPress
 			Anim->ChangeAttackState(AttackState::JumpPress);
@@ -458,16 +459,16 @@ void UHD_DragonFSM::ChooseAttackState()
 		else if (int_rand > 110)
 		{
 			//TailSlap
-			Anim->InnerAngle = GetRadianFromCharacter();
-			Anim->chkAngle = true;
 			Anim->ChangeAttackState(AttackState::TailSlap);
+			// Anim->InnerAngle = GetRadianFromCharacter();
+			// Anim->chkAngle = true;
 		}
 		else if (int_rand > 80)
 		{
 			//Scratch
-			Anim->InnerAngle = GetRadianFromCharacter();
-			Anim->chkAngle = true;
 			Anim->ChangeAttackState(AttackState::Scratch);
+			// Anim->InnerAngle = GetRadianFromCharacter();
+			// Anim->chkAngle = true;
 		}
 		else if (int_rand > 50)
 		{
@@ -484,7 +485,7 @@ void UHD_DragonFSM::ChooseAttackState()
 			//Breath
 			Anim->ChangeAttackState(AttackState::Breath);
 		}
-	 }
+	}
 }
 
 void UHD_DragonFSM::RotateToTarget(const float& DeltaTime)

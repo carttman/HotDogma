@@ -94,13 +94,28 @@ void UHD_DragonAnim::AnimNotify_PressEnd()
 
 void UHD_DragonAnim::AnimNotify_AttackJumpPress()
 {
-	bool bRtn = GetAttackJumpPress();
-	if(bRtn)
+	bool bRtn = GetAttackPress(fsm->JumpPressAttackDist);
+	if (bRtn)
 	{
-		for(auto OtherActor:DamageActorSet)
+		for (auto OtherActor : DamageActorSet)
 		{
-			FDamageEvent DamageEvent;
-			UGameplayStatics::ApplyDamage(OtherActor, Damage_JumpPress, Dragon->GetController(), Dragon, UDamageType::StaticClass());
+			UGameplayStatics::ApplyDamage(OtherActor, Damage_JumpPress, Dragon->GetController(), Dragon,
+			                              UDamageType::StaticClass());
+		}
+
+		DamageActorSet.Empty();
+	}
+}
+
+void UHD_DragonAnim::AnimNotify_AttackHandPress()
+{
+	bool bRtn = GetAttackPress(fsm->HandPressAttackDist);
+	if (bRtn)
+	{
+		for (auto OtherActor : DamageActorSet)
+		{
+			UGameplayStatics::ApplyDamage(OtherActor, Damage_HandPress, Dragon->GetController(), Dragon,
+			                              UDamageType::StaticClass());
 		}
 
 		DamageActorSet.Empty();
@@ -108,7 +123,7 @@ void UHD_DragonAnim::AnimNotify_AttackJumpPress()
 }
 
 
-bool UHD_DragonAnim::GetAttackJumpPress()
+bool UHD_DragonAnim::GetAttackPress(const float& AttackDistance)
 {
 	bool bRtn = false;
 	FVector Start = Dragon->GetActorLocation();
@@ -117,24 +132,17 @@ bool UHD_DragonAnim::GetAttackJumpPress()
 	TArray<FHitResult> OutHits;
 	TArray<AActor*> ActorsToIgnore;
 	ActorsToIgnore.Add(Dragon);
-	bRtn = UKismetSystemLibrary::SphereTraceMulti(GetWorld(), Start, End, fsm->AttackDist,
-	                                                    UEngineTypes::ConvertToTraceType(CollisionChannel), false,
-	                                                    ActorsToIgnore, EDrawDebugTrace::ForDuration, OutHits,
-	                                                    true);
-
-	//UE_LOG(LogTemp, Warning, TEXT("Hit Actor: %d"), (int32)OutHits.Num());
-	// for (auto name : OutHits)
-	// {
-	// 	//if (IsValid(name.GetActor()))
-	// 		UE_LOG(LogTemp, Warning, TEXT("Hit Actor: %s"), *name.GetActor()->GetName());
-	// }
+	bRtn = UKismetSystemLibrary::SphereTraceMulti(GetWorld(), Start, End, AttackDistance,
+	                                              UEngineTypes::ConvertToTraceType(CollisionChannel), false,
+	                                              ActorsToIgnore, EDrawDebugTrace::ForDuration, OutHits,
+	                                              true);
 
 	for (auto& Hit : OutHits)
 	{
 		if (IsValid(Hit.GetActor()))
 		{
 			//UE_LOG(LogTemp, Warning, TEXT("Hit Actor: %s"), *Hit.GetActor()->GetName());
-			UE_LOG(LogTemp, Warning, TEXT("Hit Actor: %s Cutting_TargetLoc : %.f, %.f, %.f"),
+			UE_LOG(LogTemp, Warning, TEXT("Hit Actor: %s TargetLoc : %.f, %.f, %.f"),
 			       *Hit.GetActor()->GetName(), Hit.GetActor()->GetActorLocation().X,
 			       Hit.GetActor()->GetActorLocation().Y, Hit.GetActor()->GetActorLocation().Z);
 			FVector JumpPressTarget = Hit.GetActor()->GetActorLocation(); //- Player->GetActorLocation();
@@ -156,9 +164,9 @@ bool UHD_DragonAnim::GetAttackJumpPress()
 		}
 	}
 
-	if(DamageActorSet.Num()>0)
-		bRtn=true;
-	
+	if (DamageActorSet.Num() > 0)
+		bRtn = true;
+
 	return bRtn;
 }
 #pragma endregion
@@ -173,6 +181,7 @@ void UHD_DragonAnim::AnimNotify_EndTailSlap()
 {
 	Dragon->TailCollision->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	chkAngle = false;
+	Dragon->DamageActorSet.Empty();
 }
 
 void UHD_DragonAnim::AnimNotify_StartScratch()
@@ -186,6 +195,12 @@ void UHD_DragonAnim::AnimNotify_EndScratch()
 	Dragon->HandCollision_L->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	Dragon->HandCollision_R->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	chkAngle = false;
+	Dragon->DamageActorSet.Empty();
+}
+
+void UHD_DragonAnim::AnimNotify_ClearSet()
+{
+	Dragon->DamageActorSet.Empty();
 }
 #pragma endregion
 
@@ -197,7 +212,6 @@ void UHD_DragonAnim::AnimNotify_StartAttack()
 
 void UHD_DragonAnim::AnimNotify_EndAttack()
 {
-	ChangeState(DragonState::Idle);
 	if (!fsm->chkOnceFly)
 	{
 		// 최초로 75%보다 낮아지면 하늘로 날아오른다.
@@ -207,6 +221,14 @@ void UHD_DragonAnim::AnimNotify_EndAttack()
 			ChangeState(DragonState::Fly);
 			fsm->chkOnceFly = true;
 		}
+		else
+		{
+			ChangeState(DragonState::Idle);
+		}
+	}
+	else
+	{
+		ChangeState(DragonState::Idle);
 	}
 
 	fsm->isAttack = false;

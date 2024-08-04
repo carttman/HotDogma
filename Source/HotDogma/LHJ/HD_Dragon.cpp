@@ -2,6 +2,8 @@
 
 
 #include "../LHJ/HD_Dragon.h"
+
+#include "HD_DragonAnim.h"
 #include "HD_DragonFSM.h"
 #include "Components/ArrowComponent.h"
 #include "Components/BoxComponent.h"
@@ -71,12 +73,14 @@ AHD_Dragon::AHD_Dragon()
 	HandCollision_R->SetRelativeRotation(FRotator(90, 0, 0));
 	HandCollision_R->SetCollisionProfileName(FName("DragonAttack"));
 	HandCollision_R->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	HandCollision_R->OnComponentBeginOverlap.AddDynamic(this, &AHD_Dragon::OnOverlapBegin);
 
 	HandCollision_L = CreateDefaultSubobject<UCapsuleComponent>(TEXT("HandCollision_L"));
 	HandCollision_L->SetupAttachment(SkeletalComp,TEXT("L-Finger2"));
 	HandCollision_L->SetRelativeRotation(FRotator(90, 0, 0));
 	HandCollision_L->SetCollisionProfileName(FName("DragonAttack"));
 	HandCollision_L->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	HandCollision_L->OnComponentBeginOverlap.AddDynamic(this, &AHD_Dragon::OnOverlapBegin);
 
 	TailCollision = CreateDefaultSubobject<UCapsuleComponent>(TEXT("TailCollision"));
 	TailCollision->SetupAttachment(SkeletalComp,TEXT("Tail05"));
@@ -85,6 +89,7 @@ AHD_Dragon::AHD_Dragon()
 	TailCollision->SetCapsuleRadius(37);
 	TailCollision->SetCollisionProfileName(FName("DragonAttack"));
 	TailCollision->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	TailCollision->OnComponentBeginOverlap.AddDynamic(this, &AHD_Dragon::OnOverlapBegin);
 }
 
 void AHD_Dragon::BeginPlay()
@@ -123,9 +128,16 @@ void AHD_Dragon::Tick(float DeltaTime)
 	}
 }
 
-void AHD_Dragon::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp,
-                                int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+void AHD_Dragon::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor,
+	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
+	if (!DamageActorSet.Contains(OtherActor))
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Overlap Actor Name : %s"), *OtherActor->GetName());
+		DamageActorSet.Add(OtherActor);
+
+		UGameplayStatics::ApplyDamage(OtherActor, fsm->Anim->Damage_Scratch, GetController(), this, UDamageType::StaticClass());
+	}
 }
 
 float AHD_Dragon::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator,

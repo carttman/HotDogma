@@ -165,7 +165,7 @@ void UHD_PlayerAttackComponent::Skill_Splitter()
 	IsSplitting = true;
 	Player->GetCharacterMovement()->SetMovementMode(MOVE_Flying); // 루트모션을 위한 flying 모드 변경
 	PlayerAnim->Montage_Play(AM_Splitter, 1);
-	if(Player->GetCharacterMovement()->Velocity.Z > 100 && PlayerAnim->isFalling) // 공중에 있다면 바로 뺑뺑이
+	if(PlayerAnim->isFalling) // 공중에 있다면 바로 뺑뺑이
 	{
 		PlayerAnim->Montage_JumpToSection(FName("Splitter_Start"), AM_Splitter);
 	}

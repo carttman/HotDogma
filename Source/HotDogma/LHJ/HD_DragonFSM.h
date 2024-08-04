@@ -2,6 +2,8 @@
 
 #pragma once
 
+#include <random>
+#include <vector>
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
 #include "Components/TimelineComponent.h"
@@ -77,7 +79,7 @@ public:
 	bool bRotate = false;
 
 	UFUNCTION()
-	void RotateToTarget(const float& DeltaTime);
+	bool RotateToTarget(const float& DeltaTime);
 #pragma endregion
 
 #pragma region Attack Function
@@ -99,23 +101,29 @@ public:
 	float FlyPressHeight = 500; // 공중찍기 높이
 
 	UPROPERTY()
-	float x;
+	float x = 0.f;
 	UPROPERTY()
-	float y;
+	float y = 0.f;
 	UPROPERTY()
-	float z;
+	float z = 0.f;
 	UPROPERTY()
 	float FallSpeed = 0.f; // 초기 낙하 속도
 #pragma endregion
 
 	UFUNCTION()
-	void NormalBreath(float DeltaTime);
+	void NormalBreath(const float& DeltaTime);
 
 #pragma endregion
 
 #pragma region Attack Properties
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float AttackDist = 2000.f; // 공격범위
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float HandPressAttackDist = 2000.f; // 앞발찍기 공격범위
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float JumpPressAttackDist = 2000.f; // 점프찍기 공격범위
 #pragma endregion
 
 	UPROPERTY(EditAnywhere)
@@ -171,9 +179,22 @@ public:
 	UPROPERTY()
 	int32 PatternPageNum = 1;
 
-	TArray<AttackState> AttackPattern1Page = {
-		AttackState::Breath, AttackState::ThunderMagic, AttackState::HandPress
+	// TArray<AttackState> AttackPattern1Page = {
+	// 	AttackState::Breath, AttackState::ThunderMagic, AttackState::HandPress
+	// };
+
+	std::vector<AttackState> OrgAttackPattern = {
+		AttackState::Breath,
+		AttackState::Shout,
+		AttackState::HandPress,
+		AttackState::Scratch,
+		AttackState::TailSlap,
 	};
+
+	std::vector<AttackState> RndAttackPattern;
+	
+	UFUNCTION()
+	void ShuffleAttackPattern();
 
 	UPROPERTY()
 	bool isAttack = false;
@@ -188,14 +209,14 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int RequiredSkillCnt = 4; // 다음 공중 올라갈 때까지 필요한 스킬 사용 개수
 
-	int CurrUsedSkillCnt;	// 현재 사용한 스킬 개수
+	int CurrUsedSkillCnt; // 현재 사용한 스킬 개수
 
 	FRotator NowRotator;
 #pragma endregion
 
 #pragma region	Fly Property
 	bool chkOnceFly = false; // 한번이라도 날았는지 확인	
-	
+
 	int ApplySkillAsFly; // 공중에서 사용할 스킬 개수
 #pragma endregion
 
@@ -206,8 +227,27 @@ public:
 	FTimeline BreathTimeline;
 
 	UFUNCTION()
-	void BreathRStart(float Alpha);
+	void BreathRStart(const float& Alpha);
 
 	UFUNCTION()
 	void BreathREnd();
+
+	//=================================데미지 값
+	UPROPERTY(EditAnywhere)
+	float Damage_JumpPress = 10.f; // 점프찍기
+
+	UPROPERTY(EditAnywhere)
+	float Damage_HandPress = 10.f; // 짓누르기
+
+	UPROPERTY(EditAnywhere)
+	float Damage_TailSlap = 10.f; // 꼬리치기
+
+	UPROPERTY(EditAnywhere)
+	float Damage_Scratch = 10.f; // 할퀴기
+
+	UPROPERTY(EditAnywhere)
+	float Damage_Meteor = 10.f; // 메테오
+
+	UPROPERTY(EditAnywhere)
+	float Damage_Thunder = 10.f; // 번개
 };

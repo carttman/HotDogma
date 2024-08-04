@@ -25,9 +25,8 @@ public:
 
 	UFUNCTION()
 	void OnOverlapBegin(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor,
-	                    class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep,
-	                    const FHitResult& SweepResult);
-
+						class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep,
+						const FHitResult& SweepResult);
 	
 	UPROPERTY(EditAnywhere)
 	class UCapsuleComponent* HandCollision_R;
@@ -82,8 +81,11 @@ public:
 	class UBoxComponent* FireCollision;
 
 	UPROPERTY(EditAnywhere)
-	float MaxFireCollsionSize = 10;
+	float MaxFireCollisionSize = 10;
 
 	UPROPERTY()
 	float CurrFireCollisionSize = 0;
+
+	UPROPERTY()
+	TSet<AActor*> DamageActorSet;
 };

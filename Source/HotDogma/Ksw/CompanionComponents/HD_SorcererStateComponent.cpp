@@ -40,6 +40,7 @@ void UHD_SorcererStateComponent::AttackTick(float DeltaTime)
 {
 	Super::AttackTick(DeltaTime);
 	CurrentAttackTime += DeltaTime;
+
 	switch (CurrentBattleState)
 	{
 		case ESorcererBattleState::State_CombatCheck:
@@ -125,14 +126,13 @@ void UHD_SorcererStateComponent::MagickBolt()
 		if (MagickBoltCount < MaxMagickBoltCount)
 		{
 			SorcererAnimInstance->PlayAttackMontage(1);
-			// 볼트를 발사한다.
 			// 타겟을 찾는다.
 			if (FindAttackPoint())
 			{
-				// 볼트를 스폰하고 타겟을 향해 발사한다.
-				FVector StartLocation = Me->GetActorLocation();
-				FVector EndLocation = AttackPoint;
 				// 볼트를 스폰한다.
+				FRotator LookAt = UKismetMathLibrary::FindLookAtRotation(Me->GetActorLocation(), AttackPoint);
+				AIController->SetControlRotation(LookAt);
+
 				AHD_Projectile* MagickBolt = GetWorld()->SpawnActor<AHD_Projectile>(MagickBoltFactory, Me->ArrowComp->GetComponentTransform());
 				MagickBolt->SetTarget(AttackPoint);
 			}
@@ -170,7 +170,7 @@ void UHD_SorcererStateComponent::Levitate()
 		// 높이 제한
 		if (Me->GetActorLocation().Z < 300)
 		{
-			Me->AddMovementInput(FVector(0, 0, 0.5), 1);
+			Me->GetCharacterMovement()->Velocity = FVector(0, 0, 1) * 100;
 		}
 		else
 		{
@@ -190,7 +190,11 @@ void UHD_SorcererStateComponent::Levitate()
 	Me->GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_Flying);
 
 	// 천천히 올린다.
-	Me->AddMovementInput(FVector(0, 0, 0.5), 1);
+	Me->GetCharacterMovement()->bOrientRotationToMovement = false;
+	Me->GetCharacterMovement()->Velocity = FVector(0, 0, 1) * 100;
+
+	//Me->AddMovementInput(FVector(0, 0, 1), 0.5);
+	// 회전을 못하게 막는다.
 
 	// 5초 후에 중력을 다시 적용한다.
 	GetWorld()->GetTimerManager().SetTimer(LevitateTimerHandle, this, &UHD_SorcererStateComponent::EndLevitate, LevitateTime, false);
@@ -199,6 +203,7 @@ void UHD_SorcererStateComponent::Levitate()
 void UHD_SorcererStateComponent::EndLevitate()
 {
 	// 중력을 다시 적용한다.
+	Me->GetCharacterMovement()->bOrientRotationToMovement = true;
 	Me->GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_Walking);
 	SorcererAnimInstance->EndLevitate();
 

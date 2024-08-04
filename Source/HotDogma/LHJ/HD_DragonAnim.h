@@ -100,10 +100,14 @@ public:
 	UFUNCTION()
 	void AnimNotify_AttackJumpPress();
 
-	bool GetAttackJumpPress();
+	UFUNCTION()
+	void AnimNotify_AttackHandPress();
+
+	bool GetAttackPress(const float &AttackDistance);
 
 	FRotator JumpPress_Target_Rot;
 
+	UPROPERTY()
 	TSet<AActor*> DamageActorSet;
 	//=========================꼬리치기, 손바닥 내려치기 변수 초기화
 	UFUNCTION()
@@ -117,6 +121,9 @@ public:
 
 	UFUNCTION()
 	void AnimNotify_EndScratch();
+
+	UFUNCTION()
+	void AnimNotify_ClearSet();
 	//=========================공격 시작, 종료
 	UFUNCTION()
 	void AnimNotify_StartAttack();

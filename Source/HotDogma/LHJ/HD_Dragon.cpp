@@ -126,14 +126,16 @@ void AHD_Dragon::Tick(float DeltaTime)
 }
 
 void AHD_Dragon::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor,
-	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+                                UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep,
+                                const FHitResult& SweepResult)
 {
 	if (!DamageActorSet.Contains(OtherActor))
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Overlap Actor Name : %s"), *OtherActor->GetName());
 		DamageActorSet.Add(OtherActor);
 
-		UGameplayStatics::ApplyDamage(OtherActor, fsm->Damage_Scratch, GetController(), this, UDamageType::StaticClass());
+		UGameplayStatics::ApplyDamage(OtherActor, fsm->Damage_Scratch, GetController(), this,
+		                              UDamageType::StaticClass());
 	}
 }
 

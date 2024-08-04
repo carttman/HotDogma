@@ -231,6 +231,7 @@ public:
 
 	UFUNCTION()
 	void BreathREnd();
+
 	//=================================데미지 값
 	UPROPERTY(EditAnywhere)
 	float Damage_JumpPress = 10.f; // 점프찍기

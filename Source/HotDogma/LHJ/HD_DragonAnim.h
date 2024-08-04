@@ -70,7 +70,7 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void StartFlyUpFunction();
-
+	
 	//=======================전투시작
 	UFUNCTION()
 	void AnimNotify_SleepEnd(); // 주변 캐릭터 인지
@@ -83,6 +83,89 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FSM")
 	bool bEndStartAnim = false;
+	//=========================도약찍기
+	UFUNCTION()
+	void AnimNotify_bPress();
+
+	UFUNCTION()
+	void AnimNotify_StartFlyPress();
+
+	UFUNCTION()
+	void AnimNotify_PressEnd();
+
+	UFUNCTION()
+	void AnimNotify_AttackJumpPress();
+
+	UFUNCTION()
+	void AnimNotify_AttackHandPress();
+
+	UFUNCTION()
+	bool GetAttackPress(const float &AttackDistance);
+
+	FRotator JumpPress_Target_Rot;
+
+	UPROPERTY()
+	TSet<AActor*> DamageActorSet;
+	//=========================꼬리치기, 손바닥 내려치기 변수 초기화
+	UFUNCTION()
+	void AnimNotify_StartTailSlap();
+
+	UFUNCTION()
+	void AnimNotify_EndTailSlap();
+
+	UFUNCTION()
+	void AnimNotify_StartScratch();
+
+	UFUNCTION()
+	void AnimNotify_EndScratch();
+
+	UFUNCTION()
+	void AnimNotify_ClearSet();
+	//=========================공격 시작, 종료
+	UFUNCTION()
+	void AnimNotify_StartAttack();
+
+	UFUNCTION()
+	void AnimNotify_EndAttack();
+	//=========================
+	UFUNCTION()
+	void AnimNotify_RotateFire();
+
+	UFUNCTION()
+	void AnimNotify_StartFlyUp();
+	
+	UFUNCTION()
+	void AnimNotify_EndFlyUp();
+
+	UFUNCTION()
+	void AnimNotify_StartFlyDown();
+
+	UFUNCTION()
+	void AnimNotify_EndFlyDown();
+
+	UFUNCTION()
+	void AnimNotify_StartFlyAttack();
+
+	UFUNCTION()
+	void AnimNotify_EndFlyAttack();
+
+	UFUNCTION()
+	void AnimNotify_StartBreath();
+	
+	UFUNCTION()
+	void AnimNotify_EndBreath();
+	/*
+	//=======================전투시작
+	UFUNCTION()
+	void AnimNotify_SleepEnd(); // 주변 캐릭터 인지
+
+	UFUNCTION()
+	void AnimNotify_StartFight(); // 전투 시작(포효 시작)
+
+	UFUNCTION()
+	void AnimNotify_endShout(); // 전투 시작 포효 종료
+
+	
 	//=========================도약찍기
 	UFUNCTION()
 	void AnimNotify_bPress();
@@ -132,7 +215,7 @@ public:
 
 	UFUNCTION()
 	void AnimNotify_StartFlyUp();
-
+	
 	UFUNCTION()
 	void AnimNotify_EndFlyUp();
 
@@ -150,8 +233,9 @@ public:
 
 	UFUNCTION()
 	void AnimNotify_StartBreath();
-
+	
 	UFUNCTION()
 	void AnimNotify_EndBreath();
+	*/
 	
 };

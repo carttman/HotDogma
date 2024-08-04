@@ -49,7 +49,6 @@ void UHD_DragonAnim::StartFlyUpFunction()
 		fsm->bStartFlyPress = true;
 }
 
-#pragma region 전투시작 전 Notify
 void UHD_DragonAnim::AnimNotify_SleepEnd()
 {
 	bSleepEnd = false;
@@ -69,9 +68,7 @@ void UHD_DragonAnim::AnimNotify_endShout()
 
 	ChangeState(DragonState::Idle);
 }
-#pragma endregion
 
-#pragma region 도약찍기 Notify
 void UHD_DragonAnim::AnimNotify_bPress()
 {
 	FLatentActionInfo LatentInfo;
@@ -120,7 +117,6 @@ void UHD_DragonAnim::AnimNotify_AttackHandPress()
 	}
 }
 
-
 bool UHD_DragonAnim::GetAttackPress(const float& AttackDistance)
 {
 	bool bRtn = false;
@@ -166,9 +162,7 @@ bool UHD_DragonAnim::GetAttackPress(const float& AttackDistance)
 
 	return bRtn;
 }
-#pragma endregion
 
-#pragma region 꼬리치기, 손바닥 내려치기 Notify
 void UHD_DragonAnim::AnimNotify_StartTailSlap()
 {
 	Dragon->TailCollision->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
@@ -199,7 +193,6 @@ void UHD_DragonAnim::AnimNotify_ClearSet()
 {
 	Dragon->DamageActorSet.Empty();
 }
-#pragma endregion
 
 void UHD_DragonAnim::AnimNotify_StartAttack()
 {
@@ -209,24 +202,25 @@ void UHD_DragonAnim::AnimNotify_StartAttack()
 
 void UHD_DragonAnim::AnimNotify_EndAttack()
 {
-	if (!fsm->chkOnceFly)
-	{
-		// 최초로 75%보다 낮아지면 하늘로 날아오른다.
-		if (Dragon->MaxHP * 0.75 >= Dragon->CurrHP)
-		{
-			ChangeAttackState(AttackState::None);
-			ChangeState(DragonState::Fly);
-			fsm->chkOnceFly = true;
-		}
-		else
-		{
-			ChangeState(DragonState::Idle);
-		}
-	}
-	else
-	{
-		ChangeState(DragonState::Idle);
-	}
+	ChangeState(DragonState::Idle);
+	// if (!fsm->chkOnceFly)
+	// {
+	// 	// 최초로 75%보다 낮아지면 하늘로 날아오른다.
+	// 	if (Dragon->MaxHP * 0.75 >= Dragon->CurrHP)
+	// 	{
+	// 		ChangeAttackState(AttackState::None);
+	// 		ChangeState(DragonState::Fly);
+	// 		fsm->chkOnceFly = true;
+	// 	}
+	// 	else
+	// 	{
+	// 		ChangeState(DragonState::Idle);
+	// 	}
+	// }
+	// else
+	// {
+	// 	ChangeState(DragonState::Idle);
+	// }
 
 	fsm->isAttack = false;
 }
@@ -247,6 +241,7 @@ void UHD_DragonAnim::AnimNotify_EndFlyUp()
 	ChangeState(DragonState::Idle);
 	fsm->CurrUsedSkillCnt = 0;
 	chkUsingSkillCnt = true;
+	fsm->isAttack = false;
 }
 
 void UHD_DragonAnim::AnimNotify_StartFlyDown()
@@ -258,7 +253,7 @@ void UHD_DragonAnim::AnimNotify_EndFlyDown()
 {
 	fsm->isAttack = false;
 	fsm->CurrUsedSkillCnt = 0;
-	chkUsingSkillCnt = false;
+	chkUsingSkillCnt = true;
 }
 
 void UHD_DragonAnim::AnimNotify_StartFlyAttack()
@@ -275,7 +270,6 @@ void UHD_DragonAnim::AnimNotify_EndFlyAttack()
 	{
 		ChangeState(DragonState::FlyDown);
 	}
-
 	fsm->isAttack = false;
 }
 

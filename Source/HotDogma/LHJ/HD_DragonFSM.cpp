@@ -188,20 +188,21 @@ void UHD_DragonFSM::IdleState(const float& DeltaTime)
 	{
 		CurrIdleTime = 0.f;
 
-		if (!chkOnceFly)
+		// fly 주석
+		/*if (!chkOnceFly)
 		{
 			// 최초로 75%보다 낮아지면 하늘로 날아오른다.
 			if (Dragon->MaxHP * 0.75 >= Dragon->CurrHP)
 			{
 				Anim->ChangeAttackState(AttackState::None);
 				Anim->ChangeState(DragonState::Fly);
-				chkOnceFly = true;
+				
 			}
 			else
 			{
 				Anim->ChangeState(DragonState::Idle);
 			}
-		}
+		}*/
 
 		// 공격 범위 내에 들어오면
 		if (NearTargetActor && MinDistance < AttackDist)

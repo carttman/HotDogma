@@ -243,6 +243,7 @@ void UHD_DragonAnim::AnimNotify_EndFlyUp()
 	fsm->CurrUsedSkillCnt = 0;
 	chkUsingSkillCnt = true;
 	fsm->isAttack = false;
+	fsm->chkOnceFly = true;
 }
 
 void UHD_DragonAnim::AnimNotify_StartFlyDown()

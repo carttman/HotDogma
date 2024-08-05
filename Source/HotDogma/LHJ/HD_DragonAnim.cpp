@@ -234,6 +234,7 @@ void UHD_DragonAnim::AnimNotify_RotateFire()
 void UHD_DragonAnim::AnimNotify_StartFlyUp()
 {
 	fsm->isAttack = true;
+	fsm->CurrUsedSkillCnt = 0;
 }
 
 void UHD_DragonAnim::AnimNotify_EndFlyUp()

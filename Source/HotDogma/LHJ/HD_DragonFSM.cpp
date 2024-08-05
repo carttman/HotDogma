@@ -202,12 +202,12 @@ void UHD_DragonFSM::IdleState(const float& DeltaTime)
 				Anim->ChangeState(DragonState::Idle);
 			}
 		}
-		
+
 		// 공격 범위 내에 들어오면
 		if (NearTargetActor && MinDistance < AttackDist)
-		{			
+		{
 			// 공중에서 스킬 사용개수 지정
-			if (Anim->chkUsingSkillCnt)
+			if (Anim->chkUsingSkillCnt && ApplySkillAsFly == 0)
 				ApplySkillAsFly = FMath::RandRange(1, 2);
 
 			// 공격 상태로 전이
@@ -500,7 +500,7 @@ bool UHD_DragonFSM::RotateToTarget(const float& DeltaTime)
 	float r = GetRadianFromCharacter();
 
 	//UE_LOG(LogTemp, Warning, TEXT("%f"), r);
-	if (al > 1 || (r > -0.1 && r <= 0.1))
+	if (al > 1 || (r > -0.5 && r <= 0.5))
 	{
 		al = 0;
 		bRotate = false;

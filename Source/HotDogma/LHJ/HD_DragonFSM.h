@@ -217,7 +217,7 @@ public:
 #pragma region	Fly Property
 	bool chkOnceFly = false; // 한번이라도 날았는지 확인	
 
-	int ApplySkillAsFly; // 공중에서 사용할 스킬 개수
+	int ApplySkillAsFly=0; // 공중에서 사용할 스킬 개수
 #pragma endregion
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category="Breath")

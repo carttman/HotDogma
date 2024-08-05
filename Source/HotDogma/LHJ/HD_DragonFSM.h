@@ -189,6 +189,7 @@ public:
 		AttackState::HandPress,
 		AttackState::Scratch,
 		AttackState::TailSlap,
+		AttackState::JumpPress,
 	};
 
 	std::vector<AttackState> RndAttackPattern;

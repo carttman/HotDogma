@@ -257,14 +257,28 @@ public:
 	float Damage_Thunder = 10.f; // 번개
 
 	UPROPERTY(EditAnywhere)
-	float Damage_Shout = 0.f; // 번개
+	float Damage_Shout = 0.1f; // 포효
 
 #pragma region 번개공격
 	UFUNCTION()
-	void F_ThunderMagic();
+	void F_ThunderMagic(const float& DeltaTime);
 
-	std::vector<int> ThunderPatern1 = {1, 3, 5, 7};
-	std::vector<int> ThunderPatern2 = {2, 4, 6, 8};
+	std::vector<FVector> ThunderPatern;
+	std::vector<FVector> ThunderCharacterLoc;
+	void F_GetCharacterLoc_Thunder();
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int32 iThunderCnt = 0;
+
+	bool bStartThunder = false;
+
+	int int_rand_Thunder = 0;
+
+	UPROPERTY(EditAnywhere)
+	float MakeThunderTime = 0.05f;
+
+	UPROPERTY()
+	float CurrThunderTime = 0.f;
 
 #pragma endregion
 };

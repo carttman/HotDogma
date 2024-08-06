@@ -108,7 +108,7 @@ public:
 	TSet<AActor*> DamageActorSet;
 	//=========================꼬리치기, 손바닥 내려치기 변수 초기화
 	UFUNCTION()
-	void AnimNotify_StartTailSlap();
+	void AnimNotify_MyStartTailSlap();
 
 	UFUNCTION()
 	void AnimNotify_EndTailSlap();
@@ -159,5 +159,5 @@ public:
 	void AnimNotify_AttackShout();
 
 	UFUNCTION()
-	void AnimNotify_StartThunder();
+	void AnimNotify_StartThunderAttack();
 };

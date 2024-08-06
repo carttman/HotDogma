@@ -114,4 +114,10 @@ public:
 	
 	UPROPERTY()
 	FString strDamageAttackType;
+
+	UPROPERTY(EditDefaultsOnly)
+	class UParticleSystem* ThunderVFX1;
+
+	UPROPERTY(EditDefaultsOnly)
+	class UParticleSystem* ThunderVFX2;
 };

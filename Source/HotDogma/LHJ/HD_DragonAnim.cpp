@@ -95,11 +95,10 @@ void UHD_DragonAnim::AnimNotify_AttackJumpPress()
 	{
 		for (auto OtherActor : DamageActorSet)
 		{
-			UHD_DragonAttackType* DamageTypeInstance = NewObject<UHD_DragonAttackType>();
-			DamageTypeInstance->strAttackType="JumpPress";
-			
+			Dragon->strDamageAttackType = "JumpPress";
+
 			UGameplayStatics::ApplyDamage(OtherActor, fsm->Damage_JumpPress, Dragon->GetController(), Dragon,
-			                              DamageTypeInstance->GetClass());
+			                              UDamageType::StaticClass());
 		}
 
 		DamageActorSet.Empty();

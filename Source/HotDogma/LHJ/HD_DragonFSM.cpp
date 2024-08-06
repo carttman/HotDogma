@@ -130,8 +130,7 @@ void UHD_DragonFSM::TickComponent(float DeltaTime, ELevelTick TickType, FActorCo
 		case DragonState::Attack:
 			F_NormalAttackState(DeltaTime);
 			break;
-		case DragonState::Fly:
-			Anim->isFly = true;
+		case DragonState::Fly:			
 			break;
 		case DragonState::FlyDown:
 			Anim->isFly = false;
@@ -181,7 +180,22 @@ void UHD_DragonFSM::IdleState(const float& DeltaTime)
 			}
 			else
 			{
-				F_NormalIdle(DeltaTime);
+				if(Anim->isFly)
+				{
+					F_NormalIdle(DeltaTime);
+				}
+				else
+				{
+					if(RequiredSkillCnt==CurrUsedSkillCnt)
+					{
+						Anim->ChangeAttackState(AttackState::None);
+						Anim->ChangeState(DragonState::Fly);
+					}
+					else
+					{
+						F_NormalIdle(DeltaTime);					
+					}
+				}				
 			}
 		}
 		else
@@ -531,5 +545,9 @@ void UHD_DragonFSM::BreathRStart(const float& Alpha)
 }
 
 void UHD_DragonFSM::BreathREnd()
+{
+}
+
+void UHD_DragonFSM::F_ThunderMagic()
 {
 }

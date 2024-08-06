@@ -34,7 +34,6 @@ enum class AttackState:uint8
 	ThunderMagic, // 전기마법공격
 	Meteor, // 메테오
 	JumpPress, // 공중찍기
-	//FlyBreath, // 공중 브레스
 	None, // 빈값
 };
 
@@ -175,7 +174,7 @@ public:
 	float CurrIdleTime;
 
 	UFUNCTION()
-	void F_NormalIdle(const float &DeltaTime);
+	void F_NormalIdle(const float& DeltaTime);
 #pragma endregion
 
 #pragma region Attack
@@ -193,10 +192,11 @@ public:
 		AttackState::Scratch,
 		AttackState::TailSlap,
 		AttackState::JumpPress,
+		AttackState::ThunderMagic,
 	};
 
 	std::vector<AttackState> RndAttackPattern;
-	
+
 	UFUNCTION()
 	void ShuffleAttackPattern();
 
@@ -213,6 +213,7 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int RequiredSkillCnt = 4; // 다음 공중 올라갈 때까지 필요한 스킬 사용 개수
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int CurrUsedSkillCnt; // 현재 사용한 스킬 개수
 
 	FRotator NowRotator;
@@ -221,7 +222,7 @@ public:
 #pragma region	Fly Property
 	bool chkOnceFly = false; // 한번이라도 날았는지 확인	
 
-	int ApplySkillAsFly=0; // 공중에서 사용할 스킬 개수
+	int ApplySkillAsFly = 0; // 공중에서 사용할 스킬 개수
 #pragma endregion
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category="Breath")
@@ -254,4 +255,16 @@ public:
 
 	UPROPERTY(EditAnywhere)
 	float Damage_Thunder = 10.f; // 번개
+
+	UPROPERTY(EditAnywhere)
+	float Damage_Shout = 0.f; // 번개
+
+#pragma region 번개공격
+	UFUNCTION()
+	void F_ThunderMagic();
+
+	std::vector<int> ThunderPatern1 = {1, 3, 5, 7};
+	std::vector<int> ThunderPatern2 = {2, 4, 6, 8};
+
+#pragma endregion
 };

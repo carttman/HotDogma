@@ -186,12 +186,12 @@ public:
 	// };
 
 	std::vector<AttackState> OrgAttackPattern = {
-		// AttackState::Breath,
-		// AttackState::Shout,
-		// AttackState::HandPress,
-		// AttackState::Scratch,
-		// AttackState::TailSlap,
-		// AttackState::JumpPress,
+		AttackState::Breath,
+		AttackState::Shout,
+		AttackState::HandPress,
+		AttackState::Scratch,
+		AttackState::TailSlap,
+		AttackState::JumpPress,
 		AttackState::ThunderMagic,
 	};
 

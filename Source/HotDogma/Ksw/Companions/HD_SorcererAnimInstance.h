@@ -15,21 +15,25 @@ class HOTDOGMA_API UHD_SorcererAnimInstance : public UAnimInstance
 	GENERATED_BODY()
 	virtual void NativeInitializeAnimation() override;
 public:
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Movement")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Montage")
 	UAnimMontage* AttackMontage;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Movement")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Montage")
 	UAnimMontage* DieMontage;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Movement")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Montage")
 	UAnimMontage* HighHagolMontage;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Movement")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Montage")
 	UAnimMontage* HighLevinMontage;
 
-	void PlayAttackMontage(int combo);
-	void PlayHighHagolMontage(int cast);
-	void PlayHighLevinMontage(int cast);
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Montage")
+	UAnimMontage* ArgentSuccorMontage;
+
+	void PlayAttackMontage(int32 combo);
+	void PlayHighHagolMontage(int32 cast);
+	void PlayHighLevinMontage(int32 cast);
+	void PlayArgentSuccorMontage(int32 cast);
 
 	void PlayLevitate();
 	void EndLevitate();

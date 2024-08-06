@@ -7,7 +7,7 @@ void UHD_SorcererAnimInstance::NativeInitializeAnimation()
 {
 }
 
-void UHD_SorcererAnimInstance::PlayAttackMontage(int combo)
+void UHD_SorcererAnimInstance::PlayAttackMontage(int32 combo)
 {
 	if (AttackMontage)
 	{
@@ -20,7 +20,7 @@ void UHD_SorcererAnimInstance::PlayAttackMontage(int combo)
 	}
 }
 
-void UHD_SorcererAnimInstance::PlayHighHagolMontage(int cast)
+void UHD_SorcererAnimInstance::PlayHighHagolMontage(int32 cast)
 {
 	if (HighHagolMontage)
 	{
@@ -33,7 +33,7 @@ void UHD_SorcererAnimInstance::PlayHighHagolMontage(int cast)
 	}
 }
 
-void UHD_SorcererAnimInstance::PlayHighLevinMontage(int cast)
+void UHD_SorcererAnimInstance::PlayHighLevinMontage(int32 cast)
 {
 	if (HighLevinMontage)
 	{
@@ -42,6 +42,19 @@ void UHD_SorcererAnimInstance::PlayHighLevinMontage(int cast)
 		if (Duration > 0.0f)
 		{
 			Montage_JumpToSection(MontageSection, HighLevinMontage);
+		}
+	}
+}
+
+void UHD_SorcererAnimInstance::PlayArgentSuccorMontage(int32 cast)
+{
+	if (ArgentSuccorMontage)
+	{
+		FName MontageSection = FName(*FString::Printf(TEXT("ArgentSuccor_%d"), cast));
+		float Duration = Montage_Play(ArgentSuccorMontage, 1.f);
+		if (Duration > 0.0f)
+		{
+			Montage_JumpToSection(MontageSection, ArgentSuccorMontage);
 		}
 	}
 }

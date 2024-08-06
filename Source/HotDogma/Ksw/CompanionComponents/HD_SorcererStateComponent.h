@@ -75,6 +75,9 @@ public:
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<class AActor> HighLevinFactory;
 
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<class AActor> ArgentSuccorFactory;
+
 	UPROPERTY()
 	class UHD_SorcererAnimInstance* SorcererAnimInstance;
 
@@ -84,22 +87,22 @@ public:
 
 	// MagickBolt
 	bool bCastingMagickBolt = false;
-	float MagickBoltCastTime = 0.5f;
-	float MagickBoltRange = 1000.0f;
+	float MagickBoltCastTime = 0.25f;
+	float MagickBoltRange = 2000.0f;
 	float MagickBoltTime = 0.3f;
 	int32 MagickBoltCount = 0;
 	int32 MaxMagickBoltCount = 12;
 
 	// HighHagol
 	bool bCastingHighHagol = false;
-	float HighHagolCastTime = 3.0f;
-	float HighHagolRange = 1000.0f;
+	float HighHagolCastTime = 2.0f;
+	float HighHagolRange = 3000.0f;
 	float HighHagolTime = 1.0f;
 
 	// HighLevin
 	bool bCastingHighLevin = false;
 	float HighLevinCastTime = 3.0f;
-	float HighLevinRange = 1000.0f;
+	float HighLevinRange = 2500.0f;
 	float HighLevinTime = 0.3f;
 	int32 HighLevinCount = 0;
 	int32 MaxHighLevinCount = 12;
@@ -113,6 +116,8 @@ public:
 	FTimerHandle LevitateTimerHandle;
 
 	// ArgentSuccor
+	bool bCastingArgentSuccor = false;
+	float ArgentSuccorCastTime = 3.0f;
 	float ArgentSuccorRange = 1000.0f;
 	float ArgentSuccorTime = 1.0f;
 	// Galvanize

@@ -16,6 +16,8 @@
 #include "Components/SceneComponent.h"
 #include "Curves/CurveFloat.h"
 #include "K2Node_Timeline.h"
+#include "HotDogma/HD_Character/HD_CharacterPlayer.h"
+#include <Kismet/GameplayStatics.h>
 
 UHD_SorcererStateComponent::UHD_SorcererStateComponent()
 {
@@ -38,6 +40,12 @@ UHD_SorcererStateComponent::UHD_SorcererStateComponent()
 	{
 		HighLevinFactory = HighLevin.Class;
 	}
+
+	ConstructorHelpers::FClassFinder<AActor> ArgentSuccor(TEXT("/Script/Engine.Blueprint'/Game/Ksw/Magics/BP_ArgentSuccor.BP_ArgentSuccor_C'"));
+	if (ArgentSuccor.Succeeded())
+	{
+		ArgentSuccorFactory = ArgentSuccor.Class;
+	}
 }
 
 void UHD_SorcererStateComponent::BeginPlay()
@@ -51,7 +59,7 @@ void UHD_SorcererStateComponent::BeginPlay()
 	PatternList.Add(ESorcererBattleState::State_HighHagol);
 	PatternList.Add(ESorcererBattleState::State_HighLevin);
 	PatternList.Add(ESorcererBattleState::State_Levitate);
-	//PatternList.Add(ESorcererBattleState::State_ArgentSuccor);
+	PatternList.Add(ESorcererBattleState::State_ArgentSuccor);
 	//PatternList.Add(ESorcererBattleState::State_Galvanize);
 }
 
@@ -93,6 +101,7 @@ void UHD_SorcererStateComponent::AttackTick(float DeltaTime)
 			Levitate();
 			break;
 		case ESorcererBattleState::State_ArgentSuccor:
+			ArgentSuccor();
 			break;
 		case ESorcererBattleState::State_Galvanize:
 			break;
@@ -313,6 +322,30 @@ void UHD_SorcererStateComponent::EndLevitate()
 
 void UHD_SorcererStateComponent::ArgentSuccor()
 {
+	if (!bCastingArgentSuccor)
+	{
+		// 캐스팅 애니메이션을 실행한다.
+		SorcererAnimInstance->PlayArgentSuccorMontage(0);
+		bCastingArgentSuccor = true;
+		return;
+	}
+
+	if (ArgentSuccorCastTime < CurrentAttackTime)
+	{
+		SorcererAnimInstance->PlayArgentSuccorMontage(1);
+		// 타겟을 찾는다.
+		auto* Player = Cast<AHD_CharacterPlayer>(GetWorld()->GetFirstPlayerController()->GetPawn());
+		if (Player)
+		{
+			AActor* actor = GetWorld()->SpawnActor<AActor>(ArgentSuccorFactory, Player->GetActorLocation(), FRotator::ZeroRotator);
+			actor->AttachToActor(Player, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
+			UGameplayStatics::ApplyDamage(Player, -1000.0f, Me->GetController(), Me, UDamageType::StaticClass());
+		}
+
+		CurrentAttackTime = 0.0f;
+		bCastingArgentSuccor = false;
+		SetBattleState(ESorcererBattleState::State_CombatCheck);
+	}
 }
 
 void UHD_SorcererStateComponent::Galvanize()

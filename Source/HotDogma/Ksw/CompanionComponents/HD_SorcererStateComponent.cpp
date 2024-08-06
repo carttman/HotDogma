@@ -211,6 +211,7 @@ void UHD_SorcererStateComponent::HighHagol()
 		if (FindAttackPoint())
 		{
 			// 볼트를 스폰한다.
+			AttackPoint.Z = 0;
 			GetWorld()->SpawnActor<AActor>(HighHagolFactory, AttackPoint, FRotator::ZeroRotator);
 		}
 
@@ -246,6 +247,7 @@ void UHD_SorcererStateComponent::HighLevin()
 			if (FindAttackPoint())
 			{
 				// 레빈을 스폰한다.
+				AttackPoint.Z = 0;
 				GetWorld()->SpawnActor<AActor>(HighLevinFactory, AttackPoint, FRotator::ZeroRotator);
 			}
 			

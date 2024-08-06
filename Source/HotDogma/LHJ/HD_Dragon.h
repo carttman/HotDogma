@@ -88,4 +88,7 @@ public:
 
 	UPROPERTY()
 	TSet<AActor*> DamageActorSet;
+
+	UPROPERTY()
+	FString strDamageAttackType;
 };

@@ -11,13 +11,12 @@ UENUM(BlueprintType)
 enum class EWarriorBattleState : uint8
 {
 	State_CombatCheck UMETA(DisplayName = "CombatCheck"),
-	State_FindAttackPoint UMETA(DisplayName = "공격 지점"),
 	State_MightySweep UMETA(DisplayName = "기본공격"),
 	State_ChargedSlash UMETA(DisplayName = "충전 공격"),
 	State_HeavenwardSunder UMETA(DisplayName = "올려 치기"),
 	State_IndomitableLash UMETA(DisplayName = "찍기"),
 };
-
+ 
 /**
  * 
  */
@@ -64,17 +63,18 @@ public:
 	float MightySweepDamage = 10.0f;
 
 	// ChargedSlash
-	float ChargedSlashRange = 300.0f;
+	float MaxChargeTime = 5.0f;
+	float PostDelayTime = 1.0f;
+	float ChargedSlashRange = 200.0f;
 	float ChargedSlashDamage = 20.0f;
 
 	// HeavenwardSunder
-	float HeavenwardSunderRange = 400.0f;
+	float HeavenwardSunderRange = 200.0f;
 	float HeavenwardSunderDamage = 30.0f;
 
 	// IndomitableLash
-	float IndomitableLashRange = 500.0f;
+	float IndomitableLashRange = 250.0f;
 	float IndomitableLashDamage = 40.0f;
-
 
 	UPROPERTY()
 	class UHD_WarriorAnimInstance* WarriorAnimInstance;

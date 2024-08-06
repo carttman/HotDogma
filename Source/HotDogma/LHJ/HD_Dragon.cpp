@@ -70,14 +70,14 @@ AHD_Dragon::AHD_Dragon()
 	HandCollision_R->SetRelativeRotation(FRotator(90, 0, 0));
 	HandCollision_R->SetCollisionProfileName(FName("DragonAttack"));
 	HandCollision_R->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-	HandCollision_R->OnComponentBeginOverlap.AddDynamic(this, &AHD_Dragon::OnOverlapBegin);
+	HandCollision_R->OnComponentBeginOverlap.AddDynamic(this, &AHD_Dragon::OnOverlapBegin_Scratch);
 
 	HandCollision_L = CreateDefaultSubobject<UCapsuleComponent>(TEXT("HandCollision_L"));
 	HandCollision_L->SetupAttachment(SkeletalComp,TEXT("L-Finger2"));
 	HandCollision_L->SetRelativeRotation(FRotator(90, 0, 0));
 	HandCollision_L->SetCollisionProfileName(FName("DragonAttack"));
 	HandCollision_L->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-	HandCollision_L->OnComponentBeginOverlap.AddDynamic(this, &AHD_Dragon::OnOverlapBegin);
+	HandCollision_L->OnComponentBeginOverlap.AddDynamic(this, &AHD_Dragon::OnOverlapBegin_Scratch);
 
 	TailCollision = CreateDefaultSubobject<UCapsuleComponent>(TEXT("TailCollision"));
 	TailCollision->SetupAttachment(SkeletalComp,TEXT("Tail05"));
@@ -86,7 +86,39 @@ AHD_Dragon::AHD_Dragon()
 	TailCollision->SetCapsuleRadius(37);
 	TailCollision->SetCollisionProfileName(FName("DragonAttack"));
 	TailCollision->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-	TailCollision->OnComponentBeginOverlap.AddDynamic(this, &AHD_Dragon::OnOverlapBegin);
+	TailCollision->OnComponentBeginOverlap.AddDynamic(this, &AHD_Dragon::OnOverlapBegin_TailSlap);
+
+	ThunderPoint1 = CreateDefaultSubobject<USceneComponent>(TEXT("ThunderPoint1"));
+	ThunderPoint1->SetupAttachment(SkeletalComp);
+	ThunderPoint1->SetRelativeLocation(FVector(200, 0, 0));
+
+	ThunderPoint2 = CreateDefaultSubobject<USceneComponent>(TEXT("ThunderPoint2"));
+	ThunderPoint2->SetupAttachment(SkeletalComp);
+	ThunderPoint2->SetRelativeLocation(FVector(150, -150, 0));
+
+	ThunderPoint3 = CreateDefaultSubobject<USceneComponent>(TEXT("ThunderPoint3"));
+	ThunderPoint3->SetupAttachment(SkeletalComp);
+	ThunderPoint3->SetRelativeLocation(FVector(15, -185.0, 0));
+
+	ThunderPoint4 = CreateDefaultSubobject<USceneComponent>(TEXT("ThunderPoint4"));
+	ThunderPoint4->SetupAttachment(SkeletalComp);
+	ThunderPoint4->SetRelativeLocation(FVector(150.0, -150.0, 0));
+
+	ThunderPoint5 = CreateDefaultSubobject<USceneComponent>(TEXT("ThunderPoint5"));
+	ThunderPoint5->SetupAttachment(SkeletalComp);
+	ThunderPoint5->SetRelativeLocation(FVector(-200.0, 0, 0));
+
+	ThunderPoint6 = CreateDefaultSubobject<USceneComponent>(TEXT("ThunderPoint6"));
+	ThunderPoint6->SetupAttachment(SkeletalComp);
+	ThunderPoint6->SetRelativeLocation(FVector(-150.0, 150.0, 0));
+
+	ThunderPoint7 = CreateDefaultSubobject<USceneComponent>(TEXT("ThunderPoint7"));
+	ThunderPoint7->SetupAttachment(SkeletalComp);
+	ThunderPoint7->SetRelativeLocation(FVector(15, 185.0, 0));
+
+	ThunderPoint8 = CreateDefaultSubobject<USceneComponent>(TEXT("ThunderPoint8"));
+	ThunderPoint8->SetupAttachment(SkeletalComp);
+	ThunderPoint8->SetRelativeLocation(FVector(150.0, 150.0, 0));
 }
 
 void AHD_Dragon::BeginPlay()
@@ -94,6 +126,20 @@ void AHD_Dragon::BeginPlay()
 	Super::BeginPlay();
 
 	GetCharacterMovement()->MaxWalkSpeed = GetCharacterMovement()->GetMaxSpeed() * 0.75;
+
+	// FVector DragonLocation_ = GetActorLocation();
+	// float Radius = 300.0f; // 원의 반지름
+	// int32 PointCount = 8; // 점의 개수
+	// FColor CircleColor = FColor::Cyan; // 원의 색상
+	//
+	// for (int32 i = 0; i < PointCount; i++)
+	// {
+	// 	float Angle = i * (360.0f / PointCount); // 각도를 계산합니다.
+	// 	float Radian = FMath::DegreesToRadians(Angle); // 각도를 라디안으로 변환합니다.
+	//
+	// 	FVector PointLocation = DragonLocation_ + FVector(FMath::Cos(Radian) * Radius, FMath::Sin(Radian) * Radius, 0.0f);
+	// 	DrawDebugCircle(GetWorld(), PointLocation, 10.0f, 32, CircleColor, false, -1.0f, 0, 1.0f, FVector(0, 0, 1), FVector(1, 0, 0), false); // 원의 점을 그립니다.
+	// }
 }
 
 void AHD_Dragon::Tick(float DeltaTime)
@@ -125,14 +171,32 @@ void AHD_Dragon::Tick(float DeltaTime)
 	}
 }
 
-void AHD_Dragon::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor,
-                                UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep,
-                                const FHitResult& SweepResult)
+void AHD_Dragon::OnOverlapBegin_Scratch(UPrimitiveComponent* OverlappedComp, AActor* OtherActor,
+                                          UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep,
+                                          const FHitResult& SweepResult)
 {
 	if (!DamageActorSet.Contains(OtherActor))
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Overlap Actor Name : %s"), *OtherActor->GetName());
 		DamageActorSet.Add(OtherActor);
+
+		strDamageAttackType = "Scratch";
+
+		UGameplayStatics::ApplyDamage(OtherActor, fsm->Damage_Scratch, GetController(), this,
+		                              UDamageType::StaticClass());
+	}
+}
+
+void AHD_Dragon::OnOverlapBegin_TailSlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor,
+                                         UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep,
+                                         const FHitResult& SweepResult)
+{
+	if (!DamageActorSet.Contains(OtherActor))
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Overlap Actor Name : %s"), *OtherActor->GetName());
+		DamageActorSet.Add(OtherActor);
+
+		strDamageAttackType = "TailSlap";
 
 		UGameplayStatics::ApplyDamage(OtherActor, fsm->Damage_Scratch, GetController(), this,
 		                              UDamageType::StaticClass());

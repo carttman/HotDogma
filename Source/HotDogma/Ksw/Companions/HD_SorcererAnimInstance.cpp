@@ -20,6 +20,32 @@ void UHD_SorcererAnimInstance::PlayAttackMontage(int combo)
 	}
 }
 
+void UHD_SorcererAnimInstance::PlayHighHagolMontage(int cast)
+{
+	if (HighHagolMontage)
+	{
+		FName MontageSection = FName(*FString::Printf(TEXT("HighHagol_%d"), cast));
+		float Duration = Montage_Play(HighHagolMontage, 1.f);
+		if (Duration > 0.0f)
+		{
+			Montage_JumpToSection(MontageSection, HighHagolMontage);
+		}
+	}
+}
+
+void UHD_SorcererAnimInstance::PlayHighLevinMontage(int cast)
+{
+	if (HighLevinMontage)
+	{
+		FName MontageSection = FName(*FString::Printf(TEXT("HighLevin_%d"), cast));
+		float Duration = Montage_Play(HighLevinMontage, 1.f);
+		if (Duration > 0.0f)
+		{
+			Montage_JumpToSection(MontageSection, HighLevinMontage);
+		}
+	}
+}
+
 void UHD_SorcererAnimInstance::PlayLevitate()
 {
 	bLevitate = true;

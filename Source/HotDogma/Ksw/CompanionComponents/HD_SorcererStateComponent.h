@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "HD_CompanionStateComponent.h"
+#include "Components/TimelineComponent.h"
 #include "HD_SorcererStateComponent.generated.h"
 
 UENUM(BlueprintType)
@@ -25,12 +26,16 @@ class HOTDOGMA_API UHD_SorcererStateComponent : public UHD_CompanionStateCompone
 {
 	GENERATED_BODY()
 
+public:
+	UHD_SorcererStateComponent();
+
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
 
 public:
 	virtual void StartBattle();
+	virtual void EndBattle();
 	virtual void AttackTick(float DeltaTime);
 
 	void SetBattleState(ESorcererBattleState state);
@@ -44,6 +49,8 @@ public:
 	void ArgentSuccor();
 	void Galvanize();
 
+	void RotateToTarget(float DeltaTime);
+	void LevitateTick(float DeltaTime);
 	UFUNCTION()
 	void EndLevitate();
 
@@ -62,6 +69,12 @@ public:
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<class AHD_Projectile> MagickBoltFactory;
 
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<class AActor> HighHagolFactory;
+
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<class AActor> HighLevinFactory;
+
 	UPROPERTY()
 	class UHD_SorcererAnimInstance* SorcererAnimInstance;
 
@@ -78,15 +91,25 @@ public:
 	int32 MaxMagickBoltCount = 12;
 
 	// HighHagol
+	bool bCastingHighHagol = false;
+	float HighHagolCastTime = 3.0f;
 	float HighHagolRange = 1000.0f;
 	float HighHagolTime = 1.0f;
 
 	// HighLevin
+	bool bCastingHighLevin = false;
+	float HighLevinCastTime = 3.0f;
 	float HighLevinRange = 1000.0f;
-	float HighLevinTime = 1.0f;
+	float HighLevinTime = 0.3f;
+	int32 HighLevinCount = 0;
+	int32 MaxHighLevinCount = 12;
 
 	// Levitate
+	bool bMaxLevitate = false;
 	float LevitateTime = 10.0f;
+	int32 LevitateUp = 1;
+	float LevitateAnimTime = 1.0f;
+
 	FTimerHandle LevitateTimerHandle;
 
 	// ArgentSuccor

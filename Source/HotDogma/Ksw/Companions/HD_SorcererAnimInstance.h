@@ -15,14 +15,21 @@ class HOTDOGMA_API UHD_SorcererAnimInstance : public UAnimInstance
 	GENERATED_BODY()
 	virtual void NativeInitializeAnimation() override;
 public:
-	// 총쏘기 애니메이션을 재생하고 싶다.
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Movement")
 	UAnimMontage* AttackMontage;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Movement")
 	UAnimMontage* DieMontage;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Movement")
+	UAnimMontage* HighHagolMontage;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Movement")
+	UAnimMontage* HighLevinMontage;
+
 	void PlayAttackMontage(int combo);
+	void PlayHighHagolMontage(int cast);
+	void PlayHighLevinMontage(int cast);
 
 	void PlayLevitate();
 	void EndLevitate();

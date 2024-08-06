@@ -117,6 +117,7 @@ void UHD_CompanionStateComponent::RunTick(float DeltaTime)
 			if (EnemyDistance < 1500)
 			{
 				SetState(ECompanionState::State_Battle);
+				StartBattle();
 			}
 		}
 	}
@@ -154,6 +155,7 @@ void UHD_CompanionStateComponent::BattleTick(float DeltaTime)
 					Me->GetCharacterMovement()->MaxWalkSpeed = 600;
 					Me->GetCharacterMovement()->bOrientRotationToMovement = true;
 					UE_LOG(LogTemp, Warning, TEXT("State_Run"));
+					EndBattle();
 					SetState(ECompanionState::State_Run);
 				}
 			}
@@ -176,6 +178,14 @@ void UHD_CompanionStateComponent::HelpTick(float DeltaTime)
 void UHD_CompanionStateComponent::AttackTick(float DeltaTime)
 {
 
+}
+
+void UHD_CompanionStateComponent::StartBattle()
+{
+}
+
+void UHD_CompanionStateComponent::EndBattle()
+{
 }
 
 FVector UHD_CompanionStateComponent::Separation(const TArray<UHD_CompanionStateComponent*>& Boids)

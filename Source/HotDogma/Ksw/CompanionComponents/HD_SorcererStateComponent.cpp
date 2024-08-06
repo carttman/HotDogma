@@ -14,6 +14,31 @@
 #include <HotDogma/Ksw/HD_Projectile.h>
 #include "Components/ArrowComponent.h"
 #include "Components/SceneComponent.h"
+#include "Curves/CurveFloat.h"
+#include "K2Node_Timeline.h"
+
+UHD_SorcererStateComponent::UHD_SorcererStateComponent()
+{
+	PrimaryComponentTick.bCanEverTick = true;
+
+	ConstructorHelpers::FClassFinder<AHD_Projectile> MagickBolt(TEXT("/Script/Engine.Blueprint'/Game/Ksw/Magics/BP_MagickBolt.BP_MagickBolt_C'"));
+	if (MagickBolt.Succeeded())
+	{
+		MagickBoltFactory = MagickBolt.Class;
+	}
+
+	ConstructorHelpers::FClassFinder<AActor> HighHagol(TEXT("/Script/Engine.Blueprint'/Game/Ksw/Magics/BP_HighHagol.BP_HighHagol_C'"));
+	if (HighHagol.Succeeded())
+	{
+		HighHagolFactory = HighHagol.Class;
+	}
+
+	ConstructorHelpers::FClassFinder<AActor> HighLevin(TEXT("/Script/Engine.Blueprint'/Game/Ksw/Magics/BP_HighLevin.BP_HighLevin_C'"));
+	if (HighLevin.Succeeded())
+	{
+		HighLevinFactory = HighLevin.Class;
+	}
+}
 
 void UHD_SorcererStateComponent::BeginPlay()
 {
@@ -23,8 +48,8 @@ void UHD_SorcererStateComponent::BeginPlay()
 	
 	// 전투 패턴을 세팅한다.
 	PatternList.Add(ESorcererBattleState::State_MagickBolt);
-	//PatternList.Add(ESorcererBattleState::State_HighHagol);
-	//PatternList.Add(ESorcererBattleState::State_HighLevin);
+	PatternList.Add(ESorcererBattleState::State_HighHagol);
+	PatternList.Add(ESorcererBattleState::State_HighLevin);
 	PatternList.Add(ESorcererBattleState::State_Levitate);
 	//PatternList.Add(ESorcererBattleState::State_ArgentSuccor);
 	//PatternList.Add(ESorcererBattleState::State_Galvanize);
@@ -34,6 +59,15 @@ void UHD_SorcererStateComponent::StartBattle()
 {
 	// 전투 상태로 전환
 	SetBattleState(ESorcererBattleState::State_CombatCheck);
+	// 멈춘다.
+	AIController->StopMovement();
+}
+
+void UHD_SorcererStateComponent::EndBattle()
+{
+	// 레비테이션 종료
+	GetWorld()->GetTimerManager().ClearTimer(LevitateTimerHandle);
+	EndLevitate();
 }
 
 void UHD_SorcererStateComponent::AttackTick(float DeltaTime)
@@ -50,8 +84,10 @@ void UHD_SorcererStateComponent::AttackTick(float DeltaTime)
 			MagickBolt();
 			break;
 		case ESorcererBattleState::State_HighHagol:
+			HighHagol();
 			break;
 		case ESorcererBattleState::State_HighLevin:
+			HighLevin();
 			break;
 		case ESorcererBattleState::State_Levitate:
 			Levitate();
@@ -61,6 +97,13 @@ void UHD_SorcererStateComponent::AttackTick(float DeltaTime)
 		case ESorcererBattleState::State_Galvanize:
 			break;
 	}
+
+	if (SorcererAnimInstance->bLevitate)
+	{
+		LevitateTick(DeltaTime);
+	}
+
+	RotateToTarget(DeltaTime);
 
 	FString myState = UEnum::GetValueOrBitfieldAsString(CurrentBattleState);
 	DrawDebugString(GetWorld(), GetOwner()->GetActorLocation() + FVector(0, 0, 100), myState, 0, FColor::Yellow, 0);
@@ -79,20 +122,20 @@ void UHD_SorcererStateComponent::CombatCheck()
 	{
 		if (TargetPawn != nullptr)
 		{
-			// 드래곤과의 거리
-			float Distance = FVector::Dist(Me->GetActorLocation(), TargetPawn->GetActorLocation());
+			FindAttackPoint();
+			float Distance = FVector::Dist(Me->GetActorLocation(), AttackPoint);
 			// FindAttackPoint();
-			if (Distance > 1200)
+			if (Distance > 1500)
 			{
 				// 타겟 대상으로 좌우로 조금씩 이동한다.
-				AIController->MoveToActor(TargetPawn, 1000.0f);
+				AIController->MoveToLocation(AttackPoint, 1300.0f);
 			}
 			else
 			{
 				if (CombatTime < CurrentAttackTime)
 				{
 					// 드래곤을 공격한다.
-					SetBattleState(ESorcererBattleState::State_Levitate);
+					SetBattleState(NextPattern());
 				}
 				else
 				{
@@ -153,10 +196,71 @@ void UHD_SorcererStateComponent::MagickBolt()
 
 void UHD_SorcererStateComponent::HighHagol()
 {
+	// 시작
+	if (!bCastingHighHagol)
+	{
+		// 캐스팅 애니메이션을 실행한다.
+		SorcererAnimInstance->PlayHighHagolMontage(0);
+		bCastingHighHagol = true;
+	}
+
+	if (HighHagolCastTime < CurrentAttackTime)
+	{
+		SorcererAnimInstance->PlayHighHagolMontage(1);
+		// 타겟을 찾는다.
+		if (FindAttackPoint())
+		{
+			// 볼트를 스폰한다.
+			GetWorld()->SpawnActor<AActor>(HighHagolFactory, AttackPoint, FRotator::ZeroRotator);
+		}
+
+		CurrentAttackTime = 0.0f;
+		bCastingHighHagol = false;
+		SetBattleState(ESorcererBattleState::State_CombatCheck);
+	}
 }
 
 void UHD_SorcererStateComponent::HighLevin()
 {
+	// 시작
+	if (!bCastingHighLevin)
+	{
+		// 캐스팅 애니메이션을 실행한다.
+		SorcererAnimInstance->PlayHighLevinMontage(0);
+		bCastingHighLevin = true;
+		return;
+	}
+
+	float AttackTime = HighLevinTime;
+	if (HighLevinCount == 0)
+	{
+		AttackTime += HighLevinCastTime;
+	}
+	
+	if (AttackTime < CurrentAttackTime)
+	{
+		if (HighLevinCount < MaxHighLevinCount)
+		{
+			SorcererAnimInstance->PlayHighLevinMontage(1);
+			// 타겟을 찾는다.
+			if (FindAttackPoint())
+			{
+				// 레빈을 스폰한다.
+				GetWorld()->SpawnActor<AActor>(HighLevinFactory, AttackPoint, FRotator::ZeroRotator);
+			}
+			
+			HighLevinCount++;
+			CurrentAttackTime = 0.0f;
+		}
+		else
+		{
+			// 캐스팅을 종료한다.
+			bCastingHighLevin = false;
+			CurrentAttackTime = 0.0f;
+			HighLevinCount = 0;
+			SetBattleState(ESorcererBattleState::State_CombatCheck);
+		}
+	}
 }
 
 void UHD_SorcererStateComponent::Levitate()
@@ -168,11 +272,7 @@ void UHD_SorcererStateComponent::Levitate()
 	if (SorcererAnimInstance->bLevitate)
 	{
 		// 높이 제한
-		if (Me->GetActorLocation().Z < 300)
-		{
-			Me->GetCharacterMovement()->Velocity = FVector(0, 0, 1) * 100;
-		}
-		else
+		if (Me->GetActorLocation().Z > 0)
 		{
 			SetBattleState(ESorcererBattleState::State_MagickBolt);
 		}
@@ -190,8 +290,8 @@ void UHD_SorcererStateComponent::Levitate()
 	Me->GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_Flying);
 
 	// 천천히 올린다.
+	Me->GetCharacterMovement()->MaxFlySpeed = 150;
 	Me->GetCharacterMovement()->bOrientRotationToMovement = false;
-	Me->GetCharacterMovement()->Velocity = FVector(0, 0, 1) * 100;
 
 	//Me->AddMovementInput(FVector(0, 0, 1), 0.5);
 	// 회전을 못하게 막는다.
@@ -206,7 +306,7 @@ void UHD_SorcererStateComponent::EndLevitate()
 	Me->GetCharacterMovement()->bOrientRotationToMovement = true;
 	Me->GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_Walking);
 	SorcererAnimInstance->EndLevitate();
-
+	bMaxLevitate = false;
 }
 
 void UHD_SorcererStateComponent::ArgentSuccor()
@@ -215,6 +315,46 @@ void UHD_SorcererStateComponent::ArgentSuccor()
 
 void UHD_SorcererStateComponent::Galvanize()
 {
+}
+
+void UHD_SorcererStateComponent::RotateToTarget(float DeltaTime)
+{
+	FVector Direction = (AttackPoint - Me->GetActorLocation()).GetSafeNormal2D(); // z축만 계산
+	FRotator TargetRotation = Direction.Rotation();
+
+	// 부드러운 회전을 위해 InterpTo 함수 사용
+	FRotator NewRotation = FMath::RInterpTo(Me->GetActorRotation(), TargetRotation, DeltaTime, 5.0f);
+	NewRotation.Pitch = Me->GetActorRotation().Pitch; // 피치 값 유지
+	NewRotation.Roll = Me->GetActorRotation().Roll; // 롤 값 유지
+
+	// 캐릭터의 회전 값을 업데이트
+	Me->SetActorRotation(NewRotation);
+}
+
+void UHD_SorcererStateComponent::LevitateTick(float DeltaTime)
+{
+	// 높이 제한
+	if (!bMaxLevitate)
+	{
+		Me->GetCharacterMovement()->Velocity = FVector(0, 0, 1) * 200;
+		if (Me->GetActorLocation().Z > 300)
+		{
+			bMaxLevitate = true;
+		}
+	}
+	else
+	{
+		static float Time = 0.0f;
+		Time += DeltaTime;
+
+		if (Time > LevitateAnimTime)
+		{
+			Time = 0.0f;
+			LevitateUp *= -1;
+		}
+		
+		Me->GetCharacterMovement()->Velocity = FVector(0, 0, LevitateUp) * 20;
+	}
 }
 
 void UHD_SorcererStateComponent::PatternRotting()

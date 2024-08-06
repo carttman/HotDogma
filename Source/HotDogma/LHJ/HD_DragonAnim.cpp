@@ -63,8 +63,8 @@ void UHD_DragonAnim::AnimNotify_endShout()
 {
 	bPlayShoutAnim = false;
 	bEndStartAnim = true;
-
-	fsm->bRotate = true;
+	if (fsm)
+		fsm->bRotate = true;
 
 	ChangeState(DragonState::Idle);
 }
@@ -111,6 +111,8 @@ void UHD_DragonAnim::AnimNotify_AttackHandPress()
 	{
 		for (auto OtherActor : DamageActorSet)
 		{
+			Dragon->strDamageAttackType = "HandPress";
+
 			UGameplayStatics::ApplyDamage(OtherActor, fsm->Damage_HandPress, Dragon->GetController(), Dragon,
 			                              UDamageType::StaticClass());
 		}
@@ -187,8 +189,8 @@ void UHD_DragonAnim::AnimNotify_EndScratch()
 {
 	Dragon->HandCollision_L->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	Dragon->HandCollision_R->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-	chkAngle = false;
 	Dragon->DamageActorSet.Empty();
+	chkAngle = false;
 }
 
 void UHD_DragonAnim::AnimNotify_ClearSet()
@@ -198,69 +200,94 @@ void UHD_DragonAnim::AnimNotify_ClearSet()
 
 void UHD_DragonAnim::AnimNotify_StartAttack()
 {
-	fsm->isAttack = true;
-	fsm->CurrUsedSkillCnt++;
+	if (fsm)
+	{
+		fsm->isAttack = true;
+		fsm->CurrUsedSkillCnt++;
+	}
 }
 
 void UHD_DragonAnim::AnimNotify_EndAttack()
 {
 	ChangeState(DragonState::Idle);
-
-	fsm->isAttack = false;
+	if (fsm)
+		fsm->isAttack = false;
+	if (Dragon)
+		Dragon->strDamageAttackType = "";
 }
 
 void UHD_DragonAnim::AnimNotify_RotateFire()
 {
-	fsm->NowRotator = Dragon->GetActorRotation();
-	fsm->BreathTimeline.PlayFromStart();
+	if (fsm)
+	{
+		fsm->NowRotator = Dragon->GetActorRotation();
+		fsm->BreathTimeline.PlayFromStart();
+	}
 }
 
 void UHD_DragonAnim::AnimNotify_StartFlyUp()
 {
-	fsm->isAttack = true;
-	fsm->CurrUsedSkillCnt = 0;
-	
+	if (fsm)
+	{
+		fsm->isAttack = true;
+		fsm->CurrUsedSkillCnt = 0;
+	}
 }
 
 void UHD_DragonAnim::AnimNotify_EndFlyUp()
 {
 	ChangeState(DragonState::Idle);
-	fsm->CurrUsedSkillCnt = 0;
+	if (fsm)
+	{
+		fsm->CurrUsedSkillCnt = 0;
+		fsm->isAttack = false;
+		fsm->chkOnceFly = true;
+	}
 	chkUsingSkillCnt = true;
-	fsm->isAttack = false;
-	fsm->chkOnceFly = true;
 	isFly = true;
 }
 
 void UHD_DragonAnim::AnimNotify_StartFlyDown()
 {
-	fsm->isAttack = true;
-	fsm->CurrUsedSkillCnt = 0;
+	if (fsm)
+	{
+		fsm->isAttack = true;
+		fsm->CurrUsedSkillCnt = 0;
+	}
 }
 
 void UHD_DragonAnim::AnimNotify_EndFlyDown()
 {
-	fsm->isAttack = false;
-	fsm->CurrUsedSkillCnt = 0;
+	if (fsm)
+	{
+		fsm->isAttack = false;
+		fsm->CurrUsedSkillCnt = 0;
+	}
 	chkUsingSkillCnt = false;
 	ChangeState(DragonState::Idle);
 }
 
 void UHD_DragonAnim::AnimNotify_StartFlyAttack()
 {
-	fsm->isAttack = true;
-	fsm->CurrUsedSkillCnt++;
+	if (fsm)
+	{
+		fsm->isAttack = true;
+		fsm->CurrUsedSkillCnt++;
+	}
 }
 
 void UHD_DragonAnim::AnimNotify_EndFlyAttack()
 {
 	ChangeState(DragonState::Idle);
-	// 날고있는 상태이고, 정해진 개수만큼 스킬을 사용했을 때
-	if (fsm->CurrUsedSkillCnt == fsm->ApplySkillAsFly)
+	if (fsm)
 	{
-		ChangeState(DragonState::FlyDown);
+		// 날고있는 상태이고, 정해진 개수만큼 스킬을 사용했을 때
+		if (fsm->CurrUsedSkillCnt == fsm->ApplySkillAsFly)
+		{
+			ChangeState(DragonState::FlyDown);
+		}
+		fsm->isAttack = false;
 	}
-	fsm->isAttack = false;
 }
 
 void UHD_DragonAnim::AnimNotify_StartBreath()
@@ -271,4 +298,25 @@ void UHD_DragonAnim::AnimNotify_StartBreath()
 void UHD_DragonAnim::AnimNotify_EndBreath()
 {
 	//Dragon->FireCollision->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+}
+
+void UHD_DragonAnim::AnimNotify_AttackShout()
+{
+	bool bRtn = GetAttackPress(fsm->HandPressAttackDist);
+	if (bRtn)
+	{
+		for (auto OtherActor : DamageActorSet)
+		{
+			Dragon->strDamageAttackType = "Shout";
+
+			UGameplayStatics::ApplyDamage(OtherActor, fsm->Damage_Shout, Dragon->GetController(), Dragon,
+										  UDamageType::StaticClass());
+		}
+
+		DamageActorSet.Empty();
+	}
+}
+
+void UHD_DragonAnim::AnimNotify_StartThunder()
+{
 }

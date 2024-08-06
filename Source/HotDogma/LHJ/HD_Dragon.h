@@ -24,7 +24,12 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 	UFUNCTION()
-	void OnOverlapBegin(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor,
+	void OnOverlapBegin_Scratch(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor,
+						class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep,
+						const FHitResult& SweepResult);
+
+	UFUNCTION()
+	void OnOverlapBegin_TailSlap(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor,
 						class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep,
 						const FHitResult& SweepResult);
 	
@@ -89,6 +94,24 @@ public:
 	UPROPERTY()
 	TSet<AActor*> DamageActorSet;
 
+	// ThunderMagic Point
+	UPROPERTY(EditAnywhere,BlueprintReadWrite)
+	class USceneComponent* ThunderPoint1;
+	UPROPERTY(EditAnywhere,BlueprintReadWrite)
+	class USceneComponent* ThunderPoint2;
+	UPROPERTY(EditAnywhere,BlueprintReadWrite)
+	class USceneComponent* ThunderPoint3;
+	UPROPERTY(EditAnywhere,BlueprintReadWrite)
+	class USceneComponent* ThunderPoint4;
+	UPROPERTY(EditAnywhere,BlueprintReadWrite)
+	class USceneComponent* ThunderPoint5;
+	UPROPERTY(EditAnywhere,BlueprintReadWrite)
+	class USceneComponent* ThunderPoint6;
+	UPROPERTY(EditAnywhere,BlueprintReadWrite)
+	class USceneComponent* ThunderPoint7;
+	UPROPERTY(EditAnywhere,BlueprintReadWrite)
+	class USceneComponent* ThunderPoint8;
+	
 	UPROPERTY()
 	FString strDamageAttackType;
 };

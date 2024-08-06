@@ -547,3 +547,7 @@ void UHD_DragonFSM::BreathRStart(const float& Alpha)
 void UHD_DragonFSM::BreathREnd()
 {
 }
+
+void UHD_DragonFSM::F_ThunderMagic()
+{
+}

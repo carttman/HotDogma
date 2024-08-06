@@ -3,7 +3,6 @@
 
 #include "../LHJ/HD_DragonAnim.h"
 #include "HD_Dragon.h"
-#include "HD_DragonAttackType.h"
 #include "Components/CapsuleComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetMathLibrary.h"

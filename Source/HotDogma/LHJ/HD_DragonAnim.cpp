@@ -219,6 +219,7 @@ void UHD_DragonAnim::AnimNotify_StartFlyUp()
 {
 	fsm->isAttack = true;
 	fsm->CurrUsedSkillCnt = 0;
+	
 }
 
 void UHD_DragonAnim::AnimNotify_EndFlyUp()
@@ -228,18 +229,21 @@ void UHD_DragonAnim::AnimNotify_EndFlyUp()
 	chkUsingSkillCnt = true;
 	fsm->isAttack = false;
 	fsm->chkOnceFly = true;
+	isFly = true;
 }
 
 void UHD_DragonAnim::AnimNotify_StartFlyDown()
 {
 	fsm->isAttack = true;
+	fsm->CurrUsedSkillCnt = 0;
 }
 
 void UHD_DragonAnim::AnimNotify_EndFlyDown()
 {
 	fsm->isAttack = false;
 	fsm->CurrUsedSkillCnt = 0;
-	chkUsingSkillCnt = true;
+	chkUsingSkillCnt = false;
+	ChangeState(DragonState::Idle);
 }
 
 void UHD_DragonAnim::AnimNotify_StartFlyAttack()

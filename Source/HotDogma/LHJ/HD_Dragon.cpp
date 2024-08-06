@@ -9,6 +9,7 @@
 #include "GameFramework/Character.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Kismet/GameplayStatics.h"
+#include "Particles/ParticleSystem.h"
 
 AHD_Dragon::AHD_Dragon()
 {
@@ -102,7 +103,7 @@ AHD_Dragon::AHD_Dragon()
 
 	ThunderPoint4 = CreateDefaultSubobject<USceneComponent>(TEXT("ThunderPoint4"));
 	ThunderPoint4->SetupAttachment(SkeletalComp);
-	ThunderPoint4->SetRelativeLocation(FVector(150.0, -150.0, 0));
+	ThunderPoint4->SetRelativeLocation(FVector(-150.0, -150.0, 0));
 
 	ThunderPoint5 = CreateDefaultSubobject<USceneComponent>(TEXT("ThunderPoint5"));
 	ThunderPoint5->SetupAttachment(SkeletalComp);
@@ -127,19 +128,8 @@ void AHD_Dragon::BeginPlay()
 
 	GetCharacterMovement()->MaxWalkSpeed = GetCharacterMovement()->GetMaxSpeed() * 0.75;
 
-	// FVector DragonLocation_ = GetActorLocation();
-	// float Radius = 300.0f; // 원의 반지름
-	// int32 PointCount = 8; // 점의 개수
-	// FColor CircleColor = FColor::Cyan; // 원의 색상
-	//
-	// for (int32 i = 0; i < PointCount; i++)
-	// {
-	// 	float Angle = i * (360.0f / PointCount); // 각도를 계산합니다.
-	// 	float Radian = FMath::DegreesToRadians(Angle); // 각도를 라디안으로 변환합니다.
-	//
-	// 	FVector PointLocation = DragonLocation_ + FVector(FMath::Cos(Radian) * Radius, FMath::Sin(Radian) * Radius, 0.0f);
-	// 	DrawDebugCircle(GetWorld(), PointLocation, 10.0f, 32, CircleColor, false, -1.0f, 0, 1.0f, FVector(0, 0, 1), FVector(1, 0, 0), false); // 원의 점을 그립니다.
-	// }
+	if (ThunderVFX2)
+		ThunderVFX2->Delay = 0.25f;
 }
 
 void AHD_Dragon::Tick(float DeltaTime)
@@ -172,8 +162,8 @@ void AHD_Dragon::Tick(float DeltaTime)
 }
 
 void AHD_Dragon::OnOverlapBegin_Scratch(UPrimitiveComponent* OverlappedComp, AActor* OtherActor,
-                                          UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep,
-                                          const FHitResult& SweepResult)
+                                        UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep,
+                                        const FHitResult& SweepResult)
 {
 	if (!DamageActorSet.Contains(OtherActor))
 	{

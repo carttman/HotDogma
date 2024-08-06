@@ -158,7 +158,7 @@ public:
 	UFUNCTION()
 	bool ChkCharacterIntoRadian();
 
-#pragma region Idle Variable
+#pragma region Idle Property
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int32 ThresholdRadian = 6000;
 
@@ -173,6 +173,9 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float CurrIdleTime;
+
+	UFUNCTION()
+	void F_NormalIdle(const float &DeltaTime);
 #pragma endregion
 
 #pragma region Attack

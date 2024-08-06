@@ -41,6 +41,8 @@ public:
 	void SetCommand(ECompanionCommand Command){ CurrentCommand = Command; }
 
 	virtual void AttackTick(float DeltaTime);
+	virtual void StartBattle();
+	virtual void EndBattle();
 
 	// boids
 	// separation : 다른 개체들과의 거리를 유지

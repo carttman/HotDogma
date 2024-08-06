@@ -24,9 +24,6 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "FSM")
 	AttackState AnimNormalAttackState;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "FSM")
-	class UHD_DragonAttackType* AttackType;
-
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FSM")
 	class UHD_DragonFSM* fsm;
 

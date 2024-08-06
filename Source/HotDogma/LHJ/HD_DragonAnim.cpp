@@ -3,7 +3,6 @@
 
 #include "../LHJ/HD_DragonAnim.h"
 #include "HD_Dragon.h"
-#include "HD_DragonAttackType.h"
 #include "Components/CapsuleComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetMathLibrary.h"
@@ -95,11 +94,10 @@ void UHD_DragonAnim::AnimNotify_AttackJumpPress()
 	{
 		for (auto OtherActor : DamageActorSet)
 		{
-			UHD_DragonAttackType* DamageTypeInstance = NewObject<UHD_DragonAttackType>();
-			DamageTypeInstance->strAttackType="JumpPress";
-			
+			Dragon->strDamageAttackType = "JumpPress";
+
 			UGameplayStatics::ApplyDamage(OtherActor, fsm->Damage_JumpPress, Dragon->GetController(), Dragon,
-			                              DamageTypeInstance->GetClass());
+			                              UDamageType::StaticClass());
 		}
 
 		DamageActorSet.Empty();

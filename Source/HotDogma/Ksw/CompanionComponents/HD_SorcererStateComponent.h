@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "HD_CompanionStateComponent.h"
+#include "Components/TimelineComponent.h"
 #include "HD_SorcererStateComponent.generated.h"
 
 UENUM(BlueprintType)
@@ -25,12 +26,16 @@ class HOTDOGMA_API UHD_SorcererStateComponent : public UHD_CompanionStateCompone
 {
 	GENERATED_BODY()
 
+public:
+	UHD_SorcererStateComponent();
+
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
 
 public:
 	virtual void StartBattle();
+	virtual void EndBattle();
 	virtual void AttackTick(float DeltaTime);
 
 	void SetBattleState(ESorcererBattleState state);
@@ -44,6 +49,8 @@ public:
 	void ArgentSuccor();
 	void Galvanize();
 
+	void RotateToTarget(float DeltaTime);
+	void LevitateTick(float DeltaTime);
 	UFUNCTION()
 	void EndLevitate();
 
@@ -62,6 +69,15 @@ public:
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<class AHD_Projectile> MagickBoltFactory;
 
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<class AActor> HighHagolFactory;
+
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<class AActor> HighLevinFactory;
+
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<class AActor> ArgentSuccorFactory;
+
 	UPROPERTY()
 	class UHD_SorcererAnimInstance* SorcererAnimInstance;
 
@@ -71,25 +87,37 @@ public:
 
 	// MagickBolt
 	bool bCastingMagickBolt = false;
-	float MagickBoltCastTime = 0.5f;
-	float MagickBoltRange = 1000.0f;
+	float MagickBoltCastTime = 0.25f;
+	float MagickBoltRange = 2000.0f;
 	float MagickBoltTime = 0.3f;
 	int32 MagickBoltCount = 0;
 	int32 MaxMagickBoltCount = 12;
 
 	// HighHagol
-	float HighHagolRange = 1000.0f;
+	bool bCastingHighHagol = false;
+	float HighHagolCastTime = 2.0f;
+	float HighHagolRange = 3000.0f;
 	float HighHagolTime = 1.0f;
 
 	// HighLevin
-	float HighLevinRange = 1000.0f;
-	float HighLevinTime = 1.0f;
+	bool bCastingHighLevin = false;
+	float HighLevinCastTime = 3.0f;
+	float HighLevinRange = 2500.0f;
+	float HighLevinTime = 0.3f;
+	int32 HighLevinCount = 0;
+	int32 MaxHighLevinCount = 12;
 
 	// Levitate
+	bool bMaxLevitate = false;
 	float LevitateTime = 10.0f;
+	int32 LevitateUp = 1;
+	float LevitateAnimTime = 1.0f;
+
 	FTimerHandle LevitateTimerHandle;
 
 	// ArgentSuccor
+	bool bCastingArgentSuccor = false;
+	float ArgentSuccorCastTime = 3.0f;
 	float ArgentSuccorRange = 1000.0f;
 	float ArgentSuccorTime = 1.0f;
 	// Galvanize

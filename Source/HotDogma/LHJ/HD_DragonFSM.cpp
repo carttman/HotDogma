@@ -166,6 +166,33 @@ void UHD_DragonFSM::IdleState(const float& DeltaTime)
 			Anim->ChangeAttackState(AttackState::None);
 	}
 
+	// <><><> 공격 받는 부분에 어그로 이동 추가 (일단...보류)
+	// <><><> Fly 수정중
+	CurrIdleTime += DeltaTime;
+	if (CurrIdleTime >= DuringIdleTime)
+	{
+		CurrIdleTime = 0.f;
+		if (Dragon->MaxHP * 0.75 >= Dragon->CurrHP)
+		{
+			if (!chkOnceFly)
+			{
+				Anim->ChangeAttackState(AttackState::None);
+				Anim->ChangeState(DragonState::Fly);
+			}
+			else
+			{
+				F_NormalIdle(DeltaTime);
+			}
+		}
+		else
+		{
+			F_NormalIdle(DeltaTime);
+		}
+	}
+}
+
+void UHD_DragonFSM::F_NormalIdle(const float &DeltaTime)
+{
 	// 타겟을 지정한다.
 	ACharacter* ClosestCharacter = nullptr;
 	float MinDistance = FLT_MAX;
@@ -179,53 +206,30 @@ void UHD_DragonFSM::IdleState(const float& DeltaTime)
 			MinDistance = Distance;
 			ClosestCharacter = Character;
 			NearTargetActor = ClosestCharacter;
+		}		
+	}
+	
+	// 공격 범위 내에 들어오면
+	if (NearTargetActor && MinDistance < AttackDist)
+	{
+		// 공중에서 스킬 사용개수 지정
+		if (Anim->chkUsingSkillCnt && ApplySkillAsFly == 0)
+			ApplySkillAsFly = FMath::RandRange(1, 2);
+
+		// 공격 상태로 전이
+
+		bool b = RotateToTarget(DeltaTime);
+		if (b)
+		{
+			ChooseAttackState();
+			Anim->ChangeState(DragonState::Attack);
 		}
 	}
-
-	// <><><> 공격 받는 부분에 어그로 이동 추가 (일단...보류)
-	CurrIdleTime += DeltaTime;
-	if (CurrIdleTime >= DuringIdleTime)
+	else
 	{
-		CurrIdleTime = 0.f;
-
-		// fly 주석
-		/*if (!chkOnceFly)
-		{
-			// 최초로 75%보다 낮아지면 하늘로 날아오른다.
-			if (Dragon->MaxHP * 0.75 >= Dragon->CurrHP)
-			{
-				Anim->ChangeAttackState(AttackState::None);
-				Anim->ChangeState(DragonState::Fly);
-				
-			}
-			else
-			{
-				Anim->ChangeState(DragonState::Idle);
-			}
-		}*/
-
-		// 공격 범위 내에 들어오면
-		if (NearTargetActor && MinDistance < AttackDist)
-		{
-			// 공중에서 스킬 사용개수 지정
-			if (Anim->chkUsingSkillCnt && ApplySkillAsFly == 0)
-				ApplySkillAsFly = FMath::RandRange(1, 2);
-
-			// 공격 상태로 전이
-
-			bool b = RotateToTarget(DeltaTime);
-			if (b)
-			{
-				ChooseAttackState();
-				Anim->ChangeState(DragonState::Attack);
-			}
-		}
-		else
-		{
-			// 공격범위 밖이라면
-			// 이동 상태로 전이
-			Anim->ChangeState(DragonState::Move);
-		}
+		// 공격범위 밖이라면
+		// 이동 상태로 전이
+		Anim->ChangeState(DragonState::Move);
 	}
 }
 
@@ -372,6 +376,7 @@ bool UHD_DragonFSM::ChkCharacterIntoRadian()
 	return bRtn;
 }
 #pragma endregion
+
 
 void UHD_DragonFSM::ShuffleAttackPattern()
 {

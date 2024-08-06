@@ -148,7 +148,7 @@ bool UHD_WarriorStateComponent::FindAttackPoint()
 		}
 		else
 		{
-			DrawDebugLine(GetWorld(), Start, End, FColor::Green, false, 0.1f, 0, 1.0f);
+			// DrawDebugLine(GetWorld(), Start, End, FColor::Green, false, 0.1f, 0, 1.0f);
 		}
 	}
 

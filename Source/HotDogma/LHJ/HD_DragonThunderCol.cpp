@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "LHJ/HD_DragonThunderCol.h"
+#include "../LHJ/HD_DragonThunderCol.h"
 
 // Sets default values
 AHD_DragonThunderCol::AHD_DragonThunderCol()

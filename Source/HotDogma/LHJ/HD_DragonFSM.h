@@ -200,6 +200,16 @@ public:
 	UFUNCTION()
 	void ShuffleAttackPattern();
 
+	std::vector<AttackState> OrgFlyAttackPattern = {
+		AttackState::Breath,
+		AttackState::ThunderMagic,
+	};
+
+	std::vector<AttackState> RndFlyAttackPattern;
+
+	UFUNCTION()
+	void ShuffleFlyAttackPattern();
+
 	UPROPERTY()
 	bool isAttack = false;
 

@@ -112,6 +112,11 @@ void UHD_DragonFSM::TickComponent(float DeltaTime, ELevelTick TickType, FActorCo
 		{
 			ShuffleAttackPattern();
 		}
+		
+		if (RndFlyAttackPattern.size() == 0)
+		{
+			ShuffleFlyAttackPattern();
+		}
 
 		switch (State)
 		{
@@ -409,6 +414,19 @@ void UHD_DragonFSM::ShuffleAttackPattern()
 	std::shuffle(RndAttackPattern.begin(), RndAttackPattern.end(), g);
 }
 
+void UHD_DragonFSM::ShuffleFlyAttackPattern()
+{
+	// Random number generator
+	std::random_device rd;
+	std::mt19937 g(rd());
+
+	// 사용 스킬 목록을 복사
+	RndFlyAttackPattern = OrgFlyAttackPattern;
+
+	// Shuffle the vector
+	std::shuffle(RndFlyAttackPattern.begin(), RndFlyAttackPattern.end(), g);
+}
+
 void UHD_DragonFSM::ChooseAttackState()
 {
 	if (Anim->isFly)
@@ -416,7 +434,7 @@ void UHD_DragonFSM::ChooseAttackState()
 		// 공중날고 있을때 사용가능 스킬 - 3개
 		// Breath, ThunderMagic, Meteor
 		// 30 20 20
-		int_rand = FMath::RandRange(1, 70);
+		//int_rand = FMath::RandRange(1, 70);
 		// if (int_rand > 50)
 		// {
 		// 	//ThunderMagic
@@ -430,10 +448,24 @@ void UHD_DragonFSM::ChooseAttackState()
 		// 	Anim->ChangeState(DragonState::Idle);
 		// }
 		// else if (int_rand > 0)
-		if (int_rand > 0)
+		// if (int_rand > 0)
+		// {
+		// 	//Breath
+		// 	Anim->ChangeAttackState(AttackState::Breath);
+		// }
+
+		if (RndFlyAttackPattern.size() > 0)
 		{
-			//Breath
-			Anim->ChangeAttackState(AttackState::Breath);
+			AttackState attack = RndFlyAttackPattern[0];
+			Anim->ChangeAttackState(attack);
+			RndFlyAttackPattern.erase(RndFlyAttackPattern.begin());
+		}
+		else
+		{
+			ShuffleFlyAttackPattern();
+			AttackState attack = RndFlyAttackPattern[0];
+			Anim->ChangeAttackState(attack);
+			RndFlyAttackPattern.erase(RndFlyAttackPattern.begin());
 		}
 	}
 	else

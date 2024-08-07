@@ -111,6 +111,9 @@ public:
 	class USceneComponent* ThunderPoint7;
 	UPROPERTY(EditAnywhere,BlueprintReadWrite)
 	class USceneComponent* ThunderPoint8;
+
+	UFUNCTION()
+	void CreateThunderPoint();
 	
 	UPROPERTY()
 	FString strDamageAttackType;
@@ -120,4 +123,70 @@ public:
 
 	UPROPERTY(EditDefaultsOnly)
 	class UParticleSystem* ThunderVFX2;
+
+	// 클라이밍용
+	UPROPERTY(EditAnywhere)
+	class UChildActorComponent* ClimbHand_L;
+	UPROPERTY(EditAnywhere)
+	class UChildActorComponent* ClimbArm1_L;
+	UPROPERTY(EditAnywhere)
+	class UChildActorComponent* ClimbArm2_L;
+
+	UPROPERTY(EditAnywhere)
+	class UChildActorComponent* ClimbHand_R;
+	UPROPERTY(EditAnywhere)
+	class UChildActorComponent* ClimbArm1_R;
+	UPROPERTY(EditAnywhere)
+	class UChildActorComponent* ClimbArm2_R;
+
+	UPROPERTY(EditAnywhere)
+	class UChildActorComponent* ClimbFoot_L;
+	UPROPERTY(EditAnywhere)
+	class UChildActorComponent* ClimbLeg1_L;
+	UPROPERTY(EditAnywhere)
+	class UChildActorComponent* ClimbLeg2_L;
+	UPROPERTY(EditAnywhere)
+	class UChildActorComponent* ClimbLeg3_L;
+
+	UPROPERTY(EditAnywhere)
+	class UChildActorComponent* ClimbFoot_R;
+	UPROPERTY(EditAnywhere)
+	class UChildActorComponent* ClimbLeg1_R;
+	UPROPERTY(EditAnywhere)
+	class UChildActorComponent* ClimbLeg2_R;
+	UPROPERTY(EditAnywhere)
+	class UChildActorComponent* ClimbLeg3_R;
+
+	UPROPERTY(EditAnywhere)
+	class UChildActorComponent* ClimbTail1;
+	UPROPERTY(EditAnywhere)
+	class UChildActorComponent* ClimbTail2;
+	UPROPERTY(EditAnywhere)
+	class UChildActorComponent* ClimbTail3;
+	UPROPERTY(EditAnywhere)
+	class UChildActorComponent* ClimbTail4;
+	UPROPERTY(EditAnywhere)
+	class UChildActorComponent* ClimbTail5;
+
+	UPROPERTY(EditAnywhere)
+	class UChildActorComponent* ClimbSpine1;
+	UPROPERTY(EditAnywhere)
+	class UChildActorComponent* ClimbSpine2;
+
+	UPROPERTY(EditAnywhere)
+	class UChildActorComponent* ClimbNeck1;
+	UPROPERTY(EditAnywhere)
+	class UChildActorComponent* ClimbNeck2;
+	UPROPERTY(EditAnywhere)
+	class UChildActorComponent* ClimbNeck3;
+	UPROPERTY(EditAnywhere)
+	class UChildActorComponent* ClimbNeck4;
+	UPROPERTY(EditAnywhere)
+	class UChildActorComponent* ClimbNeck5;
+
+	UPROPERTY(EditAnywhere)
+	class UChildActorComponent* ClimbHead;
+
+	UFUNCTION()
+	void CreateClimbCollision();
 };

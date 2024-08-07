@@ -99,6 +99,7 @@ void UHD_PlayerAttackComponent::SetupPlayerInputComponent(UEnhancedInputComponen
 
 void UHD_PlayerAttackComponent::EnhancedSkill(const FInputActionValue& InputActionValue)
 {
+	if(Player->IsKnockDown) return;
 	float value = InputActionValue.Get<float>();
 	if (FMath::IsNearlyEqual(value, 1.f))
 	{
@@ -311,6 +312,7 @@ void UHD_PlayerAttackComponent::PlayMontageNotifyBegin_Cutting(FName NotifyName,
 	}
 	if(NotifyName == FName("Damage_Off_Cutter"))
 	{
+		
 		CharacterPlayer->Left_Weapon->CapsuleComp->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 		CharacterPlayer->Right_Weapon->CapsuleComp->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	}

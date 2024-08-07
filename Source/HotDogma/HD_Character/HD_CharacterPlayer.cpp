@@ -35,7 +35,9 @@ void AHD_CharacterPlayer::BeginPlay()
 {
 	Super::BeginPlay();
 
+	PlayerContoller = Cast<AHD_PlayerController>(GetController());
 	AttachWeapon();
+	if(AM_KnockDown_Montage) GetMesh()->GetAnimInstance()->OnPlayMontageNotifyBegin.AddDynamic(this, &AHD_CharacterPlayer::PlayMontageNotifyBegin_KnockDown);
 }
 
 // Called every frame
@@ -81,14 +83,35 @@ float AHD_CharacterPlayer::TakeDamage(float DamageAmount, FDamageEvent const& Da
 		if(HJ_Dragon)
 		{
 			UE_LOG(LogTemp, Warning, TEXT("%s"), *HJ_Dragon->strDamageAttackType);
+			if(!HJ_Dragon->strDamageAttackType.Equals("Shout"))
+			{
+				PlayerStatusComponent->CurrHP -= damage;
+			}
+			if(HJ_Dragon->strDamageAttackType.Equals("Shout"))
+			{
+				GetMesh()->GetAnimInstance()->Montage_Play(AM_KnockDown_Montage, 1);
+				GetMesh()->GetAnimInstance()->Montage_JumpToSection(FName("KnockDown_Start"), AM_KnockDown_Montage);
+				
+			}
 			if(HJ_Dragon->strDamageAttackType.Equals("JumpPress"))
 			{
 				GetMesh()->GetAnimInstance()->Montage_Play(AM_Hit_Montage, 1);
 				GetMesh()->GetAnimInstance()->Montage_JumpToSection(FName("Hit_Large"), AM_Hit_Montage);
 			}
-			if(!HJ_Dragon->strDamageAttackType.Equals("Shout"))
+			if(HJ_Dragon->strDamageAttackType.Equals("TailSlap"))
 			{
-				PlayerStatusComponent->CurrHP -= damage;
+				GetMesh()->GetAnimInstance()->Montage_Play(AM_Hit_Montage, 1);
+				GetMesh()->GetAnimInstance()->Montage_JumpToSection(FName("Hit_Large"), AM_Hit_Montage);
+			}
+			if(HJ_Dragon->strDamageAttackType.Equals("Scratch"))
+			{
+				GetMesh()->GetAnimInstance()->Montage_Play(AM_Hit_Montage, 1);
+				GetMesh()->GetAnimInstance()->Montage_JumpToSection(FName("Hit_Normal"), AM_Hit_Montage);
+			}
+			if(HJ_Dragon->strDamageAttackType.Equals("HandPress"))
+			{
+				GetMesh()->GetAnimInstance()->Montage_Play(AM_Hit_Montage, 1);
+				GetMesh()->GetAnimInstance()->Montage_JumpToSection(FName("Hit_Normal"), AM_Hit_Montage);
 			}
 		}
 	}
@@ -115,8 +138,20 @@ void AHD_CharacterPlayer::DeathProcess()
 {
 	GetMesh()->GetAnimInstance()->Montage_Play(AM_Hit_Montage, 1);
 	GetMesh()->GetAnimInstance()->Montage_JumpToSection(FName("Hit_Death"), AM_Hit_Montage);
-	AHD_PlayerController* playerContoller = Cast<AHD_PlayerController>(GetController());
 	
-	DisableInput(playerContoller);
+	DisableInput(PlayerContoller);
+}
+
+void AHD_CharacterPlayer::PlayMontageNotifyBegin_KnockDown(FName NotifyName,
+	const FBranchingPointNotifyPayload& BranchingPointNotifyPayload)
+{
+	if(NotifyName == FName("KnockDown_Start"))
+	{
+		IsKnockDown = true;
+	}
+	if(NotifyName == FName("KnockDown_End"))
+	{
+		IsKnockDown = false;
+	}
 }
 

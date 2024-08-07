@@ -88,4 +88,8 @@ public:
 
 	UPROPERTY(EditAnywhere)
 	class UArrowComponent* CameraPoint;
+
+public:
+	bool IsDeath = false;
+	bool IsKnockDown = false;
 };

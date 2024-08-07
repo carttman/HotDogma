@@ -152,7 +152,7 @@ void AHD_CharacterBase::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
 void AHD_CharacterBase::EnhancedMove(const FInputActionValue& InputActionValue)
 {
 	MovementVector = InputActionValue.Get<FVector2D>();
-
+	
 	if (Controller != nullptr)
 	{
 		// find out which way is forward
@@ -167,11 +167,17 @@ void AHD_CharacterBase::EnhancedMove(const FInputActionValue& InputActionValue)
 
 		switch (GetCharacterMovement()->MovementMode)
 		{
-		case MOVE_Walking:
-			// Walking일 때
+		case MOVE_Walking:// Walking일 때
+			if(!IsKnockDown)
+			{
 			// add movement 
 			AddMovementInput(ForwardDirection, MovementVector.Y);
 			AddMovementInput(RightDirection, MovementVector.X);
+			}
+			else
+			{
+				UE_LOG(LogTemp, Warning, TEXT("Knock"));
+			}
 			break;
 		case MOVE_Falling:
 
@@ -197,7 +203,11 @@ void AHD_CharacterBase::EnhancedMove(const FInputActionValue& InputActionValue)
 
 void AHD_CharacterBase::EnhancedJump(const FInputActionValue& InputActionValue)
 {
-	Jump();
+	if(!IsKnockDown)
+	{
+		
+		Jump();
+	}
 }
 
 void AHD_CharacterBase::EnhancedLook(const FInputActionValue& InputActionValue)

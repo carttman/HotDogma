@@ -28,6 +28,8 @@ public:
 public:	
 	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) override;
 public:
+	class AHD_PlayerController* PlayerContoller;
+
 	UPROPERTY(EditAnywhere)
 	class USceneComponent* Left_WeaponScene;
 	UPROPERTY(EditAnywhere)
@@ -41,13 +43,18 @@ public:
 	UPROPERTY()
 	class AHD_PlayerWeaponBase* Left_Weapon;
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	class UHD_PlayerAttackComponent* PlayerAttackComponent;
 
 	UPROPERTY(EditAnywhere)
 	class UAnimMontage* AM_Hit_Montage;
-	bool IsDeath = false;
+
+	UPROPERTY(EditAnywhere)
+	class UAnimMontage* AM_KnockDown_Montage;
+	
 public:
 	void AttachWeapon();
 	void DeathProcess();
+	UFUNCTION()
+	void PlayMontageNotifyBegin_KnockDown(FName NotifyName, const FBranchingPointNotifyPayload& BranchingPointNotifyPayload);
 };

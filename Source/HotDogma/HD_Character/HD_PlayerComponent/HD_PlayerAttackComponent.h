@@ -72,6 +72,7 @@ public:
 	void Update_Skill_Splitter();
 
 	bool IsSplitting = false;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float TargetFOV = 90;
 public:
 	UPROPERTY(EditAnywhere)

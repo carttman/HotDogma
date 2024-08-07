@@ -17,6 +17,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "Kismet/KismetSystemLibrary.h"
+#include "PhysicsEngine/PhysicsConstraintComponent.h"
 
 UHD_PlayerClimbComponent::UHD_PlayerClimbComponent()
 {
@@ -78,7 +79,17 @@ void UHD_PlayerClimbComponent::TickComponent(float DeltaTime, ELevelTick TickTyp
 		Dragon = Cast<AHD_Dragon>(Player->Dragon);
 		if(Dragon)UE_LOG(LogTemp, Warning, TEXT("TO ClimbComp-> This is: %s"), *Dragon->GetName());
 	}
-	
+	// if(Climb_OutHit.GetActor() == Dragon)
+	// {
+	// 	FLatentActionInfo LatentInfo; //MoveComponentTo 인자중 하나
+	// 	LatentInfo.CallbackTarget = this; // 현재 클래스의 인스턴스를 콜백 타겟으로 설정
+	// 	//LatentInfo.ExecutionFunction = FName("OnMoveCompleted"); // 완료 시 호출할 함수 이름
+	// 	//LatentInfo.Linkage = 0;
+	// 	//LatentInfo.UUID = 1;
+	// 	// 트레이스 충돌된 위치,회전값으로 플레이어 이동
+	// 	UKismetSystemLibrary::MoveComponentTo(Player->GetCapsuleComponent(),TargetLocation,TargetRotation,false,false,
+	// 	0.2f,false, EMoveComponentAction::Move,LatentInfo);
+	// }
 }
 
 void UHD_PlayerClimbComponent::SetupPlayerInputComponent(UEnhancedInputComponent* enhancedInputComponent)
@@ -103,13 +114,6 @@ void UHD_PlayerClimbComponent::Climb()
 			Player->GetCharacterMovement()->bOrientRotationToMovement = false;
 			
 			FVector TargetLocation;
-			if(Climb_OutHit.GetActor() == Dragon) //드래곤이 맞았다면
-			{	UE_LOG(LogTemp, Warning, TEXT("Hit Dragon")); // 위치값 : 캡슐 컴포넌트 둘레? * 트레이스 노말 + 충돌된 위치
-				TargetLocation = Player->GetCapsuleComponent()->GetScaledCapsuleRadius() * Climb_OutHit.Normal + Climb_OutHit.Location;
-				Player->CableCompoent->SetAttachEndToComponent(Dragon->SkeletalComp, Climb_OutHit.BoneName); //  케이블 컴포넌트 연결
-			}
-			else TargetLocation = Player->GetCapsuleComponent()->GetScaledCapsuleRadius() * Climb_OutHit.Normal + Climb_OutHit.Location;
-			
 			FRotator TargetRotation = UKismetMathLibrary::MakeRotFromX(Climb_OutHit.Normal * -1); // 회전값 : 트레이스 노말의 반대방향(앞방향)의 Rotation
 			
 			FLatentActionInfo LatentInfo; //MoveComponentTo 인자중 하나
@@ -117,6 +121,19 @@ void UHD_PlayerClimbComponent::Climb()
 			//LatentInfo.ExecutionFunction = FName("OnMoveCompleted"); // 완료 시 호출할 함수 이름
 			//LatentInfo.Linkage = 0;
 			//LatentInfo.UUID = 1;
+			if(Climb_OutHit.GetActor() == Dragon) //드래곤이 맞았다면
+			{	UE_LOG(LogTemp, Warning, TEXT("Hit Dragon")); // 위치값 : 캡슐 컴포넌트 둘레? * 트레이스 노말 + 충돌된 위치
+				//TargetLocation = Player->GetCapsuleComponent()->GetScaledCapsuleRadius() + Player->GetCapsuleComponent()->SetRelativeTransform();
+				FAttachmentTransformRules AttachmentRules(EAttachmentRule::KeepWorld, false);
+				FAttachmentTransformRules AttachmentTransformRules = FAttachmentTransformRules(EAttachmentRule::KeepRelative, EAttachmentRule::KeepRelative, EAttachmentRule::KeepWorld, false);
+
+				Player->GetCapsuleComponent()->AttachToComponent(Dragon->SkeletalComp, AttachmentTransformRules, Climb_OutHit.BoneName);
+				//Climb_OutHit.BoneName
+				// UKismetSystemLibrary::MoveComponentTo(Player->GetCapsuleComponent(),TargetLocation,TargetRotation,false,false,
+				// 0.2f,false, EMoveComponentAction::Move,LatentInfo);
+				Player->PlayerAttackComponent->TargetFOV = 120;
+			}
+			else TargetLocation = Player->GetCapsuleComponent()->GetRelativeLocation() * Climb_OutHit.Normal + Climb_OutHit.Location;
 			// 트레이스 충돌된 위치,회전값으로 플레이어 이동
 			UKismetSystemLibrary::MoveComponentTo(Player->GetCapsuleComponent(),TargetLocation,TargetRotation,false,false,
 				0.2f,false, EMoveComponentAction::Move,LatentInfo);
@@ -183,6 +200,8 @@ void UHD_PlayerClimbComponent::StopClimbing()
 	Player->GetCharacterMovement()->bOrientRotationToMovement = true;
 	Player->SetActorRotation(FRotator(0, Player->GetActorRotation().Yaw,  0));
 	IsClimbing = false;
+	Player->GetCapsuleComponent()->DetachFromComponent(FDetachmentTransformRules::KeepWorldTransform);
+	Player->PlayerAttackComponent->TargetFOV = 90;
 }
 // 케이블 컴포넌트 붙이기
 void UHD_PlayerClimbComponent::AttachToCable()
@@ -206,6 +225,8 @@ void UHD_PlayerClimbComponent::AttachToCable()
 // 파쿠르 하는 함수
 void UHD_PlayerClimbComponent::LedgeMantleCaculation()
 {
+	if(Climb_OutHit.GetActor() == Dragon) return;
+	
 	FHitResult ledge_OutHit;
 	ECollisionChannel TraceChannel = ECC_GameTraceChannel5;
 	FCollisionQueryParams ledge_params;
@@ -269,6 +290,7 @@ void UHD_PlayerClimbComponent::LedgeMantleCaculation()
 			}
 		}
 	}
+	
 }
 
 void UHD_PlayerClimbComponent::PlayMontageNotifyBegin(FName NotifyName,

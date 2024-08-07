@@ -25,6 +25,6 @@ public:
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 public:
-	float MaxHP = 100.f;
+	float MaxHP = 1000.f;
 	float CurrHP = MaxHP;
 };

@@ -15,7 +15,6 @@
 #include "CableComponent.h"
 #include "MotionWarpingComponent.h"
 #include "Components/ArrowComponent.h"
-#include "Engine/DamageEvents.h"
 #include "HD_PlayerComponent/PlayerStatusComponent.h"
 #include "HotDogma/HD_GameModeBase/CHJ_GameMode.h"
 #include "HotDogma/LHJ/HD_Dragon.h"
@@ -246,10 +245,10 @@ float AHD_CharacterBase::TakeDamage(float DamageAmount, FDamageEvent const& Dama
                                     AActor* DamageCauser)
 {
 	float damage = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
-	UE_LOG(LogTemp, Warning, TEXT("%s Takes Damage : %f"), *GetName(), damage);
-	PlayerStatusComponent->CurrHP -= damage;
-	UE_LOG(LogTemp, Warning, TEXT("%s Takes Damage : %f"), *GetName(), PlayerStatusComponent->CurrHP);
-
+	// UE_LOG(LogTemp, Warning, TEXT("%s Takes Damage : %f"), *GetName(), damage);
+	// PlayerStatusComponent->CurrHP -= damage;
+	// UE_LOG(LogTemp, Warning, TEXT("%s Takes Damage : %f"), *GetName(), PlayerStatusComponent->CurrHP);
+	//
 	// if(DamageCauser)
 	// {
 	// 	AHD_Dragon* HJ_Dragon = Cast<AHD_Dragon>(DamageCauser);

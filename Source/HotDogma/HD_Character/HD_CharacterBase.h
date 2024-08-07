@@ -62,9 +62,14 @@ public:
 	UPROPERTY(EditAnywhere)
 	class UMotionWarpingComponent* MotionWarpingComponent;
 public:
+	//UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	FVector2D MovementVector;
 	float Climb_UpDown;
 	float Climb_LeftRight;
+
+	
+	// const FVector ForwardDirection;
+	// const FVector RightDirection;
 public:
 	void EnhancedMove(const FInputActionValue& InputActionValue);
 	void EnhancedJump(const FInputActionValue& InputActionValue);

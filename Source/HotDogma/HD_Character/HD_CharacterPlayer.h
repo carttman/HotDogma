@@ -25,7 +25,8 @@ public:
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-
+public:	
+	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) override;
 public:
 	UPROPERTY(EditAnywhere)
 	class USceneComponent* Left_WeaponScene;
@@ -43,6 +44,10 @@ public:
 	UPROPERTY(EditAnywhere)
 	class UHD_PlayerAttackComponent* PlayerAttackComponent;
 
+	UPROPERTY(EditAnywhere)
+	class UAnimMontage* AM_Hit_Montage;
+	bool IsDeath = false;
 public:
 	void AttachWeapon();
+	void DeathProcess();
 };

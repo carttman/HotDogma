@@ -282,7 +282,7 @@ void UHD_DragonAnim::AnimNotify_EndFlyAttack()
 	if (fsm)
 	{
 		// 날고있는 상태이고, 정해진 개수만큼 스킬을 사용했을 때
-		if (fsm->CurrUsedSkillCnt == fsm->ApplySkillAsFly)
+		if (fsm->CurrUsedSkillCnt >= fsm->ApplySkillAsFly)
 		{
 			ChangeState(DragonState::FlyDown);
 		}
@@ -321,8 +321,6 @@ void UHD_DragonAnim::AnimNotify_StartThunderAttack()
 {
 	if (fsm)
 	{
-		
-
-		fsm->bStartThunder=true;
+		fsm->bStartThunder = true;
 	}
 }

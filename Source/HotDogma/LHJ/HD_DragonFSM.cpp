@@ -8,6 +8,7 @@
 #include "AIController.h"
 #include "HD_Dragon.h"
 #include "HD_DragonAnim.h"
+#include "HD_DragonThunderCol.h"
 #include "HotDogma/HD_Character/HD_CharacterPlayer.h"
 #include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetMathLibrary.h"
@@ -112,7 +113,7 @@ void UHD_DragonFSM::TickComponent(float DeltaTime, ELevelTick TickType, FActorCo
 		{
 			ShuffleAttackPattern();
 		}
-		
+
 		if (RndFlyAttackPattern.size() == 0)
 		{
 			ShuffleFlyAttackPattern();
@@ -624,15 +625,16 @@ void UHD_DragonFSM::F_ThunderMagic(const float& DeltaTime)
 		{
 			UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), Dragon->ThunderVFX1, ThunderPoint);
 			UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), Dragon->ThunderVFX2, ThunderPoint);
+			if (ThunderCol)
+				GetWorld()->SpawnActor<AHD_DragonThunderCol>(ThunderCol, ThunderPoint, FRotator::ZeroRotator);
 		}
 
 		for (auto ThunderPoint : ThunderCharacterLoc)
 		{
-			
 			UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), Dragon->ThunderVFX1, ThunderPoint);
 			UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), Dragon->ThunderVFX2, ThunderPoint);
-			// UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), Dragon->ThunderVFX1, ThunderPoint,
-			//                                          FRotator::ZeroRotator, FVector(1), false);
+			if (ThunderCol)
+				GetWorld()->SpawnActor<AHD_DragonThunderCol>(ThunderCol, ThunderPoint, FRotator::ZeroRotator);
 		}
 
 		ThunderPatern.clear();
@@ -640,15 +642,17 @@ void UHD_DragonFSM::F_ThunderMagic(const float& DeltaTime)
 	}
 	else
 	{
-		CurrThunderTime+=DeltaTime;
-		if(CurrThunderTime>=MakeThunderTime)
+		CurrThunderTime += DeltaTime;
+		if (CurrThunderTime >= MakeThunderTime)
 		{
-			CurrThunderTime=0;
+			CurrThunderTime = 0;
 			iThunderCnt++;
 			for (auto ThunderPoint : ThunderCharacterLoc)
 			{
 				UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), Dragon->ThunderVFX1, ThunderPoint);
 				UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), Dragon->ThunderVFX2, ThunderPoint);
+				if (ThunderCol)
+					GetWorld()->SpawnActor<AHD_DragonThunderCol>(ThunderCol, ThunderPoint, FRotator::ZeroRotator);
 			}
 
 			if (iThunderCnt == 4)

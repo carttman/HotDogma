@@ -89,6 +89,12 @@ AHD_Dragon::AHD_Dragon()
 	TailCollision->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	TailCollision->OnComponentBeginOverlap.AddDynamic(this, &AHD_Dragon::OnOverlapBegin_TailSlap);
 
+	CreateThunderPoint();
+	CreateClimbCollision();
+}
+
+void AHD_Dragon::CreateThunderPoint()
+{
 	ThunderPoint1 = CreateDefaultSubobject<USceneComponent>(TEXT("ThunderPoint1"));
 	ThunderPoint1->SetupAttachment(SkeletalComp);
 	ThunderPoint1->SetRelativeLocation(FVector(200, 0, 0));
@@ -120,6 +126,71 @@ AHD_Dragon::AHD_Dragon()
 	ThunderPoint8 = CreateDefaultSubobject<USceneComponent>(TEXT("ThunderPoint8"));
 	ThunderPoint8->SetupAttachment(SkeletalComp);
 	ThunderPoint8->SetRelativeLocation(FVector(150.0, 150.0, 0));
+}
+
+void AHD_Dragon::CreateClimbCollision()
+{
+	ClimbHand_L = CreateDefaultSubobject<UChildActorComponent>(TEXT("ClimbHand_L"));
+	ClimbHand_L->SetupAttachment(SkeletalComp,FName("L-Finger2"));
+	ClimbArm1_L = CreateDefaultSubobject<UChildActorComponent>(TEXT("ClimbArm1_L"));
+	ClimbArm1_L->SetupAttachment(SkeletalComp,FName("L-Arm1"));
+	ClimbArm2_L = CreateDefaultSubobject<UChildActorComponent>(TEXT("ClimbArm2_L"));
+	ClimbArm2_L->SetupAttachment(SkeletalComp,FName("L-Arm2"));
+	
+	ClimbHand_R = CreateDefaultSubobject<UChildActorComponent>(TEXT("ClimbHand_R"));
+	ClimbHand_R->SetupAttachment(SkeletalComp,FName("R-Finger2"));
+	ClimbArm1_R = CreateDefaultSubobject<UChildActorComponent>(TEXT("ClimbArm1_R"));
+	ClimbArm1_R->SetupAttachment(SkeletalComp,FName("R-Arm1"));
+	ClimbArm2_R = CreateDefaultSubobject<UChildActorComponent>(TEXT("ClimbArm2_R"));
+	ClimbArm2_R->SetupAttachment(SkeletalComp,FName("R-Arm2"));
+	
+	ClimbFoot_L = CreateDefaultSubobject<UChildActorComponent>(TEXT("ClimbFoot_L"));
+	ClimbFoot_L->SetupAttachment(SkeletalComp,FName("R-Toe1"));
+	ClimbLeg1_L = CreateDefaultSubobject<UChildActorComponent>(TEXT("ClimbLeg1_L"));
+	ClimbLeg1_L->SetupAttachment(SkeletalComp,FName("R-Foot"));
+	ClimbLeg2_L = CreateDefaultSubobject<UChildActorComponent>(TEXT("ClimbLeg2_L"));
+	ClimbLeg2_L->SetupAttachment(SkeletalComp,FName("R_Leg2"));
+	ClimbLeg3_L = CreateDefaultSubobject<UChildActorComponent>(TEXT("ClimbLeg3_L"));
+	ClimbLeg3_L->SetupAttachment(SkeletalComp,FName("R_Leg3"));
+	
+	ClimbFoot_R = CreateDefaultSubobject<UChildActorComponent>(TEXT("ClimbFoot_R"));
+	ClimbFoot_R->SetupAttachment(SkeletalComp,FName("L-Toe1"));
+	ClimbLeg1_R = CreateDefaultSubobject<UChildActorComponent>(TEXT("ClimbLeg1_R"));
+	ClimbLeg1_R->SetupAttachment(SkeletalComp,FName("L-Foot"));
+	ClimbLeg2_R = CreateDefaultSubobject<UChildActorComponent>(TEXT("ClimbLeg2_R"));
+	ClimbLeg2_R->SetupAttachment(SkeletalComp,FName("L-Leg2"));
+	ClimbLeg3_R = CreateDefaultSubobject<UChildActorComponent>(TEXT("ClimbLeg3_R"));
+	ClimbLeg3_R->SetupAttachment(SkeletalComp,FName("L-Leg3"));
+	
+	ClimbTail1 = CreateDefaultSubobject<UChildActorComponent>(TEXT("ClimbTail1"));
+	ClimbTail1->SetupAttachment(SkeletalComp,FName("Tail02"));
+	ClimbTail2 = CreateDefaultSubobject<UChildActorComponent>(TEXT("ClimbTail2"));
+	ClimbTail2->SetupAttachment(SkeletalComp,FName("Tail04"));
+	ClimbTail3 = CreateDefaultSubobject<UChildActorComponent>(TEXT("ClimbTail3"));
+	ClimbTail3->SetupAttachment(SkeletalComp,FName("Tail06"));
+	ClimbTail4 = CreateDefaultSubobject<UChildActorComponent>(TEXT("ClimbTail4"));
+	ClimbTail4->SetupAttachment(SkeletalComp,FName("Tail08"));
+	ClimbTail5 = CreateDefaultSubobject<UChildActorComponent>(TEXT("ClimbTail5"));
+	ClimbTail5->SetupAttachment(SkeletalComp,FName("Tail10"));
+	
+	ClimbSpine1 = CreateDefaultSubobject<UChildActorComponent>(TEXT("ClimbSpine1"));
+	ClimbSpine1->SetupAttachment(SkeletalComp,FName("SpineSK1"));
+	ClimbSpine2 = CreateDefaultSubobject<UChildActorComponent>(TEXT("ClimbSpine2"));
+	ClimbSpine2->SetupAttachment(SkeletalComp,FName("SpineSK2"));
+	
+	ClimbNeck1 = CreateDefaultSubobject<UChildActorComponent>(TEXT("ClimbNeck1"));
+	ClimbNeck1->SetupAttachment(SkeletalComp,FName("Neck"));
+	ClimbNeck2 = CreateDefaultSubobject<UChildActorComponent>(TEXT("ClimbNeck2"));
+	ClimbNeck2->SetupAttachment(SkeletalComp,FName("Neck1"));
+	ClimbNeck3 = CreateDefaultSubobject<UChildActorComponent>(TEXT("ClimbNeck3"));
+	ClimbNeck3->SetupAttachment(SkeletalComp,FName("Neck2"));
+	ClimbNeck4 = CreateDefaultSubobject<UChildActorComponent>(TEXT("ClimbNeck4"));
+	ClimbNeck4->SetupAttachment(SkeletalComp,FName("Neck3"));
+	ClimbNeck5 = CreateDefaultSubobject<UChildActorComponent>(TEXT("ClimbNeck5"));
+	ClimbNeck5->SetupAttachment(SkeletalComp,FName("Neck4"));
+	
+	ClimbHead = CreateDefaultSubobject<UChildActorComponent>(TEXT("ClimbHead"));
+	ClimbHead->SetupAttachment(SkeletalComp,FName("HeadSK"));
 }
 
 void AHD_Dragon::BeginPlay()
@@ -203,3 +274,6 @@ float AHD_Dragon::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent
 
 	return damage;
 }
+
+
+

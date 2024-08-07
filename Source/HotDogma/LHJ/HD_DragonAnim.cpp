@@ -321,6 +321,7 @@ void UHD_DragonAnim::AnimNotify_StartThunderAttack()
 {
 	if (fsm)
 	{
+		fsm->iThunderCnt = 0;
 		fsm->bStartThunder = true;
 	}
 }

@@ -642,29 +642,31 @@ void UHD_DragonFSM::F_ThunderMagic(const float& DeltaTime)
 	}
 	else
 	{
-		CurrThunderTime += DeltaTime;
-		if (CurrThunderTime >= MakeThunderTime)
+		if(iThunderCnt<4)
 		{
-			CurrThunderTime = 0;
-			iThunderCnt++;
-			for (auto ThunderPoint : ThunderCharacterLoc)
+			CurrThunderTime += DeltaTime;
+			if (CurrThunderTime >= MakeThunderTime)
 			{
-				UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), Dragon->ThunderVFX1, ThunderPoint);
-				UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), Dragon->ThunderVFX2, ThunderPoint);
-				if (ThunderCol)
-					GetWorld()->SpawnActor<AHD_DragonThunderCol>(ThunderCol, ThunderPoint, FRotator::ZeroRotator);
-			}
+				CurrThunderTime = 0;
+				iThunderCnt++;
+				for (auto ThunderPoint : ThunderCharacterLoc)
+				{
+					UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), Dragon->ThunderVFX1, ThunderPoint);
+					UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), Dragon->ThunderVFX2, ThunderPoint);
+					if (ThunderCol)
+						GetWorld()->SpawnActor<AHD_DragonThunderCol>(ThunderCol, ThunderPoint, FRotator::ZeroRotator);
+				}
 
-			if (iThunderCnt == 4)
-			{
-				Anim->ChangeState(DragonState::Idle);
-				isAttack = false;
-				bStartThunder = false;
-				iThunderCnt = 0;
-				if (Dragon)
-					Dragon->strDamageAttackType = "";
+				if (iThunderCnt == 4)
+				{
+					bStartThunder = false;
+					
+					if (Dragon)
+						Dragon->strDamageAttackType = "";
+				}
 			}
 		}
+		
 	}
 }
 

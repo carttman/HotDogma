@@ -24,6 +24,8 @@ void UHD_WarriorStateComponent::BeginPlay()
 	PatternList.Add(EWarriorBattleState::State_ChargedSlash);
 	PatternList.Add(EWarriorBattleState::State_HeavenwardSunder);
 	PatternList.Add(EWarriorBattleState::State_IndomitableLash);
+
+	PatternRotting();
 }
 
 void UHD_WarriorStateComponent::StartBattle()
@@ -79,8 +81,8 @@ void UHD_WarriorStateComponent::CombatCheck()
 				if (CombatTime < CurrentAttackTime)
 				{
 					// 드래곤을 공격한다.
-					//SetBattleState(NextPattern());
-					SetBattleState(EWarriorBattleState::State_MightySweep);
+					SetBattleState(NextPattern());
+					//SetBattleState(EWarriorBattleState::State_MightySweep);
 				}
 				else
 				{
@@ -121,7 +123,7 @@ bool UHD_WarriorStateComponent::FindAttackPoint()
 
 		if (HitResult.bBlockingHit)
 		{
-			DrawDebugLine(GetWorld(), Start, HitResult.ImpactPoint, FColor::Red, false, 0.1f, 0, 1.0f);
+			//DrawDebugLine(GetWorld(), Start, HitResult.ImpactPoint, FColor::Red, false, 0.1f, 0, 1.0f);
 			// 히트된게 캡슐이면 무시한다.
 			if (HitResult.Component->IsA<UCapsuleComponent>())
 			{
@@ -146,7 +148,7 @@ bool UHD_WarriorStateComponent::FindAttackPoint()
 		}
 		else
 		{
-			DrawDebugLine(GetWorld(), Start, End, FColor::Green, false, 0.1f, 0, 1.0f);
+			// DrawDebugLine(GetWorld(), Start, End, FColor::Green, false, 0.1f, 0, 1.0f);
 		}
 	}
 
@@ -258,16 +260,164 @@ void UHD_WarriorStateComponent::MightySweep()
 
 void UHD_WarriorStateComponent::ChargedSlash()
 {
-
+	MaxChargeTime = 4.0f;
+	if (CurrentCombo == 0)
+	{
+		// 드래곤과의 거리
+		if (FindAttackPoint())
+		{
+			float Distance = FVector::Dist(Me->GetActorLocation(), AttackPoint);
+			if (Distance > ChargedSlashRange)
+			{
+				// 드래곤을 향해 이동한다.
+				AIController->MoveToLocation(AttackPoint, ChargedSlashRange - 20.0f, false);
+				// 대상으로 회전한다.
+				FRotator LookAt = UKismetMathLibrary::FindLookAtRotation(Me->GetActorLocation(), AttackPoint);
+				AIController->SetControlRotation(LookAt);
+			}
+			else
+			{
+				// 몽타주 실행
+				WarriorAnimInstance->PlayChargedSlashMontage(CurrentCombo);
+				CurrentCombo++;
+				CurrentAttackTime = 0.0f;
+			}
+		}
+		else
+		{
+			// 다음 공격
+			SetBattleState(EWarriorBattleState::State_CombatCheck);
+		}
+	}
+	else if (CurrentCombo == 1)
+	{
+		if (MaxChargeTime < CurrentAttackTime)
+		{
+			// 몽타주 실행
+			WarriorAnimInstance->PlayChargedSlashMontage(CurrentCombo);
+			CurrentCombo++;
+			CurrentAttackTime = 0.0f;
+		}
+	}
+	else
+	{
+		// 모든 콤보가 종료됨
+		if (PostDelayTime < CurrentAttackTime)
+		{
+			SetBattleState(EWarriorBattleState::State_CombatCheck);
+		}
+	}
 }
 
 void UHD_WarriorStateComponent::HeavenwardSunder()
 {
-
+	MaxChargeTime = 3.0f;
+	if (CurrentCombo == 0)
+	{
+		// 드래곤과의 거리
+		if (FindAttackPoint())
+		{
+			float Distance = FVector::Dist(Me->GetActorLocation(), AttackPoint);
+			if (Distance > HeavenwardSunderRange)
+			{
+				// 드래곤을 향해 이동한다.
+				AIController->MoveToLocation(AttackPoint, HeavenwardSunderRange - 20.0f, false);
+				// 대상으로 회전한다.
+				FRotator LookAt = UKismetMathLibrary::FindLookAtRotation(Me->GetActorLocation(), AttackPoint);
+				AIController->SetControlRotation(LookAt);
+			}
+			else
+			{
+				// 몽타주 실행
+				WarriorAnimInstance->PlayHeavenwardSunderMontage(CurrentCombo);
+				CurrentCombo++;
+				CurrentAttackTime = 0.0f;
+			}
+		}
+		else
+		{
+			// 다음 공격
+			SetBattleState(EWarriorBattleState::State_CombatCheck);
+		}
+	}
+	else if (CurrentCombo == 1)
+	{
+		if (MaxChargeTime < CurrentAttackTime)
+		{
+			// 몽타주 실행
+			// 캐릭터를 점프시킨다.
+			// 충돌을 무시한다.
+			
+			Me->GetCapsuleComponent()->SetCollisionResponseToChannel(ECollisionChannel::ECC_Pawn, ECollisionResponse::ECR_Ignore);
+			Me->LaunchCharacter(FVector(0, 0, 1000), false, false);
+			
+			WarriorAnimInstance->PlayHeavenwardSunderMontage(CurrentCombo);
+			CurrentCombo++;
+			CurrentAttackTime = 0.0f;
+		}
+	}
+	else
+	{
+		// 모든 콤보가 종료됨
+		if (PostDelayTime < CurrentAttackTime)
+		{
+			//충돌체
+			Me->GetCapsuleComponent()->SetCollisionResponseToChannel(ECollisionChannel::ECC_Pawn, ECollisionResponse::ECR_Block);
+			
+			SetBattleState(EWarriorBattleState::State_CombatCheck);
+		}
+	}
 }
 
 void UHD_WarriorStateComponent::IndomitableLash()
 {
+	MaxChargeTime = 5.0f;
+	if (CurrentCombo == 0)
+	{
+		// 드래곤과의 거리
+		if (FindAttackPoint())
+		{
+			float Distance = FVector::Dist(Me->GetActorLocation(), AttackPoint);
+			if (Distance > IndomitableLashRange)
+			{
+				// 드래곤을 향해 이동한다.
+				AIController->MoveToLocation(AttackPoint, IndomitableLashRange - 20.0f, false);
+				// 대상으로 회전한다.
+				FRotator LookAt = UKismetMathLibrary::FindLookAtRotation(Me->GetActorLocation(), AttackPoint);
+				AIController->SetControlRotation(LookAt);
+			}
+			else
+			{
+				// 몽타주 실행
+				WarriorAnimInstance->PlayIndomitableLashMontage(CurrentCombo);
+				CurrentCombo++;
+				CurrentAttackTime = 0.0f;
+			}
+		}
+		else
+		{
+			// 다음 공격
+			SetBattleState(EWarriorBattleState::State_CombatCheck);
+		}
+	}
+	else if (CurrentCombo == 1)
+	{
+		if (MaxChargeTime < CurrentAttackTime)
+		{
+			// 몽타주 실행
+			WarriorAnimInstance->PlayIndomitableLashMontage(CurrentCombo);
+			CurrentCombo++;
+			CurrentAttackTime = 0.0f;
+		}
+	}
+	else
+	{
+		// 모든 콤보가 종료됨
+		if (PostDelayTime < CurrentAttackTime)
+		{
+			SetBattleState(EWarriorBattleState::State_CombatCheck);
+		}
+	}
 
 }
 

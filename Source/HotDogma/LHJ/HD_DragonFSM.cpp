@@ -13,6 +13,7 @@
 #include "Kismet/KismetMathLibrary.h"
 #include "GameFramework/PlayerController.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "Particles/ParticleSystem.h"
 
 #pragma region [Constructor]
 UHD_DragonFSM::UHD_DragonFSM()
@@ -82,8 +83,6 @@ void UHD_DragonFSM::TickComponent(float DeltaTime, ELevelTick TickType, FActorCo
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
-	//double dot = GetRadianFrwomCharacter();
-	//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("Player To Dragon Direction : %f"), dot));
 	FString myState = UEnum::GetValueOrBitfieldAsString(State);
 	DrawDebugString(GetWorld(), Dragon->GetActorLocation(), myState, nullptr, FColor::Yellow, 0);
 	if (Anim)
@@ -113,6 +112,11 @@ void UHD_DragonFSM::TickComponent(float DeltaTime, ELevelTick TickType, FActorCo
 		{
 			ShuffleAttackPattern();
 		}
+		
+		if (RndFlyAttackPattern.size() == 0)
+		{
+			ShuffleFlyAttackPattern();
+		}
 
 		switch (State)
 		{
@@ -130,7 +134,7 @@ void UHD_DragonFSM::TickComponent(float DeltaTime, ELevelTick TickType, FActorCo
 		case DragonState::Attack:
 			F_NormalAttackState(DeltaTime);
 			break;
-		case DragonState::Fly:			
+		case DragonState::Fly:
 			break;
 		case DragonState::FlyDown:
 			Anim->isFly = false;
@@ -180,22 +184,22 @@ void UHD_DragonFSM::IdleState(const float& DeltaTime)
 			}
 			else
 			{
-				if(Anim->isFly)
+				if (Anim->isFly)
 				{
 					F_NormalIdle(DeltaTime);
 				}
 				else
 				{
-					if(RequiredSkillCnt==CurrUsedSkillCnt)
+					if (RequiredSkillCnt == CurrUsedSkillCnt)
 					{
 						Anim->ChangeAttackState(AttackState::None);
 						Anim->ChangeState(DragonState::Fly);
 					}
 					else
 					{
-						F_NormalIdle(DeltaTime);					
+						F_NormalIdle(DeltaTime);
 					}
-				}				
+				}
 			}
 		}
 		else
@@ -205,7 +209,7 @@ void UHD_DragonFSM::IdleState(const float& DeltaTime)
 	}
 }
 
-void UHD_DragonFSM::F_NormalIdle(const float &DeltaTime)
+void UHD_DragonFSM::F_NormalIdle(const float& DeltaTime)
 {
 	// 타겟을 지정한다.
 	ACharacter* ClosestCharacter = nullptr;
@@ -220,9 +224,9 @@ void UHD_DragonFSM::F_NormalIdle(const float &DeltaTime)
 			MinDistance = Distance;
 			ClosestCharacter = Character;
 			NearTargetActor = ClosestCharacter;
-		}		
+		}
 	}
-	
+
 	// 공격 범위 내에 들어오면
 	if (NearTargetActor && MinDistance < AttackDist)
 	{
@@ -284,6 +288,11 @@ void UHD_DragonFSM::F_NormalAttackState(const float& DeltaTime)
 	{
 		Anim->InnerAngle = GetRadianFromCharacter();
 		Anim->chkAngle = true;
+	}
+	if (normalAttackState == AttackState::ThunderMagic)
+	{
+		if (bStartThunder)
+			F_ThunderMagic(DeltaTime);
 	}
 }
 #pragma endregion
@@ -405,6 +414,19 @@ void UHD_DragonFSM::ShuffleAttackPattern()
 	std::shuffle(RndAttackPattern.begin(), RndAttackPattern.end(), g);
 }
 
+void UHD_DragonFSM::ShuffleFlyAttackPattern()
+{
+	// Random number generator
+	std::random_device rd;
+	std::mt19937 g(rd());
+
+	// 사용 스킬 목록을 복사
+	RndFlyAttackPattern = OrgFlyAttackPattern;
+
+	// Shuffle the vector
+	std::shuffle(RndFlyAttackPattern.begin(), RndFlyAttackPattern.end(), g);
+}
+
 void UHD_DragonFSM::ChooseAttackState()
 {
 	if (Anim->isFly)
@@ -412,7 +434,7 @@ void UHD_DragonFSM::ChooseAttackState()
 		// 공중날고 있을때 사용가능 스킬 - 3개
 		// Breath, ThunderMagic, Meteor
 		// 30 20 20
-		int_rand = FMath::RandRange(1, 70);
+		//int_rand = FMath::RandRange(1, 70);
 		// if (int_rand > 50)
 		// {
 		// 	//ThunderMagic
@@ -426,10 +448,24 @@ void UHD_DragonFSM::ChooseAttackState()
 		// 	Anim->ChangeState(DragonState::Idle);
 		// }
 		// else if (int_rand > 0)
-		if (int_rand > 0)
+		// if (int_rand > 0)
+		// {
+		// 	//Breath
+		// 	Anim->ChangeAttackState(AttackState::Breath);
+		// }
+
+		if (RndFlyAttackPattern.size() > 0)
 		{
-			//Breath
-			Anim->ChangeAttackState(AttackState::Breath);
+			AttackState attack = RndFlyAttackPattern[0];
+			Anim->ChangeAttackState(attack);
+			RndFlyAttackPattern.erase(RndFlyAttackPattern.begin());
+		}
+		else
+		{
+			ShuffleFlyAttackPattern();
+			AttackState attack = RndFlyAttackPattern[0];
+			Anim->ChangeAttackState(attack);
+			RndFlyAttackPattern.erase(RndFlyAttackPattern.begin());
 		}
 	}
 	else
@@ -548,6 +584,92 @@ void UHD_DragonFSM::BreathREnd()
 {
 }
 
-void UHD_DragonFSM::F_ThunderMagic()
+void UHD_DragonFSM::F_ThunderMagic(const float& DeltaTime)
 {
+	F_GetCharacterLoc_Thunder();
+
+	if (iThunderCnt == 0)
+	{
+		int_rand_Thunder = FMath::RandRange(1, 2); // << 이거 문제 많다
+		if (int_rand_Thunder == 1)
+		{
+			ThunderPatern.push_back(Dragon->ThunderPoint1->GetComponentLocation());
+			ThunderPatern.push_back(Dragon->ThunderPoint3->GetComponentLocation());
+			ThunderPatern.push_back(Dragon->ThunderPoint5->GetComponentLocation());
+			ThunderPatern.push_back(Dragon->ThunderPoint7->GetComponentLocation());
+			// ThunderPatern = {
+			// 	Dragon->ThunderPoint1->GetComponentLocation(),
+			// 	Dragon->ThunderPoint3->GetComponentLocation(),
+			// 	Dragon->ThunderPoint5->GetComponentLocation(),
+			// 	Dragon->ThunderPoint7->GetComponentLocation(),
+			// };
+		}
+		else
+		{
+			ThunderPatern.push_back(Dragon->ThunderPoint2->GetComponentLocation());
+			ThunderPatern.push_back(Dragon->ThunderPoint4->GetComponentLocation());
+			ThunderPatern.push_back(Dragon->ThunderPoint6->GetComponentLocation());
+			ThunderPatern.push_back(Dragon->ThunderPoint8->GetComponentLocation());
+			// ThunderPatern = {
+			// 	Dragon->ThunderPoint2->GetComponentLocation(),
+			// 	Dragon->ThunderPoint4->GetComponentLocation(),
+			// 	Dragon->ThunderPoint6->GetComponentLocation(),
+			// 	Dragon->ThunderPoint8->GetComponentLocation(),
+			// };
+		}
+
+		// 처음 떨어지는 번개는
+		// 드래곤 주변 4곳과 플레이어 위치에 떨어트리고 싶다.
+		for (auto ThunderPoint : ThunderPatern)
+		{
+			UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), Dragon->ThunderVFX1, ThunderPoint);
+			UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), Dragon->ThunderVFX2, ThunderPoint);
+		}
+
+		for (auto ThunderPoint : ThunderCharacterLoc)
+		{
+			
+			UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), Dragon->ThunderVFX1, ThunderPoint);
+			UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), Dragon->ThunderVFX2, ThunderPoint);
+			// UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), Dragon->ThunderVFX1, ThunderPoint,
+			//                                          FRotator::ZeroRotator, FVector(1), false);
+		}
+
+		ThunderPatern.clear();
+		iThunderCnt++;
+	}
+	else
+	{
+		CurrThunderTime+=DeltaTime;
+		if(CurrThunderTime>=MakeThunderTime)
+		{
+			CurrThunderTime=0;
+			iThunderCnt++;
+			for (auto ThunderPoint : ThunderCharacterLoc)
+			{
+				UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), Dragon->ThunderVFX1, ThunderPoint);
+				UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), Dragon->ThunderVFX2, ThunderPoint);
+			}
+
+			if (iThunderCnt == 4)
+			{
+				Anim->ChangeState(DragonState::Idle);
+				isAttack = false;
+				bStartThunder = false;
+				iThunderCnt = 0;
+				if (Dragon)
+					Dragon->strDamageAttackType = "";
+			}
+		}
+	}
+}
+
+void UHD_DragonFSM::F_GetCharacterLoc_Thunder()
+{
+	ThunderCharacterLoc.clear();
+
+	for (auto charac : Dragon->CharacterArr)
+	{
+		ThunderCharacterLoc.push_back(charac->GetActorLocation());
+	}
 }

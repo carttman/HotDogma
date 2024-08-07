@@ -61,6 +61,8 @@ void UHD_SorcererStateComponent::BeginPlay()
 	PatternList.Add(ESorcererBattleState::State_Levitate);
 	PatternList.Add(ESorcererBattleState::State_ArgentSuccor);
 	//PatternList.Add(ESorcererBattleState::State_Galvanize);
+
+	PatternRotting();
 }
 
 void UHD_SorcererStateComponent::StartBattle()

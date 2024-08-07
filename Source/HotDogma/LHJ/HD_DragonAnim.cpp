@@ -167,7 +167,7 @@ bool UHD_DragonAnim::GetAttackPress(const float& AttackDistance)
 	return bRtn;
 }
 
-void UHD_DragonAnim::AnimNotify_StartTailSlap()
+void UHD_DragonAnim::AnimNotify_MyStartTailSlap()
 {
 	Dragon->TailCollision->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
 }
@@ -310,13 +310,19 @@ void UHD_DragonAnim::AnimNotify_AttackShout()
 			Dragon->strDamageAttackType = "Shout";
 
 			UGameplayStatics::ApplyDamage(OtherActor, fsm->Damage_Shout, Dragon->GetController(), Dragon,
-										  UDamageType::StaticClass());
+			                              UDamageType::StaticClass());
 		}
 
 		DamageActorSet.Empty();
 	}
 }
 
-void UHD_DragonAnim::AnimNotify_StartThunder()
+void UHD_DragonAnim::AnimNotify_StartThunderAttack()
 {
+	if (fsm)
+	{
+		
+
+		fsm->bStartThunder=true;
+	}
 }

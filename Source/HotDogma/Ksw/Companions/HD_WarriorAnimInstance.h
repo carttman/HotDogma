@@ -19,11 +19,26 @@ public:
 	virtual void NativeInitializeAnimation() override;
 
 	// 총쏘기 애니메이션을 재생하고 싶다.
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Movement")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Attack")
 	UAnimMontage* AttackMontage;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Movement")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Attack")
 	UAnimMontage* DieMontage;
 
-	void PlayAttackMontage(int combo);
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Attack")
+	UAnimMontage* ChargedSlashMontage;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Attack")
+	UAnimMontage* HeavenwardSunderMontage;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Attack")
+	UAnimMontage* IndomitableLashMontage;
+
+	void PlayAttackMontage(int32 combo);
+
+	void PlayChargedSlashMontage(int32 step);
+
+	void PlayHeavenwardSunderMontage(int32 step);
+
+	void PlayIndomitableLashMontage(int32 step);
 };

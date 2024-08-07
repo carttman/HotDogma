@@ -201,6 +201,7 @@ void AHD_Dragon::BeginPlay()
 
 	if (ThunderVFX2)
 		ThunderVFX2->Delay = 0.25f;
+
 }
 
 void AHD_Dragon::Tick(float DeltaTime)

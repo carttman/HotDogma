@@ -168,7 +168,7 @@ public:
 	float PlayShoutAnimTime = 5.f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	float DuringIdleTime = 1.f;
+	float DuringIdleTime = 2.f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float CurrIdleTime;
@@ -285,10 +285,13 @@ public:
 	int int_rand_Thunder = 0;
 
 	UPROPERTY(EditAnywhere)
-	float MakeThunderTime = 0.05f;
+	float MakeThunderTime = 1.f;
 
 	UPROPERTY()
 	float CurrThunderTime = 0.f;
+
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<class AHD_DragonThunderCol> ThunderCol;
 
 #pragma endregion
 };

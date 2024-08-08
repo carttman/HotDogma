@@ -3,6 +3,11 @@
 
 #include "../../HD_Character/HD_PlayerComponent/PlayerStatusComponent.h"
 
+#include "HotDogma/HD_Character/HD_CharacterBase.h"
+#include "HotDogma/HD_Character/HD_CharacterPlayer.h"
+#include "HotDogma/HD_GameModeBase/CHJ_GameMode.h"
+#include "HotDogma/UI/HD_PlayerWidget.h"
+
 // Sets default values for this component's properties
 UPlayerStatusComponent::UPlayerStatusComponent()
 {
@@ -20,7 +25,11 @@ void UPlayerStatusComponent::BeginPlay()
 	Super::BeginPlay();
 
 	// ...
-	
+	Player = Cast<AHD_CharacterBase>(GetOwner());
+	CharacterPlayer = Cast<AHD_CharacterPlayer>(Player);
+	GameMode = Cast<ACHJ_GameMode>(GetWorld()->GetAuthGameMode());
+
+	CurrHP = MaxHP;
 }
 
 
@@ -30,6 +39,11 @@ void UPlayerStatusComponent::TickComponent(float DeltaTime, ELevelTick TickType,
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 	
 	// ...
+}
+
+void UPlayerStatusComponent::UpdateWidgetHP()
+{
+	GameMode->PlayerWidget->SetHP(CurrHP, MaxHP);
 }
 
 

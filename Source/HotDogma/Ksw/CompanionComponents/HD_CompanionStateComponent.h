@@ -60,6 +60,7 @@ public:
 	void StopMove();
 	void DoHelp();
 
+	void RotateToTarget(float DeltaTime, FVector Target);
 	void SetState(ECompanionState State);
 
 	FVector MovePoint;

@@ -52,8 +52,8 @@ public:
 	FVector AttackPoint;
 	
 	float CurrentAttackTime = 0.0f;
-	
-	float CombatTime = 1.0f;
+	bool bStrafing = false;
+	float CombatTime = 3.0f;
 	
 	// MightySweep
 	int CurrentCombo = 0;

@@ -49,7 +49,6 @@ public:
 	void ArgentSuccor();
 	void Galvanize();
 
-	void RotateToTarget(float DeltaTime);
 	void LevitateTick(float DeltaTime);
 	UFUNCTION()
 	void EndLevitate();
@@ -83,7 +82,8 @@ public:
 
 	float CurrentAttackTime = 0.0f;
 
-	float CombatTime = 1.0f;
+	bool bStrafing = false;
+	float CombatTime = 2.0f;
 
 	// MagickBolt
 	bool bCastingMagickBolt = false;

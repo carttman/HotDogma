@@ -8,6 +8,7 @@
 #include "HD_PlayerComponent/HD_PlayerAttackComponent.h"
 #include "HD_PlayerComponent/PlayerStatusComponent.h"
 #include "HD_PlayerItem/HD_PlayerWeaponBase.h"
+#include "HotDogma/HD_GameModeBase/CHJ_GameMode.h"
 #include "HotDogma/LHJ/HD_Dragon.h"
 #include "Kismet/GameplayStatics.h"
 
@@ -77,7 +78,7 @@ float AHD_CharacterPlayer::TakeDamage(float DamageAmount, FDamageEvent const& Da
 	UE_LOG(LogTemp, Warning, TEXT("%s Takes Damage : %f"), *GetName(), damage);
 	PlayerStatusComponent->CurrHP -= damage;
 	UE_LOG(LogTemp, Warning, TEXT("%s Takes Damage : %f"), *GetName(), PlayerStatusComponent->CurrHP);
-	
+	PlayerGameMode->SetHPUI(PlayerStatusComponent->CurrHP, PlayerStatusComponent->MaxHP);
 	if(!PlayerAttackComponent->IsClimb) // 등산중일때 슈퍼아머
 	{
 		if(DamageCauser)

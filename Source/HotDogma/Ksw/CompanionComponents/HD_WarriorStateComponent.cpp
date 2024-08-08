@@ -38,10 +38,13 @@ void UHD_WarriorStateComponent::AttackTick(float DeltaTime)
 {
 	Super::AttackTick(DeltaTime);
 	CurrentAttackTime += DeltaTime;
+	Me->GetCharacterMovement()->MaxWalkSpeed = 400;
+	Me->GetCharacterMovement()->bOrientRotationToMovement = true;
 	switch (CurrentBattleState)
 	{
 		case EWarriorBattleState::State_CombatCheck:
 			CombatCheck();
+			RotateToTarget(DeltaTime, TargetPawn->GetActorLocation());
 			break;
 		case EWarriorBattleState::State_MightySweep:
 			MightySweep();
@@ -63,6 +66,9 @@ void UHD_WarriorStateComponent::AttackTick(float DeltaTime)
 
 void UHD_WarriorStateComponent::CombatCheck()
 {
+	Me->GetCharacterMovement()->MaxWalkSpeed = 250;
+	Me->GetCharacterMovement()->bOrientRotationToMovement = false;
+
 	// 전투 상태에서는 드래곤을 공격한다.
 	if (AIController)
 	{
@@ -71,10 +77,10 @@ void UHD_WarriorStateComponent::CombatCheck()
 			// 드래곤과의 거리
 			float Distance = FVector::Dist(Me->GetActorLocation(), TargetPawn->GetActorLocation());
 			// FindAttackPoint();
-			if (Distance > 700)
+			if (Distance > 1200)
 			{
 				// 타겟 대상으로 좌우로 조금씩 이동한다.
-				AIController->MoveToActor(TargetPawn, 300.0f);
+				AIController->MoveToActor(TargetPawn, 1000.0f);
 			}
 			else
 			{
@@ -84,7 +90,7 @@ void UHD_WarriorStateComponent::CombatCheck()
 					ACHJ_GameMode* gameMode = Cast<ACHJ_GameMode>(GetWorld()->GetAuthGameMode());
 					if (gameMode)
 					{
-						FVector Loc = gameMode->CompanionManager->StrafingLocation(Me, TargetPawn, 900);
+						FVector Loc = gameMode->CompanionManager->StrafingLocation(Me, TargetPawn, 10, 900);
 						AIController->MoveToLocation(Loc, 100.0f);
 					}
 				}
@@ -94,11 +100,6 @@ void UHD_WarriorStateComponent::CombatCheck()
 					// 드래곤을 공격한다.
 					SetBattleState(NextPattern());
 					bStrafing = false;
-					//SetBattleState(EWarriorBattleState::State_MightySweep);
-				}
-				else
-				{
-					// 타겟을 원점으로 원형으로 이동시킨다.
 				}
 			}
 		}

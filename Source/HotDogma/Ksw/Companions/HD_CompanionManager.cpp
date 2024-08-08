@@ -201,13 +201,13 @@ bool CompareDistance(const TPair<FVector, float>& A, const TPair<FVector, float>
 	return A.Value < B.Value;
 }
 
-FVector AHD_CompanionManager::StrafingLocation(APawn* AiPlayer, APawn* Target, float Range)
+FVector AHD_CompanionManager::StrafingLocation(APawn* AiPlayer, APawn* Target, int LocCount, float Range)
 {
 	TArray<FVector> Directions;
 	// Target을 기준으로 Range 범위에 있는 16개 위치들을 구한다.
-	for (int32 i = 0; i < 16; i++)
+	for (int32 i = 0; i < LocCount; i++)
 	{
-		float AngleDegrees = i * 22.5f;
+		float AngleDegrees = i * 360.0f/ LocCount;
 		float AngleRadians = FMath::DegreesToRadians(AngleDegrees);
 
 		FVector Direction = FVector(FMath::Cos(AngleRadians), FMath::Sin(AngleRadians), 0.0f);

@@ -85,6 +85,9 @@ void UHD_SorcererStateComponent::AttackTick(float DeltaTime)
 	Super::AttackTick(DeltaTime);
 	CurrentAttackTime += DeltaTime;
 
+	Me->GetCharacterMovement()->MaxWalkSpeed = 150;
+	Me->GetCharacterMovement()->bOrientRotationToMovement = false;
+	
 	switch (CurrentBattleState)
 	{
 		case ESorcererBattleState::State_CombatCheck:
@@ -114,7 +117,7 @@ void UHD_SorcererStateComponent::AttackTick(float DeltaTime)
 		LevitateTick(DeltaTime);
 	}
 
-	RotateToTarget(DeltaTime);
+	RotateToTarget(DeltaTime, TargetPawn->GetActorLocation());
 
 	FString myState = UEnum::GetValueOrBitfieldAsString(CurrentBattleState);
 	DrawDebugString(GetWorld(), GetOwner()->GetActorLocation() + FVector(0, 0, 100), myState, 0, FColor::Yellow, 0);
@@ -124,11 +127,11 @@ void UHD_SorcererStateComponent::SetBattleState(ESorcererBattleState state)
 {
 	CurrentBattleState = state;
 	CurrentAttackTime = 0.0f;
-	
 }
 
 void UHD_SorcererStateComponent::CombatCheck()
-{// 전투 상태에서는 드래곤을 공격한다.
+{
+	// 전투 상태에서는 드래곤을 공격한다.
 	if (AIController)
 	{
 		if (TargetPawn != nullptr)
@@ -148,7 +151,7 @@ void UHD_SorcererStateComponent::CombatCheck()
 					ACHJ_GameMode* gameMode = Cast<ACHJ_GameMode>(GetWorld()->GetAuthGameMode());
 					if (gameMode)
 					{
-						FVector Loc = gameMode->CompanionManager->StrafingLocation(Me, TargetPawn, 1300);
+						FVector Loc = gameMode->CompanionManager->StrafingLocation(Me, TargetPawn, 16, 1300);
 						AIController->MoveToLocation(Loc, 100.0f);
 					}
 				}
@@ -158,10 +161,6 @@ void UHD_SorcererStateComponent::CombatCheck()
 					// 드래곤을 공격한다.
 					SetBattleState(NextPattern());
 					bStrafing = false;
-				}
-				else
-				{
-					// 타겟을 원점으로 원형으로 이동시킨다.
 				}
 			}
 		}
@@ -314,8 +313,7 @@ void UHD_SorcererStateComponent::Levitate()
 	Me->GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_Flying);
 
 	// 천천히 올린다.
-	Me->GetCharacterMovement()->MaxFlySpeed = 150;
-	Me->GetCharacterMovement()->bOrientRotationToMovement = false;
+	Me->GetCharacterMovement()->MaxFlySpeed = 50;
 
 	//Me->AddMovementInput(FVector(0, 0, 1), 0.5);
 	// 회전을 못하게 막는다.
@@ -327,7 +325,7 @@ void UHD_SorcererStateComponent::Levitate()
 void UHD_SorcererStateComponent::EndLevitate()
 {
 	// 중력을 다시 적용한다.
-	Me->GetCharacterMovement()->bOrientRotationToMovement = true;
+	// Me->GetCharacterMovement()->bOrientRotationToMovement = true;
 	Me->GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_Walking);
 	SorcererAnimInstance->EndLevitate();
 	bMaxLevitate = false;
@@ -363,20 +361,6 @@ void UHD_SorcererStateComponent::ArgentSuccor()
 
 void UHD_SorcererStateComponent::Galvanize()
 {
-}
-
-void UHD_SorcererStateComponent::RotateToTarget(float DeltaTime)
-{
-	FVector Direction = (AttackPoint - Me->GetActorLocation()).GetSafeNormal2D(); // z축만 계산
-	FRotator TargetRotation = Direction.Rotation();
-
-	// 부드러운 회전을 위해 InterpTo 함수 사용
-	FRotator NewRotation = FMath::RInterpTo(Me->GetActorRotation(), TargetRotation, DeltaTime, 5.0f);
-	NewRotation.Pitch = Me->GetActorRotation().Pitch; // 피치 값 유지
-	NewRotation.Roll = Me->GetActorRotation().Roll; // 롤 값 유지
-
-	// 캐릭터의 회전 값을 업데이트
-	Me->SetActorRotation(NewRotation);
 }
 
 void UHD_SorcererStateComponent::LevitateTick(float DeltaTime)

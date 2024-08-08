@@ -78,10 +78,22 @@ void UHD_WarriorStateComponent::CombatCheck()
 			}
 			else
 			{
+				if (!bStrafing)
+				{
+					bStrafing = true;
+					ACHJ_GameMode* gameMode = Cast<ACHJ_GameMode>(GetWorld()->GetAuthGameMode());
+					if (gameMode)
+					{
+						FVector Loc = gameMode->CompanionManager->StrafingLocation(Me, TargetPawn, 900);
+						AIController->MoveToLocation(Loc, 100.0f);
+					}
+				}
+
 				if (CombatTime < CurrentAttackTime)
 				{
 					// 드래곤을 공격한다.
 					SetBattleState(NextPattern());
+					bStrafing = false;
 					//SetBattleState(EWarriorBattleState::State_MightySweep);
 				}
 				else

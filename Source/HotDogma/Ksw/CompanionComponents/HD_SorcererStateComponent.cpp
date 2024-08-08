@@ -135,7 +135,6 @@ void UHD_SorcererStateComponent::CombatCheck()
 		{
 			FindAttackPoint();
 			float Distance = FVector::Dist(Me->GetActorLocation(), AttackPoint);
-			// FindAttackPoint();
 			if (Distance > 1500)
 			{
 				// 타겟 대상으로 좌우로 조금씩 이동한다.
@@ -143,10 +142,22 @@ void UHD_SorcererStateComponent::CombatCheck()
 			}
 			else
 			{
+				if (!bStrafing)
+				{
+					bStrafing = true;
+					ACHJ_GameMode* gameMode = Cast<ACHJ_GameMode>(GetWorld()->GetAuthGameMode());
+					if (gameMode)
+					{
+						FVector Loc = gameMode->CompanionManager->StrafingLocation(Me, TargetPawn, 1300);
+						AIController->MoveToLocation(Loc, 100.0f);
+					}
+				}
+
 				if (CombatTime < CurrentAttackTime)
 				{
 					// 드래곤을 공격한다.
 					SetBattleState(NextPattern());
+					bStrafing = false;
 				}
 				else
 				{

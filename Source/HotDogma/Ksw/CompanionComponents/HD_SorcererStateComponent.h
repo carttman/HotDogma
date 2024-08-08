@@ -83,6 +83,7 @@ public:
 
 	float CurrentAttackTime = 0.0f;
 
+	bool bStrafing = false;
 	float CombatTime = 1.0f;
 
 	// MagickBolt

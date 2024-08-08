@@ -196,6 +196,82 @@ void AHD_CompanionManager::MoveBoid(UHD_CompanionStateComponent* Companion, FVec
 	Companion->SetMovePoint(PlayerLocation, Pos);
 }
 
+bool CompareDistance(const TPair<FVector, float>& A, const TPair<FVector, float>& B)
+{
+	return A.Value < B.Value;
+}
+
+FVector AHD_CompanionManager::StrafingLocation(APawn* AiPlayer, APawn* Target, float Range)
+{
+	TArray<FVector> Directions;
+	// Target을 기준으로 Range 범위에 있는 16개 위치들을 구한다.
+	for (int32 i = 0; i < 16; i++)
+	{
+		float AngleDegrees = i * 22.5f;
+		float AngleRadians = FMath::DegreesToRadians(AngleDegrees);
+
+		FVector Direction = FVector(FMath::Cos(AngleRadians), FMath::Sin(AngleRadians), 0.0f);
+		FVector Position = Target->GetActorLocation() + Direction * Range;
+
+		Directions.Add(Position);
+	}
+
+	// Direction 위치에 Debug Draw Circle
+	for (int32 i = 0; i < Directions.Num(); i++)
+	{
+		DrawDebugSphere(GetWorld(), Directions[i], 50.0f, 16, FColor::Green, false, 0.0f);
+	}
+
+	// AiPlayer 위치에서 가장 가깝고 다른 플레이어와 상대적으로 먼 위치를 구한다.
+	int32 AIPlayerIdx = 0;
+	TArray<FVector> CompanionsPos;
+	for (int32 i = 0; i < Companions.Num(); i++)
+	{
+		if (Companions[i]->Me != AiPlayer)
+		{
+			CompanionsPos.Add(Companions[i]->Me->GetActorLocation());
+		}
+	}
+
+	// 3개정도 BestLocation을 구한다.
+	TArray<FVector> BestLocations;
+	TArray<TPair<FVector, float>> ValidLocations;
+
+	for (int32 i = 0; i < Directions.Num(); i++)
+	{
+		bool bIgnor = false;
+		for (int32 j = 0; j < CompanionsPos.Num(); j++)
+		{
+			float Distance = FVector::Dist(Directions[i], CompanionsPos[j]);
+			if (Distance < (Range / 2))
+			{
+				bIgnor = true;
+				break;
+			}
+		}
+
+		if (!bIgnor)
+		{
+			float Distance = FVector::Dist(Directions[i], AiPlayer->GetActorLocation());
+			ValidLocations.Add(TPair<FVector, float>(Directions[i], Distance));
+		}
+	}
+
+	ValidLocations.Sort(CompareDistance);
+	for (int32 i = 0; i < FMath::Min(3, ValidLocations.Num()); ++i)
+	{
+		BestLocations.Add(ValidLocations[i].Key);
+	}
+
+	if (BestLocations.Num() == 0)
+	{
+		return AiPlayer->GetActorLocation();
+	}
+
+	int32 RandomIndex = FMath::RandRange(0, BestLocations.Num() - 1);
+	return BestLocations[RandomIndex];
+}
+
 void AHD_CompanionManager::SetCommand(ECompanionCommand Command)
 {
 	CurrentCommand = Command;

@@ -25,23 +25,26 @@ public:
 
 	UFUNCTION()
 	void OnOverlapBegin_Scratch(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor,
-						class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep,
-						const FHitResult& SweepResult);
+	                            class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep,
+	                            const FHitResult& SweepResult);
 
 	UFUNCTION()
 	void OnOverlapBegin_TailSlap(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor,
-						class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep,
-						const FHitResult& SweepResult);
+	                             class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep,
+	                             const FHitResult& SweepResult);
+
+	UPROPERTY()
+	class ACHJ_GameMode* gm;
 	
 	UPROPERTY(EditAnywhere)
 	class UCapsuleComponent* HandCollision_R;
-	
+
 	UPROPERTY(EditAnywhere)
 	class UCapsuleComponent* HandCollision_L;
-	
+
 	UPROPERTY(EditAnywhere)
 	class UCapsuleComponent* TailCollision;
-	
+
 	// 공격 추적용
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	class UCapsuleComponent* TargetPoint1;
@@ -95,26 +98,26 @@ public:
 	TSet<AActor*> DamageActorSet;
 
 	// ThunderMagic Point
-	UPROPERTY(EditAnywhere,BlueprintReadWrite)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	class USceneComponent* ThunderPoint1;
-	UPROPERTY(EditAnywhere,BlueprintReadWrite)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	class USceneComponent* ThunderPoint2;
-	UPROPERTY(EditAnywhere,BlueprintReadWrite)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	class USceneComponent* ThunderPoint3;
-	UPROPERTY(EditAnywhere,BlueprintReadWrite)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	class USceneComponent* ThunderPoint4;
-	UPROPERTY(EditAnywhere,BlueprintReadWrite)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	class USceneComponent* ThunderPoint5;
-	UPROPERTY(EditAnywhere,BlueprintReadWrite)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	class USceneComponent* ThunderPoint6;
-	UPROPERTY(EditAnywhere,BlueprintReadWrite)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	class USceneComponent* ThunderPoint7;
-	UPROPERTY(EditAnywhere,BlueprintReadWrite)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	class USceneComponent* ThunderPoint8;
 
 	UFUNCTION()
 	void CreateThunderPoint();
-	
+
 	UPROPERTY()
 	FString strDamageAttackType;
 
@@ -126,7 +129,7 @@ public:
 
 	UPROPERTY(EditDefaultsOnly)
 	class UParticleSystem* MeteorVFX;
-	
+
 	// 클라이밍용
 	UPROPERTY(EditAnywhere)
 	class UChildActorComponent* ClimbHand_L;
@@ -189,6 +192,15 @@ public:
 
 	UPROPERTY(EditAnywhere)
 	class UChildActorComponent* ClimbHead;
+
+	UPROPERTY(EditAnywhere)
+	class USceneComponent* MeteorPoint1;
+	UPROPERTY(EditAnywhere)
+	class USceneComponent* MeteorPoint2;
+	UPROPERTY(EditAnywhere)
+	class USceneComponent* MeteorPoint3;
+	UPROPERTY(EditAnywhere)
+	class USceneComponent* MeteorPoint4;
 
 	UFUNCTION()
 	void CreateClimbCollision();

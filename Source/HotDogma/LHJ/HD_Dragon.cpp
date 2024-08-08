@@ -105,8 +105,6 @@ AHD_Dragon::AHD_Dragon()
 	MeteorPoint4 = CreateDefaultSubobject<USceneComponent>(TEXT("MeteorPoint4"));
 	MeteorPoint4->SetupAttachment(SkeletalComp);
 	MeteorPoint4->SetRelativeLocation(FVector(350,-150,450));
-
-	gm = Cast<ACHJ_GameMode>(GetWorld()->GetAuthGameMode());
 }
 
 void AHD_Dragon::CreateThunderPoint()
@@ -218,6 +216,7 @@ void AHD_Dragon::BeginPlay()
 	if (ThunderVFX2)
 		ThunderVFX2->Delay = 0.25f;
 
+	gm = Cast<ACHJ_GameMode>(GetWorld()->GetAuthGameMode());
 }
 
 void AHD_Dragon::Tick(float DeltaTime)

@@ -168,16 +168,12 @@ void AHD_CharacterBase::EnhancedMove(const FInputActionValue& InputActionValue)
 		switch (GetCharacterMovement()->MovementMode)
 		{
 		case MOVE_Walking:// Walking일 때
-			if(!IsKnockDown)
-			{
+			if(IsKnockDown) return;
+			if(IsHit) return;
 			// add movement 
 			AddMovementInput(ForwardDirection, MovementVector.Y);
 			AddMovementInput(RightDirection, MovementVector.X);
-			}
-			else
-			{
-				UE_LOG(LogTemp, Warning, TEXT("Knock"));
-			}
+			
 			break;
 		case MOVE_Falling:
 
@@ -203,11 +199,10 @@ void AHD_CharacterBase::EnhancedMove(const FInputActionValue& InputActionValue)
 
 void AHD_CharacterBase::EnhancedJump(const FInputActionValue& InputActionValue)
 {
-	if(!IsKnockDown)
-	{
-		
-		Jump();
-	}
+	if(IsKnockDown) return;
+	if(IsHit) return;
+	Jump();
+	
 }
 
 void AHD_CharacterBase::EnhancedLook(const FInputActionValue& InputActionValue)

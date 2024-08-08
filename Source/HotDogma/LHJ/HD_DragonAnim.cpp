@@ -321,6 +321,16 @@ void UHD_DragonAnim::AnimNotify_StartThunderAttack()
 {
 	if (fsm)
 	{
+		fsm->iCastingCnt = 0;
 		fsm->bStartThunder = true;
+	}
+}
+
+void UHD_DragonAnim::AnimNotify_StartMeteorAttack()
+{
+	if (fsm)
+	{
+		fsm->iCastingCnt = 0;
+		fsm->bStartMeteor = true;
 	}
 }

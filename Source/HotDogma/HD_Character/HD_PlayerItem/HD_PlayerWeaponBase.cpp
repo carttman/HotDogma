@@ -10,6 +10,7 @@
 #include "HotDogma/HD_Character/HD_PlayerComponent/HD_PlayerAttackComponent.h"
 #include "HotDogma/LHJ/HD_Dragon.h"
 #include "Kismet/GameplayStatics.h"
+#include "NiagaraFunctionLibrary.h"
 
 // Sets default values
 AHD_PlayerWeaponBase::AHD_PlayerWeaponBase()
@@ -60,7 +61,7 @@ void AHD_PlayerWeaponBase::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, A
 		//UE_LOG(LogTemp, Warning, TEXT("Hit Dragon"));
 		FDamageEvent DamageEvent;
 		UGameplayStatics::ApplyDamage(OtherActor, 10.0f, Player->GetController(), this, UDamageType::StaticClass());
-
+		UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), BloodVFX, GetActorLocation(), GetActorRotation());
 		// if(Player->PlayerAttackComponent->IsCutting)
 		// {
 		// 	UE_LOG(LogTemp, Warning, TEXT("Slow"));

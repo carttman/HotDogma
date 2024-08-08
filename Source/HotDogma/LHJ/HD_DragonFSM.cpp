@@ -295,6 +295,11 @@ void UHD_DragonFSM::F_NormalAttackState(const float& DeltaTime)
 		if (bStartThunder)
 			F_ThunderMagic(DeltaTime);
 	}
+	if(normalAttackState==AttackState::Meteor)
+	{
+		if(bStartMeteor)
+			F_MeteorMagic(DeltaTime);
+	}
 }
 #pragma endregion
 
@@ -587,23 +592,17 @@ void UHD_DragonFSM::BreathREnd()
 
 void UHD_DragonFSM::F_ThunderMagic(const float& DeltaTime)
 {
-	F_GetCharacterLoc_Thunder();
+	F_GetCharacterLoc_Casting();
 
-	if (iThunderCnt == 0)
+	if (iCastingCnt == 0)
 	{
-		int_rand_Thunder = FMath::RandRange(1, 2); // << 이거 문제 많다
+		int_rand_Thunder = FMath::RandRange(1, 2);
 		if (int_rand_Thunder == 1)
 		{
 			ThunderPatern.push_back(Dragon->ThunderPoint1->GetComponentLocation());
 			ThunderPatern.push_back(Dragon->ThunderPoint3->GetComponentLocation());
 			ThunderPatern.push_back(Dragon->ThunderPoint5->GetComponentLocation());
 			ThunderPatern.push_back(Dragon->ThunderPoint7->GetComponentLocation());
-			// ThunderPatern = {
-			// 	Dragon->ThunderPoint1->GetComponentLocation(),
-			// 	Dragon->ThunderPoint3->GetComponentLocation(),
-			// 	Dragon->ThunderPoint5->GetComponentLocation(),
-			// 	Dragon->ThunderPoint7->GetComponentLocation(),
-			// };
 		}
 		else
 		{
@@ -611,12 +610,6 @@ void UHD_DragonFSM::F_ThunderMagic(const float& DeltaTime)
 			ThunderPatern.push_back(Dragon->ThunderPoint4->GetComponentLocation());
 			ThunderPatern.push_back(Dragon->ThunderPoint6->GetComponentLocation());
 			ThunderPatern.push_back(Dragon->ThunderPoint8->GetComponentLocation());
-			// ThunderPatern = {
-			// 	Dragon->ThunderPoint2->GetComponentLocation(),
-			// 	Dragon->ThunderPoint4->GetComponentLocation(),
-			// 	Dragon->ThunderPoint6->GetComponentLocation(),
-			// 	Dragon->ThunderPoint8->GetComponentLocation(),
-			// };
 		}
 
 		// 처음 떨어지는 번개는
@@ -629,7 +622,7 @@ void UHD_DragonFSM::F_ThunderMagic(const float& DeltaTime)
 				GetWorld()->SpawnActor<AHD_DragonThunderCol>(ThunderCol, ThunderPoint, FRotator::ZeroRotator);
 		}
 
-		for (auto ThunderPoint : ThunderCharacterLoc)
+		for (auto ThunderPoint : CastingAttack_CharacterLoc)
 		{
 			UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), Dragon->ThunderVFX1, ThunderPoint);
 			UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), Dragon->ThunderVFX2, ThunderPoint);
@@ -638,42 +631,59 @@ void UHD_DragonFSM::F_ThunderMagic(const float& DeltaTime)
 		}
 
 		ThunderPatern.clear();
-		iThunderCnt++;
+		iCastingCnt++;
 	}
 	else
 	{
-		CurrThunderTime += DeltaTime;
-		if (CurrThunderTime >= MakeThunderTime)
+		if (iCastingCnt < 4)
 		{
-			CurrThunderTime = 0;
-			iThunderCnt++;
-			for (auto ThunderPoint : ThunderCharacterLoc)
+			CurrThunderTime += DeltaTime;
+			if (CurrThunderTime >= MakeThunderTime)
 			{
-				UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), Dragon->ThunderVFX1, ThunderPoint);
-				UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), Dragon->ThunderVFX2, ThunderPoint);
-				if (ThunderCol)
-					GetWorld()->SpawnActor<AHD_DragonThunderCol>(ThunderCol, ThunderPoint, FRotator::ZeroRotator);
-			}
+				CurrThunderTime = 0;
+				iCastingCnt++;
+				for (auto ThunderPoint : CastingAttack_CharacterLoc)
+				{
+					UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), Dragon->ThunderVFX1, ThunderPoint);
+					UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), Dragon->ThunderVFX2, ThunderPoint);
+					if (ThunderCol)
+						GetWorld()->SpawnActor<AHD_DragonThunderCol>(ThunderCol, ThunderPoint, FRotator::ZeroRotator);
+				}
 
-			if (iThunderCnt == 4)
-			{
-				Anim->ChangeState(DragonState::Idle);
-				isAttack = false;
-				bStartThunder = false;
-				iThunderCnt = 0;
-				if (Dragon)
-					Dragon->strDamageAttackType = "";
+				if (iCastingCnt == 4)
+				{
+					bStartThunder = false;
+
+					if (Dragon)
+						Dragon->strDamageAttackType = "";
+				}
 			}
 		}
 	}
 }
 
-void UHD_DragonFSM::F_GetCharacterLoc_Thunder()
+void UHD_DragonFSM::F_GetCharacterLoc_Casting()
 {
-	ThunderCharacterLoc.clear();
+	CastingAttack_CharacterLoc.clear();
 
 	for (auto charac : Dragon->CharacterArr)
 	{
-		ThunderCharacterLoc.push_back(charac->GetActorLocation());
+		FVector CharacLoc = charac->GetActorLocation();
+		CastingAttack_CharacterLoc.push_back(FVector(CharacLoc.X, CharacLoc.Y, 0));
+	}
+}
+
+void UHD_DragonFSM::F_MeteorMagic(const float& DeltaTime)
+{
+	F_GetCharacterLoc_Casting();
+
+	if(iCastingCnt<4)
+	{
+		for (auto MeteorPoint : CastingAttack_CharacterLoc)
+		{
+			UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), Dragon->MeteorVFX, MeteorPoint);
+		}
+		
+		iCastingCnt++;
 	}
 }

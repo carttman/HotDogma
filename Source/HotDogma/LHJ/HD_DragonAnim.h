@@ -160,4 +160,7 @@ public:
 
 	UFUNCTION()
 	void AnimNotify_StartThunderAttack();
+
+	UFUNCTION()
+	void AnimNotify_StartMeteorAttack();
 };

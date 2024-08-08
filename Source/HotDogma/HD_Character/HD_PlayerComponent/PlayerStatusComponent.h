@@ -19,12 +19,14 @@ public:
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
-
+  
 public:	
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 public:
+	UPROPERTY(EditAnywhere)
 	float MaxHP = 1000.f;
+	UPROPERTY(EditAnywhere)
 	float CurrHP = MaxHP;
 };

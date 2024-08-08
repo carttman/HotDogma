@@ -90,6 +90,11 @@ public:
 	class UArrowComponent* CameraPoint;
 
 public:
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<class UCameraShakeBase> ShoutCameraShake;
+	
+public:
 	bool IsDeath = false;
 	bool IsKnockDown = false;
+	bool IsHit = false;
 };

@@ -102,6 +102,7 @@ void UHD_PlayerAttackComponent::EnhancedSkill(const FInputActionValue& InputActi
 {
 	if(Player->IsKnockDown) return;
 	if(Player->IsHit) return;
+	if(Player->IsDeath) return;
 	float value = InputActionValue.Get<float>();
 	if (FMath::IsNearlyEqual(value, 1.f))
 	{
@@ -138,6 +139,7 @@ void UHD_PlayerAttackComponent::BaseAttack()
 	if(Player->PlayerClimbComponent->IsClimbing)return;
 	if(Player->IsKnockDown) return;
 	if(Player->IsHit) return;
+	if(Player->IsDeath) return;
 	if (ComboCount == 0)
 	{
 		PlayerAnim->Montage_Play(AM_BaseAttack, 1.1);

@@ -170,6 +170,7 @@ void AHD_CharacterBase::EnhancedMove(const FInputActionValue& InputActionValue)
 		case MOVE_Walking:// Walking일 때
 			if(IsKnockDown) return;
 			if(IsHit) return;
+			if(IsDeath) return;
 			// add movement 
 			AddMovementInput(ForwardDirection, MovementVector.Y);
 			AddMovementInput(RightDirection, MovementVector.X);
@@ -201,6 +202,7 @@ void AHD_CharacterBase::EnhancedJump(const FInputActionValue& InputActionValue)
 {
 	if(IsKnockDown) return;
 	if(IsHit) return;
+	if(IsDeath) return;
 	Jump();
 	
 }
@@ -215,6 +217,7 @@ void AHD_CharacterBase::EnhancedLook(const FInputActionValue& InputActionValue)
 
 void AHD_CharacterBase::EnhancedOrder(const FInputActionValue& InputActionValue)
 {
+	if(IsDeath) return;
 	float InputKey = InputActionValue.Get<float>();
 	// gamemode를 가져온다.
 
@@ -240,6 +243,7 @@ void AHD_CharacterBase::EnhancedOrder(const FInputActionValue& InputActionValue)
 
 void AHD_CharacterBase::EnhancedRun(const FInputActionValue& InputActionValue)
 {
+	if(IsDeath) return;
 	bool IsRun = InputActionValue.Get<bool>();
 	if (IsRun)GetCharacterMovement()->MaxWalkSpeed = 800.f;
 	else GetCharacterMovement()->MaxWalkSpeed = 500.f;

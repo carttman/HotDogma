@@ -74,7 +74,8 @@ float AHD_CharacterPlayer::TakeDamage(float DamageAmount, FDamageEvent const& Da
 	AActor* DamageCauser)
 {
 	float damage = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
-	
+	if(!IsDeath)
+	{
 	UE_LOG(LogTemp, Warning, TEXT("%s Takes Damage : %f"), *GetName(), damage);
 	PlayerStatusComponent->CurrHP -= damage;
 	UE_LOG(LogTemp, Warning, TEXT("%s Takes Damage : %f"), *GetName(), PlayerStatusComponent->CurrHP);
@@ -153,6 +154,7 @@ float AHD_CharacterPlayer::TakeDamage(float DamageAmount, FDamageEvent const& Da
 			}
 		}
 	}
+	}
 	return damage;
 }
 
@@ -176,8 +178,10 @@ void AHD_CharacterPlayer::DeathProcess()
 {
 	GetMesh()->GetAnimInstance()->Montage_Play(AM_Hit_Montage, 1);
 	GetMesh()->GetAnimInstance()->Montage_JumpToSection(FName("Hit_Death"), AM_Hit_Montage);
-	
-	DisableInput(PlayerContoller);
+	PlayerContoller->SetShowMouseCursor(true);
+	PlayerContoller->SetInputMode(FInputModeUIOnly());
+	//PlayerGameMode->PlayerWidget
+	//DisableInput(PlayerContoller);
 }
 
 void AHD_CharacterPlayer::PlayMontageNotifyBegin_KnockDown(FName NotifyName,

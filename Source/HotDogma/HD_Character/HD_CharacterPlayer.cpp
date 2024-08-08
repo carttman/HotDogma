@@ -99,6 +99,7 @@ float AHD_CharacterPlayer::TakeDamage(float DamageAmount, FDamageEvent const& Da
 					// GetMesh()->GetAnimInstance()->Montage_Play(AM_Hit_Montage, 1);
 					// GetMesh()->GetAnimInstance()->Montage_JumpToSection(FName("Hit_Normal"), AM_Hit_Montage);
 					// GetMesh()->GetAnimInstance()->Montage_JumpToSectionsEnd(FName("Hit_Normal"), AM_Hit_Montage);
+					SlowDownTime_Hit(0.5f, 0.1f);
 					GetMesh()->GetAnimInstance()->Montage_Play(AM_KnockDown_Montage, 1);
 					GetMesh()->GetAnimInstance()->Montage_JumpToSection(FName("KnockDown_Start"), AM_KnockDown_Montage);
 				}
@@ -108,19 +109,21 @@ float AHD_CharacterPlayer::TakeDamage(float DamageAmount, FDamageEvent const& Da
 					{
 						PlayerContoller->PlayerCameraManager->StartCameraShake(ShoutCameraShake);
 					}
+					SlowDownTime_Hit(0.5f, 0.1f);
 					GetMesh()->GetAnimInstance()->Montage_Play(AM_Hit_Montage, 1);
 					GetMesh()->GetAnimInstance()->Montage_JumpToSection(FName("Hit_Large"), AM_Hit_Montage);
 					PlayerAttackComponent->IsClimb_Attacking = false;
 				}
 				if(HJ_Dragon->strDamageAttackType.Equals("TailSlap"))
 				{
-					PlayerAttackComponent->SlowDownTime(1.5f, 0.1f);
+					SlowDownTime_Hit(0.5f, 0.1f);
 					GetMesh()->GetAnimInstance()->Montage_Play(AM_Hit_Montage, 1);
 					GetMesh()->GetAnimInstance()->Montage_JumpToSection(FName("Hit_Large"), AM_Hit_Montage);
 					PlayerAttackComponent->IsClimb_Attacking = false;
 				}
 				if(HJ_Dragon->strDamageAttackType.Equals("Scratch"))
 				{
+					SlowDownTime_Hit(0.5f, 0.1f);
 					GetMesh()->GetAnimInstance()->Montage_Play(AM_Hit_Montage, 1);
 					GetMesh()->GetAnimInstance()->Montage_JumpToSection(FName("Hit_Normal"), AM_Hit_Montage);
 					PlayerAttackComponent->IsClimb_Attacking = false;
@@ -131,6 +134,7 @@ float AHD_CharacterPlayer::TakeDamage(float DamageAmount, FDamageEvent const& Da
 					{
 						PlayerContoller->PlayerCameraManager->StartCameraShake(ShoutCameraShake);
 					}
+					SlowDownTime_Hit(0.5f, 0.1f);
 					GetMesh()->GetAnimInstance()->Montage_Play(AM_Hit_Montage, 1);
 					GetMesh()->GetAnimInstance()->Montage_JumpToSection(FName("Hit_Normal"), AM_Hit_Montage);
 					PlayerAttackComponent->IsClimb_Attacking = false;
@@ -199,5 +203,21 @@ void AHD_CharacterPlayer::PlayMontageNotifyBegin_Hit(FName NotifyName,
 	{
 		IsHit = false;
 	}
+}
+
+void AHD_CharacterPlayer::SlowDownTime_Hit(float SlowDownFactor, float Duration)
+{
+	// 현재 글로벌 타임 딜레이션 저장
+	OriginalTimeDilation = UGameplayStatics::GetGlobalTimeDilation(GetWorld());
+	// 새로운 글로벌 타임 딜레이션 설정
+	UGameplayStatics::SetGlobalTimeDilation(GetWorld(), SlowDownFactor);
+	// 원래 타임 딜레이션을 복원하는 타이머 설정
+	GetWorld()->GetTimerManager().SetTimer(TimeDilationTimerHandle, this, &AHD_CharacterPlayer::RestoreTimeDilation_Hit, Duration, false);
+}
+
+void AHD_CharacterPlayer::RestoreTimeDilation_Hit()
+{
+	// 원래 글로벌 타임 딜레이션 복원
+	UGameplayStatics::SetGlobalTimeDilation(GetWorld(), OriginalTimeDilation);
 }
 

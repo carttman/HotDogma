@@ -273,6 +273,7 @@ void UHD_PlayerAttackComponent::Skill_Cutting()
 {
 	if(IsSplitting || Player->PlayerClimbComponent->IsClimbing) return;
 	if(IsCutting) return;
+	if(IsCutting_New) return;
 	PlayerAnim->Montage_Play(AM_Cutting, 1);
 }
 
@@ -321,6 +322,7 @@ void UHD_PlayerAttackComponent::PlayMontageNotifyBegin_Cutting(FName NotifyName,
 	if(NotifyName == FName("Cutting_Run_Start"))
 	{
 		IsCutting = true;
+		IsCutting_New = true;
 		Cutting_GetTarget();
 		FMotionWarpingTarget Cutting_MW_Target;
 		if(CuttingHit)
@@ -352,6 +354,7 @@ void UHD_PlayerAttackComponent::PlayMontageNotifyBegin_Cutting(FName NotifyName,
 	}
 	if(NotifyName == FName("Cutting_Camera"))
 	{
+		IsCutting_New = false;
 		// 플레이어 등 뒤로 돌아간다
 		//Player->springArm->bUsePawnControlRotation = false;
 		//Player->springArm->CameraRotationLagSpeed = 3.0f;
@@ -422,25 +425,19 @@ void UHD_PlayerAttackComponent::PlayMontageNotifyBegin_ClimbAttack(FName NotifyN
 	if(NotifyName == FName("Climb_Attack_Start"))
 	{
 		// 중복 입력 막기
-		UE_LOG(LogTemp, Warning, TEXT("11111"));
 		IsClimb_Attacking = true;
 	}
 	if(NotifyName == FName("Climb_Attack_End"))
 	{
-		UE_LOG(LogTemp, Warning, TEXT("22222"));
-
 		IsClimb_Attacking = false;
 	}
 	if(NotifyName == FName("Climb_Damage_On"))
 	{
-		UE_LOG(LogTemp, Warning, TEXT("333333"));
-
 		CharacterPlayer->Right_Weapon->CapsuleComp->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
+		SlowDownTime(0.4f, 0.05f);
 	}
 	if(NotifyName == FName("Climb_Damage_Off"))
 	{
-		UE_LOG(LogTemp, Warning, TEXT("4444444"));
-
 		CharacterPlayer->Right_Weapon->CapsuleComp->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	}
 }

@@ -62,7 +62,7 @@ public:
 
 	int32 ComboCount = 0;
 	float CurrComboTime = 0;
-	float MinComboTime = 0.3f;
+	float MinComboTime = 0.2f;
 	float MaxComboTime = 1.0f;
 
 public:
@@ -91,7 +91,7 @@ public:
 	float Cutting_Attack_Range = 200.f;
 
 	bool IsCutting = false;
-
+	bool IsCutting_New = false;
 	void RotatingCamera();
 	FTimerHandle CutterTimerHandle;
 

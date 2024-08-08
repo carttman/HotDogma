@@ -124,6 +124,9 @@ public:
 	UPROPERTY(EditDefaultsOnly)
 	class UParticleSystem* ThunderVFX2;
 
+	UPROPERTY(EditDefaultsOnly)
+	class UParticleSystem* MeteorVFX;
+	
 	// 클라이밍용
 	UPROPERTY(EditAnywhere)
 	class UChildActorComponent* ClimbHand_L;

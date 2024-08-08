@@ -274,11 +274,11 @@ public:
 	void F_ThunderMagic(const float& DeltaTime);
 
 	std::vector<FVector> ThunderPatern;
-	std::vector<FVector> ThunderCharacterLoc;
-	void F_GetCharacterLoc_Thunder();
+	std::vector<FVector> CastingAttack_CharacterLoc;
+	void F_GetCharacterLoc_Casting();
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	int32 iThunderCnt = 0;
+	int32 iCastingCnt = 0;
 
 	bool bStartThunder = false;
 
@@ -293,5 +293,12 @@ public:
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<class AHD_DragonThunderCol> ThunderCol;
 
+#pragma endregion
+
+#pragma region 메테오
+	bool bStartMeteor = false;
+
+	UFUNCTION()
+	void F_MeteorMagic(const float& DeltaTime);
 #pragma endregion
 };

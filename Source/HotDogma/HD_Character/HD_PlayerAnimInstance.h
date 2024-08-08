@@ -73,8 +73,7 @@ public:
 	UFUNCTION()
 	void AnimNotify_Damage_Off();
 
-	
-	
+
 	//UFUNCTION()
 	//void AnimNotify_Start_Hit();
 	//UFUNCTION()

@@ -57,4 +57,6 @@ public:
 	void DeathProcess();
 	UFUNCTION()
 	void PlayMontageNotifyBegin_KnockDown(FName NotifyName, const FBranchingPointNotifyPayload& BranchingPointNotifyPayload);
+	UFUNCTION()
+	void PlayMontageNotifyBegin_Hit(FName NotifyName, const FBranchingPointNotifyPayload& BranchingPointNotifyPayload);
 };

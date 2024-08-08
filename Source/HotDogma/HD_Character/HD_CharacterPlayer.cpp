@@ -38,6 +38,7 @@ void AHD_CharacterPlayer::BeginPlay()
 	PlayerContoller = Cast<AHD_PlayerController>(GetController());
 	AttachWeapon();
 	if(AM_KnockDown_Montage) GetMesh()->GetAnimInstance()->OnPlayMontageNotifyBegin.AddDynamic(this, &AHD_CharacterPlayer::PlayMontageNotifyBegin_KnockDown);
+	if(AM_Hit_Montage) GetMesh()->GetAnimInstance()->OnPlayMontageNotifyBegin.AddDynamic(this, &AHD_CharacterPlayer::AHD_CharacterPlayer::PlayMontageNotifyBegin_Hit);
 }
 
 // Called every frame
@@ -77,41 +78,73 @@ float AHD_CharacterPlayer::TakeDamage(float DamageAmount, FDamageEvent const& Da
 	PlayerStatusComponent->CurrHP -= damage;
 	UE_LOG(LogTemp, Warning, TEXT("%s Takes Damage : %f"), *GetName(), PlayerStatusComponent->CurrHP);
 	
-	if(DamageCauser)
+	if(!PlayerAttackComponent->IsClimb) // 등산중일때 슈퍼아머
 	{
-		AHD_Dragon* HJ_Dragon = Cast<AHD_Dragon>(DamageCauser);
-		if(HJ_Dragon)
+		if(DamageCauser)
 		{
-			UE_LOG(LogTemp, Warning, TEXT("%s"), *HJ_Dragon->strDamageAttackType);
-			if(!HJ_Dragon->strDamageAttackType.Equals("Shout"))
+			AHD_Dragon* HJ_Dragon = Cast<AHD_Dragon>(DamageCauser);
+			if(HJ_Dragon)
 			{
-				PlayerStatusComponent->CurrHP -= damage;
-			}
-			if(HJ_Dragon->strDamageAttackType.Equals("Shout"))
-			{
-				GetMesh()->GetAnimInstance()->Montage_Play(AM_KnockDown_Montage, 1);
-				GetMesh()->GetAnimInstance()->Montage_JumpToSection(FName("KnockDown_Start"), AM_KnockDown_Montage);
-				
-			}
-			if(HJ_Dragon->strDamageAttackType.Equals("JumpPress"))
-			{
-				GetMesh()->GetAnimInstance()->Montage_Play(AM_Hit_Montage, 1);
-				GetMesh()->GetAnimInstance()->Montage_JumpToSection(FName("Hit_Large"), AM_Hit_Montage);
-			}
-			if(HJ_Dragon->strDamageAttackType.Equals("TailSlap"))
-			{
-				GetMesh()->GetAnimInstance()->Montage_Play(AM_Hit_Montage, 1);
-				GetMesh()->GetAnimInstance()->Montage_JumpToSection(FName("Hit_Large"), AM_Hit_Montage);
-			}
-			if(HJ_Dragon->strDamageAttackType.Equals("Scratch"))
-			{
-				GetMesh()->GetAnimInstance()->Montage_Play(AM_Hit_Montage, 1);
-				GetMesh()->GetAnimInstance()->Montage_JumpToSection(FName("Hit_Normal"), AM_Hit_Montage);
-			}
-			if(HJ_Dragon->strDamageAttackType.Equals("HandPress"))
-			{
-				GetMesh()->GetAnimInstance()->Montage_Play(AM_Hit_Montage, 1);
-				GetMesh()->GetAnimInstance()->Montage_JumpToSection(FName("Hit_Normal"), AM_Hit_Montage);
+				UE_LOG(LogTemp, Warning, TEXT("%s"), *HJ_Dragon->strDamageAttackType);
+				if(!HJ_Dragon->strDamageAttackType.Equals("Shout"))
+				{
+					PlayerStatusComponent->CurrHP -= damage;
+				}
+				if(HJ_Dragon->strDamageAttackType.Equals("Shout"))
+				{
+					if(ShoutCameraShake)
+					{
+						PlayerContoller->PlayerCameraManager->StartCameraShake(ShoutCameraShake);
+					}
+					// GetMesh()->GetAnimInstance()->Montage_Play(AM_Hit_Montage, 1);
+					// GetMesh()->GetAnimInstance()->Montage_JumpToSection(FName("Hit_Normal"), AM_Hit_Montage);
+					// GetMesh()->GetAnimInstance()->Montage_JumpToSectionsEnd(FName("Hit_Normal"), AM_Hit_Montage);
+					GetMesh()->GetAnimInstance()->Montage_Play(AM_KnockDown_Montage, 1);
+					GetMesh()->GetAnimInstance()->Montage_JumpToSection(FName("KnockDown_Start"), AM_KnockDown_Montage);
+				}
+				if(HJ_Dragon->strDamageAttackType.Equals("JumpPress"))
+				{
+					if(ShoutCameraShake)
+					{
+						PlayerContoller->PlayerCameraManager->StartCameraShake(ShoutCameraShake);
+					}
+					GetMesh()->GetAnimInstance()->Montage_Play(AM_Hit_Montage, 1);
+					GetMesh()->GetAnimInstance()->Montage_JumpToSection(FName("Hit_Large"), AM_Hit_Montage);
+					PlayerAttackComponent->IsClimb_Attacking = false;
+				}
+				if(HJ_Dragon->strDamageAttackType.Equals("TailSlap"))
+				{
+					PlayerAttackComponent->SlowDownTime(1.5f, 0.1f);
+					GetMesh()->GetAnimInstance()->Montage_Play(AM_Hit_Montage, 1);
+					GetMesh()->GetAnimInstance()->Montage_JumpToSection(FName("Hit_Large"), AM_Hit_Montage);
+					PlayerAttackComponent->IsClimb_Attacking = false;
+				}
+				if(HJ_Dragon->strDamageAttackType.Equals("Scratch"))
+				{
+					GetMesh()->GetAnimInstance()->Montage_Play(AM_Hit_Montage, 1);
+					GetMesh()->GetAnimInstance()->Montage_JumpToSection(FName("Hit_Normal"), AM_Hit_Montage);
+					PlayerAttackComponent->IsClimb_Attacking = false;
+				}
+				if(HJ_Dragon->strDamageAttackType.Equals("HandPress"))
+				{
+					if(ShoutCameraShake)
+					{
+						PlayerContoller->PlayerCameraManager->StartCameraShake(ShoutCameraShake);
+					}
+					GetMesh()->GetAnimInstance()->Montage_Play(AM_Hit_Montage, 1);
+					GetMesh()->GetAnimInstance()->Montage_JumpToSection(FName("Hit_Normal"), AM_Hit_Montage);
+					PlayerAttackComponent->IsClimb_Attacking = false;
+				}
+				if(HJ_Dragon->strDamageAttackType.Equals("Thunder"))
+				{
+					if(ShoutCameraShake)
+					{
+						PlayerContoller->PlayerCameraManager->StartCameraShake(ShoutCameraShake);
+					}
+					GetMesh()->GetAnimInstance()->Montage_Play(AM_Hit_Montage, 1);
+					GetMesh()->GetAnimInstance()->Montage_JumpToSection(FName("Hit_Normal"), AM_Hit_Montage);
+					PlayerAttackComponent->IsClimb_Attacking = false;
+				}
 			}
 		}
 	}
@@ -152,6 +185,19 @@ void AHD_CharacterPlayer::PlayMontageNotifyBegin_KnockDown(FName NotifyName,
 	if(NotifyName == FName("KnockDown_End"))
 	{
 		IsKnockDown = false;
+	}
+}
+
+void AHD_CharacterPlayer::PlayMontageNotifyBegin_Hit(FName NotifyName,
+	const FBranchingPointNotifyPayload& BranchingPointNotifyPayload)
+{
+	if(NotifyName == FName("Hit_Start"))
+	{
+		IsHit = true;
+	}
+	if(NotifyName == FName("Hit_End"))
+	{
+		IsHit = false;
 	}
 }
 

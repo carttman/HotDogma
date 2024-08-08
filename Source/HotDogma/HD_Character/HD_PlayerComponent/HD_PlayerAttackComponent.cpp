@@ -68,6 +68,7 @@ void UHD_PlayerAttackComponent::BeginPlay()
 	// ...
 	if(AM_Splitter) PlayerAnim->OnPlayMontageNotifyBegin.AddDynamic(this, &UHD_PlayerAttackComponent::PlayMontageNotifyBegin_Splitter);
 	if(AM_Cutting) PlayerAnim->OnPlayMontageNotifyBegin.AddDynamic(this, &UHD_PlayerAttackComponent::PlayMontageNotifyBegin_Cutting);
+	if(AM_Climb_Attack) PlayerAnim->OnPlayMontageNotifyBegin.AddDynamic(this, &UHD_PlayerAttackComponent::PlayMontageNotifyBegin_ClimbAttack);
 	if (YawCurve)
 	{
 		// Bind the function that will be called each tick of the timeline
@@ -100,6 +101,7 @@ void UHD_PlayerAttackComponent::SetupPlayerInputComponent(UEnhancedInputComponen
 void UHD_PlayerAttackComponent::EnhancedSkill(const FInputActionValue& InputActionValue)
 {
 	if(Player->IsKnockDown) return;
+	if(Player->IsHit) return;
 	float value = InputActionValue.Get<float>();
 	if (FMath::IsNearlyEqual(value, 1.f))
 	{
@@ -119,17 +121,43 @@ void UHD_PlayerAttackComponent::EnhancedSkill(const FInputActionValue& InputActi
 
 void UHD_PlayerAttackComponent::PlayerAttack()
 {
+	if(!IsClimb)
+	{
+		BaseAttack();
+	}
+	else
+	{
+		if(IsClimb_Attacking) return;
+		ClimbAttack();
+	}
+}
+
+void UHD_PlayerAttackComponent::BaseAttack()
+{
 	if(IsSplitting || IsCutting) return;
 	if(Player->PlayerClimbComponent->IsClimbing)return;
+	if(Player->IsKnockDown) return;
+	if(Player->IsHit) return;
 	if (ComboCount == 0)
 	{
 		PlayerAnim->Montage_Play(AM_BaseAttack, 1.1);
 		ComboCount++;
 		CurrComboTime = 0;
+		//Cutting_GetTarget();
+		BaseAttackRot();
 	}
 	PlayerBaseAttackPlay(1,FName("Attack_2"));
 	PlayerBaseAttackPlay(2,FName("Attack_3"));
 	PlayerBaseAttackPlay(3,FName("Attack_4"));
+}
+
+void UHD_PlayerAttackComponent::ClimbAttack()
+{
+	if(IsSplitting || IsCutting) return;
+	if(Player->PlayerClimbComponent->IsClimbing)return;
+	if(Player->IsKnockDown) return;
+	if(Player->IsHit) return;
+	PlayerAnim->Montage_Play(AM_Climb_Attack, 1);
 }
 
 void UHD_PlayerAttackComponent::PlayerBaseAttackPlay(int32 ComboCnt, FName SectionName)
@@ -141,6 +169,33 @@ void UHD_PlayerAttackComponent::PlayerBaseAttackPlay(int32 ComboCnt, FName Secti
 			ComboCount++;
 			CurrComboTime = 0;
 			PlayerAnim->Montage_JumpToSection(SectionName, AM_BaseAttack);
+			//Cutting_GetTarget();
+			BaseAttackRot();
+		}
+	}
+}
+
+void UHD_PlayerAttackComponent::BaseAttackRot()
+{
+	FVector Start = Player->GetActorLocation();
+	FVector End = Player->GetActorLocation();
+	ECollisionChannel CollisionChannel = ECC_GameTraceChannel6;
+	TArray<FHitResult> OutHits;
+	TArray<AActor*> ActorsToIgnore;
+	ActorsToIgnore.Add(Player);
+	CuttingHit = UKismetSystemLibrary::SphereTraceMulti(GetWorld(), Start, End, 900.f, UEngineTypes::ConvertToTraceType(CollisionChannel), false,
+		ActorsToIgnore,EDrawDebugTrace::None,OutHits,true);
+
+	for (auto& Hit : OutHits)
+	{
+		if (IsValid(Hit.GetActor()))
+		{
+			//UE_LOG(LogTemp, Warning, TEXT("Hit Actor: %s Cutting_TargetLoc : %.f, %.f, %.f"), *Hit.GetActor()->GetName(),Hit.GetActor()->GetActorLocation().X, Hit.GetActor()->GetActorLocation().Y, Hit.GetActor()->GetActorLocation().Z);
+			FVector newLoc = Hit.GetActor()->GetActorLocation() - Player->GetActorLocation();//히트 된 상대의 위치
+			newLoc.Normalize();
+			FRotator newRot = UKismetMathLibrary::MakeRotFromX(newLoc); //타겟의 방향벡터
+			Player->SetActorRotation(newRot);
+			break;
 		}
 	}
 }
@@ -217,6 +272,7 @@ void UHD_PlayerAttackComponent::PlayMontageNotifyBegin_Splitter(FName NotifyName
 void UHD_PlayerAttackComponent::Skill_Cutting()
 {
 	if(IsSplitting || Player->PlayerClimbComponent->IsClimbing) return;
+	if(IsCutting) return;
 	PlayerAnim->Montage_Play(AM_Cutting, 1);
 }
 
@@ -357,4 +413,34 @@ void UHD_PlayerAttackComponent::RestoreTimeDilation()
 {
 	// 원래 글로벌 타임 딜레이션 복원
 	UGameplayStatics::SetGlobalTimeDilation(GetWorld(), OriginalTimeDilation);
+}
+
+void UHD_PlayerAttackComponent::PlayMontageNotifyBegin_ClimbAttack(FName NotifyName,
+	const FBranchingPointNotifyPayload& BranchingPointNotifyPayload)
+{
+	
+	if(NotifyName == FName("Climb_Attack_Start"))
+	{
+		// 중복 입력 막기
+		UE_LOG(LogTemp, Warning, TEXT("11111"));
+		IsClimb_Attacking = true;
+	}
+	if(NotifyName == FName("Climb_Attack_End"))
+	{
+		UE_LOG(LogTemp, Warning, TEXT("22222"));
+
+		IsClimb_Attacking = false;
+	}
+	if(NotifyName == FName("Climb_Damage_On"))
+	{
+		UE_LOG(LogTemp, Warning, TEXT("333333"));
+
+		CharacterPlayer->Right_Weapon->CapsuleComp->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
+	}
+	if(NotifyName == FName("Climb_Damage_Off"))
+	{
+		UE_LOG(LogTemp, Warning, TEXT("4444444"));
+
+		CharacterPlayer->Right_Weapon->CapsuleComp->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	}
 }

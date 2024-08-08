@@ -39,4 +39,8 @@ public:
 	class AHD_CharacterPlayer* Player;
 	UPROPERTY()
 	class UHD_PlayerAnimInstance* PlayerAnim;
+
+public:
+	UPROPERTY(EditAnywhere)
+	class UNiagaraSystem* BloodVFX;
 };

@@ -31,8 +31,11 @@ public:
 	void EnhancedSkill(const FInputActionValue& InputActionValue);
 public:
 	void PlayerAttack();
+	void BaseAttack();
+	void ClimbAttack();
 	void UpdatePlayerAttack(float DeltaTime);
 	void PlayerBaseAttackPlay(int32 ComboCnt, FName SectionName);
+	void BaseAttackRot();
 public:
 	UPROPERTY(EditAnywhere)
 	class UInputAction* IA_HD_Attack;
@@ -116,4 +119,18 @@ public:
 	float OriginalTimeDilation;
 	// 타임 딜레이션 타이머 핸들
 	FTimerHandle TimeDilationTimerHandle;
+
+public:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	bool IsClimb = false;
+
+	bool IsClimb_Attacking = false;
+	
+	UPROPERTY(EditAnywhere)
+	class UAnimMontage* AM_Climb_Attack;
+	UFUNCTION()
+	void PlayMontageNotifyBegin_ClimbAttack(FName NotifyName, const FBranchingPointNotifyPayload& BranchingPointNotifyPayload);
+
+
+	
 };

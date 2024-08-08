@@ -8,6 +8,7 @@
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/Character.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "HotDogma/HD_GameModeBase/CHJ_GameMode.h"
 #include "Kismet/GameplayStatics.h"
 #include "Particles/ParticleSystem.h"
 
@@ -91,6 +92,21 @@ AHD_Dragon::AHD_Dragon()
 
 	CreateThunderPoint();
 	CreateClimbCollision();
+
+	MeteorPoint1 = CreateDefaultSubobject<USceneComponent>(TEXT("MeteorPoint1"));
+	MeteorPoint1->SetupAttachment(SkeletalComp);
+	MeteorPoint1->SetRelativeLocation(FVector(-350,-150,450));
+	MeteorPoint2 = CreateDefaultSubobject<USceneComponent>(TEXT("MeteorPoint2"));
+	MeteorPoint2->SetupAttachment(SkeletalComp);
+	MeteorPoint2->SetRelativeLocation(FVector(-200,-150,450));
+	MeteorPoint3 = CreateDefaultSubobject<USceneComponent>(TEXT("MeteorPoint3"));
+	MeteorPoint3->SetupAttachment(SkeletalComp);
+	MeteorPoint3->SetRelativeLocation(FVector(200,-150,450));
+	MeteorPoint4 = CreateDefaultSubobject<USceneComponent>(TEXT("MeteorPoint4"));
+	MeteorPoint4->SetupAttachment(SkeletalComp);
+	MeteorPoint4->SetRelativeLocation(FVector(350,-150,450));
+
+	gm = Cast<ACHJ_GameMode>(GetWorld()->GetAuthGameMode());
 }
 
 void AHD_Dragon::CreateThunderPoint()
@@ -273,6 +289,9 @@ float AHD_Dragon::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent
 	CurrHP -= damage;
 	UE_LOG(LogTemp, Warning, TEXT("%s Takes Damage : %f"), *GetName(), CurrHP);
 
+	if(gm)
+		gm->SetDragonHPUI(CurrHP, MaxHP);
+	
 	return damage;
 }
 

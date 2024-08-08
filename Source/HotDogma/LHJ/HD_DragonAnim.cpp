@@ -211,7 +211,12 @@ void UHD_DragonAnim::AnimNotify_EndAttack()
 {
 	ChangeState(DragonState::Idle);
 	if (fsm)
+	{
 		fsm->isAttack = false;
+		fsm->bStartMeteor = false;
+		fsm->bStartThunder = false;
+		fsm->iCastingCnt = 0;
+	}
 	if (Dragon)
 		Dragon->strDamageAttackType = "";
 }

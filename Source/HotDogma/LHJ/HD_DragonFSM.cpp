@@ -9,6 +9,7 @@
 #include "HD_Dragon.h"
 #include "HD_DragonAnim.h"
 #include "HD_DragonThunderCol.h"
+#include "HD_Meteor.h"
 #include "HotDogma/HD_Character/HD_CharacterPlayer.h"
 #include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetMathLibrary.h"
@@ -295,9 +296,9 @@ void UHD_DragonFSM::F_NormalAttackState(const float& DeltaTime)
 		if (bStartThunder)
 			F_ThunderMagic(DeltaTime);
 	}
-	if(normalAttackState==AttackState::Meteor)
+	if (normalAttackState == AttackState::Meteor)
 	{
-		if(bStartMeteor)
+		if (bStartMeteor)
 			F_MeteorMagic(DeltaTime);
 	}
 }
@@ -677,13 +678,49 @@ void UHD_DragonFSM::F_MeteorMagic(const float& DeltaTime)
 {
 	F_GetCharacterLoc_Casting();
 
-	if(iCastingCnt<4)
+	FVector SpMeteorLoc = F_GetSpawnMeteorLoc();
+
+	if (iCastingCnt < 4)
 	{
-		for (auto MeteorPoint : CastingAttack_CharacterLoc)
+		CurrMeteorTime += DeltaTime;
+		if (CurrMeteorTime >= MakeMeteorTime)
 		{
-			UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), Dragon->MeteorVFX, MeteorPoint);
+			CurrMeteorTime = 0.f;
+			for (auto MeteorPoint : CastingAttack_CharacterLoc)
+			{
+				AHD_Meteor* meteor_prj = GetWorld()->SpawnActor<AHD_Meteor>(
+					Meteor_Projectile, SpMeteorLoc, FRotator::ZeroRotator);
+				meteor_prj->SetTarget(MeteorPoint);
+			}
+
+			iCastingCnt++;
 		}
-		
-		iCastingCnt++;
 	}
+}
+
+FVector UHD_DragonFSM::F_GetSpawnMeteorLoc()
+{
+	int rndLoc = FMath::RandRange(1, 4);
+	FVector rtnVec = FVector::ZeroVector;
+
+	switch (rndLoc)
+	{
+	case 1:
+		rtnVec = Dragon->MeteorPoint1->GetComponentLocation();
+		break;
+	case 2:
+		rtnVec = Dragon->MeteorPoint2->GetComponentLocation();
+		break;
+	case 3:
+		rtnVec = Dragon->MeteorPoint3->GetComponentLocation();
+		break;
+	case 4:
+		rtnVec = Dragon->MeteorPoint4->GetComponentLocation();
+		break;
+	default:
+		UE_LOG(LogTemp, Warning, TEXT("%d"), rndLoc);
+		break;
+	}
+
+	return rtnVec;
 }

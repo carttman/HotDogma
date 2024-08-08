@@ -193,6 +193,7 @@ public:
 		AttackState::TailSlap,
 		AttackState::JumpPress,
 		AttackState::ThunderMagic,
+		AttackState::Meteor,
 	};
 
 	std::vector<AttackState> RndAttackPattern;
@@ -298,7 +299,18 @@ public:
 #pragma region 메테오
 	bool bStartMeteor = false;
 
+	UPROPERTY(EditAnywhere)
+	float MakeMeteorTime = 1.f;
+
+	UPROPERTY()
+	float CurrMeteorTime = 0.f;
+
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<class AHD_Meteor> Meteor_Projectile;
+
 	UFUNCTION()
 	void F_MeteorMagic(const float& DeltaTime);
+
+	FVector F_GetSpawnMeteorLoc();
 #pragma endregion
 };

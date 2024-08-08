@@ -6,6 +6,7 @@
 #include "HotDogma/LHJ/HD_Dragon.h"
 #include "EngineUtils.h"
 #include "HotDogma/HD_Character/HD_PlayerComponent/HD_PlayerCamera.h"
+#include "HotDogma/UI/HD_PlayerWidget.h"
 #include "Kismet/GameplayStatics.h"
 
 void ACHJ_GameMode::BeginPlay()
@@ -21,24 +22,7 @@ void ACHJ_GameMode::BeginPlay()
 		Dragons.Add(*ActorItr);
 	}
 
-	// // 플레이어 컨트롤러 가져오기(0번)
-	// APlayerController* PlayerController = UGameplayStatics::GetPlayerController(GetWorld(), 0);
-	// if (PlayerController)
-	// {
-	// 	// 카메라 액터 찾기
-	// 	TArray<AActor*> FoundActors;
-	// 	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AHD_PlayerCamera::StaticClass(), FoundActors);
-	//
-	// 	if (FoundActors.Num() > 0)
-	// 	{
-	// 		AHD_PlayerCamera* PlayerCamera = Cast<AHD_PlayerCamera>(FoundActors[0]);
-	// 		if (PlayerCamera)
-	// 		{
-	// 			// 컨트롤러에 카메라 자동 활성화
-	// 			PlayerCamera->AutoActivateForPlayer(PlayerController);
-	// 		}
-	// 	}
-	// }
+	CreatePlayerWidget();
 }
 
 void ACHJ_GameMode::CommandCompanion(int num)
@@ -66,4 +50,25 @@ APawn* ACHJ_GameMode::GetEnemy(FVector Pos)
 	}
 
 	return ClosestDragon;
+}
+
+void ACHJ_GameMode::CreatePlayerWidget()
+{
+	// 위젯 클래스 담고 생성
+	if(PlayerWidgetFactory)
+	{
+		PlayerWidget = Cast<UHD_PlayerWidget>(CreateWidget(GetWorld(), PlayerWidgetFactory));
+		PlayerWidget->AddToViewport();	
+	}
+	
+}
+
+void ACHJ_GameMode::SetHPUI(float Curr, float Max)
+{
+	PlayerWidget->SetHP(Curr, Max);
+}
+
+void ACHJ_GameMode::SetDragonHPUI(float Curr, float Max)
+{
+	PlayerWidget->Set_DragonHP(Curr, Max);
 }

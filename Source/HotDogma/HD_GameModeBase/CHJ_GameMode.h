@@ -16,7 +16,7 @@ class HOTDOGMA_API ACHJ_GameMode : public AGameModeBase
 public:
 	virtual void BeginPlay() override;
 	void CommandCompanion(int num);
-	// Pos¿¡¼­ °¡Àå °¡±î¿î µå·¡°ïÀ» Ã£´Â´Ù.
+	// Posï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½å·¡ï¿½ï¿½ï¿½ï¿½ Ã£ï¿½Â´ï¿½.
 	APawn* GetEnemy(FVector Pos);
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "CompanionManager")
 	bool bCompanionsSpawn = false;
@@ -31,4 +31,15 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Dragon")
 	TArray<APawn*> Dragons;
+
+public:
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+	class UHD_PlayerWidget* PlayerWidget;
+	
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+	TSubclassOf<UHD_PlayerWidget> PlayerWidgetFactory;
+	
+	void CreatePlayerWidget();
+	void SetHPUI(float Curr, float Max);
+	void SetDragonHPUI(float Curr, float Max);
 };

@@ -79,17 +79,6 @@ void UHD_PlayerClimbComponent::TickComponent(float DeltaTime, ELevelTick TickTyp
 		Dragon = Cast<AHD_Dragon>(Player->Dragon);
 		if(Dragon)UE_LOG(LogTemp, Warning, TEXT("TO ClimbComp-> This is: %s"), *Dragon->GetName());
 	}
-	// if(Climb_OutHit.GetActor() == Dragon)
-	// {
-	// 	FLatentActionInfo LatentInfo; //MoveComponentTo 인자중 하나
-	// 	LatentInfo.CallbackTarget = this; // 현재 클래스의 인스턴스를 콜백 타겟으로 설정
-	// 	//LatentInfo.ExecutionFunction = FName("OnMoveCompleted"); // 완료 시 호출할 함수 이름
-	// 	//LatentInfo.Linkage = 0;
-	// 	//LatentInfo.UUID = 1;
-	// 	// 트레이스 충돌된 위치,회전값으로 플레이어 이동
-	// 	UKismetSystemLibrary::MoveComponentTo(Player->GetCapsuleComponent(),TargetLocation,TargetRotation,false,false,
-	// 	0.2f,false, EMoveComponentAction::Move,LatentInfo);
-	// }
 }
 
 void UHD_PlayerClimbComponent::SetupPlayerInputComponent(UEnhancedInputComponent* enhancedInputComponent)

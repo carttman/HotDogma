@@ -78,7 +78,7 @@ void ACHJ_GameMode::SetHPUI(float Curr, float Max)
 	GamePlayWidget->WBP_PlayerWidget->SetHP(Curr, Max);
 }
 
-void ACHJ_GameMode::SetDragonHPUI(float Curr, float Max)
+void ACHJ_GameMode::SetDragonHPUI(float Curr, float Max, int RemainLineCnt)
 {
-	GamePlayWidget->WBP_PlayerWidget->Set_DragonHP(Curr, Max);
+	GamePlayWidget->WBP_PlayerWidget->Set_DragonHP(Curr, Max, RemainLineCnt);
 }

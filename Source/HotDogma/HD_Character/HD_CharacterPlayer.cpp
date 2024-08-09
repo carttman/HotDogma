@@ -232,3 +232,11 @@ void AHD_CharacterPlayer::RestoreTimeDilation_Hit()
 	UGameplayStatics::SetGlobalTimeDilation(GetWorld(), OriginalTimeDilation);
 }
 
+void AHD_CharacterPlayer::GetPlayerCameraShake()
+{
+	if(ShoutCameraShake)
+	{
+		PlayerContoller->PlayerCameraManager->StartCameraShake(ShoutCameraShake);
+	}
+}
+

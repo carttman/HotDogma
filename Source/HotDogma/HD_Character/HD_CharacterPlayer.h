@@ -72,4 +72,5 @@ public:
 	// 타임 딜레이션 타이머 핸들
 	FTimerHandle TimeDilationTimerHandle;
 
+	void GetPlayerCameraShake();
 };

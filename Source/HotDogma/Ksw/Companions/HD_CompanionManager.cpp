@@ -217,10 +217,10 @@ FVector AHD_CompanionManager::StrafingLocation(APawn* AiPlayer, APawn* Target, i
 	}
 
 	// Direction 위치에 Debug Draw Circle
-	for (int32 i = 0; i < Directions.Num(); i++)
+	/*for (int32 i = 0; i < Directions.Num(); i++)
 	{
 		DrawDebugSphere(GetWorld(), Directions[i], 50.0f, 16, FColor::Green, false, 0.0f);
-	}
+	}*/
 
 	// AiPlayer 위치에서 가장 가깝고 다른 플레이어와 상대적으로 먼 위치를 구한다.
 	int32 AIPlayerIdx = 0;

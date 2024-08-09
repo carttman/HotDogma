@@ -61,8 +61,8 @@ void UHD_CompanionStateComponent::TickComponent(float DeltaTime, ELevelTick Tick
 			break;
 	}
 
-	FString myState = UEnum::GetValueOrBitfieldAsString(CurrentState);
-	DrawDebugString(GetWorld(), GetOwner()->GetActorLocation(), myState, 0, FColor::Yellow, 0);
+	//FString myState = UEnum::GetValueOrBitfieldAsString(CurrentState);
+	//DrawDebugString(GetWorld(), GetOwner()->GetActorLocation(), myState, 0, FColor::Yellow, 0);
 }
 
 void UHD_CompanionStateComponent::WaitTick(float DeltaTime)
@@ -137,7 +137,6 @@ void UHD_CompanionStateComponent::BattleTick(float DeltaTime)
 			FRotator LookAt = UKismetMathLibrary::FindLookAtRotation(Me->GetActorLocation(), TargetPawn->GetActorLocation());
 			Me->SetActorRotation(LookAt);
 
-			UE_LOG(LogTemp, Warning, TEXT("Following"));
 			// 드래곤을 지켜보며 플레이어를 따라간다.
 			if (AIController)
 			{
@@ -151,7 +150,6 @@ void UHD_CompanionStateComponent::BattleTick(float DeltaTime)
 				{
 					Me->GetCharacterMovement()->MaxWalkSpeed = 600;
 					Me->GetCharacterMovement()->bOrientRotationToMovement = true;
-					UE_LOG(LogTemp, Warning, TEXT("State_Run"));
 					EndBattle();
 					SetState(ECompanionState::State_Run);
 				}

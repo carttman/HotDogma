@@ -32,11 +32,21 @@ public:
 	class UHD_CompanionStateComponent* CompanionStateComp;
 
 	class UHD_CompanionStateComponent* SetupCompanionStateComp(bool isWarrior);
+	
+	UPROPERTY(EditAnywhere, Category = "Companion")
+	class UArrowComponent* ArrowComp;
 
 	UPROPERTY(EditAnywhere, Category = "Companion")
 	class UPlayerStatusComponent* PlayerStatusComp;
 
 	UPROPERTY(EditAnywhere, Category = "Companion")
-	class UArrowComponent* ArrowComp;
-	
+	class UWidgetComponent* HPComp;
+
+	// 문자열
+	UPROPERTY(EditAnywhere, Category = "Companion")
+	FString CompanionName;
+
+	// 이미지
+	UPROPERTY(EditAnywhere, Category = "Companion")
+	class UTexture2D* CompanionImage;
 };

@@ -119,8 +119,8 @@ void UHD_SorcererStateComponent::AttackTick(float DeltaTime)
 
 	RotateToTarget(DeltaTime, TargetPawn->GetActorLocation());
 
-	FString myState = UEnum::GetValueOrBitfieldAsString(CurrentBattleState);
-	DrawDebugString(GetWorld(), GetOwner()->GetActorLocation() + FVector(0, 0, 100), myState, 0, FColor::Yellow, 0);
+	//FString myState = UEnum::GetValueOrBitfieldAsString(CurrentBattleState);
+	//DrawDebugString(GetWorld(), GetOwner()->GetActorLocation() + FVector(0, 0, 100), myState, 0, FColor::Yellow, 0);
 }
 
 void UHD_SorcererStateComponent::SetBattleState(ESorcererBattleState state)

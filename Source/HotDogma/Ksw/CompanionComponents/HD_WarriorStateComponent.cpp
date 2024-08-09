@@ -60,8 +60,8 @@ void UHD_WarriorStateComponent::AttackTick(float DeltaTime)
 			break;
 	}
 
-	FString myState = UEnum::GetValueOrBitfieldAsString(CurrentBattleState);
-	DrawDebugString(GetWorld(), GetOwner()->GetActorLocation() + FVector(0, 0, 100), myState, 0, FColor::Yellow, 0);
+	//FString myState = UEnum::GetValueOrBitfieldAsString(CurrentBattleState);
+	//DrawDebugString(GetWorld(), GetOwner()->GetActorLocation() + FVector(0, 0, 100), myState, 0, FColor::Yellow, 0);
 }
 
 void UHD_WarriorStateComponent::CombatCheck()

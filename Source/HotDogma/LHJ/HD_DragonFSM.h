@@ -204,6 +204,7 @@ public:
 	std::vector<AttackState> OrgFlyAttackPattern = {
 		AttackState::Breath,
 		AttackState::ThunderMagic,
+		AttackState::Meteor
 	};
 
 	std::vector<AttackState> RndFlyAttackPattern;

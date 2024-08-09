@@ -243,7 +243,7 @@ void AHD_Dragon::Tick(float DeltaTime)
 			for (auto othActor : OutActors)
 			{
 				ACharacter* charac = Cast<ACharacter>(othActor);
-				if (charac)
+				if (charac&&!charac->GetName().Contains("Player"))
 					CharacterArr.Add(charac);
 			}
 		}

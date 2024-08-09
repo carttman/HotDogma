@@ -405,6 +405,20 @@ bool UHD_DragonFSM::ChkCharacterIntoRadian()
 	}
 	return bRtn;
 }
+
+float UHD_DragonFSM::GetDegreeFromCharacter()
+{
+	FVector ForwardVec = Dragon->GetActorForwardVector();
+	FVector CurrentLocation = Dragon->GetActorLocation();
+	FVector TargetVec = NearTargetActor->GetActorLocation() - CurrentLocation;
+	float TargetDot = FVector::DotProduct(ForwardVec, TargetVec);
+
+	float RadianValue = FMath::Acos(TargetDot);
+
+	float DegreeValue = FMath::RadiansToDegrees(RadianValue);
+	//Anim->Direction = DegreeValue;
+	return DegreeValue;
+}
 #pragma endregion
 
 

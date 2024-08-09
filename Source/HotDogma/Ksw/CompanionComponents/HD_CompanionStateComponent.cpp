@@ -125,9 +125,6 @@ void UHD_CompanionStateComponent::RunTick(float DeltaTime)
 
 void UHD_CompanionStateComponent::BattleTick(float DeltaTime)
 {
-	Me->GetCharacterMovement()->MaxWalkSpeed = 400;
-	// 몬스터를 바라본다.
-
 	if (CurrentCommand == ECompanionCommand::Command_Following)
 	{
 		// 플레이어와 거리가 멀어질 경우
@@ -164,7 +161,6 @@ void UHD_CompanionStateComponent::BattleTick(float DeltaTime)
 		}
 	}
 
-	Me->GetCharacterMovement()->bOrientRotationToMovement = true;
 	// 자식이 구현한다.
 	AttackTick(DeltaTime);
 
@@ -317,6 +313,20 @@ void UHD_CompanionStateComponent::DoHelp()
 
 	// 지원 스킬이 있는지 확인하고 사용한다.
 	// SetState(ECompanionState::State_Help);
+}
+
+void UHD_CompanionStateComponent::RotateToTarget(float DeltaTime, FVector Target)
+{
+	FVector Direction = (Target - Me->GetActorLocation()).GetSafeNormal2D(); // z축만 계산
+	FRotator TargetRotation = Direction.Rotation();
+
+	// 부드러운 회전을 위해 InterpTo 함수 사용
+	FRotator NewRotation = FMath::RInterpTo(Me->GetActorRotation(), TargetRotation, DeltaTime, 5.0f);
+	NewRotation.Pitch = Me->GetActorRotation().Pitch; // 피치 값 유지
+	NewRotation.Roll = Me->GetActorRotation().Roll; // 롤 값 유지
+
+	// 캐릭터의 회전 값을 업데이트
+	Me->SetActorRotation(NewRotation);
 }
 
 void UHD_CompanionStateComponent::SetState(ECompanionState State)

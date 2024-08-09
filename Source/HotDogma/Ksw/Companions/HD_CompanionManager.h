@@ -40,7 +40,7 @@ public:
 
 	void MoveBoid(class UHD_CompanionStateComponent* Companion, FVector Pos);
 
-	FVector StrafingLocation(APawn* AiPlayer, APawn* Target, float Range);
+	FVector StrafingLocation(APawn* AiPlayer, APawn* Target, int LocCount, float Range);
 
 	// 블루프린트 호출가능
 	UFUNCTION(BlueprintCallable)

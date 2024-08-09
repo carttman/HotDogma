@@ -582,9 +582,19 @@ bool UHD_DragonFSM::RotateToTarget(const float& DeltaTime)
 		al = 0;
 		bRotate = false;
 		EndRotate = true;
+		if (Anim)
+		{
+			Anim->isRotate = false;
+			Anim->InnerProductValue = 0;
+		}
 	}
 	else
 	{
+		if (Anim)
+		{
+			Anim->isRotate = true;
+			Anim->InnerProductValue = r;
+		}
 		FRotator realrealRot = UKismetMathLibrary::RLerp(curRot, realRot, al, true);
 		Dragon->SetActorRotation(realrealRot);
 	}

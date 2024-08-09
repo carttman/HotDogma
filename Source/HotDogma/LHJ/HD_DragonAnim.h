@@ -54,6 +54,12 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FSM")
 	bool isGroggy = false; // 그로기 전용
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FSM")
+	bool isRotate = false; // 타겟으로 회전
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FSM")
+	float InnerProductValue; // 내적 값
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Meta = (AllowPrivateAccess=true))
 	float Direction;
 

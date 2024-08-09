@@ -238,12 +238,21 @@ void AHD_Dragon::Tick(float DeltaTime)
 		// UGameplayStatics::GetAllActorsOfClassWithTag(GetWorld(), ACharacter::StaticClass(),
 		//                                              TEXT("PlayerCharacter"), OutCharacterActor);
 
-		if (OutActors.Num() > 0)
+		if (OutActors.Num() > 1)
 		{
 			for (auto othActor : OutActors)
 			{
 				ACharacter* charac = Cast<ACharacter>(othActor);
 				if (charac&&!charac->GetName().Contains("Player"))
+					CharacterArr.Add(charac);
+			}
+		}
+		else if(OutActors.Num() > 0)	// 솔플용...
+		{
+			for (auto othActor : OutActors)
+			{
+				ACharacter* charac = Cast<ACharacter>(othActor);
+				if (charac)
 					CharacterArr.Add(charac);
 			}
 		}

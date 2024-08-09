@@ -17,4 +17,17 @@ class HOTDOGMA_API UHD_GameOverWidget : public UUserWidget
 public:
 	virtual void NativeConstruct() override;
 	virtual void NativeTick(const FGeometry& MyGeometry, float InDeltaTime) override;
+
+	UPROPERTY(EditAnywhere, meta = (BindWidget))
+	class UButton* Button_Restart;
+
+	UPROPERTY(EditAnywhere, meta = (BindWidget))
+	class UButton* Button_BackTitle;
+
+	class AHD_CharacterPlayer* Player;
+	
+	UFUNCTION()
+	void OnMyReStart();
+	UFUNCTION()
+	void OnMyBackTitle();
 };

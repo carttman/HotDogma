@@ -3,6 +3,7 @@
 
 #include "../UI/HD_PlayerWidget.h"
 
+#include "HD_GameOverWidget.h"
 #include "Components/ProgressBar.h"
 
 void UHD_PlayerWidget::NativeConstruct()
@@ -10,6 +11,8 @@ void UHD_PlayerWidget::NativeConstruct()
 	Super::NativeConstruct();
 	HealthBar->SetPercent(1);
 	Dragon_HealthBar->SetPercent(1);
+	
+	//WBP_GameOver->SetVisibility(ESlateVisibility::Hidden);
 }
 
 void UHD_PlayerWidget::NativeTick(const FGeometry& MyGeometry, float InDeltaTime)

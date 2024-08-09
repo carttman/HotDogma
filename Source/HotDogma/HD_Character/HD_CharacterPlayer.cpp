@@ -10,6 +10,9 @@
 #include "HD_PlayerItem/HD_PlayerWeaponBase.h"
 #include "HotDogma/HD_GameModeBase/CHJ_GameMode.h"
 #include "HotDogma/LHJ/HD_Dragon.h"
+#include "HotDogma/UI/HD_GameOverWidget.h"
+#include "HotDogma/UI/HD_GamePlayWidget.h"
+#include "HotDogma/UI/HD_PlayerWidget.h"
 #include "Kismet/GameplayStatics.h"
 
 // Sets default values
@@ -180,12 +183,16 @@ void AHD_CharacterPlayer::DeathProcess()
 	GetMesh()->GetAnimInstance()->Montage_JumpToSection(FName("Hit_Death"), AM_Hit_Montage);
 	PlayerContoller->SetShowMouseCursor(true);
 	PlayerContoller->SetInputMode(FInputModeUIOnly());
-	//PlayerGameMode->PlayerWidget
-	//DisableInput(PlayerContoller);
+	GetWorld()->GetTimerManager().SetTimer(DeathTimerHandle, this, &AHD_CharacterPlayer::DeathTimer, 3.f, false);
 }
 
-void AHD_CharacterPlayer::PlayMontageNotifyBegin_KnockDown(FName NotifyName,
-	const FBranchingPointNotifyPayload& BranchingPointNotifyPayload)
+void AHD_CharacterPlayer::DeathTimer()
+{
+	PlayerGameMode->GamePlayWidget->ChangeSwitcher(1); // 1번이 게임오버 UI임
+	UGameplayStatics::SetGamePaused( GetWorld(), true );
+}
+
+void AHD_CharacterPlayer::PlayMontageNotifyBegin_KnockDown(FName NotifyName, const FBranchingPointNotifyPayload& BranchingPointNotifyPayload)
 {
 	if(NotifyName == FName("KnockDown_Start"))
 	{
@@ -197,8 +204,7 @@ void AHD_CharacterPlayer::PlayMontageNotifyBegin_KnockDown(FName NotifyName,
 	}
 }
 
-void AHD_CharacterPlayer::PlayMontageNotifyBegin_Hit(FName NotifyName,
-	const FBranchingPointNotifyPayload& BranchingPointNotifyPayload)
+void AHD_CharacterPlayer::PlayMontageNotifyBegin_Hit(FName NotifyName, const FBranchingPointNotifyPayload& BranchingPointNotifyPayload)
 {
 	if(NotifyName == FName("Hit_Start"))
 	{

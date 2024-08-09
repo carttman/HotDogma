@@ -5,7 +5,10 @@
 #include "HotDogma/Ksw/Companions/HD_CompanionManager.h"
 #include "HotDogma/LHJ/HD_Dragon.h"
 #include "EngineUtils.h"
+#include "HotDogma/HD_Character/HD_CharacterPlayer.h"
 #include "HotDogma/HD_Character/HD_PlayerComponent/HD_PlayerCamera.h"
+#include "HotDogma/UI/HD_GameOverWidget.h"
+#include "HotDogma/UI/HD_GamePlayWidget.h"
 #include "HotDogma/UI/HD_PlayerWidget.h"
 #include "Kismet/GameplayStatics.h"
 
@@ -22,7 +25,15 @@ void ACHJ_GameMode::BeginPlay()
 		Dragons.Add(*ActorItr);
 	}
 
-	CreatePlayerWidget();
+	//CreatePlayerWidget();
+	Player  = Cast<AHD_CharacterPlayer>(GetWorld()->GetFirstPlayerController()->GetPawn());
+	CreateGamePlayWidget();
+}
+
+void ACHJ_GameMode::Tick(float DeltaSeconds)
+{
+	Super::Tick(DeltaSeconds);
+	
 }
 
 void ACHJ_GameMode::CommandCompanion(int num)
@@ -52,23 +63,22 @@ APawn* ACHJ_GameMode::GetEnemy(FVector Pos)
 	return ClosestDragon;
 }
 
-void ACHJ_GameMode::CreatePlayerWidget()
+
+void ACHJ_GameMode::CreateGamePlayWidget()
 {
-	// 위젯 클래스 담고 생성
-	if(PlayerWidgetFactory)
+	if(GamePlayWidgetFactory)
 	{
-		PlayerWidget = Cast<UHD_PlayerWidget>(CreateWidget(GetWorld(), PlayerWidgetFactory));
-		PlayerWidget->AddToViewport();	
+		GamePlayWidget = Cast<UHD_GamePlayWidget>(CreateWidget(GetWorld(), GamePlayWidgetFactory));
+		GamePlayWidget->AddToViewport();
 	}
-	
 }
 
 void ACHJ_GameMode::SetHPUI(float Curr, float Max)
 {
-	PlayerWidget->SetHP(Curr, Max);
+	GamePlayWidget->WBP_PlayerWidget->SetHP(Curr, Max);
 }
 
 void ACHJ_GameMode::SetDragonHPUI(float Curr, float Max)
 {
-	PlayerWidget->Set_DragonHP(Curr, Max);
+	GamePlayWidget->WBP_PlayerWidget->Set_DragonHP(Curr, Max);
 }

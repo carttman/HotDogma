@@ -15,6 +15,7 @@ class HOTDOGMA_API ACHJ_GameMode : public AGameModeBase
 	GENERATED_BODY()
 public:
 	virtual void BeginPlay() override;
+	virtual void Tick(float DeltaSeconds) override;
 	void CommandCompanion(int num);
 	// Pos���� ���� ����� �巡���� ã�´�.
 	APawn* GetEnemy(FVector Pos);
@@ -32,14 +33,18 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Dragon")
 	TArray<APawn*> Dragons;
 
+	class AHD_CharacterPlayer* Player;
+
+	void CreatePlayerWidget();
 public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
-	class UHD_PlayerWidget* PlayerWidget;
+	class UHD_GamePlayWidget* GamePlayWidget;
 	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
-	TSubclassOf<UHD_PlayerWidget> PlayerWidgetFactory;
+	TSubclassOf<UHD_GamePlayWidget> GamePlayWidgetFactory;
+
+	void CreateGamePlayWidget();
 	
-	void CreatePlayerWidget();
 	void SetHPUI(float Curr, float Max);
 	void SetDragonHPUI(float Curr, float Max);
 };

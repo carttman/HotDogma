@@ -25,9 +25,6 @@ void UPlayerStatusComponent::BeginPlay()
 	Super::BeginPlay();
 
 	// ...
-	Player = Cast<AHD_CharacterBase>(GetOwner());
-	CharacterPlayer = Cast<AHD_CharacterPlayer>(Player);
-	GameMode = Cast<ACHJ_GameMode>(GetWorld()->GetAuthGameMode());
 
 	CurrHP = MaxHP;
 }
@@ -40,10 +37,3 @@ void UPlayerStatusComponent::TickComponent(float DeltaTime, ELevelTick TickType,
 	
 	// ...
 }
-
-void UPlayerStatusComponent::UpdateWidgetHP()
-{
-	GameMode->PlayerWidget->SetHP(CurrHP, MaxHP);
-}
-
-

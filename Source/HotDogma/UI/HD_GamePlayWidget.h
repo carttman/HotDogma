@@ -4,13 +4,13 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
-#include "HD_PlayerWidget.generated.h"
+#include "HD_GamePlayWidget.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class HOTDOGMA_API UHD_PlayerWidget : public UUserWidget
+class HOTDOGMA_API UHD_GamePlayWidget : public UUserWidget
 {
 	GENERATED_BODY()
 
@@ -18,15 +18,17 @@ public:
 	virtual void NativeConstruct() override;
 	virtual void NativeTick(const FGeometry& MyGeometry, float InDeltaTime) override;
 
-	UPROPERTY(meta = (BindWidget))
-	class UProgressBar* HealthBar;
-
-	UPROPERTY(meta = (BindWidget))
-	class UProgressBar* Dragon_HealthBar;
-
 	// UPROPERTY(EditAnywhere, meta = (BindWidget))
 	// class UHD_GameOverWidget* WBP_GameOver;
+	UPROPERTY(EditAnywhere, meta = (BindWidget))
+	class UWidgetSwitcher* WidgetSwitcher;
+
+	void ChangeSwitcher(int32 index);
+
 public:
-	void SetHP(float currHP, float maxHP);
-	void Set_DragonHP(float currHP, float maxHP);
+	UPROPERTY(EditAnywhere, meta = (BindWidget))
+	class UHD_PlayerWidget* WBP_PlayerWidget;
+
+	UPROPERTY(EditAnywhere, meta = (BindWidget))
+	class UHD_GameOverWidget* WBP_GameOver;
 };

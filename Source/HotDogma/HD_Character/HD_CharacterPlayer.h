@@ -54,7 +54,11 @@ public:
 	
 public:
 	void AttachWeapon();
+public:
 	void DeathProcess();
+	FTimerHandle DeathTimerHandle;
+	void DeathTimer();
+public:
 	UFUNCTION()
 	void PlayMontageNotifyBegin_KnockDown(FName NotifyName, const FBranchingPointNotifyPayload& BranchingPointNotifyPayload);
 	UFUNCTION()

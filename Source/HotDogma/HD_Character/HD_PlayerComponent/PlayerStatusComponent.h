@@ -25,17 +25,9 @@ public:
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 public:
-	UPROPERTY()
-	class AHD_CharacterBase* Player;
-	UPROPERTY()
-	class AHD_CharacterPlayer* CharacterPlayer;
-	UPROPERTY()
-	class ACHJ_GameMode* GameMode;
-public:
 	UPROPERTY(EditAnywhere)
 	float MaxHP = 1000.f;
 	UPROPERTY(EditAnywhere)
 	float CurrHP;
-
-	void UpdateWidgetHP();
+	
 };

@@ -157,6 +157,8 @@ public:
 	UFUNCTION()
 	bool ChkCharacterIntoRadian();
 
+	float GetDegreeFromCharacter();
+
 #pragma region Idle Property
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int32 ThresholdRadian = 6000;

@@ -340,8 +340,7 @@ void UHD_DragonAnim::AnimNotify_StartBreath()
 {
 	//Dragon->FireCollision->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
 	fsm->bBreathAttack = true;
-	fsm->LightColorAlpha=0;
-	//fsm->SetFirelLight();
+	fsm->LightColorAlpha = 0;
 }
 
 void UHD_DragonAnim::AnimNotify_EndBreath()
@@ -349,8 +348,7 @@ void UHD_DragonAnim::AnimNotify_EndBreath()
 	//Dragon->FireCollision->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	fsm->bBreathAttack = false;
 	fsm->bReturnLightColor = true;
-	fsm->LightColorAlpha=0;
-	//fsm->SetNormalLight();
+	fsm->LightColorAlpha = 0;
 }
 
 void UHD_DragonAnim::AnimNotify_AttackShout()
@@ -386,4 +384,10 @@ void UHD_DragonAnim::AnimNotify_StartMeteorAttack()
 		fsm->iCastingCnt = 0;
 		fsm->bStartMeteor = true;
 	}
+}
+
+void UHD_DragonAnim::AnimNotify_StartDeath()
+{
+	if (Dragon && Dragon->Player)
+		Dragon->Player->SlowDownTime_Hit(TimeDilation, Duration);
 }

@@ -9,6 +9,7 @@
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/Character.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "HotDogma/HD_Character/HD_CharacterPlayer.h"
 #include "HotDogma/HD_GameModeBase/CHJ_GameMode.h"
 #include "Kismet/GameplayStatics.h"
 #include "Particles/ParticleSystem.h"
@@ -220,6 +221,8 @@ void AHD_Dragon::BeginPlay()
 	gm = Cast<ACHJ_GameMode>(GetWorld()->GetAuthGameMode());
 
 	LineHpValue = MaxHP / LineCnt;
+
+	Player =  Cast<AHD_CharacterPlayer>(GetWorld()->GetFirstPlayerController()->GetCharacter());
 }
 
 void AHD_Dragon::Tick(float DeltaTime)
@@ -233,13 +236,13 @@ void AHD_Dragon::Tick(float DeltaTime)
 		// 필드에 있는 캐릭터를 인지한다.
 		UGameplayStatics::GetAllActorsOfClassWithTag(GetWorld(), ACharacter::StaticClass(),
 		                                             TEXT("HD_Player"), OutActors);
-	
+
 		for (auto othActor : OutActors)
 		{
 			ACharacter* charac = Cast<ACharacter>(othActor);
 			if (charac)
 				CharacterArr.Add(charac);
-		}		
+		}
 	}
 }
 
@@ -280,23 +283,26 @@ float AHD_Dragon::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent
 {
 	float damage = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
 	UE_LOG(LogTemp, Warning, TEXT("%s Takes Damage : %f"), *GetName(), damage);
-	CurrHP -= damage;
-	UE_LOG(LogTemp, Warning, TEXT("%s Takes Damage : %f"), *GetName(), CurrHP);
+	UE_LOG(LogTemp, Warning, TEXT("%s Empty HP : %f"), *GetName(), CurrHP);
 
-	if (gm)
+	if (CurrHP > 0)
 	{
+		CurrHP -= damage;
 
-		float EmptyHpBarCnt = fmod((CurrHP - 1), (float)LineHpValue) + 1; // 남은 피통
-		float CurrEmptyHPLine = (CurrHP - 1) / LineHpValue;	// 남은 피통 줄수
-		
-		float BarHp = CurrHP - (int)CurrEmptyHPLine * LineHpValue;
+		if (gm)
+		{
+			//float EmptyHpBarCnt = fmod((CurrHP - 1), (float)LineHpValue) + 1; // 남은 피통
+			float CurrEmptyHPLine = (CurrHP - 1) / LineHpValue; // 남은 피통 줄수
 
-		gm->SetDragonHPUI(BarHp, LineHpValue,CurrEmptyHPLine);
+			float BarHp = CurrHP - (int)CurrEmptyHPLine * LineHpValue;
+
+			gm->SetDragonHPUI(BarHp, LineHpValue, CurrEmptyHPLine);
+		}
 	}
-
-	if(CurrHP<=0)
+	else
 	{
 		fsm->Anim->ChangeState(DragonState::Death);
+		SkeletalComp->SetCollisionProfileName(FName("FloorBlock"));
 	}
 
 	return damage;

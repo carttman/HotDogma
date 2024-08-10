@@ -96,7 +96,7 @@ void UHD_DragonFSM::BeginPlay()
 void UHD_DragonFSM::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-
+	
 	FString myState = UEnum::GetValueOrBitfieldAsString(State);
 	DrawDebugString(GetWorld(), Dragon->GetActorLocation(), myState, nullptr, FColor::Yellow, 0);
 	if (Anim)
@@ -107,6 +107,25 @@ void UHD_DragonFSM::TickComponent(float DeltaTime, ELevelTick TickType, FActorCo
 			                    Dragon->GetActorLocation().Z - 50), myState, nullptr, FColor::Yellow, 0);
 	}
 
+	if(State==DragonState::Death)
+	{
+		LightColorAlpha +=DeltaTime;
+		
+		// Lerp 진행 (Alpha 값은 DeltaTime을 사용해 천천히 변화)
+		FLinearColor LerpColor = FLinearColor::LerpUsingHSV(BreathColor, OldColor, LightColorAlpha);
+
+		// LightComponent의 색상 업데이트
+		if (LightColorAlpha >= 1)
+		{
+			DirectionalLight->GetLightComponent()->SetLightColor(OldColor);			
+		}
+		else
+		{
+			DirectionalLight->GetLightComponent()->SetLightColor(LerpColor);
+		}
+		return;
+	}
+	
 	BreathTimeline.TickTimeline(DeltaTime);
 	if (State != DragonState::Move)
 		ai->StopMovement();
@@ -811,20 +830,4 @@ FVector UHD_DragonFSM::F_GetSpawnMeteorLoc()
 	}
 
 	return rtnVec;
-}
-
-void UHD_DragonFSM::SetFirelLight()
-{
-	if (DirectionalLight)
-	{
-		DirectionalLight->GetLightComponent()->SetLightColor(BreathColor);
-	}
-}
-
-void UHD_DragonFSM::SetNormalLight()
-{
-	if (DirectionalLight)
-	{
-		DirectionalLight->GetLightComponent()->SetLightColor(OldColor);
-	}
 }

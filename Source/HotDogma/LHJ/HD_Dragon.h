@@ -208,4 +208,7 @@ public:
 	//UI
 	int LineCnt = 7;	// 피통 줄 수
 	float LineHpValue;	// 한줄 당 피 값
+
+	UPROPERTY()
+	class AHD_CharacterPlayer* Player;
 };

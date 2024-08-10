@@ -8,6 +8,8 @@
 #include "NiagaraComponent.h"
 #include "NiagaraFunctionLibrary.h"
 #include "Components/BoxComponent.h"
+#include "HotDogma/HD_Character/HD_CharacterPlayer.h"
+#include "HotDogma/HD_Character/HD_PlayerComponent/PlayerStatusComponent.h"
 #include "Kismet/GameplayStatics.h"
 
 // Sets default values
@@ -43,6 +45,24 @@ void AHD_DragonThunderCol::Tick(float DeltaTime)
 		CurrTime = 0.f;
 		BoxComp->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
 
+		bool bRtn = GetCameraShackThunder(CameraShakeDist);
+		if (bRtn)
+		{
+			for (auto DamageOtherActor : DamageActorSet)
+			{
+				if (DamageOtherActor->GetName().Contains("Player"))
+				{
+					AHD_CharacterPlayer* player = Cast<AHD_CharacterPlayer>(DamageOtherActor);
+					if (player)
+					{
+						if (player->PlayerStatusComponent->CurrHP > 0)
+							player->GetPlayerCameraShake();
+					}
+				}
+			}
+			DamageActorSet.Empty();
+		}
+
 		UNiagaraComponent* NiagaraComponent = UNiagaraFunctionLibrary::SpawnSystemAtLocation(
 		   this,
 		   ThunderSmog,
@@ -68,4 +88,47 @@ void AHD_DragonThunderCol::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, A
 	Dragon->strDamageAttackType = "Thunder";
 	UGameplayStatics::ApplyDamage(OtherActor, Dragon->fsm->Damage_Thunder, Dragon->GetController(), Dragon,
 								  UDamageType::StaticClass());
+}
+
+bool AHD_DragonThunderCol::GetCameraShackThunder(const float& AttackDistance)
+{
+	bool bRtn = false;
+	FVector Start = GetActorLocation();
+	FVector End = GetActorLocation();
+	ECollisionChannel CollisionChannel = ECC_GameTraceChannel4;
+	TArray<FHitResult> OutHits;
+	TArray<AActor*> ActorsToIgnore;
+	ActorsToIgnore.Add(Dragon);
+	ActorsToIgnore.Add(this);
+	UKismetSystemLibrary::SphereTraceMulti(GetWorld(), Start, End, AttackDistance,
+										   UEngineTypes::ConvertToTraceType(CollisionChannel), false,
+										   ActorsToIgnore, EDrawDebugTrace::None, OutHits,
+										   true);
+
+	for (auto& Hit : OutHits)
+	{
+		if (IsValid(Hit.GetActor()))
+		{
+			//UE_LOG(LogTemp, Warning, TEXT("Hit Actor: %s"), *Hit.GetActor()->GetName());
+			UE_LOG(LogTemp, Warning, TEXT("Hit Actor: %s TargetLoc : %.f, %.f, %.f"),
+				   *Hit.GetActor()->GetName(), Hit.GetActor()->GetActorLocation().X,
+				   Hit.GetActor()->GetActorLocation().Y, Hit.GetActor()->GetActorLocation().Z);
+			FVector ThunderAttackTarget = Hit.GetActor()->GetActorLocation(); //- Player->GetActorLocation();
+			FVector newLoc = ThunderAttackTarget - Dragon->GetActorLocation();
+			newLoc.Normalize();
+
+			if (Hit.GetActor()->Tags.Num() > 0 && (Hit.GetActor()->Tags[0].ToString().Equals("HD_Player")))
+			{
+				if (!DamageActorSet.Contains(Hit.GetActor()))
+				{
+					DamageActorSet.Add(Hit.GetActor());
+				}
+			}
+		}
+	}
+
+	if (DamageActorSet.Num() > 0)
+		bRtn = true;
+
+	return bRtn;
 }

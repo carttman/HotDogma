@@ -4,6 +4,7 @@
 #include "../LHJ/HD_BreathCol.h"
 
 #include "HD_Dragon.h"
+#include "HD_DragonAnim.h"
 #include "HD_DragonFSM.h"
 #include "Components/SphereComponent.h"
 #include "GameFramework/Character.h"
@@ -36,6 +37,8 @@ void AHD_BreathCol::BeginPlay()
 	Super::BeginPlay();
 
 	Dragon = Cast<AHD_Dragon>(UGameplayStatics::GetActorOfClass(GetWorld(), AHD_Dragon::StaticClass()));
+	if(Dragon)
+		Anim = Cast<UHD_DragonAnim>(Dragon->SkeletalComp->GetAnimInstance());
 }
 
 // Called every frame
@@ -48,7 +51,19 @@ void AHD_BreathCol::SetTarget(FTransform target)
 {
 	SetLifeSpan(.225f);
 	FRotator FireSocketRotation = target.GetRotation().Rotator();
-	FireSocketRotation.Pitch += 20.f;
+	if (Anim)
+	{
+		if (Anim->isFly)
+		{
+			
+			FireSocketRotation.Pitch -= 40.f;
+		}
+		else
+		{
+			
+			FireSocketRotation.Pitch += 20.f;
+		}
+	}
 	SetActorRotation(FireSocketRotation);
 	ProjectileComp->Velocity = FireSocketRotation.Vector() * speed;
 }
@@ -61,7 +76,7 @@ void AHD_BreathCol::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* 
 	{
 		//ACharacter* OverlappedCharacter = Cast<ACharacter>(OtherActor);
 		Dragon->strDamageAttackType = "Breath";
-		UGameplayStatics::ApplyDamage(OtherActor, Dragon->fsm->Damage_Breath, GetInstigatorController(), this,
+		UGameplayStatics::ApplyDamage(OtherActor, Dragon->fsm->Damage_Breath, GetInstigatorController(), Dragon,
 		                              UDamageType::StaticClass());
 	}
 }

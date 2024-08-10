@@ -122,7 +122,13 @@ public:
 	float HandPressAttackDist = 2000.f; // 앞발찍기 공격범위
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float HandPressCameraDist = 3000.f; // 앞발찍기 카메라쉐이크
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float JumpPressAttackDist = 2000.f; // 점프찍기 공격범위
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float JumpPressCameraDist = 3000.f; // 점프찍기 카메라쉐이크
 #pragma endregion
 
 	UPROPERTY(EditAnywhere)
@@ -229,7 +235,7 @@ public:
 	FRotator NowRotator;
 #pragma endregion
 
-#pragma region	Fly Property
+#pragma region	FlyProperty
 	bool chkOnceFly = false; // 한번이라도 날았는지 확인	
 
 	int ApplySkillAsFly = 0; // 공중에서 사용할 스킬 개수
@@ -256,6 +262,7 @@ public:
 	TSubclassOf<class AHD_BreathCol> Breath_Projectile;
 
 	//=================================데미지 값
+#pragma region 데미지 값
 	UPROPERTY(EditAnywhere)
 	float Damage_JumpPress = 10.f; // 점프찍기
 
@@ -279,6 +286,7 @@ public:
 
 	UPROPERTY(EditAnywhere)
 	float Damage_Breath = 10.f; // 브레스
+#pragma endregion
 
 #pragma region 번개공격
 	UFUNCTION()
@@ -322,5 +330,18 @@ public:
 	void F_MeteorMagic(const float& DeltaTime);
 
 	FVector F_GetSpawnMeteorLoc();
-#pragma endregion	
+#pragma endregion
+
+	UPROPERTY(EditAnywhere)
+	class ADirectionalLight* DirectionalLight; // DirectionalLight
+
+	FLinearColor OldColor;
+	FLinearColor BreathColor = {1.f, 0.208637f, 0.198069f, 1.f};
+
+	void SetFirelLight();
+	void SetNormalLight();
+
+	bool bReturnLightColor = false;
+
+	float LightColorAlpha=0.f;
 };

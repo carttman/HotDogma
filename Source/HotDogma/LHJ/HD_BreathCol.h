@@ -41,4 +41,7 @@ public:
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FSM")
 	class AHD_Dragon* Dragon;
+
+	UPROPERTY(BlueprintReadOnly, EditInstanceOnly)
+	class UHD_DragonAnim* Anim;
 };

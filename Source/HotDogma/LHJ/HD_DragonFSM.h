@@ -184,14 +184,14 @@ public:
 	int32 PatternPageNum = 1;
 
 	std::vector<AttackState> OrgAttackPattern = {
-		// AttackState::Breath,
-		// AttackState::Shout,
-		// AttackState::HandPress,
-		// AttackState::Scratch,
-		// AttackState::TailSlap,
-		// AttackState::JumpPress,
+		AttackState::Breath,
+		AttackState::Shout,
+		AttackState::HandPress,
+		AttackState::Scratch,
+		AttackState::TailSlap,
+		AttackState::JumpPress,
 		AttackState::ThunderMagic,
-		//AttackState::Meteor,
+		AttackState::Meteor,
 	};
 
 	std::vector<AttackState> RndAttackPattern;
@@ -323,6 +323,6 @@ public:
 
 	FVector F_GetSpawnMeteorLoc();
 
-	
-#pragma endregion	
+
+#pragma endregion
 };

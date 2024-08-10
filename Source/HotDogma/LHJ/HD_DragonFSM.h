@@ -122,7 +122,13 @@ public:
 	float HandPressAttackDist = 2000.f; // 앞발찍기 공격범위
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float HandPressCameraDist = 3000.f; // 앞발찍기 카메라쉐이크
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float JumpPressAttackDist = 2000.f; // 점프찍기 공격범위
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float JumpPressCameraDist = 3000.f; // 점프찍기 카메라쉐이크
 #pragma endregion
 
 	UPROPERTY(EditAnywhere)

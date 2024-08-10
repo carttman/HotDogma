@@ -44,4 +44,11 @@ public:
 
 	UPROPERTY(EditDefaultsOnly)
 	class UNiagaraSystem* ThunderSmog;
+
+	float CameraShakeDist = 1000;
+
+	bool GetCameraShackThunder(const float& AttackDistance);
+
+	UPROPERTY()
+	TSet<AActor*> DamageActorSet;
 };

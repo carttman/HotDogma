@@ -4,6 +4,8 @@
 #include "../LHJ/HD_DragonAnim.h"
 #include "HD_Dragon.h"
 #include "Components/CapsuleComponent.h"
+#include "HotDogma/HD_Character/HD_CharacterPlayer.h"
+#include "HotDogma/HD_Character/HD_PlayerComponent/PlayerStatusComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "Kismet/KismetSystemLibrary.h"
@@ -89,7 +91,26 @@ void UHD_DragonAnim::AnimNotify_PressEnd()
 
 void UHD_DragonAnim::AnimNotify_AttackJumpPress()
 {
-	bool bRtn = GetAttackPress(fsm->JumpPressAttackDist);
+	bool bRtn = GetAttackPress(fsm->JumpPressCameraDist);
+	if (bRtn)
+	{	
+		for (auto DamageOtherActor : DamageActorSet)
+		{
+			if (DamageOtherActor->GetName().Contains("Player"))
+			{
+				AHD_CharacterPlayer* player = Cast<AHD_CharacterPlayer>(DamageOtherActor);
+				if (player)
+				{
+					if (player->PlayerStatusComponent->CurrHP > 0)
+						player->GetPlayerCameraShake();
+				}
+			}
+		}
+
+		DamageActorSet.Empty();
+	}
+	
+	bRtn = GetAttackPress(fsm->JumpPressAttackDist);
 	if (bRtn)
 	{
 		for (auto OtherActor : DamageActorSet)
@@ -106,7 +127,26 @@ void UHD_DragonAnim::AnimNotify_AttackJumpPress()
 
 void UHD_DragonAnim::AnimNotify_AttackHandPress()
 {
-	bool bRtn = GetAttackPress(fsm->HandPressAttackDist);
+	bool bRtn = GetAttackPress(fsm->HandPressCameraDist);
+	if (bRtn)
+	{
+		for (auto DamageOtherActor : DamageActorSet)
+		{
+			if (DamageOtherActor->GetName().Contains("Player"))
+			{
+				AHD_CharacterPlayer* player = Cast<AHD_CharacterPlayer>(DamageOtherActor);
+				if (player)
+				{
+					if (player->PlayerStatusComponent->CurrHP > 0)
+						player->GetPlayerCameraShake();
+				}
+			}
+		}
+
+		DamageActorSet.Empty();
+	}
+	
+	bRtn = GetAttackPress(fsm->HandPressAttackDist);
 	if (bRtn)
 	{
 		for (auto OtherActor : DamageActorSet)

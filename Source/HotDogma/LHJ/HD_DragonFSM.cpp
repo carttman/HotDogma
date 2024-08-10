@@ -11,6 +11,8 @@
 #include "HD_DragonAnim.h"
 #include "HD_DragonThunderCol.h"
 #include "HD_Meteor.h"
+#include "NiagaraComponent.h"
+#include "NiagaraFunctionLibrary.h"
 #include "HotDogma/HD_Character/HD_CharacterPlayer.h"
 #include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetMathLibrary.h"
@@ -101,7 +103,7 @@ void UHD_DragonFSM::TickComponent(float DeltaTime, ELevelTick TickType, FActorCo
 		ai->StopMovement();
 
 
-	if (NearTargetActor)
+	if (NearTargetActor && !isAttack)
 		RotateToTarget(DeltaTime);
 
 	if (State == DragonState::Attack && normalAttackState == AttackState::Breath && bBreathAttack)
@@ -723,7 +725,7 @@ void UHD_DragonFSM::F_MeteorMagic(const float& DeltaTime)
 {
 	F_GetCharacterLoc_Casting();
 
-	FVector SpMeteorLoc = F_GetSpawnMeteorLoc();
+	//FVector SpMeteorLoc = F_GetSpawnMeteorLoc();
 
 	if (iCastingCnt < 4)
 	{
@@ -734,13 +736,33 @@ void UHD_DragonFSM::F_MeteorMagic(const float& DeltaTime)
 			for (auto MeteorPoint : CastingAttack_CharacterLoc)
 			{
 				AHD_Meteor* meteor_prj = GetWorld()->SpawnActor<AHD_Meteor>(
-					Meteor_Projectile, SpMeteorLoc, FRotator::ZeroRotator);
+					Meteor_Projectile, MeteorPoint, FRotator::ZeroRotator);
 				meteor_prj->SetTarget(MeteorPoint);
 			}
 
 			iCastingCnt++;
 		}
 	}
+
+
+	// if (iCastingCnt < 4)
+	// {
+	// 	CurrMeteorTime += DeltaTime;
+	// 	if (CurrMeteorTime >= MakeMeteorTime)
+	// 	{
+	// 		CurrMeteorTime = 0.f;
+	// 		for (auto MeteorPoint : CastingAttack_CharacterLoc)
+	// 		{
+	// 			UNiagaraComponent* NiagaraComponent = UNiagaraFunctionLibrary::SpawnSystemAtLocation(
+	// 				this,
+	// 				MeteorVFX,
+	// 				MeteorPoint,
+	// 				MeteorPoint.Rotation()
+	// 			);
+	// 		}
+	// 		iCastingCnt++;
+	// 	}
+	// }
 }
 
 FVector UHD_DragonFSM::F_GetSpawnMeteorLoc()

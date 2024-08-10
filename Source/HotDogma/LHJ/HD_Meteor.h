@@ -49,4 +49,7 @@ public:
 
 	UPROPERTY()
 	TSet<AActor*> DamageActorSet;
+
+	UPROPERTY(EditDefaultsOnly)
+	class UNiagaraSystem* MeteorNia;
 };

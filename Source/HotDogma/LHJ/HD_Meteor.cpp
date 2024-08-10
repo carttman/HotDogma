@@ -5,6 +5,8 @@
 
 #include "HD_Dragon.h"
 #include "HD_DragonFSM.h"
+#include "NiagaraComponent.h"
+#include "NiagaraFunctionLibrary.h"
 #include "Components/SphereComponent.h"
 #include "GameFramework/ProjectileMovementComponent.h"
 #include "HotDogma/HD_Character/HD_CharacterPlayer.h"
@@ -49,8 +51,10 @@ void AHD_Meteor::Tick(float DeltaTime)
 void AHD_Meteor::SetTarget(FVector target)
 {
 	FVector dir = target - GetActorLocation();
+	FRotator dirRot = dir.Rotation();
+	//dirRot.Yaw += 45.f;
 	dir.Normalize();
-	SetActorRotation(dir.Rotation());
+	SetActorRotation(dirRot);
 	ProjectileComp->Velocity = dir * speed;
 }
 
@@ -58,13 +62,20 @@ void AHD_Meteor::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimit
                        FVector NormalImpulse, const FHitResult& Hit)
 {
 	//UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), explosionEffect, GetActorLocation());
-	bool bRtn =false;
-	
+	bool bRtn = false;
+
 	if (OtherActor->Tags.Contains("Meteor"))
 	{
 		return;
 	}
 
+	UNiagaraComponent* NiagaraComponent = UNiagaraFunctionLibrary::SpawnSystemAtLocation(
+	   this,
+	   MeteorNia,
+	   GetActorLocation(),
+	   GetActorRotation()	   
+   );
+	
 	// 플레이어가 카메라 쉐이크 범위 안에 있다면 카메라 쉐이크 효과를 호출한다.
 	bRtn = GetAttackMeteor(CameraShakeDist);
 	if (bRtn)
@@ -74,10 +85,10 @@ void AHD_Meteor::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimit
 			if (DamageOtherActor->GetName().Contains("Player"))
 			{
 				AHD_CharacterPlayer* player = Cast<AHD_CharacterPlayer>(DamageOtherActor);
-				if(player)
+				if (player)
 				{
 					if (player->PlayerStatusComponent->CurrHP > 0)
-						player->GetPlayerCameraShake();					
+						player->GetPlayerCameraShake();
 				}
 			}
 		}
@@ -91,7 +102,8 @@ void AHD_Meteor::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimit
 		for (auto DamageOtherActor : DamageActorSet)
 		{
 			Dragon->strDamageAttackType = "Meteor";
-			UGameplayStatics::ApplyDamage(DamageOtherActor, Dragon->fsm->Damage_Meteor, GetInstigatorController(), this,
+			UGameplayStatics::ApplyDamage(DamageOtherActor, Dragon->fsm->Damage_Meteor, GetInstigatorController(),
+			                              Dragon,
 			                              UDamageType::StaticClass());
 		}
 		DamageActorSet.Empty();

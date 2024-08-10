@@ -110,10 +110,10 @@ float AHD_CharacterPlayer::TakeDamage(float DamageAmount, FDamageEvent const& Da
 				}
 				if(HJ_Dragon->strDamageAttackType.Equals("JumpPress"))
 				{
-					if(ShoutCameraShake)
-					{
-						PlayerContoller->PlayerCameraManager->StartCameraShake(ShoutCameraShake);
-					}
+					// if(ShoutCameraShake)
+					// {
+					// 	PlayerContoller->PlayerCameraManager->StartCameraShake(ShoutCameraShake);
+					// }
 					SlowDownTime_Hit(0.5f, 0.1f);
 					GetMesh()->GetAnimInstance()->Montage_Play(AM_Hit_Montage, 1);
 					GetMesh()->GetAnimInstance()->Montage_JumpToSection(FName("Hit_Large"), AM_Hit_Montage);
@@ -135,10 +135,10 @@ float AHD_CharacterPlayer::TakeDamage(float DamageAmount, FDamageEvent const& Da
 				}
 				if(HJ_Dragon->strDamageAttackType.Equals("HandPress"))
 				{
-					if(ShoutCameraShake)
-					{
-						PlayerContoller->PlayerCameraManager->StartCameraShake(ShoutCameraShake);
-					}
+					// if(ShoutCameraShake)
+					// {
+					// 	PlayerContoller->PlayerCameraManager->StartCameraShake(ShoutCameraShake);
+					// }
 					SlowDownTime_Hit(0.5f, 0.1f);
 					GetMesh()->GetAnimInstance()->Montage_Play(AM_Hit_Montage, 1);
 					GetMesh()->GetAnimInstance()->Montage_JumpToSection(FName("Hit_Normal"), AM_Hit_Montage);
@@ -146,14 +146,21 @@ float AHD_CharacterPlayer::TakeDamage(float DamageAmount, FDamageEvent const& Da
 				}
 				if(HJ_Dragon->strDamageAttackType.Equals("Thunder"))
 				{
-					if(ShoutCameraShake)
-					{
-						PlayerContoller->PlayerCameraManager->StartCameraShake(ShoutCameraShake);
-					}
+					// if(ShoutCameraShake)
+					// {
+					// 	PlayerContoller->PlayerCameraManager->StartCameraShake(ShoutCameraShake);
+					// }
 					GetMesh()->GetAnimInstance()->Montage_Play(AM_Hit_Montage, 1);
 					GetMesh()->GetAnimInstance()->Montage_JumpToSection(FName("Hit_Normal"), AM_Hit_Montage);
 					PlayerAttackComponent->IsClimb_Attacking = false;
 				}
+				if(HJ_Dragon->strDamageAttackType.Equals("Meteor"))
+				{
+					SlowDownTime_Hit(0.5f, 0.1f);
+					GetMesh()->GetAnimInstance()->Montage_Play(AM_Hit_Montage, 1);
+					GetMesh()->GetAnimInstance()->Montage_JumpToSection(FName("Hit_Large"), AM_Hit_Montage);
+					PlayerAttackComponent->IsClimb_Attacking = false;
+				}//Meteor
 			}
 		}
 	}

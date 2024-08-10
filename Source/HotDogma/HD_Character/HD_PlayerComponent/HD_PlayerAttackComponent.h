@@ -63,7 +63,7 @@ public:
 	int32 ComboCount = 0;
 	float CurrComboTime = 0;
 	float MinComboTime = 0.2f;
-	float MaxComboTime = 1.0f;
+	float MaxComboTime = 0.7f;
 
 public:
 	UPROPERTY(EditAnywhere)

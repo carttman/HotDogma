@@ -43,4 +43,6 @@ public:
 public:
 	UPROPERTY(EditAnywhere)
 	class UNiagaraSystem* BloodVFX;
+	UPROPERTY(EditAnywhere)
+	class USoundBase* Hit_SFX;
 };

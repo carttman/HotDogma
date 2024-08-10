@@ -62,12 +62,9 @@ void AHD_PlayerWeaponBase::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, A
 		FDamageEvent DamageEvent;
 		UGameplayStatics::ApplyDamage(OtherActor, 10.0f, Player->GetController(), this, UDamageType::StaticClass());
 		UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), BloodVFX, GetActorLocation(), GetActorRotation());
-		// if(Player->PlayerAttackComponent->IsCutting)
-		// {
-		// 	UE_LOG(LogTemp, Warning, TEXT("Slow"));
-		// 	//Player->PlayerAttackComponent->SlowDownTime(0.3f,0.1f);
-		// }
+		UGameplayStatics::PlaySoundAtLocation(GetWorld(), Hit_SFX, GetActorLocation(), GetActorRotation());
 		CapsuleComp->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+		
 	}
 }
 

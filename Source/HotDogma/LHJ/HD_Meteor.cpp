@@ -19,7 +19,7 @@ AHD_Meteor::AHD_Meteor()
 	PrimaryActorTick.bCanEverTick = true;
 
 	collisionComp = CreateDefaultSubobject<USphereComponent>(TEXT("CollisionComp"));
-	collisionComp->SetCollisionProfileName(TEXT("DragonAttack"));
+	collisionComp->SetCollisionProfileName(TEXT("Meteor"));
 	collisionComp->SetSphereRadius(55);
 	RootComponent = collisionComp;
 	collisionComp->OnComponentHit.AddDynamic(this, &AHD_Meteor::OnHit);

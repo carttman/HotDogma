@@ -2,10 +2,14 @@
 
 
 #include "HD_WarriorAnimInstance.h"
+#include "HD_CompanionCharacter.h"
+#include "HotDogma/Ksw/HD_CompanionWeapon.h"
 
 void UHD_WarriorAnimInstance::NativeInitializeAnimation()
 {
 	Super::NativeInitializeAnimation();
+
+	Companion = Cast<AHD_CompanionCharacter>(TryGetPawnOwner());
 }
 
 void UHD_WarriorAnimInstance::PlayAttackMontage(int32 combo)
@@ -61,4 +65,14 @@ void UHD_WarriorAnimInstance::PlayIndomitableLashMontage(int32 step)
 			Montage_JumpToSection(MontageSection, IndomitableLashMontage);
 		}
 	}
+}
+
+void UHD_WarriorAnimInstance::AnimNotify_Damage_On()
+{
+	Companion->CompanionWeapon->OnCollision(true);
+}
+
+void UHD_WarriorAnimInstance::AnimNotify_Damage_Off()
+{
+	Companion->CompanionWeapon->OnCollision(false);
 }

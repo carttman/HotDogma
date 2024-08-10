@@ -10,6 +10,7 @@
 #include "Components/WidgetComponent.h"
 #include "Blueprint/UserWidget.h"
 #include "HotDogma/UI/HD_CompanionWidget.h"
+#include "HotDogma/Ksw/HD_CompanionWeapon.h"
 
 // Sets default values
 AHD_CompanionCharacter::AHD_CompanionCharacter()
@@ -45,6 +46,10 @@ void AHD_CompanionCharacter::BeginPlay()
 		Widget->SetText(CompanionName);
 		Widget->SetHPBar(1, 1);
 	}
+
+	CompanionWeapon = GetWorld()->SpawnActor<AHD_CompanionWeapon>(CompanionWeaponFactory, GetActorLocation(), GetActorRotation());
+	
+	CompanionWeapon->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, TEXT("Weapon"));
 }
 
 // Called every frame

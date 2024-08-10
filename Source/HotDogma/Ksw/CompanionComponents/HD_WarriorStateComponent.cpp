@@ -21,6 +21,8 @@ void UHD_WarriorStateComponent::BeginPlay()
 
 	// 전투 패턴을 세팅한다.
 	PatternList.Add(EWarriorBattleState::State_MightySweep);
+	PatternList.Add(EWarriorBattleState::State_MightySweep);
+	PatternList.Add(EWarriorBattleState::State_MightySweep);
 	PatternList.Add(EWarriorBattleState::State_ChargedSlash);
 	PatternList.Add(EWarriorBattleState::State_HeavenwardSunder);
 	PatternList.Add(EWarriorBattleState::State_IndomitableLash);
@@ -384,7 +386,7 @@ void UHD_WarriorStateComponent::HeavenwardSunder()
 
 void UHD_WarriorStateComponent::IndomitableLash()
 {
-	MaxChargeTime = 5.0f;
+	MaxChargeTime = 3.5f;
 	if (CurrentCombo == 0)
 	{
 		// 드래곤과의 거리

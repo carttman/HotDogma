@@ -41,4 +41,13 @@ public:
 	void PlayHeavenwardSunderMontage(int32 step);
 
 	void PlayIndomitableLashMontage(int32 step);
+
+	UFUNCTION()
+	void AnimNotify_Damage_On();
+	UFUNCTION()
+	void AnimNotify_Damage_Off();
+
+
+	UPROPERTY()
+	class AHD_CompanionCharacter* Companion;
 };

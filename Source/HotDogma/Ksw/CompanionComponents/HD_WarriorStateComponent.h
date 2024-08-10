@@ -63,7 +63,7 @@ public:
 	float MightySweepDamage = 10.0f;
 
 	// ChargedSlash
-	float MaxChargeTime = 5.0f;
+	float MaxChargeTime = 4.0f;
 	float PostDelayTime = 1.0f;
 	float ChargedSlashRange = 200.0f;
 	float ChargedSlashDamage = 20.0f;

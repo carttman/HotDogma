@@ -49,4 +49,12 @@ public:
 	// ¿ÃπÃ¡ˆ
 	UPROPERTY(EditAnywhere, Category = "Companion")
 	class UTexture2D* CompanionImage;
+
+
+
+	UPROPERTY(EditAnywhere, Category = "Companion")
+	TSubclassOf<class AHD_CompanionWeapon> CompanionWeaponFactory;
+
+	UPROPERTY()
+	class AHD_CompanionWeapon* CompanionWeapon;
 };

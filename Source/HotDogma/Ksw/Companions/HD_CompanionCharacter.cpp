@@ -11,6 +11,8 @@
 #include "Blueprint/UserWidget.h"
 #include "HotDogma/UI/HD_CompanionWidget.h"
 #include "HotDogma/Ksw/HD_CompanionWeapon.h"
+#include "HotDogma/LHJ/HD_Dragon.h"
+
 
 // Sets default values
 AHD_CompanionCharacter::AHD_CompanionCharacter()
@@ -39,7 +41,7 @@ void AHD_CompanionCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 
-	UHD_CompanionWidget* Widget = Cast<UHD_CompanionWidget>(HPComp->GetUserWidgetObject());
+	Widget = Cast<UHD_CompanionWidget>(HPComp->GetUserWidgetObject());
 	if (Widget)
 	{
 		Widget->SetImage(CompanionImage);
@@ -73,9 +75,62 @@ void AHD_CompanionCharacter::SetupPlayerInputComponent(UInputComponent* PlayerIn
 float AHD_CompanionCharacter::TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser)
 {
 	float Damage = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
+	if (!IsDeath)
+	{
+		PlayerStatusComp->CurrHP -= Damage;
+		if (PlayerStatusComp->MaxHP < PlayerStatusComp->CurrHP)
+		{
+			PlayerStatusComp->CurrHP = PlayerStatusComp->MaxHP;
+		}
 
-	UE_LOG(LogTemp, Warning, TEXT("Companion Take Damage : %f"), Damage);
-	
+		PlayerStatusComp->CurrHP <= 0 ? IsDeath = true : IsDeath = false;
+		Widget->SetHPBar(PlayerStatusComp->CurrHP, PlayerStatusComp->MaxHP);
+		if (!CompanionStateComp->bCasting)
+		{
+			if (DamageCauser)
+			{
+				AHD_Dragon* Dragon = Cast<AHD_Dragon>(DamageCauser);
+				if (Dragon)
+				{
+					if (Dragon->strDamageAttackType.Equals("Shout"))
+					{
+						GetMesh()->GetAnimInstance()->Montage_Play(HitMontage, 1);
+						GetMesh()->GetAnimInstance()->Montage_JumpToSection(FName("Stun"), HitMontage);
+					}
+					if (Dragon->strDamageAttackType.Equals("JumpPress"))
+					{
+						GetMesh()->GetAnimInstance()->Montage_Play(HitMontage, 1);
+						GetMesh()->GetAnimInstance()->Montage_JumpToSection(FName("CriticalHit"), HitMontage);
+					}
+					if (Dragon->strDamageAttackType.Equals("TailSlap"))
+					{
+						GetMesh()->GetAnimInstance()->Montage_Play(HitMontage, 1);
+						GetMesh()->GetAnimInstance()->Montage_JumpToSection(FName("KnockBack"), HitMontage);
+					}
+					if (Dragon->strDamageAttackType.Equals("Scratch"))
+					{
+						GetMesh()->GetAnimInstance()->Montage_Play(HitMontage, 1);
+						GetMesh()->GetAnimInstance()->Montage_JumpToSection(FName("KnockBack"), HitMontage);
+					}
+					if (Dragon->strDamageAttackType.Equals("HandPress"))
+					{
+						GetMesh()->GetAnimInstance()->Montage_Play(HitMontage, 1);
+						GetMesh()->GetAnimInstance()->Montage_JumpToSection(FName("Hit"), HitMontage);
+					}
+					if (Dragon->strDamageAttackType.Equals("Thunder"))
+					{
+						GetMesh()->GetAnimInstance()->Montage_Play(HitMontage, 1);
+						GetMesh()->GetAnimInstance()->Montage_JumpToSection(FName("Hit"), HitMontage);
+					}
+					if (Dragon->strDamageAttackType.Equals("Meteor"))
+					{
+						GetMesh()->GetAnimInstance()->Montage_Play(HitMontage, 1);
+						GetMesh()->GetAnimInstance()->Montage_JumpToSection(FName("CriticalHit"), HitMontage);
+					}
+				}
+			}
+		}
+	}
 	return Damage;
 }
 

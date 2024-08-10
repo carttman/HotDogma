@@ -24,7 +24,7 @@ public:
 
 	float CurrentPercent = 1.0f;
 	float TargetPercent = 1.0f;
-	float DecreaseRate = 1.0f;
+	float DecreaseRate = 0.1f;
 
 	// ÀÌ¹ÌÁö
 	UPROPERTY(meta = (BindWidget))

@@ -84,4 +84,6 @@ public:
 	UAnimInstance* AnimInstance;
 
 	FVector Acc;
+
+	bool bCasting = false;
 };

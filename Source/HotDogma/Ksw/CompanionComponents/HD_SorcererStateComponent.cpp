@@ -18,6 +18,7 @@
 #include "K2Node_Timeline.h"
 #include "HotDogma/HD_Character/HD_CharacterPlayer.h"
 #include <Kismet/GameplayStatics.h>
+#include <NiagaraFunctionLibrary.h>
 
 UHD_SorcererStateComponent::UHD_SorcererStateComponent()
 {
@@ -317,8 +318,10 @@ void UHD_SorcererStateComponent::Levitate()
 	// 천천히 올린다.
 	Me->GetCharacterMovement()->MaxFlySpeed = 150;
 
-	//Me->AddMovementInput(FVector(0, 0, 1), 0.5);
-	// 회전을 못하게 막는다.
+	auto* dust = GetWorld()->SpawnActor<AActor>(DustFactory, Me->GetActorTransform());
+	dust->AttachToComponent(Me->GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale);
+	//dust 위치를 조금 올린다.
+	dust->SetActorRelativeLocation(FVector(0, 0, 70));
 
 	// 5초 후에 중력을 다시 적용한다.
 	GetWorld()->GetTimerManager().SetTimer(LevitateTimerHandle, this, &UHD_SorcererStateComponent::EndLevitate, LevitateTime, false);

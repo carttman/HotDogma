@@ -113,6 +113,9 @@ public:
 	int32 LevitateUp = 1;
 	float LevitateAnimTime = 1.0f;
 
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<class AActor> DustFactory;
+
 	FTimerHandle LevitateTimerHandle;
 
 	// ArgentSuccor

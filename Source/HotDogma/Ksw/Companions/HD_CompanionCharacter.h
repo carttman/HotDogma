@@ -41,7 +41,10 @@ public:
 
 	UPROPERTY(EditAnywhere, Category = "Companion")
 	class UWidgetComponent* HPComp;
-
+	
+	UPROPERTY()
+	class UHD_CompanionWidget* Widget;
+	
 	// ¹®ÀÚ¿­
 	UPROPERTY(EditAnywhere, Category = "Companion")
 	FString CompanionName;
@@ -50,11 +53,14 @@ public:
 	UPROPERTY(EditAnywhere, Category = "Companion")
 	class UTexture2D* CompanionImage;
 
-
-
 	UPROPERTY(EditAnywhere, Category = "Companion")
 	TSubclassOf<class AHD_CompanionWeapon> CompanionWeaponFactory;
 
 	UPROPERTY()
 	class AHD_CompanionWeapon* CompanionWeapon;
+
+	UPROPERTY(EditAnywhere, Category = "Companion")
+	UAnimMontage* HitMontage;
+
+	bool IsDeath;
 };

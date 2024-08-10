@@ -25,15 +25,38 @@ void UHD_GameOverWidget::NativeTick(const FGeometry& MyGeometry, float InDeltaTi
 
 void UHD_GameOverWidget::OnMyReStart()
 {
-	FString mapName = UGameplayStatics::GetCurrentLevelName(GetWorld());
-
-	UGameplayStatics::OpenLevel(GetWorld(), FName(*mapName));
-	Player->PlayerContoller->SetShowMouseCursor(false);
-	Player->PlayerContoller->SetInputMode(FInputModeGameOnly());
-	
+	UGameplayStatics::SetGamePaused(GetWorld(), false);
+	GameOverReverseFade();
+	GetWorld()->GetTimerManager().SetTimer(PlayTimerHandle, this, &UHD_GameOverWidget::OpenLevelTimer, 2.f, false);
 }
 
 void UHD_GameOverWidget::OnMyBackTitle()
 {
+	UGameplayStatics::SetGamePaused(GetWorld(), false);
+	GameOverReverseFade();
+	GetWorld()->GetTimerManager().SetTimer(PlayTimerHandle, this, &UHD_GameOverWidget::OpenTitle, 2.f, false);
+}
+
+void UHD_GameOverWidget::OpenLevelTimer()
+{
+	FString mapName = UGameplayStatics::GetCurrentLevelName(GetWorld());
+	UGameplayStatics::OpenLevel(GetWorld(), FName(*mapName));
+	Player->PlayerContoller->SetShowMouseCursor(false);
+	Player->PlayerContoller->SetInputMode(FInputModeGameOnly());
+}
+
+void UHD_GameOverWidget::OpenTitle()
+{
 	UGameplayStatics::OpenLevel(GetWorld(), FName("MainMenu"));
+}
+
+void UHD_GameOverWidget::GameOverPlayFade()
+{
+	PlayAnimation(Fade_Out);
+}
+
+void UHD_GameOverWidget::GameOverReverseFade()
+{
+	
+	PlayAnimation(Fade_In);
 }

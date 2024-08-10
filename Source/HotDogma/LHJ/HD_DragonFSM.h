@@ -338,9 +338,6 @@ public:
 	FLinearColor OldColor;
 	FLinearColor BreathColor = {1.f, 0.208637f, 0.198069f, 1.f};
 
-	void SetFirelLight();
-	void SetNormalLight();
-
 	bool bReturnLightColor = false;
 
 	float LightColorAlpha=0.f;

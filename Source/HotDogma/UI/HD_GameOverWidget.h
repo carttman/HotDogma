@@ -25,9 +25,21 @@ public:
 	class UButton* Button_BackTitle;
 
 	class AHD_CharacterPlayer* Player;
-	
+public:
 	UFUNCTION()
 	void OnMyReStart();
 	UFUNCTION()
 	void OnMyBackTitle();
+
+	UPROPERTY(EditAnywhere, meta = (BindWidgetAnim), Transient)
+	UWidgetAnimation* Fade_Out;
+	UPROPERTY(EditAnywhere, meta = (BindWidgetAnim), Transient)
+	UWidgetAnimation* Fade_In;
+	
+	FTimerHandle PlayTimerHandle;
+	void OpenLevelTimer();
+	void OpenTitle();
+public:
+	void GameOverPlayFade();
+	void GameOverReverseFade();
 };

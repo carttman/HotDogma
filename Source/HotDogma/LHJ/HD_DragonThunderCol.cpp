@@ -57,7 +57,6 @@ void AHD_DragonThunderCol::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, A
 {
 	UE_LOG(LogTemp, Warning, TEXT("%s"), *OtherActor->GetName());
 	Dragon->strDamageAttackType = "Thunder";
-
-	UGameplayStatics::ApplyDamage(OtherActor, Dragon->fsm->Damage_Shout, Dragon->GetController(), Dragon,
+	UGameplayStatics::ApplyDamage(OtherActor, Dragon->fsm->Damage_Thunder, Dragon->GetController(), Dragon,
 								  UDamageType::StaticClass());
 }

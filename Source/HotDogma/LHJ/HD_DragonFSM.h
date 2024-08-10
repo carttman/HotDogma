@@ -183,18 +183,14 @@ public:
 	UPROPERTY()
 	int32 PatternPageNum = 1;
 
-	// TArray<AttackState> AttackPattern1Page = {
-	// 	AttackState::Breath, AttackState::ThunderMagic, AttackState::HandPress
-	// };
-
 	std::vector<AttackState> OrgAttackPattern = {
-		AttackState::Breath,
-		AttackState::Shout,
-		AttackState::HandPress,
-		AttackState::Scratch,
-		AttackState::TailSlap,
-		AttackState::JumpPress,
-		AttackState::ThunderMagic,
+		//AttackState::Breath,
+		// AttackState::Shout,
+		// AttackState::HandPress,
+		// AttackState::Scratch,
+		// AttackState::TailSlap,
+		// AttackState::JumpPress,
+		// AttackState::ThunderMagic,
 		AttackState::Meteor,
 	};
 
@@ -251,6 +247,14 @@ public:
 	UFUNCTION()
 	void BreathREnd();
 
+	bool bBreathAttack = false;
+
+	UFUNCTION()
+	void ProjectileBreathCollision(const float& DeltaTime);
+
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<class AHD_BreathCol> Breath_Projectile;
+
 	//=================================데미지 값
 	UPROPERTY(EditAnywhere)
 	float Damage_JumpPress = 10.f; // 점프찍기
@@ -272,6 +276,9 @@ public:
 
 	UPROPERTY(EditAnywhere)
 	float Damage_Shout = 0.1f; // 포효
+
+	UPROPERTY(EditAnywhere)
+	float Damage_Breath = 10.f; // 브레스
 
 #pragma region 번개공격
 	UFUNCTION()
@@ -315,5 +322,5 @@ public:
 	void F_MeteorMagic(const float& DeltaTime);
 
 	FVector F_GetSpawnMeteorLoc();
-#pragma endregion
+#pragma endregion	
 };

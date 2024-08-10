@@ -232,30 +232,13 @@ void AHD_Dragon::Tick(float DeltaTime)
 		// 필드에 있는 캐릭터를 인지한다.
 		UGameplayStatics::GetAllActorsOfClassWithTag(GetWorld(), ACharacter::StaticClass(),
 		                                             TEXT("HD_Player"), OutActors);
-		//
-		// TArray<AActor*> OutCharacterActor;
-		// // 필드에 있는 캐릭터를 인지한다.
-		// UGameplayStatics::GetAllActorsOfClassWithTag(GetWorld(), ACharacter::StaticClass(),
-		//                                              TEXT("PlayerCharacter"), OutCharacterActor);
-
-		if (OutActors.Num() > 1)
+	
+		for (auto othActor : OutActors)
 		{
-			for (auto othActor : OutActors)
-			{
-				ACharacter* charac = Cast<ACharacter>(othActor);
-				if (charac&&!charac->GetName().Contains("Player"))
-					CharacterArr.Add(charac);
-			}
-		}
-		else if(OutActors.Num() > 0)	// 솔플용...
-		{
-			for (auto othActor : OutActors)
-			{
-				ACharacter* charac = Cast<ACharacter>(othActor);
-				if (charac)
-					CharacterArr.Add(charac);
-			}
-		}
+			ACharacter* charac = Cast<ACharacter>(othActor);
+			if (charac)
+				CharacterArr.Add(charac);
+		}		
 	}
 }
 

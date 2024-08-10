@@ -4,22 +4,22 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "HD_Meteor.generated.h"
+#include "HD_BreathCol.generated.h"
 
 UCLASS()
-class HOTDOGMA_API AHD_Meteor : public AActor
+class HOTDOGMA_API AHD_BreathCol : public AActor
 {
 	GENERATED_BODY()
-
-public:
+	
+public:	
 	// Sets default values for this actor's properties
-	AHD_Meteor();
+	AHD_BreathCol();
 
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-public:
+public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
@@ -29,24 +29,16 @@ public:
 	UPROPERTY(VisibleAnywhere, Category = Collision)
 	class USphereComponent* collisionComp;
 
-	void SetTarget(FVector target);
+	void SetTarget(FTransform target);
 
 	UFUNCTION()
-	void OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse,
-	           const FHitResult& Hit);
-
-	bool GetAttackMeteor(const float& AttackDistance);
+	void OnOverlapBegin(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor,
+						class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep,
+						const FHitResult& SweepResult);
 
 	UPROPERTY(EditAnywhere, Category = Settings)
 	float speed = 5000;
-
+	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FSM")
 	class AHD_Dragon* Dragon;
-
-	float AttackDist = 300;
-
-	float CameraShakeDist = 1000;
-
-	UPROPERTY()
-	TSet<AActor*> DamageActorSet;
 };

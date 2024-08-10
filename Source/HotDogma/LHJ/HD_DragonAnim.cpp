@@ -298,11 +298,13 @@ void UHD_DragonAnim::AnimNotify_EndFlyAttack()
 void UHD_DragonAnim::AnimNotify_StartBreath()
 {
 	//Dragon->FireCollision->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
+	fsm->bBreathAttack = true;
 }
 
 void UHD_DragonAnim::AnimNotify_EndBreath()
 {
 	//Dragon->FireCollision->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	fsm->bBreathAttack = false;
 }
 
 void UHD_DragonAnim::AnimNotify_AttackShout()

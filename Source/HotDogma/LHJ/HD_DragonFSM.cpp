@@ -6,6 +6,7 @@
 #include <random>
 
 #include "AIController.h"
+#include "HD_BreathCol.h"
 #include "HD_Dragon.h"
 #include "HD_DragonAnim.h"
 #include "HD_DragonThunderCol.h"
@@ -101,11 +102,12 @@ void UHD_DragonFSM::TickComponent(float DeltaTime, ELevelTick TickType, FActorCo
 
 
 	if (NearTargetActor)
-		//ai->SetControlRotation((NearTargetActor->GetActorLocation() - Dragon->GetActorLocation()).Rotation());
 		RotateToTarget(DeltaTime);
 
-	// Dragon->SetActorRotation(
-	// 	(NearTargetActor->GetActorLocation() - Dragon->GetActorLocation()).Rotation().Quaternion());
+	if (State == DragonState::Attack && normalAttackState == AttackState::Breath && bBreathAttack)
+	{
+		ProjectileBreathCollision(DeltaTime);
+	}
 
 	//공격중일 때는 상태 변환 x
 	if (!isAttack)
@@ -220,6 +222,12 @@ void UHD_DragonFSM::F_NormalIdle(const float& DeltaTime)
 	// 가까운 캐릭터를 공격대상으로 지정
 	for (ACharacter* Character : Dragon->CharacterArr)
 	{
+		if (Dragon->CharacterArr.Num() > 1)
+		{
+			if (Character->GetName().Contains("Player"))
+				continue;
+		}
+
 		float Distance = FVector::Dist(Character->GetActorLocation(), Dragon->GetActorLocation());
 		if (Distance < MinDistance)
 		{
@@ -301,6 +309,11 @@ void UHD_DragonFSM::F_NormalAttackState(const float& DeltaTime)
 		if (bStartMeteor)
 			F_MeteorMagic(DeltaTime);
 	}
+	// if (normalAttackState == AttackState::Breath)
+	// {
+	// 	if (bBreathAttack)
+	// 		ProjectileBreathCollision(DeltaTime);
+	// }
 }
 #pragma endregion
 
@@ -613,6 +626,14 @@ void UHD_DragonFSM::BreathRStart(const float& Alpha)
 
 void UHD_DragonFSM::BreathREnd()
 {
+}
+
+void UHD_DragonFSM::ProjectileBreathCollision(const float& DeltaTime)
+{
+	auto FireTrans = Dragon->SkeletalComp->GetSocketTransform(FName("Fire_Socket"));
+	AHD_BreathCol* BreathCol = GetWorld()->SpawnActor<AHD_BreathCol>(
+		Breath_Projectile, FireTrans.GetLocation(), FRotator::ZeroRotator);
+	BreathCol->SetTarget(FireTrans);
 }
 
 void UHD_DragonFSM::F_ThunderMagic(const float& DeltaTime)

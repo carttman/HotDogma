@@ -197,6 +197,7 @@ void AHD_CharacterPlayer::DeathTimer()
 {
 	PlayerGameMode->GamePlayWidget->ChangeSwitcher(1); // 1번이 게임오버 UI임
 	UGameplayStatics::SetGamePaused( GetWorld(), true );
+	PlayerGameMode->GamePlayWidget->WBP_GameOver->GameOverPlayFade();
 }
 
 void AHD_CharacterPlayer::PlayMontageNotifyBegin_KnockDown(FName NotifyName, const FBranchingPointNotifyPayload& BranchingPointNotifyPayload)

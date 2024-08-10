@@ -3,6 +3,7 @@
 
 #include "../LHJ/HD_Dragon.h"
 
+#include "HD_DragonAnim.h"
 #include "HD_DragonFSM.h"
 #include "Components/BoxComponent.h"
 #include "Components/CapsuleComponent.h"
@@ -291,7 +292,11 @@ float AHD_Dragon::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent
 		float BarHp = CurrHP - (int)CurrEmptyHPLine * LineHpValue;
 
 		gm->SetDragonHPUI(BarHp, LineHpValue,CurrEmptyHPLine);
-		
+	}
+
+	if(CurrHP<=0)
+	{
+		fsm->Anim->ChangeState(DragonState::Death);
 	}
 
 	return damage;

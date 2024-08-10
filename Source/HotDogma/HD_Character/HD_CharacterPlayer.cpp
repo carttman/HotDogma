@@ -156,7 +156,7 @@ float AHD_CharacterPlayer::TakeDamage(float DamageAmount, FDamageEvent const& Da
 				}
 				if(HJ_Dragon->strDamageAttackType.Equals("Meteor"))
 				{
-					SlowDownTime_Hit(0.5f, 0.1f);
+					//SlowDownTime_Hit(0.5f, 0.01f);
 					GetMesh()->GetAnimInstance()->Montage_Play(AM_Hit_Montage, 1);
 					GetMesh()->GetAnimInstance()->Montage_JumpToSection(FName("Hit_Large"), AM_Hit_Montage);
 					PlayerAttackComponent->IsClimb_Attacking = false;

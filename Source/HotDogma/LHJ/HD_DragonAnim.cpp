@@ -172,7 +172,7 @@ bool UHD_DragonAnim::GetAttackPress(const float& AttackDistance)
 	ActorsToIgnore.Add(Dragon);
 	bRtn = UKismetSystemLibrary::SphereTraceMulti(GetWorld(), Start, End, AttackDistance,
 	                                              UEngineTypes::ConvertToTraceType(CollisionChannel), false,
-	                                              ActorsToIgnore, EDrawDebugTrace::ForDuration, OutHits,
+	                                              ActorsToIgnore, EDrawDebugTrace::None, OutHits,
 	                                              true);
 
 	for (auto& Hit : OutHits)

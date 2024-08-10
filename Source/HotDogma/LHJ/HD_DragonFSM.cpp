@@ -725,7 +725,7 @@ void UHD_DragonFSM::F_MeteorMagic(const float& DeltaTime)
 {
 	F_GetCharacterLoc_Casting();
 
-	//FVector SpMeteorLoc = F_GetSpawnMeteorLoc();
+	FVector SpMeteorLoc = F_GetSpawnMeteorLoc();
 
 	if (iCastingCnt < 4)
 	{
@@ -736,33 +736,12 @@ void UHD_DragonFSM::F_MeteorMagic(const float& DeltaTime)
 			for (auto MeteorPoint : CastingAttack_CharacterLoc)
 			{
 				AHD_Meteor* meteor_prj = GetWorld()->SpawnActor<AHD_Meteor>(
-					Meteor_Projectile, MeteorPoint, FRotator::ZeroRotator);
+					Meteor_Projectile, SpMeteorLoc, FRotator::ZeroRotator);
 				meteor_prj->SetTarget(MeteorPoint);
 			}
-
 			iCastingCnt++;
 		}
 	}
-
-
-	// if (iCastingCnt < 4)
-	// {
-	// 	CurrMeteorTime += DeltaTime;
-	// 	if (CurrMeteorTime >= MakeMeteorTime)
-	// 	{
-	// 		CurrMeteorTime = 0.f;
-	// 		for (auto MeteorPoint : CastingAttack_CharacterLoc)
-	// 		{
-	// 			UNiagaraComponent* NiagaraComponent = UNiagaraFunctionLibrary::SpawnSystemAtLocation(
-	// 				this,
-	// 				MeteorVFX,
-	// 				MeteorPoint,
-	// 				MeteorPoint.Rotation()
-	// 			);
-	// 		}
-	// 		iCastingCnt++;
-	// 	}
-	// }
 }
 
 FVector UHD_DragonFSM::F_GetSpawnMeteorLoc()

@@ -61,7 +61,7 @@ void UHD_SorcererStateComponent::BeginPlay()
 	PatternList.Add(ESorcererBattleState::State_Levitate);
 	PatternList.Add(ESorcererBattleState::State_ArgentSuccor);
 	//PatternList.Add(ESorcererBattleState::State_Galvanize);
-
+	bMaxLevitate = false;
 	PatternRotting();
 }
 
@@ -141,9 +141,10 @@ void UHD_SorcererStateComponent::CombatCheck()
 			if (Distance > 1500)
 			{
 				// 타겟 대상으로 좌우로 조금씩 이동한다.
+				AttackPoint.Z = Me->GetActorLocation().Z;
 				AIController->MoveToLocation(AttackPoint, 1300.0f);
 			}
-			else
+
 			{
 				if (!bStrafing)
 				{
@@ -152,6 +153,7 @@ void UHD_SorcererStateComponent::CombatCheck()
 					if (gameMode)
 					{
 						FVector Loc = gameMode->CompanionManager->StrafingLocation(Me, TargetPawn, 16, 1300);
+						Loc.Z = Me->GetActorLocation().Z;
 						AIController->MoveToLocation(Loc, 100.0f);
 					}
 				}
@@ -297,7 +299,7 @@ void UHD_SorcererStateComponent::Levitate()
 		// 높이 제한
 		if (Me->GetActorLocation().Z > 0)
 		{
-			SetBattleState(ESorcererBattleState::State_MagickBolt);
+			SetBattleState(ESorcererBattleState::State_CombatCheck);
 		}
 		
 		return;
@@ -307,13 +309,13 @@ void UHD_SorcererStateComponent::Levitate()
 
 	// 부유 애니메이션을 실행한다.
 	SorcererAnimInstance->PlayLevitate();
-
+	bMaxLevitate = false;
 	// 중력을 제거하고 캐릭터를 올린다.
 	// 무브먼트 모드 변경
 	Me->GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_Flying);
 
 	// 천천히 올린다.
-	Me->GetCharacterMovement()->MaxFlySpeed = 50;
+	Me->GetCharacterMovement()->MaxFlySpeed = 150;
 
 	//Me->AddMovementInput(FVector(0, 0, 1), 0.5);
 	// 회전을 못하게 막는다.
@@ -365,10 +367,10 @@ void UHD_SorcererStateComponent::Galvanize()
 
 void UHD_SorcererStateComponent::LevitateTick(float DeltaTime)
 {
-	// 높이 제한
 	if (!bMaxLevitate)
 	{
-		Me->GetCharacterMovement()->Velocity = FVector(0, 0, 1) * 200;
+		//Me->GetCharacterMovement()->Velocity = FVector(0, 0, 1) * 200;
+		Me->AddMovementInput(FVector(0, 0, 1), 1);
 		if (Me->GetActorLocation().Z > 300)
 		{
 			bMaxLevitate = true;

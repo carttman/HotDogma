@@ -88,7 +88,7 @@ public:
 	// MagickBolt
 	bool bCastingMagickBolt = false;
 	float MagickBoltCastTime = 0.25f;
-	float MagickBoltRange = 2000.0f;
+	float MagickBoltRange = 20000.0f;
 	float MagickBoltTime = 0.3f;
 	int32 MagickBoltCount = 0;
 	int32 MaxMagickBoltCount = 12;
@@ -96,13 +96,13 @@ public:
 	// HighHagol
 	bool bCastingHighHagol = false;
 	float HighHagolCastTime = 2.0f;
-	float HighHagolRange = 3000.0f;
+	float HighHagolRange = 30000.0f;
 	float HighHagolTime = 1.0f;
 
 	// HighLevin
 	bool bCastingHighLevin = false;
 	float HighLevinCastTime = 3.0f;
-	float HighLevinRange = 2500.0f;
+	float HighLevinRange = 25000.0f;
 	float HighLevinTime = 0.3f;
 	int32 HighLevinCount = 0;
 	int32 MaxHighLevinCount = 12;

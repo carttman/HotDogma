@@ -258,7 +258,7 @@ FVector AHD_CompanionManager::StrafingLocation(APawn* AiPlayer, APawn* Target, i
 	}
 
 	ValidLocations.Sort(CompareDistance);
-	for (int32 i = 0; i < FMath::Min(3, ValidLocations.Num()); ++i)
+	for (int32 i = 0; i < FMath::Min(4, ValidLocations.Num()); ++i)
 	{
 		BestLocations.Add(ValidLocations[i].Key);
 	}
@@ -268,7 +268,12 @@ FVector AHD_CompanionManager::StrafingLocation(APawn* AiPlayer, APawn* Target, i
 		return AiPlayer->GetActorLocation();
 	}
 
-	int32 RandomIndex = FMath::RandRange(0, BestLocations.Num() - 1);
+	if (BestLocations.Num() == 1)
+	{
+		return BestLocations[0];
+	}
+
+	int32 RandomIndex = FMath::RandRange(1, BestLocations.Num() - 1);
 	return BestLocations[RandomIndex];
 }
 

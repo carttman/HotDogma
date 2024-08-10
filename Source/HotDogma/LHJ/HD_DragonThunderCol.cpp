@@ -5,6 +5,8 @@
 
 #include "HD_Dragon.h"
 #include "HD_DragonFSM.h"
+#include "NiagaraComponent.h"
+#include "NiagaraFunctionLibrary.h"
 #include "Components/BoxComponent.h"
 #include "Kismet/GameplayStatics.h"
 
@@ -40,6 +42,13 @@ void AHD_DragonThunderCol::Tick(float DeltaTime)
 	{
 		CurrTime = 0.f;
 		BoxComp->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
+
+		UNiagaraComponent* NiagaraComponent = UNiagaraFunctionLibrary::SpawnSystemAtLocation(
+		   this,
+		   ThunderSmog,
+		   GetActorLocation(),
+		   GetActorRotation()
+	   );
 	}
 
 	if (BoxComp->GetCollisionEnabled() == ECollisionEnabled::QueryOnly)

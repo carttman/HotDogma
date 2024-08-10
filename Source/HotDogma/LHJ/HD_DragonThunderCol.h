@@ -41,4 +41,7 @@ public:
 	float DestroyTime = 0.1f;
 
 	float CurrTime = 0.f;
+
+	UPROPERTY(EditDefaultsOnly)
+	class UNiagaraSystem* ThunderSmog;
 };

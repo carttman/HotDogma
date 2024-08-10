@@ -93,7 +93,7 @@ void UHD_DragonAnim::AnimNotify_AttackJumpPress()
 {
 	bool bRtn = GetAttackPress(fsm->JumpPressCameraDist);
 	if (bRtn)
-	{	
+	{
 		for (auto DamageOtherActor : DamageActorSet)
 		{
 			if (DamageOtherActor->GetName().Contains("Player"))
@@ -109,7 +109,7 @@ void UHD_DragonAnim::AnimNotify_AttackJumpPress()
 
 		DamageActorSet.Empty();
 	}
-	
+
 	bRtn = GetAttackPress(fsm->JumpPressAttackDist);
 	if (bRtn)
 	{
@@ -145,7 +145,7 @@ void UHD_DragonAnim::AnimNotify_AttackHandPress()
 
 		DamageActorSet.Empty();
 	}
-	
+
 	bRtn = GetAttackPress(fsm->HandPressAttackDist);
 	if (bRtn)
 	{
@@ -256,6 +256,7 @@ void UHD_DragonAnim::AnimNotify_EndAttack()
 		fsm->bStartMeteor = false;
 		fsm->bStartThunder = false;
 		fsm->iCastingCnt = 0;
+		fsm->bReturnLightColor = false;
 	}
 	if (Dragon)
 		Dragon->strDamageAttackType = "";
@@ -339,12 +340,17 @@ void UHD_DragonAnim::AnimNotify_StartBreath()
 {
 	//Dragon->FireCollision->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
 	fsm->bBreathAttack = true;
+	fsm->LightColorAlpha=0;
+	//fsm->SetFirelLight();
 }
 
 void UHD_DragonAnim::AnimNotify_EndBreath()
 {
 	//Dragon->FireCollision->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	fsm->bBreathAttack = false;
+	fsm->bReturnLightColor = true;
+	fsm->LightColorAlpha=0;
+	//fsm->SetNormalLight();
 }
 
 void UHD_DragonAnim::AnimNotify_AttackShout()

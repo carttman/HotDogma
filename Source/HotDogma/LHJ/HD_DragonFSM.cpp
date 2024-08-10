@@ -13,6 +13,8 @@
 #include "HD_Meteor.h"
 #include "NiagaraComponent.h"
 #include "NiagaraFunctionLibrary.h"
+#include "Components/LightComponent.h"
+#include "Engine/DirectionalLight.h"
 #include "HotDogma/HD_Character/HD_CharacterPlayer.h"
 #include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetMathLibrary.h"
@@ -80,6 +82,13 @@ void UHD_DragonFSM::BeginPlay()
 
 	BreathTimeline.AddInterpFloat(BreathCurve, ProgressUpdate);
 	BreathTimeline.SetTimelineFinishedFunc(FinishedEvent);
+
+	DirectionalLight = Cast<ADirectionalLight>(
+		UGameplayStatics::GetActorOfClass(GetWorld(), ADirectionalLight::StaticClass()));
+	if (DirectionalLight)
+	{
+		OldColor = DirectionalLight->GetLightComponent()->GetLightColor();
+	}
 }
 #pragma endregion
 
@@ -109,6 +118,39 @@ void UHD_DragonFSM::TickComponent(float DeltaTime, ELevelTick TickType, FActorCo
 	if (State == DragonState::Attack && normalAttackState == AttackState::Breath && bBreathAttack)
 	{
 		ProjectileBreathCollision(DeltaTime);
+
+		LightColorAlpha +=DeltaTime;
+		// Lerp 진행 (Alpha 값은 DeltaTime을 사용해 천천히 변화)
+		FLinearColor LerpColor = FLinearColor::LerpUsingHSV(OldColor, BreathColor, LightColorAlpha);
+
+		// LightComponent의 색상 업데이트
+		if (LightColorAlpha >= 1)
+		{
+			DirectionalLight->GetLightComponent()->SetLightColor(BreathColor);
+			
+		}
+		else
+		{
+			DirectionalLight->GetLightComponent()->SetLightColor(LerpColor);
+		}
+	}
+	else if (State == DragonState::Attack && normalAttackState == AttackState::Breath && !bBreathAttack &&
+		bReturnLightColor)
+	{
+		LightColorAlpha +=DeltaTime;
+		
+		// Lerp 진행 (Alpha 값은 DeltaTime을 사용해 천천히 변화)
+		FLinearColor LerpColor = FLinearColor::LerpUsingHSV(BreathColor, OldColor, LightColorAlpha);
+
+		// LightComponent의 색상 업데이트
+		if (LightColorAlpha >= 1)
+		{
+			DirectionalLight->GetLightComponent()->SetLightColor(OldColor);			
+		}
+		else
+		{
+			DirectionalLight->GetLightComponent()->SetLightColor(LerpColor);
+		}
 	}
 
 	//공격중일 때는 상태 변환 x
@@ -769,4 +811,20 @@ FVector UHD_DragonFSM::F_GetSpawnMeteorLoc()
 	}
 
 	return rtnVec;
+}
+
+void UHD_DragonFSM::SetFirelLight()
+{
+	if (DirectionalLight)
+	{
+		DirectionalLight->GetLightComponent()->SetLightColor(BreathColor);
+	}
+}
+
+void UHD_DragonFSM::SetNormalLight()
+{
+	if (DirectionalLight)
+	{
+		DirectionalLight->GetLightComponent()->SetLightColor(OldColor);
+	}
 }

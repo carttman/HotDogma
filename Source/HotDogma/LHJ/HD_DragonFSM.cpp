@@ -20,6 +20,8 @@
 #include "Kismet/KismetMathLibrary.h"
 #include "GameFramework/PlayerController.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "HotDogma/HD_GameModeBase/CHJ_GameMode.h"
+#include "HotDogma/UI/HD_GamePlayWidget.h"
 #include "Particles/ParticleSystem.h"
 
 #pragma region [Constructor]
@@ -96,7 +98,7 @@ void UHD_DragonFSM::BeginPlay()
 void UHD_DragonFSM::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-	
+
 	FString myState = UEnum::GetValueOrBitfieldAsString(State);
 	DrawDebugString(GetWorld(), Dragon->GetActorLocation(), myState, nullptr, FColor::Yellow, 0);
 	if (Anim)
@@ -107,17 +109,17 @@ void UHD_DragonFSM::TickComponent(float DeltaTime, ELevelTick TickType, FActorCo
 			                    Dragon->GetActorLocation().Z - 50), myState, nullptr, FColor::Yellow, 0);
 	}
 
-	if(State==DragonState::Death)
+	if (State == DragonState::Death)
 	{
-		LightColorAlpha +=DeltaTime;
-		
+		LightColorAlpha += DeltaTime;
+
 		// Lerp 진행 (Alpha 값은 DeltaTime을 사용해 천천히 변화)
 		FLinearColor LerpColor = FLinearColor::LerpUsingHSV(BreathColor, OldColor, LightColorAlpha);
 
 		// LightComponent의 색상 업데이트
 		if (LightColorAlpha >= 1)
 		{
-			DirectionalLight->GetLightComponent()->SetLightColor(OldColor);			
+			DirectionalLight->GetLightComponent()->SetLightColor(OldColor);
 		}
 		else
 		{
@@ -125,7 +127,7 @@ void UHD_DragonFSM::TickComponent(float DeltaTime, ELevelTick TickType, FActorCo
 		}
 		return;
 	}
-	
+
 	BreathTimeline.TickTimeline(DeltaTime);
 	if (State != DragonState::Move)
 		ai->StopMovement();
@@ -138,7 +140,7 @@ void UHD_DragonFSM::TickComponent(float DeltaTime, ELevelTick TickType, FActorCo
 	{
 		ProjectileBreathCollision(DeltaTime);
 
-		LightColorAlpha +=DeltaTime;
+		LightColorAlpha += DeltaTime;
 		// Lerp 진행 (Alpha 값은 DeltaTime을 사용해 천천히 변화)
 		FLinearColor LerpColor = FLinearColor::LerpUsingHSV(OldColor, BreathColor, LightColorAlpha);
 
@@ -146,7 +148,6 @@ void UHD_DragonFSM::TickComponent(float DeltaTime, ELevelTick TickType, FActorCo
 		if (LightColorAlpha >= 1)
 		{
 			DirectionalLight->GetLightComponent()->SetLightColor(BreathColor);
-			
 		}
 		else
 		{
@@ -156,15 +157,15 @@ void UHD_DragonFSM::TickComponent(float DeltaTime, ELevelTick TickType, FActorCo
 	else if (State == DragonState::Attack && normalAttackState == AttackState::Breath && !bBreathAttack &&
 		bReturnLightColor)
 	{
-		LightColorAlpha +=DeltaTime;
-		
+		LightColorAlpha += DeltaTime;
+
 		// Lerp 진행 (Alpha 값은 DeltaTime을 사용해 천천히 변화)
 		FLinearColor LerpColor = FLinearColor::LerpUsingHSV(BreathColor, OldColor, LightColorAlpha);
 
 		// LightComponent의 색상 업데이트
 		if (LightColorAlpha >= 1)
 		{
-			DirectionalLight->GetLightComponent()->SetLightColor(OldColor);			
+			DirectionalLight->GetLightComponent()->SetLightColor(OldColor);
 		}
 		else
 		{
@@ -476,11 +477,16 @@ bool UHD_DragonFSM::ChkCharacterIntoRadian()
 				Anim->bSleepEnd = true;
 				chkCharacterUsingSleep = true;
 
-				if(Battle_BGM)
+				if (Dragon && Dragon->gm && Dragon->gm->GamePlayWidget)
+				{
+					Dragon->gm->GamePlayWidget->StopBGM_Crow();
+				}
+				
+				if (Battle_BGM)
 				{
 					UGameplayStatics::PlaySound2D(GetWorld(), Battle_BGM);
 				}
-				
+
 				break;
 			}
 		}

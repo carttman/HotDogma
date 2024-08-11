@@ -31,4 +31,13 @@ public:
 
 	UPROPERTY(EditAnywhere, meta = (BindWidget))
 	class UHD_GameOverWidget* WBP_GameOver;
+
+	UPROPERTY(EditAnywhere)
+	class USoundBase* BGM_Crow;
+
+	void PlayBGM_Crow();
+	void StopBGM_Crow();
+
+	UPROPERTY()
+	UAudioComponent* CrowAudioComponent;
 };

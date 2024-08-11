@@ -377,7 +377,7 @@ void UHD_WarriorStateComponent::HeavenwardSunder()
 			// 충돌을 무시한다.
 			
 			Me->GetCapsuleComponent()->SetCollisionResponseToChannel(ECollisionChannel::ECC_Pawn, ECollisionResponse::ECR_Ignore);
-			Me->LaunchCharacter(FVector(0, 0, 1000), false, false);
+			Me->LaunchCharacter(FVector(25, 0, 300), false, false);
 			
 			WarriorAnimInstance->PlayHeavenwardSunderMontage(CurrentCombo);
 			CurrentCombo++;

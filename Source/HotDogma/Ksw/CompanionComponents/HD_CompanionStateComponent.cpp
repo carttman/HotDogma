@@ -9,6 +9,7 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "Animation/AnimInstance.h"
+#include <HotDogma/LHJ/HD_Dragon.h>
 
 // Sets default values for this component's properties
 UHD_CompanionStateComponent::UHD_CompanionStateComponent()
@@ -64,6 +65,18 @@ void UHD_CompanionStateComponent::TickComponent(float DeltaTime, ELevelTick Tick
 			break;
 	}
 
+	if (TargetPawn && ! bHighfive)
+	{
+		AHD_Dragon* dragon = Cast<AHD_Dragon>(TargetPawn);
+		if (dragon->CurrHP <= 0.0f)
+		{
+			SetState(ECompanionState::State_BattleEnd);
+		}
+	}
+	else
+	{
+		SetState(ECompanionState::State_BattleEnd);
+	}
 
 	//FString myState = UEnum::GetValueOrBitfieldAsString(CurrentState);
 	//DrawDebugString(GetWorld(), GetOwner()->GetActorLocation(), myState, 0, FColor::Yellow, 0);

@@ -47,6 +47,20 @@ void UHD_PlayerAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 			Climb_UD = 0;
 		}
 	}
+
+	if (FMath::IsNearlyEqual(HandIKTargetAlpha, 1.0f))
+	{
+		if (TargetCharacter)
+		{
+			HandTarget = TargetCharacter->GetMesh()->GetBoneLocation("hand_r");
+		}
+
+		HandIKAlpha = FMath::Lerp(HandIKAlpha, HandIKTargetAlpha, 0.1f);
+	}
+	else
+	{
+		HandIKAlpha = 0.0f;
+	}
 }
 
 void UHD_PlayerAnimInstance::AnimNotify_Damage_On()
@@ -66,4 +80,36 @@ void UHD_PlayerAnimInstance::AnimNotify_Damage_Off()
 	//UE_LOG(LogTemp, Warning, TEXT("Off"));
 	Left_Weapon->CapsuleComp->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	Right_Weapon->CapsuleComp->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+}
+
+void UHD_PlayerAnimInstance::AnimNotify_Highfive()
+{
+	ToggleHandIK(false, nullptr);
+}
+
+void UHD_PlayerAnimInstance::ToggleHandIK(bool enable, ACharacter* Target)
+{
+	if (Player)
+	{
+		if (enable)
+			Player->GetCharacterMovement()->DisableMovement();
+		else
+			Player->GetCharacterMovement()->SetMovementMode(MOVE_Walking);
+	}
+
+	TargetCharacter = Target;
+	if (TargetCharacter)
+	{
+		HandTarget = Target->GetMesh()->GetBoneLocation("hand_r");
+	}
+	HandIKAlpha = enable ? 1.0f : 0.0f;
+}
+
+void UHD_PlayerAnimInstance::PlayHighfive()
+{
+	if (AM_HighfiveMontage)
+	{
+		Montage_Play(AM_HighfiveMontage, 1.f);
+		Montage_JumpToSection("Highfive", AM_HighfiveMontage);
+	}
 }

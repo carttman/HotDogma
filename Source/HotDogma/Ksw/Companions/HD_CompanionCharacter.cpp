@@ -12,7 +12,12 @@
 #include "HotDogma/UI/HD_CompanionWidget.h"
 #include "HotDogma/Ksw/HD_CompanionWeapon.h"
 #include "HotDogma/LHJ/HD_Dragon.h"
-
+#include "HotDogma/Ksw/Companions/HD_WarriorAnimInstance.h"
+#include "Components/BoxComponent.h"
+#include "HotDogma/HD_Character/HD_CharacterPlayer.h"
+#include "HotDogma/HD_Character/HD_PlayerAnimInstance.h"
+#include "GameFramework/CharacterMovementComponent.h"
+#include <Kismet/KismetMathLibrary.h>
 
 // Sets default values
 AHD_CompanionCharacter::AHD_CompanionCharacter()
@@ -34,6 +39,9 @@ AHD_CompanionCharacter::AHD_CompanionCharacter()
 		HPComp->SetDrawSize(FVector2D(200.0f, 51.0f));
 		HPComp->SetRelativeLocation(FVector(0.0f, 0.0f, 140.0f));
 	}
+
+	BoxComp = CreateDefaultSubobject<UBoxComponent>(TEXT("BoxComp"));
+	BoxComp->SetupAttachment(RootComponent);
 }
 
 // Called when the game starts or when spawned
@@ -50,8 +58,9 @@ void AHD_CompanionCharacter::BeginPlay()
 	}
 
 	CompanionWeapon = GetWorld()->SpawnActor<AHD_CompanionWeapon>(CompanionWeaponFactory, GetActorLocation(), GetActorRotation());
-	
 	CompanionWeapon->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, TEXT("Weapon"));
+	
+	BoxComp->OnComponentBeginOverlap.AddDynamic(this, &AHD_CompanionCharacter::OnOverlapBegin);
 }
 
 // Called every frame
@@ -63,6 +72,11 @@ void AHD_CompanionCharacter::Tick(float DeltaTime)
 	FVector Dir = Target - HPComp->GetComponentLocation();
 	FRotator Rot = Dir.ToOrientationRotator();
 	HPComp->SetWorldRotation(Rot);
+
+	// Target과의 거리가 멀수록 HP바가 커진다.
+	float Distance = FVector::Distance(Target, HPComp->GetComponentLocation());
+	float Scale = FMath::Clamp(Distance / 750, 0.1f, 2.0f);
+	HPComp->SetWorldScale3D(FVector(Scale, Scale, Scale));
 }
 
 // Called to bind functionality to input
@@ -134,6 +148,19 @@ float AHD_CompanionCharacter::TakeDamage(float DamageAmount, struct FDamageEvent
 	return Damage;
 }
 
+void AHD_CompanionCharacter::ToggleHandIK(bool enable)
+{
+	UHD_WarriorAnimInstance* anim = Cast<UHD_WarriorAnimInstance>(GetMesh()->GetAnimInstance());
+	if (anim)
+	{
+		// 플레이어의 오른손 위치
+		ACharacter* Player = GetWorld()->GetFirstPlayerController()->GetCharacter();
+		FVector Target = Player->GetMesh()->GetBoneLocation("hand_r");
+
+		anim->ToggleHandIK(enable, Target);
+	}
+}
+
 class UHD_CompanionStateComponent* AHD_CompanionCharacter::SetupCompanionStateComp(bool isWarrior)
 {
 	if (isWarrior)
@@ -148,4 +175,28 @@ class UHD_CompanionStateComponent* AHD_CompanionCharacter::SetupCompanionStateCo
 	}
 
 	return CompanionStateComp;
+}
+
+void AHD_CompanionCharacter::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+	AHD_CharacterPlayer* Player = Cast<AHD_CharacterPlayer>(OtherActor);
+	if (Player && CompanionStateComp->IsHighfive())
+	{
+		CompanionStateComp->Highfive();
+		ToggleHandIK(true);
+		UHD_PlayerAnimInstance* PlayerAnim = Cast< UHD_PlayerAnimInstance>(Player->GetMesh()->GetAnimInstance());
+		
+		PlayerAnim->PlayHighfive();
+		PlayerAnim->ToggleHandIK(true, this);
+		Player->GetCharacterMovement()->StopMovementImmediately();
+		// 회전시킨다.
+		FRotator Rot = UKismetMathLibrary::FindLookAtRotation(Player->GetActorLocation(), GetActorLocation());
+		Player->SetActorRotation(Rot);
+
+		FRotator LookAt = UKismetMathLibrary::FindLookAtRotation(GetActorLocation(), Player->GetActorLocation());
+		SetActorRotation(LookAt);
+
+		// 콜리전 제거
+		BoxComp->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	}
 }

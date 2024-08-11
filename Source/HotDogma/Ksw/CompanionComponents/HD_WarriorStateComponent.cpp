@@ -66,6 +66,19 @@ void UHD_WarriorStateComponent::AttackTick(float DeltaTime)
 	//DrawDebugString(GetWorld(), GetOwner()->GetActorLocation() + FVector(0, 0, 100), myState, 0, FColor::Yellow, 0);
 }
 
+void UHD_WarriorStateComponent::HighfiveReady()
+{
+	WarriorAnimInstance->PlayHighfiveMontage(0);
+	// 플레이어를 바라본다.
+	FRotator LookAt = UKismetMathLibrary::FindLookAtRotation(Me->GetActorLocation(), CharacterPoint);
+	Me->SetActorRotation(LookAt);
+}
+
+void UHD_WarriorStateComponent::Highfive()
+{
+	WarriorAnimInstance->PlayHighfiveMontage(1);
+}
+
 void UHD_WarriorStateComponent::CombatCheck()
 {
 	Me->GetCharacterMovement()->MaxWalkSpeed = 250;

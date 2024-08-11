@@ -32,6 +32,8 @@ protected:
 public:
 	virtual void StartBattle();
 	virtual void AttackTick(float DeltaTime);
+	virtual void HighfiveReady();
+	virtual void Highfive();
 
 	void CombatCheck();
 	bool FindAttackPoint();

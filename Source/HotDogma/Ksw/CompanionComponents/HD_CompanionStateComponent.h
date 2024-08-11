@@ -15,6 +15,7 @@ enum class ECompanionState : uint8
 	State_Run UMETA(DisplayName = "Run"),
 	State_Battle UMETA(DisplayName = "Battle"),
 	State_Help UMETA(DisplayName = "Help"),
+	State_BattleEnd UMETA(DisplayName = "BattleEnd"),
 };
 
 UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
@@ -38,11 +39,15 @@ public:
 	void RunTick(float DeltaTime);
 	void BattleTick(float DeltaTime);
 	void HelpTick(float DeltaTime);
+	void BattleEndTick(float DeltaTime);
 	void SetCommand(ECompanionCommand Command){ CurrentCommand = Command; }
 
 	virtual void AttackTick(float DeltaTime);
 	virtual void StartBattle();
 	virtual void EndBattle();
+	virtual void HighfiveReady();
+	UFUNCTION(BlueprintCallable)
+	virtual void Highfive();
 
 	// boids
 	// separation : 다른 개체들과의 거리를 유지
@@ -64,7 +69,7 @@ public:
 	void SetState(ECompanionState State);
 
 	FVector MovePoint;
-	FVector CharcterPoint;
+	FVector CharacterPoint;
 	ECompanionState CurrentState;
 	ECompanionCommand CurrentCommand;
 	
@@ -86,4 +91,8 @@ public:
 	FVector Acc;
 
 	bool bCasting = false;
+
+	bool bHighfive;
+
+	bool IsHighfive();
 };

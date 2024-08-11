@@ -341,4 +341,7 @@ public:
 	bool bReturnLightColor = false;
 
 	float LightColorAlpha=0.f;
+
+	UPROPERTY( EditAnywhere )
+	class USoundBase* Battle_BGM;
 };

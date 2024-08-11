@@ -475,6 +475,12 @@ bool UHD_DragonFSM::ChkCharacterIntoRadian()
 				// true 리턴
 				Anim->bSleepEnd = true;
 				chkCharacterUsingSleep = true;
+
+				if(Battle_BGM)
+				{
+					UGameplayStatics::PlaySound2D(GetWorld(), Battle_BGM);
+				}
+				
 				break;
 			}
 		}

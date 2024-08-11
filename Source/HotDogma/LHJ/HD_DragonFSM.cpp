@@ -99,15 +99,15 @@ void UHD_DragonFSM::TickComponent(float DeltaTime, ELevelTick TickType, FActorCo
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
-	FString myState = UEnum::GetValueOrBitfieldAsString(State);
-	DrawDebugString(GetWorld(), Dragon->GetActorLocation(), myState, nullptr, FColor::Yellow, 0);
-	if (Anim)
-	{
-		myState = UEnum::GetValueOrBitfieldAsString(Anim->AnimNormalAttackState);
-		DrawDebugString(
-			GetWorld(), FVector(Dragon->GetActorLocation().X, Dragon->GetActorLocation().Y,
-			                    Dragon->GetActorLocation().Z - 50), myState, nullptr, FColor::Yellow, 0);
-	}
+	// FString myState = UEnum::GetValueOrBitfieldAsString(State);
+	// DrawDebugString(GetWorld(), Dragon->GetActorLocation(), myState, nullptr, FColor::Yellow, 0);
+	// if (Anim)
+	// {
+	// 	myState = UEnum::GetValueOrBitfieldAsString(Anim->AnimNormalAttackState);
+	// 	DrawDebugString(
+	// 		GetWorld(), FVector(Dragon->GetActorLocation().X, Dragon->GetActorLocation().Y,
+	// 		                    Dragon->GetActorLocation().Z - 50), myState, nullptr, FColor::Yellow, 0);
+	// }
 
 	if (State == DragonState::Death)
 	{
@@ -481,7 +481,7 @@ bool UHD_DragonFSM::ChkCharacterIntoRadian()
 				{
 					Dragon->gm->GamePlayWidget->StopBGM_Crow();
 				}
-				
+
 				if (Battle_BGM)
 				{
 					UGameplayStatics::PlaySound2D(GetWorld(), Battle_BGM);
@@ -708,7 +708,8 @@ void UHD_DragonFSM::ProjectileBreathCollision(const float& DeltaTime)
 	auto FireTrans = Dragon->SkeletalComp->GetSocketTransform(FName("Fire_Socket"));
 	AHD_BreathCol* BreathCol = GetWorld()->SpawnActor<AHD_BreathCol>(
 		Breath_Projectile, FireTrans.GetLocation(), FRotator::ZeroRotator);
-	BreathCol->SetTarget(FireTrans);
+	if (BreathCol)
+		BreathCol->SetTarget(FireTrans);
 }
 
 void UHD_DragonFSM::F_ThunderMagic(const float& DeltaTime)
@@ -810,7 +811,8 @@ void UHD_DragonFSM::F_MeteorMagic(const float& DeltaTime)
 			{
 				AHD_Meteor* meteor_prj = GetWorld()->SpawnActor<AHD_Meteor>(
 					Meteor_Projectile, SpMeteorLoc, FRotator::ZeroRotator);
-				meteor_prj->SetTarget(MeteorPoint);
+				if (meteor_prj)
+					meteor_prj->SetTarget(MeteorPoint);
 			}
 			iCastingCnt++;
 		}

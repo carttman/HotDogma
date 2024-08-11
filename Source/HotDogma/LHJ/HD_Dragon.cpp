@@ -7,10 +7,13 @@
 #include "HD_DragonFSM.h"
 #include "Components/BoxComponent.h"
 #include "Components/CapsuleComponent.h"
+#include "Components/WidgetSwitcher.h"
 #include "GameFramework/Character.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "HotDogma/HD_Character/HD_CharacterPlayer.h"
 #include "HotDogma/HD_GameModeBase/CHJ_GameMode.h"
+#include "HotDogma/UI/HD_GameClearWidget.h"
+#include "HotDogma/UI/HD_GamePlayWidget.h"
 #include "Kismet/GameplayStatics.h"
 #include "Particles/ParticleSystem.h"
 
@@ -222,7 +225,7 @@ void AHD_Dragon::BeginPlay()
 
 	LineHpValue = MaxHP / LineCnt;
 
-	Player =  Cast<AHD_CharacterPlayer>(GetWorld()->GetFirstPlayerController()->GetCharacter());
+	Player = Cast<AHD_CharacterPlayer>(GetWorld()->GetFirstPlayerController()->GetCharacter());
 }
 
 void AHD_Dragon::Tick(float DeltaTime)
@@ -303,7 +306,18 @@ float AHD_Dragon::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent
 	{
 		fsm->Anim->ChangeState(DragonState::Death);
 		SkeletalComp->SetCollisionProfileName(FName("FloorBlock"));
+
+		if (gm && gm->GamePlayWidget && gm->GamePlayWidget->WidgetSwitcher)
+		{
+			GetWorld()->GetTimerManager().SetTimer(DeathTimerHandle, this, &AHD_Dragon::CallCredit, 10.f,
+			                                       false);
+		}
 	}
 
 	return damage;
+}
+
+void AHD_Dragon::CallCredit()
+{
+	gm->GamePlayWidget->WidgetSwitcher->SetActiveWidgetIndex(2);
 }

@@ -131,10 +131,10 @@ public:
 	float JumpPressCameraDist = 3000.f; // 점프찍기 카메라쉐이크
 #pragma endregion
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditDefaultsOnly)
 	DragonState State = DragonState::Sleep; //Default State를 Idle로 설정
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditDefaultsOnly)
 	AttackState normalAttackState = AttackState::None;
 
 	UPROPERTY(BlueprintReadOnly, EditInstanceOnly)
@@ -145,10 +145,10 @@ public:
 	class ACharacter* NearTargetActor;
 
 	// 내 위치
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditDefaultsOnly)
 	class AActor* DragonActor;
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditDefaultsOnly)
 	class AHD_Dragon* Dragon;
 
 	// 타겟과 거리
@@ -332,7 +332,7 @@ public:
 	FVector F_GetSpawnMeteorLoc();
 #pragma endregion
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY()
 	class ADirectionalLight* DirectionalLight; // DirectionalLight
 
 	FLinearColor OldColor;

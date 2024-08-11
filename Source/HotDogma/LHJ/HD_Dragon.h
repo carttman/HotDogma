@@ -211,4 +211,8 @@ public:
 
 	UPROPERTY()
 	class AHD_CharacterPlayer* Player;
+
+	FTimerHandle DeathTimerHandle;
+
+	void CallCredit();	
 };

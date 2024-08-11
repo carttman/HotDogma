@@ -47,7 +47,7 @@ public:
 	
 	UPROPERTY()
 	class UHD_CompanionWidget* Widget;
-	
+
 	// 문자열
 	UPROPERTY(EditAnywhere, Category = "Companion")
 	FString CompanionName;
@@ -72,4 +72,8 @@ public:
 	void OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 
 	bool IsDeath;
+
+	// 사운드
+	UPROPERTY(EditAnywhere, Category = "Companion")
+	class USoundBase* HighfiveSound;
 };

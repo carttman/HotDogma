@@ -18,6 +18,7 @@
 #include "HotDogma/HD_Character/HD_PlayerAnimInstance.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include <Kismet/KismetMathLibrary.h>
+#include <Kismet/GameplayStatics.h>
 
 // Sets default values
 AHD_CompanionCharacter::AHD_CompanionCharacter()
@@ -158,6 +159,12 @@ void AHD_CompanionCharacter::ToggleHandIK(bool enable)
 		FVector Target = Player->GetMesh()->GetBoneLocation("hand_r");
 
 		anim->ToggleHandIK(enable, Target);
+	}
+
+	if (enable)
+	{
+		// »ç¿îµå
+		UGameplayStatics::PlaySoundAtLocation(GetWorld(), HighfiveSound, GetActorLocation());
 	}
 }
 

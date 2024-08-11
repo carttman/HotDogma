@@ -52,4 +52,7 @@ public:
 
 	UPROPERTY(EditDefaultsOnly)
 	class UNiagaraSystem* MeteorNia;
+
+	UPROPERTY( EditAnywhere )
+	class USoundBase* MeteorSound;
 };

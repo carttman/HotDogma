@@ -10,10 +10,10 @@
 UENUM(BlueprintType)
 enum class ECompanionCommand : uint8
 {
-	Command_Following UMETA(DisplayName = "Following"),
 	Command_Go UMETA(DisplayName = "Go"),
-	Command_Wait UMETA(DisplayName = "Wait"),
+	Command_Following UMETA(DisplayName = "Following"),
 	Command_Help UMETA(DisplayName = "Help"),
+	Command_Wait UMETA(DisplayName = "Wait"),
 };
 
 UCLASS()

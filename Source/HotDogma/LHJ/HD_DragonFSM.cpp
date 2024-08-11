@@ -111,19 +111,26 @@ void UHD_DragonFSM::TickComponent(float DeltaTime, ELevelTick TickType, FActorCo
 
 	if (State == DragonState::Death)
 	{
-		LightColorAlpha += DeltaTime;
-
-		// Lerp 진행 (Alpha 값은 DeltaTime을 사용해 천천히 변화)
-		FLinearColor LerpColor = FLinearColor::LerpUsingHSV(BreathColor, OldColor, LightColorAlpha);
-
-		// LightComponent의 색상 업데이트
-		if (LightColorAlpha >= 1)
+		if (DirectionalLight)
 		{
-			DirectionalLight->GetLightComponent()->SetLightColor(OldColor);
-		}
-		else
-		{
-			DirectionalLight->GetLightComponent()->SetLightColor(LerpColor);
+			LightColorAlpha += DeltaTime;
+			
+			if(DirectionalLight->GetLightComponent()->GetLightColor()!=FLinearColor(1,1,1,1))
+			{
+				// Lerp 진행 (Alpha 값은 DeltaTime을 사용해 천천히 변화)
+				FLinearColor LerpColor = FLinearColor::LerpUsingHSV(BreathColor, OldColor, LightColorAlpha);
+
+				// LightComponent의 색상 업데이트
+				if (LightColorAlpha >= 1)
+				{
+					DirectionalLight->GetLightComponent()->SetLightColor(OldColor);
+				}
+				else
+				{
+					DirectionalLight->GetLightComponent()->SetLightColor(LerpColor);
+				}
+				
+			}
 		}
 		return;
 	}

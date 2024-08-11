@@ -51,4 +51,7 @@ public:
 
 	UPROPERTY()
 	TSet<AActor*> DamageActorSet;
+
+	UPROPERTY( EditAnywhere )
+	class USoundBase* ThunderSound;
 };

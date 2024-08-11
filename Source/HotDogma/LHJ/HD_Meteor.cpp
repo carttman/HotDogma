@@ -70,12 +70,15 @@ void AHD_Meteor::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimit
 	}
 
 	UNiagaraComponent* NiagaraComponent = UNiagaraFunctionLibrary::SpawnSystemAtLocation(
-	   this,
-	   MeteorNia,
-	   GetActorLocation(),
-	   GetActorRotation()	   
-   );
-	
+		this,
+		MeteorNia,
+		GetActorLocation(),
+		GetActorRotation()
+	);
+
+	if (MeteorSound)
+		UGameplayStatics::PlaySound2D(GetWorld(), MeteorSound);
+
 	// 플레이어가 카메라 쉐이크 범위 안에 있다면 카메라 쉐이크 효과를 호출한다.
 	bRtn = GetAttackMeteor(CameraShakeDist);
 	if (bRtn)

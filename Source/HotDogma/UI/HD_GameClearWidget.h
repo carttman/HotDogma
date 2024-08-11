@@ -13,5 +13,11 @@ UCLASS()
 class HOTDOGMA_API UHD_GameClearWidget : public UUserWidget
 {
 	GENERATED_BODY()
-	
+public:
+	virtual void NativeConstruct() override;
+public:
+	UPROPERTY(EditAnywhere, meta = (BindWidgetAnim), Transient)
+	UWidgetAnimation* Credits;
+
+	void PlayCreditAnim();
 };

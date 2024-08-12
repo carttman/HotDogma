@@ -39,5 +39,5 @@ public:
 	void StopBGM_Crow();
 
 	UPROPERTY()
-	UAudioComponent* CrowAudioComponent;
+	UAudioComponent* CrowAudioComponent;	
 };

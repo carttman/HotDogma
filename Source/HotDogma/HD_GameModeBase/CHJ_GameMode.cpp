@@ -12,6 +12,20 @@
 #include "HotDogma/UI/HD_PlayerWidget.h"
 #include "Kismet/GameplayStatics.h"
 
+void ACHJ_GameMode::InitGame(const FString& MapName, const FString& Options, FString& ErrorMessage)
+{
+	Super::InitGame(MapName, Options, ErrorMessage);
+
+	// 나레이션 로드
+	ArrNarration = {
+		LoadObject<USoundBase>(nullptr,TEXT("/Script/Engine.SoundWave'/Game/LHJ/Sounds/Narration/N1.N1'")),
+		LoadObject<USoundBase>(nullptr,TEXT("/Script/Engine.SoundWave'/Game/LHJ/Sounds/Narration/N2.N2'")),
+		LoadObject<USoundBase>(nullptr,TEXT("/Script/Engine.SoundWave'/Game/LHJ/Sounds/Narration/N3.N3'")),
+		LoadObject<USoundBase>(nullptr,TEXT("/Script/Engine.SoundWave'/Game/LHJ/Sounds/Narration/N4.N4'")),
+		LoadObject<USoundBase>(nullptr,TEXT("/Script/Engine.SoundWave'/Game/LHJ/Sounds/Narration/N5.N5'"))
+	};
+}
+
 void ACHJ_GameMode::BeginPlay()
 {
 	if (bCompanionsSpawn)
@@ -26,14 +40,13 @@ void ACHJ_GameMode::BeginPlay()
 	}
 
 	//CreatePlayerWidget();
-	Player  = Cast<AHD_CharacterPlayer>(GetWorld()->GetFirstPlayerController()->GetPawn());
+	Player = Cast<AHD_CharacterPlayer>(GetWorld()->GetFirstPlayerController()->GetPawn());
 	CreateGamePlayWidget();
 }
 
 void ACHJ_GameMode::Tick(float DeltaSeconds)
 {
 	Super::Tick(DeltaSeconds);
-	
 }
 
 void ACHJ_GameMode::CommandCompanion(int num)
@@ -46,7 +59,7 @@ void ACHJ_GameMode::CommandCompanion(int num)
 
 APawn* ACHJ_GameMode::GetEnemy(FVector Pos)
 {
-		// ���� ����� �巡���� ã�´�.
+	// ���� ����� �巡���� ã�´�.
 	APawn* ClosestDragon = nullptr;
 	float MinDistance = 9999999999.0f;
 
@@ -66,7 +79,7 @@ APawn* ACHJ_GameMode::GetEnemy(FVector Pos)
 
 void ACHJ_GameMode::CreateGamePlayWidget()
 {
-	if(GamePlayWidgetFactory)
+	if (GamePlayWidgetFactory)
 	{
 		GamePlayWidget = Cast<UHD_GamePlayWidget>(CreateWidget(GetWorld(), GamePlayWidgetFactory));
 		GamePlayWidget->AddToViewport();
@@ -82,4 +95,23 @@ void ACHJ_GameMode::SetHPUI(float Curr, float Max)
 void ACHJ_GameMode::SetDragonHPUI(float Curr, float Max, int RemainLineCnt)
 {
 	GamePlayWidget->WBP_PlayerWidget->Set_DragonHP(Curr, Max, RemainLineCnt);
+}
+
+void ACHJ_GameMode::PlaySoundAtIndex(int32 idx)
+{
+	if (ArrNarration.IsValidIndex(idx))
+	{
+		auto DialogSB = ArrNarration[idx];
+		if (DialogSB && GamePlayWidget)
+		{
+			// 나레이션 음성 파일을 재생한다.
+			UGameplayStatics::PlaySound2D(GetWorld(), DialogSB);
+
+			float Duration = DialogSB->GetDuration();
+
+			UE_LOG(LogTemp,Warning, TEXT("%d"),GamePlayWidget->GetLinkerIndex());
+			GamePlayWidget->WBP_PlayerWidget->ShowDialogForDuration(idx, Duration);
+			//PlayerWidget->ShowDialogForDuration(idx, Duration);
+		}
+	}
 }

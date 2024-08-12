@@ -14,6 +14,7 @@ class HOTDOGMA_API ACHJ_GameMode : public AGameModeBase
 {
 	GENERATED_BODY()
 public:
+	virtual void InitGame(const FString& MapName, const FString& Options, FString& ErrorMessage);
 	virtual void BeginPlay() override;
 	virtual void Tick(float DeltaSeconds) override;
 	void CommandCompanion(int num);
@@ -47,4 +48,14 @@ public:
 	
 	void SetHPUI(float Curr, float Max);
 	void SetDragonHPUI(float Curr, float Max, int RemainLineCnt);
+
+	// 나레이션
+	UPROPERTY()
+	TArray<USoundBase*> ArrNarration;
+
+	UFUNCTION()
+	void PlaySoundAtIndex(int32 idx);
+	
+	UPROPERTY(EditAnywhere)
+	class UHD_PlayerWidget* PlayerWidget;
 };

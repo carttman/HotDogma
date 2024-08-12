@@ -95,10 +95,10 @@ float AHD_CharacterPlayer::TakeDamage(float DamageAmount, FDamageEvent const& Da
 			if(HJ_Dragon)
 			{
 				UE_LOG(LogTemp, Warning, TEXT("%s"), *HJ_Dragon->strDamageAttackType);
-				if(!HJ_Dragon->strDamageAttackType.Equals("Shout"))
-				{
-					PlayerStatusComponent->CurrHP -= damage;
-				}
+				// if(!HJ_Dragon->strDamageAttackType.Equals("Shout"))
+				// {
+				// 	PlayerStatusComponent->CurrHP -= damage;
+				// }
 				if(HJ_Dragon->strDamageAttackType.Equals("Shout"))
 				{
 					if(ShoutCameraShake)

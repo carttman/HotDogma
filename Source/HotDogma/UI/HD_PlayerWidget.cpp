@@ -7,6 +7,7 @@
 #include "Components/Image.h"
 #include "Components/ProgressBar.h"
 
+
 void UHD_PlayerWidget::NativeConstruct()
 {
 	Super::NativeConstruct();
@@ -26,6 +27,17 @@ void UHD_PlayerWidget::NativeConstruct()
 	if (EmptyGauge0)
 		ArrEmptyGauge.Add(EmptyGauge0);
 	//WBP_GameOver->SetVisibility(ESlateVisibility::Hidden);
+
+	if(Narration1)
+		Narration1->SetVisibility(ESlateVisibility::Hidden);
+	if(Narration2)
+		Narration2->SetVisibility(ESlateVisibility::Hidden);
+	if(Narration3)
+		Narration3->SetVisibility(ESlateVisibility::Hidden);
+	if(Narration4)
+		Narration4->SetVisibility(ESlateVisibility::Hidden);
+	if(Narration5)
+		Narration5->SetVisibility(ESlateVisibility::Hidden);
 }
 
 void UHD_PlayerWidget::NativeTick(const FGeometry& MyGeometry, float InDeltaTime)
@@ -55,4 +67,67 @@ void UHD_PlayerWidget::Set_DragonHP(float currHP, float maxHP, int RemainLineCnt
 			ArrEmptyGauge[i]->SetVisibility(ESlateVisibility::Hidden);
 		}
 	}
+}
+
+void UHD_PlayerWidget::ShowDialogForDuration(int32 idx, float duration)
+{
+	// TextBlock을 선언한다.
+	UTextBlock* DialogTextBlock = nullptr;
+
+	switch (idx)
+	{
+	case 0:
+		DialogTextBlock = Narration1;
+		break;
+	case 1:
+		DialogTextBlock = Narration2;
+		break;
+	case 2:
+		DialogTextBlock = Narration3;
+		break;
+	case 3:
+		DialogTextBlock = Narration4;
+		break;
+	case 4:
+		DialogTextBlock = Narration5;
+		break;
+	}
+
+	if (DialogTextBlock)
+	{
+		// 선택한 TextBlock Visible을 True 변경
+		DialogTextBlock->SetVisibility(ESlateVisibility::Visible);
+
+		// GetWorld()->GetTimerManager().SetTimer(DialogHnd, [this, idx]()
+		// {
+		// 	EnVisibleTextBlock(idx);
+		// }, duration, false);
+	}
+}
+
+void UHD_PlayerWidget::EnVisibleTextBlock(int32 idx)
+{
+	// TextBlock을 선언한다.
+	UTextBlock* DialogTextBlock = nullptr;
+	switch (idx)
+	{
+	case 0:
+		DialogTextBlock = Narration1;
+		break;
+	case 1:
+		DialogTextBlock = Narration2;
+		break;
+	case 2:
+		DialogTextBlock = Narration3;
+		break;
+	case 3:
+		DialogTextBlock = Narration4;
+		break;
+	case 4:
+		DialogTextBlock = Narration5;
+		break;
+	}
+
+	if (DialogTextBlock)
+		DialogTextBlock->SetVisibility(ESlateVisibility::Hidden);
 }

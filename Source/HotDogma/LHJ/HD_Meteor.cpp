@@ -54,7 +54,7 @@ void AHD_Meteor::SetTarget(FVector target)
 	FRotator dirRot = dir.Rotation();
 	//dirRot.Yaw += 45.f;
 	dir.Normalize();
-	SetActorRotation(dirRot);
+	//SetActorRotation(dirRot);
 	ProjectileComp->Velocity = dir * speed;
 }
 

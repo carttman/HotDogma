@@ -216,8 +216,8 @@ void AHD_Dragon::CreateClimbCollision()
 void AHD_Dragon::BeginPlay()
 {
 	Super::BeginPlay();
-	
-	CurrHP=MaxHP;
+
+	CurrHP = MaxHP;
 
 	GetCharacterMovement()->MaxWalkSpeed = GetCharacterMovement()->GetMaxSpeed() * 0.75;
 
@@ -303,6 +303,12 @@ float AHD_Dragon::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent
 			float BarHp = CurrHP - (int)CurrEmptyHPLine * LineHpValue;
 
 			gm->SetDragonHPUI(BarHp, LineHpValue, CurrEmptyHPLine);
+
+			//if (CurrHP <= MaxHP * 0.95 && narTirgger)
+			//{
+			//	gm->PlaySoundAtIndex(4);
+			//	narTirgger = false;
+			//}
 		}
 	}
 	else

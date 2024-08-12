@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
+#include "Components/TextBlock.h"
 #include "HD_PlayerWidget.generated.h"
 
 /**
@@ -46,5 +47,27 @@ public:
 	void SetHP(float currHP, float maxHP);
 	void Set_DragonHP(float currHP, float maxHP, int RemainLineCnt);
 	
+	UPROPERTY(EditAnywhere, meta = (BindWidget))
+	UTextBlock* Narration1;
+
+	UPROPERTY(EditAnywhere, meta = (BindWidget))
+	UTextBlock* Narration2;
+
+	UPROPERTY(EditAnywhere, meta = (BindWidget))
+	UTextBlock* Narration3;
+
+	UPROPERTY(EditAnywhere, meta = (BindWidget))
+	UTextBlock* Narration4;
+
+	UPROPERTY(EditAnywhere, meta = (BindWidget))
+	UTextBlock* Narration5;
+
+	UPROPERTY()
+	FTimerHandle DialogHnd;
 	
+	UFUNCTION()
+	void ShowDialogForDuration(int32 idx, float duration);
+
+	UFUNCTION()
+	void EnVisibleTextBlock(int32 idx);
 };

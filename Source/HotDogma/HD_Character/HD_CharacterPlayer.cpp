@@ -83,6 +83,10 @@ float AHD_CharacterPlayer::TakeDamage(float DamageAmount, FDamageEvent const& Da
 	PlayerStatusComponent->CurrHP -= damage;
 	UE_LOG(LogTemp, Warning, TEXT("%s Takes Damage : %f"), *GetName(), PlayerStatusComponent->CurrHP);
 	PlayerGameMode->SetHPUI(PlayerStatusComponent->CurrHP, PlayerStatusComponent->MaxHP);
+		if (PlayerStatusComponent->MaxHP < PlayerStatusComponent->CurrHP)
+		{
+			PlayerStatusComponent->CurrHP = PlayerStatusComponent->MaxHP;
+		}
 	if(!PlayerAttackComponent->IsClimb) // 등산중일때 슈퍼아머
 	{
 		if(DamageCauser)

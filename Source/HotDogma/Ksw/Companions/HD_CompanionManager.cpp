@@ -120,8 +120,8 @@ void AHD_CompanionManager::Tick(float DeltaTime)
 	}
 
 	ChangeCommand = false;
-	FString myState = UEnum::GetValueOrBitfieldAsString(CurrentCommand);
-	DrawDebugString(GetWorld(), PlayerPawn->GetActorLocation(), myState, 0, FColor::Yellow, 0);
+	//FString myState = UEnum::GetValueOrBitfieldAsString(CurrentCommand);
+	//DrawDebugString(GetWorld(), PlayerPawn->GetActorLocation(), myState, 0, FColor::Yellow, 0);
 }
 
 void AHD_CompanionManager::TickFollow(float DeltaTime)

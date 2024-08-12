@@ -70,7 +70,11 @@ void UHD_WarriorStateComponent::HighfiveReady()
 {
 	WarriorAnimInstance->PlayHighfiveMontage(0);
 	// 플레이어를 바라본다.
-	FRotator LookAt = UKismetMathLibrary::FindLookAtRotation(Me->GetActorLocation(), CharacterPoint);
+	FVector PlayerLocation = Me->GetWorld()->GetFirstPlayerController()->GetPawn()->GetActorLocation();
+	FRotator LookAt = UKismetMathLibrary::FindLookAtRotation(Me->GetActorLocation(), PlayerLocation);
+	// z축 회전만 한다.
+	LookAt.Pitch = 0;
+	LookAt.Roll = 0;
 	Me->SetActorRotation(LookAt);
 }
 

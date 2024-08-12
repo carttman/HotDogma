@@ -29,6 +29,7 @@ AHD_Dragon::AHD_Dragon()
 	if (tempSkeleton.Succeeded())
 	{
 		SkeletalComp->SetSkeletalMesh(tempSkeleton.Object);
+		SkeletalComp->SetRelativeScale3D(FVector(.8f));
 	}
 	SkeletalComp->SetCollisionProfileName(FName("DragonMeshColl"));
 	SkeletalComp->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);

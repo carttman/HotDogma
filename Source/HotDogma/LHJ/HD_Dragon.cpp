@@ -216,6 +216,8 @@ void AHD_Dragon::CreateClimbCollision()
 void AHD_Dragon::BeginPlay()
 {
 	Super::BeginPlay();
+	
+	CurrHP=MaxHP;
 
 	GetCharacterMovement()->MaxWalkSpeed = GetCharacterMovement()->GetMaxSpeed() * 0.75;
 

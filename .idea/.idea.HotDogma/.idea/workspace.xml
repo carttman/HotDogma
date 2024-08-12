@@ -13,19 +13,19 @@
   <component name="ChangeListManager">
     <list default="true" id="816ff4fd-5015-4971-a749-88a8f089f2fd" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.HotDogma/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.HotDogma/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/CHJ/Blueprints/BP_CHJ_GameModeBase.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/CHJ/Blueprints/BP_CHJ_GameModeBase.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/LGT/LGT_TestMap.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/LGT/LGT_TestMap.umap" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Maps/CompanionLevel.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Maps/CompanionLevel.umap" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/UI/WBP_PlayerWidget.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/UI/WBP_PlayerWidget.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/HotDogma/HD_Character/HD_CharacterPlayer.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/HotDogma/HD_Character/HD_CharacterPlayer.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/LHJ/BluePrints/ABP_DragonAnim.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/LHJ/BluePrints/ABP_DragonAnim.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/LHJ/UnkaDragon/Animations/BlendSpaces/Unka_BS_NonFly_Rotate.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/LHJ/UnkaDragon/Animations/BlendSpaces/Unka_BS_NonFly_Rotate.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/LHJ/UnkaDragon/Animations/Common/My_Unka_IP_Attack_Stump.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/LHJ/UnkaDragon/Animations/Common/My_Unka_IP_Attack_Stump.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/LHJ/UnkaDragon/Animations/Common/Unka_C_Attack_Fire_Breath.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/LHJ/UnkaDragon/Animations/Common/Unka_C_Attack_Fire_Breath.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/LHJ/UnkaDragon/Animations/Common/Unka_C_Damage_Front_Right.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/LHJ/UnkaDragon/Animations/Common/Unka_C_Damage_Front_Right.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/LHJ/UnkaDragon/Animations/Common/Unka_C_Idle_AM_3_CPY.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/LHJ/UnkaDragon/Animations/Common/Unka_C_Idle_AM_3_CPY.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/LHJ/UnkaDragon/Animations/InPlace/MyScratch1.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/LHJ/UnkaDragon/Animations/InPlace/MyScratch1.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/LHJ/UnkaDragon/Animations/InPlace/MyScratch2.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/LHJ/UnkaDragon/Animations/InPlace/MyScratch2.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/LHJ/UnkaDragon/Animations/InPlace/MyTailSlap1.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/LHJ/UnkaDragon/Animations/InPlace/MyTailSlap1.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/LHJ/UnkaDragon/Animations/InPlace/MyTailSlap2.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/LHJ/UnkaDragon/Animations/InPlace/MyTailSlap2.uasset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/HotDogma/HD_GameModeBase/CHJ_GameMode.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/HotDogma/HD_GameModeBase/CHJ_GameMode.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/HotDogma/HD_GameModeBase/CHJ_GameMode.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/HotDogma/HD_GameModeBase/CHJ_GameMode.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/HotDogma/LHJ/HD_Dragon.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/HotDogma/LHJ/HD_Dragon.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/HotDogma/LHJ/HD_Dragon.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/HotDogma/LHJ/HD_Dragon.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/HotDogma/LHJ/HD_Meteor.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/HotDogma/LHJ/HD_Meteor.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/HotDogma/UI/HD_GamePlayWidget.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/HotDogma/UI/HD_GamePlayWidget.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/HotDogma/UI/HD_PlayerWidget.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/HotDogma/UI/HD_PlayerWidget.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/HotDogma/UI/HD_PlayerWidget.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/HotDogma/UI/HD_PlayerWidget.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/HotDogma/LHJ/HD_DragonAnim.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/HotDogma/LHJ/HD_DragonAnim.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/HotDogma/LHJ/HD_DragonFSM.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/HotDogma/LHJ/HD_DragonFSM.cpp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -53,6 +53,9 @@
   }
 }</component>
   <component name="HighlightingSettingsPerFile">
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
@@ -100,29 +103,29 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;C++ 프로젝트.HotDogma.executor&quot;: &quot;Debug&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/00. hak/HotDogma/HotDogma/Source&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.lookFeel&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "C++ 프로젝트.HotDogma.executor": "Debug",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "HAK__20240724",
+    "ignore.virus.scanning.warn.message": "true",
+    "last_opened_file_path": "C:/00. hak/HotDogma/HotDogma/Source",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "preferences.lookFeel",
+    "vue.rearranger.settings.migration": "true"
   },
-  &quot;keyToStringList&quot;: {
-    &quot;rider.external.source.directories&quot;: [
-      &quot;C:\\Users\\Admin\\AppData\\Roaming\\JetBrains\\Rider2024.1\\resharper-host\\DecompilerCache&quot;,
-      &quot;C:\\Users\\Admin\\AppData\\Roaming\\JetBrains\\Rider2024.1\\resharper-host\\SourcesCache&quot;,
-      &quot;C:\\Users\\Admin\\AppData\\Local\\Symbols\\src&quot;
+  "keyToStringList": {
+    "rider.external.source.directories": [
+      "C:\\Users\\Admin\\AppData\\Roaming\\JetBrains\\Rider2024.1\\resharper-host\\DecompilerCache",
+      "C:\\Users\\Admin\\AppData\\Roaming\\JetBrains\\Rider2024.1\\resharper-host\\SourcesCache",
+      "C:\\Users\\Admin\\AppData\\Local\\Symbols\\src"
     ]
   }
-}</component>
+}]]></component>
   <component name="RunManager" selected="C++ 프로젝트.HotDogma">
     <configuration name="HotDogma" type="CppProject" factoryName="C++ Project">
       <configuration_1>
@@ -647,6 +650,7 @@
       <workItem from="1723436437140" duration="6946000" />
       <workItem from="1723465072052" duration="1130000" />
       <workItem from="1723466331085" duration="15000" />
+      <workItem from="1723466689444" duration="1728000" />
     </task>
     <task id="LOCAL-00001" summary="retarget Attack Animation 추가 / 무기 에셋 추가">
       <option name="closed" value="true" />
@@ -701,16 +705,5 @@
     <MESSAGE value="retarget Attack Animation 추가 / 무기 에셋 추가" />
     <MESSAGE value="cutting wind 스킬 수정중" />
     <option name="LAST_COMMIT_MESSAGE" value="cutting wind 스킬 수정중" />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
-          <url>file://$PROJECT_DIR$/Source/HotDogma/UI/HD_PlayerWidget.cpp</url>
-          <line>76</line>
-          <option name="timeStamp" value="10" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
   </component>
 </project>

@@ -109,7 +109,7 @@ void ACHJ_GameMode::PlaySoundAtIndex(int32 idx)
 
 			float Duration = DialogSB->GetDuration();
 
-			UE_LOG(LogTemp,Warning, TEXT("%d"),GamePlayWidget->GetLinkerIndex());
+			//UE_LOG(LogTemp,Warning, TEXT("%d"),GamePlayWidget->GetLinkerIndex());
 			GamePlayWidget->WBP_PlayerWidget->ShowDialogForDuration(idx, Duration);
 			//PlayerWidget->ShowDialogForDuration(idx, Duration);
 		}

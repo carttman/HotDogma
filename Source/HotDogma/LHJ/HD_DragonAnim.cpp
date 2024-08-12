@@ -215,7 +215,6 @@ void UHD_DragonAnim::AnimNotify_MyStartTailSlap()
 void UHD_DragonAnim::AnimNotify_EndTailSlap()
 {
 	Dragon->TailCollision->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-	chkAngle = false;
 	Dragon->DamageActorSet.Empty();
 }
 
@@ -230,7 +229,6 @@ void UHD_DragonAnim::AnimNotify_EndScratch()
 	Dragon->HandCollision_L->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	Dragon->HandCollision_R->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	Dragon->DamageActorSet.Empty();
-	chkAngle = false;
 }
 
 void UHD_DragonAnim::AnimNotify_ClearSet()
@@ -260,6 +258,7 @@ void UHD_DragonAnim::AnimNotify_EndAttack()
 	}
 	if (Dragon)
 		Dragon->strDamageAttackType = "";
+	chkAngle = false;
 }
 
 void UHD_DragonAnim::AnimNotify_RotateFire()
@@ -323,7 +322,7 @@ void UHD_DragonAnim::AnimNotify_StartFlyAttack()
 }
 
 void UHD_DragonAnim::AnimNotify_EndFlyAttack()
-{	
+{
 	if (fsm)
 	{
 		// 날고있는 상태이고, 정해진 개수만큼 스킬을 사용했을 때
@@ -335,7 +334,7 @@ void UHD_DragonAnim::AnimNotify_EndFlyAttack()
 		{
 			ChangeState(DragonState::Idle);
 		}
-		
+
 		fsm->isAttack = false;
 		fsm->iCastingCnt = 0;
 		fsm->bStartMeteor = false;

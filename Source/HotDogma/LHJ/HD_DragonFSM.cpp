@@ -108,7 +108,7 @@ void UHD_DragonFSM::TickComponent(float DeltaTime, ELevelTick TickType, FActorCo
 	// 		GetWorld(), FVector(Dragon->GetActorLocation().X, Dragon->GetActorLocation().Y,
 	// 		                    Dragon->GetActorLocation().Z - 50), myState, nullptr, FColor::Yellow, 0);
 	// }
-
+	
 	if (State == DragonState::Death)
 	{
 		if (DirectionalLight)

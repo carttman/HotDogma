@@ -80,7 +80,7 @@ public:
 	float MaxHP = 100;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	float CurrHP = MaxHP;
+	float CurrHP;
 
 	UPROPERTY(EditAnywhere)
 	class USceneComponent* FireScene;
@@ -211,4 +211,8 @@ public:
 
 	UPROPERTY()
 	class AHD_CharacterPlayer* Player;
+
+	FTimerHandle DeathTimerHandle;
+
+	void CallCredit();	
 };

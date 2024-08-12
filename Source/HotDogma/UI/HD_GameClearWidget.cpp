@@ -3,3 +3,13 @@
 
 #include "../UI/HD_GameClearWidget.h"
 
+void UHD_GameClearWidget::NativeConstruct()
+{
+	Super::NativeConstruct();
+	PlayCreditAnim();
+}
+
+void UHD_GameClearWidget::PlayCreditAnim()
+{
+	PlayAnimation(Credits);
+}

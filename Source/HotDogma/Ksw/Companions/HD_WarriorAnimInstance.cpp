@@ -12,6 +12,25 @@ void UHD_WarriorAnimInstance::NativeInitializeAnimation()
 	Companion = Cast<AHD_CompanionCharacter>(TryGetPawnOwner());
 }
 
+void UHD_WarriorAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
+{
+	Super::NativeUpdateAnimation(DeltaSeconds);
+
+	if (FMath::IsNearlyEqual(HandIKTargetAlpha, 1.0f))
+	{
+		// 플레이어 
+		ACharacter* Player = GetWorld()->GetFirstPlayerController()->GetCharacter();
+		if (Player)
+			HandTarget = Player->GetMesh()->GetBoneLocation("hand_r");
+		
+		HandIKAlpha = FMath::Lerp(HandIKAlpha, HandIKTargetAlpha, 0.1f);
+	}
+	else
+	{
+		HandIKAlpha = 0.0f;
+	}
+}
+
 void UHD_WarriorAnimInstance::PlayAttackMontage(int32 combo)
 {
 	if (AttackMontage)
@@ -67,6 +86,25 @@ void UHD_WarriorAnimInstance::PlayIndomitableLashMontage(int32 step)
 	}
 }
 
+void UHD_WarriorAnimInstance::PlayHighfiveMontage(int32 step)
+{
+	if (HighfiveMontage)
+	{
+		FName MontageSection = FName(*FString::Printf(TEXT("Highfive_%d"), step));
+		float Duration = Montage_Play(HighfiveMontage, 1.f);
+		if (Duration > 0.0f)
+		{
+			Montage_JumpToSection(MontageSection, HighfiveMontage);
+		}
+	}
+}
+
+void UHD_WarriorAnimInstance::ToggleHandIK(bool enable, FVector Target)
+{
+	HandTarget = Target;
+	HandIKTargetAlpha = enable ? 1.0f : 0.0f;
+}
+
 void UHD_WarriorAnimInstance::AnimNotify_Damage_On()
 {
 	Companion->CompanionWeapon->OnCollision(true);
@@ -75,4 +113,9 @@ void UHD_WarriorAnimInstance::AnimNotify_Damage_On()
 void UHD_WarriorAnimInstance::AnimNotify_Damage_Off()
 {
 	Companion->CompanionWeapon->OnCollision(false);
+}
+
+void UHD_WarriorAnimInstance::AnimNotify_Highfive()
+{
+	Companion->ToggleHandIK(false);
 }

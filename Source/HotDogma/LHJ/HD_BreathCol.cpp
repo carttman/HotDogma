@@ -39,6 +39,8 @@ void AHD_BreathCol::BeginPlay()
 	Dragon = Cast<AHD_Dragon>(UGameplayStatics::GetActorOfClass(GetWorld(), AHD_Dragon::StaticClass()));
 	if(Dragon)
 		Anim = Cast<UHD_DragonAnim>(Dragon->SkeletalComp->GetAnimInstance());
+
+	SetLifeSpan(.225f);
 }
 
 // Called every frame
@@ -48,8 +50,7 @@ void AHD_BreathCol::Tick(float DeltaTime)
 }
 
 void AHD_BreathCol::SetTarget(FTransform target)
-{
-	SetLifeSpan(.225f);
+{	
 	FRotator FireSocketRotation = target.GetRotation().Rotator();
 	if (Anim)
 	{

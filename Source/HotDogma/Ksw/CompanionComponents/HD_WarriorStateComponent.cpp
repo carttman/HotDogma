@@ -66,6 +66,23 @@ void UHD_WarriorStateComponent::AttackTick(float DeltaTime)
 	//DrawDebugString(GetWorld(), GetOwner()->GetActorLocation() + FVector(0, 0, 100), myState, 0, FColor::Yellow, 0);
 }
 
+void UHD_WarriorStateComponent::HighfiveReady()
+{
+	WarriorAnimInstance->PlayHighfiveMontage(0);
+	// 플레이어를 바라본다.
+	FVector PlayerLocation = Me->GetWorld()->GetFirstPlayerController()->GetPawn()->GetActorLocation();
+	FRotator LookAt = UKismetMathLibrary::FindLookAtRotation(Me->GetActorLocation(), PlayerLocation);
+	// z축 회전만 한다.
+	LookAt.Pitch = 0;
+	LookAt.Roll = 0;
+	Me->SetActorRotation(LookAt);
+}
+
+void UHD_WarriorStateComponent::Highfive()
+{
+	WarriorAnimInstance->PlayHighfiveMontage(1);
+}
+
 void UHD_WarriorStateComponent::CombatCheck()
 {
 	Me->GetCharacterMovement()->MaxWalkSpeed = 250;
@@ -364,7 +381,7 @@ void UHD_WarriorStateComponent::HeavenwardSunder()
 			// 충돌을 무시한다.
 			
 			Me->GetCapsuleComponent()->SetCollisionResponseToChannel(ECollisionChannel::ECC_Pawn, ECollisionResponse::ECR_Ignore);
-			Me->LaunchCharacter(FVector(0, 0, 1000), false, false);
+			Me->LaunchCharacter(FVector(25, 0, 300), false, false);
 			
 			WarriorAnimInstance->PlayHeavenwardSunderMontage(CurrentCombo);
 			CurrentCombo++;

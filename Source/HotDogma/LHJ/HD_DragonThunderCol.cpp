@@ -31,7 +31,7 @@ void AHD_DragonThunderCol::BeginPlay()
 {
 	Super::BeginPlay();
 
-	Dragon = Cast<AHD_Dragon>(UGameplayStatics::GetActorOfClass(GetWorld(),AHD_Dragon::StaticClass()));
+	Dragon = Cast<AHD_Dragon>(UGameplayStatics::GetActorOfClass(GetWorld(), AHD_Dragon::StaticClass()));
 }
 
 // Called every frame
@@ -44,6 +44,9 @@ void AHD_DragonThunderCol::Tick(float DeltaTime)
 	{
 		CurrTime = 0.f;
 		BoxComp->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
+
+		if (ThunderSound)
+			UGameplayStatics::PlaySound2D(GetWorld(), ThunderSound);
 
 		bool bRtn = GetCameraShackThunder(CameraShakeDist);
 		if (bRtn)
@@ -64,11 +67,11 @@ void AHD_DragonThunderCol::Tick(float DeltaTime)
 		}
 
 		UNiagaraComponent* NiagaraComponent = UNiagaraFunctionLibrary::SpawnSystemAtLocation(
-		   this,
-		   ThunderSmog,
-		   GetActorLocation(),
-		   GetActorRotation()
-	   );
+			this,
+			ThunderSmog,
+			GetActorLocation(),
+			GetActorRotation()
+		);
 	}
 
 	if (BoxComp->GetCollisionEnabled() == ECollisionEnabled::QueryOnly)
@@ -87,7 +90,7 @@ void AHD_DragonThunderCol::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, A
 	UE_LOG(LogTemp, Warning, TEXT("%s"), *OtherActor->GetName());
 	Dragon->strDamageAttackType = "Thunder";
 	UGameplayStatics::ApplyDamage(OtherActor, Dragon->fsm->Damage_Thunder, Dragon->GetController(), Dragon,
-								  UDamageType::StaticClass());
+	                              UDamageType::StaticClass());
 }
 
 bool AHD_DragonThunderCol::GetCameraShackThunder(const float& AttackDistance)
@@ -101,9 +104,9 @@ bool AHD_DragonThunderCol::GetCameraShackThunder(const float& AttackDistance)
 	ActorsToIgnore.Add(Dragon);
 	ActorsToIgnore.Add(this);
 	UKismetSystemLibrary::SphereTraceMulti(GetWorld(), Start, End, AttackDistance,
-										   UEngineTypes::ConvertToTraceType(CollisionChannel), false,
-										   ActorsToIgnore, EDrawDebugTrace::None, OutHits,
-										   true);
+	                                       UEngineTypes::ConvertToTraceType(CollisionChannel), false,
+	                                       ActorsToIgnore, EDrawDebugTrace::None, OutHits,
+	                                       true);
 
 	for (auto& Hit : OutHits)
 	{
@@ -111,8 +114,8 @@ bool AHD_DragonThunderCol::GetCameraShackThunder(const float& AttackDistance)
 		{
 			//UE_LOG(LogTemp, Warning, TEXT("Hit Actor: %s"), *Hit.GetActor()->GetName());
 			UE_LOG(LogTemp, Warning, TEXT("Hit Actor: %s TargetLoc : %.f, %.f, %.f"),
-				   *Hit.GetActor()->GetName(), Hit.GetActor()->GetActorLocation().X,
-				   Hit.GetActor()->GetActorLocation().Y, Hit.GetActor()->GetActorLocation().Z);
+			       *Hit.GetActor()->GetName(), Hit.GetActor()->GetActorLocation().X,
+			       Hit.GetActor()->GetActorLocation().Y, Hit.GetActor()->GetActorLocation().Z);
 			FVector ThunderAttackTarget = Hit.GetActor()->GetActorLocation(); //- Player->GetActorLocation();
 			FVector newLoc = ThunderAttackTarget - Dragon->GetActorLocation();
 			newLoc.Normalize();

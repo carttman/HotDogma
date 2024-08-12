@@ -323,8 +323,7 @@ void UHD_DragonAnim::AnimNotify_StartFlyAttack()
 }
 
 void UHD_DragonAnim::AnimNotify_EndFlyAttack()
-{
-	ChangeState(DragonState::Idle);
+{	
 	if (fsm)
 	{
 		// 날고있는 상태이고, 정해진 개수만큼 스킬을 사용했을 때
@@ -332,8 +331,19 @@ void UHD_DragonAnim::AnimNotify_EndFlyAttack()
 		{
 			ChangeState(DragonState::FlyDown);
 		}
+		else
+		{
+			ChangeState(DragonState::Idle);
+		}
+		
 		fsm->isAttack = false;
+		fsm->iCastingCnt = 0;
+		fsm->bStartMeteor = false;
+		fsm->bStartThunder = false;
+		fsm->bReturnLightColor = false;
 	}
+	if (Dragon)
+		Dragon->strDamageAttackType = "";
 }
 
 void UHD_DragonAnim::AnimNotify_StartBreath()
@@ -374,6 +384,7 @@ void UHD_DragonAnim::AnimNotify_StartThunderAttack()
 	{
 		fsm->iCastingCnt = 0;
 		fsm->bStartThunder = true;
+		fsm->CurrUsedSkillCnt++;
 	}
 }
 
@@ -383,6 +394,7 @@ void UHD_DragonAnim::AnimNotify_StartMeteorAttack()
 	{
 		fsm->iCastingCnt = 0;
 		fsm->bStartMeteor = true;
+		fsm->CurrUsedSkillCnt++;
 	}
 }
 

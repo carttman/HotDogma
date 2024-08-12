@@ -9,6 +9,7 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "Animation/AnimInstance.h"
+#include <HotDogma/LHJ/HD_Dragon.h>
 
 // Sets default values for this component's properties
 UHD_CompanionStateComponent::UHD_CompanionStateComponent()
@@ -59,6 +60,22 @@ void UHD_CompanionStateComponent::TickComponent(float DeltaTime, ELevelTick Tick
 		case ECompanionState::State_Help:
 			HelpTick(DeltaTime);
 			break;
+		case ECompanionState::State_BattleEnd:
+			BattleEndTick(DeltaTime);
+			break;
+	}
+
+	if (TargetPawn && ! bHighfive)
+	{
+		AHD_Dragon* dragon = Cast<AHD_Dragon>(TargetPawn);
+		if (dragon->CurrHP <= 0.0f)
+		{
+			SetState(ECompanionState::State_BattleEnd);
+		}
+	}
+	else
+	{
+		SetState(ECompanionState::State_BattleEnd);
 	}
 
 	//FString myState = UEnum::GetValueOrBitfieldAsString(CurrentState);
@@ -166,7 +183,15 @@ void UHD_CompanionStateComponent::BattleTick(float DeltaTime)
 
 void UHD_CompanionStateComponent::HelpTick(float DeltaTime)
 {
+}
 
+void UHD_CompanionStateComponent::BattleEndTick(float DeltaTime)
+{
+	if (! bHighfive)
+	{
+		bHighfive = true;
+		HighfiveReady();
+	}
 }
 
 void UHD_CompanionStateComponent::AttackTick(float DeltaTime)
@@ -179,6 +204,14 @@ void UHD_CompanionStateComponent::StartBattle()
 }
 
 void UHD_CompanionStateComponent::EndBattle()
+{
+}
+
+void UHD_CompanionStateComponent::HighfiveReady()
+{
+}
+
+void UHD_CompanionStateComponent::Highfive()
 {
 }
 
@@ -292,7 +325,7 @@ void UHD_CompanionStateComponent::Flocking(const TArray<UHD_CompanionStateCompon
 void UHD_CompanionStateComponent::SetMovePoint(const FVector& chacterPos, const FVector& Point)
 {
 	MovePoint = Point;
-	CharcterPoint = chacterPos;
+	CharacterPoint = chacterPos;
 }
 
 void UHD_CompanionStateComponent::StopMove()
@@ -310,7 +343,7 @@ void UHD_CompanionStateComponent::DoHelp()
 {
 
 	// 지원 스킬이 있는지 확인하고 사용한다.
-	// SetState(ECompanionState::State_Help);
+	SetState(ECompanionState::State_BattleEnd);
 }
 
 void UHD_CompanionStateComponent::RotateToTarget(float DeltaTime, FVector Target)
@@ -330,5 +363,10 @@ void UHD_CompanionStateComponent::RotateToTarget(float DeltaTime, FVector Target
 void UHD_CompanionStateComponent::SetState(ECompanionState State)
 {
 	CurrentState = State;
+}
+
+bool UHD_CompanionStateComponent::IsHighfive()
+{
+	return bHighfive;
 }
 

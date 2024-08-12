@@ -120,8 +120,8 @@ void AHD_CompanionManager::Tick(float DeltaTime)
 	}
 
 	ChangeCommand = false;
-	FString myState = UEnum::GetValueOrBitfieldAsString(CurrentCommand);
-	DrawDebugString(GetWorld(), PlayerPawn->GetActorLocation(), myState, 0, FColor::Yellow, 0);
+	//FString myState = UEnum::GetValueOrBitfieldAsString(CurrentCommand);
+	//DrawDebugString(GetWorld(), PlayerPawn->GetActorLocation(), myState, 0, FColor::Yellow, 0);
 }
 
 void AHD_CompanionManager::TickFollow(float DeltaTime)
@@ -186,7 +186,7 @@ void AHD_CompanionManager::MoveBoid(UHD_CompanionStateComponent* Companion, FVec
 	FVector PlayerLocation = PlayerPawn->GetActorLocation();
 	if (!ChangeCommand && Companion->CurrentState == ECompanionState::State_Wait)
 	{
-		FVector GapPos = PlayerLocation - Companion->CharcterPoint;
+		FVector GapPos = PlayerLocation - Companion->CharacterPoint;
 		if (GapPos.Length() < 500)
 		{
 			return;

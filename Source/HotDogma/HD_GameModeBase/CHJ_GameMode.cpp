@@ -70,6 +70,7 @@ void ACHJ_GameMode::CreateGamePlayWidget()
 	{
 		GamePlayWidget = Cast<UHD_GamePlayWidget>(CreateWidget(GetWorld(), GamePlayWidgetFactory));
 		GamePlayWidget->AddToViewport();
+		GamePlayWidget->PlayBGM_Crow();
 	}
 }
 

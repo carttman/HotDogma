@@ -128,4 +128,6 @@ public:
 	float GalvanizeRange = 1000.0f;
 	float GalvanizeTime = 1.0f;
 
+	UPROPERTY(EditAnywhere, Category = "Companion")
+	class USoundBase* MagickBoltSound;
 };

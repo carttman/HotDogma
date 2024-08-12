@@ -73,7 +73,23 @@ public:
 	UFUNCTION()
 	void AnimNotify_Damage_Off();
 
+	UFUNCTION()
+	void AnimNotify_Highfive();
 
+	void ToggleHandIK(bool enable, ACharacter* Target);
+	void PlayHighfive();
+
+	UPROPERTY(EditAnywhere)
+	class UAnimMontage* AM_HighfiveMontage;
+	UPROPERTY()
+	class ACharacter* TargetCharacter;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FVector HandTarget;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float HandIKAlpha;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float HandIKTargetAlpha;
 	//UFUNCTION()
 	//void AnimNotify_Start_Hit();
 	//UFUNCTION()

@@ -47,6 +47,13 @@ UHD_SorcererStateComponent::UHD_SorcererStateComponent()
 	{
 		ArgentSuccorFactory = ArgentSuccor.Class;
 	}
+
+	//메직 볼트 사운드
+static ConstructorHelpers::FObjectFinder<USoundBase> MagickBoltSoundAsset(TEXT("/Script/Engine.SoundWave'/Game/Assets/SFX/Magic/IMPACT_Generic_15_mono.IMPACT_Generic_15_mono'"));
+	if (MagickBoltSoundAsset.Succeeded())
+	{
+		MagickBoltSound = MagickBoltSoundAsset.Object;
+	}
 }
 
 void UHD_SorcererStateComponent::BeginPlay()
@@ -199,6 +206,9 @@ void UHD_SorcererStateComponent::MagickBolt()
 				// 볼트를 스폰한다.
 				FRotator LookAt = UKismetMathLibrary::FindLookAtRotation(Me->GetActorLocation(), AttackPoint);
 				AIController->SetControlRotation(LookAt);
+
+				// 사운드
+				UGameplayStatics::PlaySoundAtLocation(GetWorld(), MagickBoltSound, Me->GetActorLocation());
 
 				AHD_Projectile* MagickBolt = GetWorld()->SpawnActor<AHD_Projectile>(MagickBoltFactory, Me->ArrowComp->GetComponentTransform());
 				MagickBolt->SetTarget(AttackPoint);

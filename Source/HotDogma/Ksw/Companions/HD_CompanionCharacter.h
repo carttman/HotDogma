@@ -28,7 +28,10 @@ public:
 
 	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) override;
 
-	UPROPERTY(EditAnywhere, Category = "Companion")
+	UFUNCTION(BlueprintCallable)
+	void ToggleHandIK(bool enable);
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Companion")
 	class UHD_CompanionStateComponent* CompanionStateComp;
 
 	class UHD_CompanionStateComponent* SetupCompanionStateComp(bool isWarrior);
@@ -44,7 +47,7 @@ public:
 	
 	UPROPERTY()
 	class UHD_CompanionWidget* Widget;
-	
+
 	// 문자열
 	UPROPERTY(EditAnywhere, Category = "Companion")
 	FString CompanionName;
@@ -62,5 +65,15 @@ public:
 	UPROPERTY(EditAnywhere, Category = "Companion")
 	UAnimMontage* HitMontage;
 
+	UPROPERTY(EditAnywhere, Category = "Companion")
+	class UBoxComponent* BoxComp;
+
+	UFUNCTION()
+	void OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+
 	bool IsDeath;
+
+	// 사운드
+	UPROPERTY(EditAnywhere, Category = "Companion")
+	class USoundBase* HighfiveSound;
 };

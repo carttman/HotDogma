@@ -145,8 +145,8 @@ void UHD_PlayerAttackComponent::BaseAttack()
 		PlayerAnim->Montage_Play(AM_BaseAttack, 1.1);
 		ComboCount++;
 		CurrComboTime = 0;
-		//Cutting_GetTarget();
-		BaseAttackRot();
+		
+		//BaseAttackRot();
 	}
 	PlayerBaseAttackPlay(1,FName("Attack_2"));
 	PlayerBaseAttackPlay(2,FName("Attack_3"));
@@ -171,8 +171,8 @@ void UHD_PlayerAttackComponent::PlayerBaseAttackPlay(int32 ComboCnt, FName Secti
 			ComboCount++;
 			CurrComboTime = 0;
 			PlayerAnim->Montage_JumpToSection(SectionName, AM_BaseAttack);
-			//Cutting_GetTarget();
-			BaseAttackRot();
+			
+			//BaseAttackRot();
 		}
 	}
 }

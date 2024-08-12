@@ -116,7 +116,7 @@ public:
 
 #pragma region Attack Properties
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	float AttackDist = 2000.f; // 공격범위
+	float AttackDist = 1500.f; // 공격범위
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float HandPressAttackDist = 2000.f; // 앞발찍기 공격범위
@@ -131,10 +131,10 @@ public:
 	float JumpPressCameraDist = 3000.f; // 점프찍기 카메라쉐이크
 #pragma endregion
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditDefaultsOnly)
 	DragonState State = DragonState::Sleep; //Default State를 Idle로 설정
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditDefaultsOnly)
 	AttackState normalAttackState = AttackState::None;
 
 	UPROPERTY(BlueprintReadOnly, EditInstanceOnly)
@@ -145,10 +145,10 @@ public:
 	class ACharacter* NearTargetActor;
 
 	// 내 위치
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditDefaultsOnly)
 	class AActor* DragonActor;
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditDefaultsOnly)
 	class AHD_Dragon* Dragon;
 
 	// 타겟과 거리
@@ -332,7 +332,7 @@ public:
 	FVector F_GetSpawnMeteorLoc();
 #pragma endregion
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY()
 	class ADirectionalLight* DirectionalLight; // DirectionalLight
 
 	FLinearColor OldColor;
@@ -341,4 +341,7 @@ public:
 	bool bReturnLightColor = false;
 
 	float LightColorAlpha=0.f;
+
+	UPROPERTY( EditAnywhere )
+	class USoundBase* Battle_BGM;
 };

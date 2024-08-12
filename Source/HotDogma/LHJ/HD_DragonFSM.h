@@ -116,7 +116,7 @@ public:
 
 #pragma region Attack Properties
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	float AttackDist = 2000.f; // 공격범위
+	float AttackDist = 1500.f; // 공격범위
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float HandPressAttackDist = 2000.f; // 앞발찍기 공격범위

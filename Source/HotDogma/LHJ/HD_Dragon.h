@@ -83,12 +83,6 @@ public:
 	float CurrHP;
 
 	UPROPERTY(EditAnywhere)
-	class USceneComponent* FireScene;
-
-	UPROPERTY(EditDefaultsOnly)
-	class UBoxComponent* FireCollision;
-
-	UPROPERTY(EditAnywhere)
 	float MaxFireCollisionSize = 10;
 
 	UPROPERTY()

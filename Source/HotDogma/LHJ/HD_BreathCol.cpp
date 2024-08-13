@@ -22,6 +22,7 @@ AHD_BreathCol::AHD_BreathCol()
 	collisionComp->SetSphereRadius(80.0);
 	RootComponent = collisionComp;
 	collisionComp->OnComponentBeginOverlap.AddDynamic(this, &AHD_BreathCol::OnOverlapBegin);
+	collisionComp->SetRelativeScale3D(FVector(1.5, 1.5, 1.5));
 
 	ProjectileComp = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("ProjectileComp"));
 	ProjectileComp->SetUpdatedComponent(RootComponent);
@@ -37,10 +38,10 @@ void AHD_BreathCol::BeginPlay()
 	Super::BeginPlay();
 
 	Dragon = Cast<AHD_Dragon>(UGameplayStatics::GetActorOfClass(GetWorld(), AHD_Dragon::StaticClass()));
-	if(Dragon)
+	if (Dragon)
 		Anim = Cast<UHD_DragonAnim>(Dragon->SkeletalComp->GetAnimInstance());
 
-	SetLifeSpan(.225f);
+	SetLifeSpan(.35f);
 }
 
 // Called every frame
@@ -50,19 +51,17 @@ void AHD_BreathCol::Tick(float DeltaTime)
 }
 
 void AHD_BreathCol::SetTarget(FTransform target)
-{	
+{
 	FRotator FireSocketRotation = target.GetRotation().Rotator();
 	if (Anim)
 	{
 		if (Anim->isFly)
 		{
-			
 			FireSocketRotation.Pitch -= 40.f;
 		}
 		else
 		{
-			
-			FireSocketRotation.Pitch += 30.f;
+			FireSocketRotation.Pitch -= 35.f;
 		}
 	}
 	SetActorRotation(FireSocketRotation);

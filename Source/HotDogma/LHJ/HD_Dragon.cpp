@@ -65,14 +65,6 @@ AHD_Dragon::AHD_Dragon()
 	TargetPoint4->SetCollisionProfileName(FName("DragonMeshColl"));
 	TargetPoint4->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
 
-	// Tongue에 SocketComponent 설치
-	FireScene = CreateDefaultSubobject<USceneComponent>(TEXT("FireScene"));
-	FireScene->SetupAttachment(SkeletalComp, TEXT("Fire_Socket"));
-
-	FireCollision = CreateDefaultSubobject<UBoxComponent>(TEXT("FireCollision"));
-	FireCollision->SetupAttachment(FireScene);
-	FireCollision->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-
 	HandCollision_R = CreateDefaultSubobject<UCapsuleComponent>(TEXT("HandCollision_R"));
 	HandCollision_R->SetupAttachment(SkeletalComp,TEXT("R-Finger2"));
 	HandCollision_R->SetRelativeRotation(FRotator(90, 0, 0));

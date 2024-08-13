@@ -13,19 +13,6 @@
   <component name="ChangeListManager">
     <list default="true" id="816ff4fd-5015-4971-a749-88a8f089f2fd" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.HotDogma/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.HotDogma/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/CHJ/Blueprints/BP_PlayerCamera.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HotDogma.sln.DotSettings.user" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/HotDogma/HD_Character/HD_CharacterBase.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/HotDogma/HD_Character/HD_CharacterBase.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/HotDogma/HD_Character/HD_CharacterBase.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/HotDogma/HD_Character/HD_CharacterBase.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/HotDogma/HD_Character/HD_CharacterPlayer.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/HotDogma/HD_Character/HD_CharacterPlayer.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/HotDogma/HD_Character/HD_PlayerAnimInstance.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/HotDogma/HD_Character/HD_PlayerAnimInstance.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/HotDogma/HD_Character/HD_PlayerComponent/HD_PlayerAttackComponent.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/HotDogma/HD_Character/HD_PlayerComponent/HD_PlayerAttackComponent.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/HotDogma/HD_Character/HD_PlayerComponent/HD_PlayerAttackComponent.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/HotDogma/HD_Character/HD_PlayerComponent/HD_PlayerAttackComponent.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/HotDogma/HD_Character/HD_PlayerComponent/HD_PlayerClimbComponent.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/HotDogma/HD_Character/HD_PlayerComponent/HD_PlayerClimbComponent.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/HotDogma/HD_Character/HD_PlayerComponent/HD_PlayerClimbComponent.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/HotDogma/HD_Character/HD_PlayerComponent/HD_PlayerClimbComponent.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/HotDogma/HD_Character/HD_PlayerComponent/PlayerStatusComponent.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/HotDogma/HD_Character/HD_PlayerComponent/PlayerStatusComponent.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/HotDogma/HD_Character/HD_PlayerItem/HD_PlayerWeaponBase.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/HotDogma/HD_Character/HD_PlayerItem/HD_PlayerWeaponBase.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/HotDogma/HD_GameModeBase/CHJ_GameMode.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/HotDogma/HD_GameModeBase/CHJ_GameMode.cpp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -35,7 +22,7 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="main" />
+        <entry key="$PROJECT_DIR$" value="CHJ" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -53,22 +40,6 @@
   }
 }</component>
   <component name="HighlightingSettingsPerFile">
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Intermediate/Build/Win64/UnrealEditor/Inc/HotDogma/UHT/HD_Dragon.gen.cpp" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Source/HotDogma/HD_Character/HD_CharacterBase.cpp" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Source/HotDogma/HD_Character/HD_CharacterBase.h" root0="FORCE_HIGHLIGHTING" />
@@ -78,9 +49,8 @@
     <setting file="file://$PROJECT_DIR$/Source/HotDogma/HD_Character/HD_PlayerAnimInstance.h" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Source/HotDogma/HD_Character/HD_PlayerComponent/HD_PlayerAttackComponent.cpp" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Source/HotDogma/HD_Character/HD_PlayerComponent/HD_PlayerAttackComponent.h" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Source/HotDogma/HD_Character/HD_PlayerComponent/HD_PlayerCamera.cpp" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Source/HotDogma/HD_Character/HD_PlayerComponent/HD_PlayerCamera.h" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Source/HotDogma/HD_Character/HD_PlayerComponent/PlayerStatusComponent.cpp" root0="FORCE_HIGHLIGHTING" />
+    <setting file="mock://D:/Projects/HotDogma/Source/HotDogma/HD_Character/HD_PlayerComponent/PlayerStatusComponent.cpp" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Source/HotDogma/HD_Character/HD_PlayerComponent/PlayerStatusComponent.h" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Source/HotDogma/HD_Character/HD_PlayerController.cpp" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Source/HotDogma/HD_Character/HD_PlayerController.h" root0="FORCE_HIGHLIGHTING" />
@@ -107,7 +77,7 @@
   "keyToString": {
     "C++ 프로젝트.HotDogma.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "CHJ",
+    "git-widget-placeholder": "main",
     "ignore.virus.scanning.warn.message": "true",
     "last_opened_file_path": "C:/00. hak/HotDogma/HotDogma/Source",
     "node.js.detected.package.eslint": "true",
@@ -705,6 +675,7 @@
     <MESSAGE value="Twin animation asset 추가 / 캐릭터 이동, 점프 애니메이션 추가" />
     <MESSAGE value="retarget Attack Animation 추가 / 무기 에셋 추가" />
     <MESSAGE value="cutting wind 스킬 수정중" />
-    <option name="LAST_COMMIT_MESSAGE" value="cutting wind 스킬 수정중" />
+    <MESSAGE value="플레이어 파트 안쓰는 코드 삭제 및 지움" />
+    <option name="LAST_COMMIT_MESSAGE" value="플레이어 파트 안쓰는 코드 삭제 및 지움" />
   </component>
 </project>

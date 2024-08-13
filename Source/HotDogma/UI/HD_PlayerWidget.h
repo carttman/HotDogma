@@ -37,7 +37,9 @@ public:
 	class UImage* EmptyGauge4;
 	UPROPERTY(meta = (BindWidget))
 	class UImage* EmptyGauge5;
-
+	UPROPERTY(meta = (BindWidget))
+	class UImage* EmptyGauge6;
+	
 	TArray<class UImage*> ArrEmptyGauge;
 	
 

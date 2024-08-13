@@ -13,19 +13,13 @@
   <component name="ChangeListManager">
     <list default="true" id="816ff4fd-5015-4971-a749-88a8f089f2fd" name="Changes" comment="Portal VFX 추가">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.HotDogma/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.HotDogma/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Assets/Assassin/Mesh/SK_Assassin.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Assets/Assassin/Mesh/SK_Assassin.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Assets/Assassin/Mesh/SK_Assassin_Skeleton.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Assets/Assassin/Mesh/SK_Assassin_Skeleton.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/CHJ/Blueprints/BP_PlayerWeapon.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/CHJ/Blueprints/BP_PlayerWeapon.uasset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Content/CHJ/CHJ_TestMap.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/CHJ/CHJ_TestMap.umap" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/CHJ/Player_Animation/Attack/Cutting_Wind/AM_Cutting_Wind.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/CHJ/Player_Animation/Attack/Cutting_Wind/AM_Cutting_Wind.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/GroundAttacks/Fx/Fire/P_FireGroundAttack.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/GroundAttacks/Fx/Fire/P_FireGroundAttack.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/GroundAttacks/Mat/M_WaveHeat.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/GroundAttacks/Mat/M_WaveHeat.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Maps/CompanionLevel.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Maps/CompanionLevel.umap" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/HotDogma/HD_Character/HD_CharacterPlayer.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/HotDogma/HD_Character/HD_CharacterPlayer.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/HotDogma/HD_Character/HD_PlayerComponent/HD_PlayerAttackComponent.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/HotDogma/HD_Character/HD_PlayerComponent/HD_PlayerAttackComponent.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/HotDogma/HD_Character/HD_PlayerComponent/PlayerStatusComponent.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/HotDogma/HD_Character/HD_PlayerComponent/PlayerStatusComponent.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/HotDogma/HD_Character/HD_PlayerItem/HD_PlayerWeaponBase.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/HotDogma/HD_Character/HD_PlayerItem/HD_PlayerWeaponBase.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/HotDogma/HD_Character/HD_PlayerItem/HD_PlayerWeaponBase.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/HotDogma/HD_Character/HD_PlayerItem/HD_PlayerWeaponBase.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/UI/InGame/New_InGameButton/right_dash_1.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/UI/InGame/New_InGameButton/right_dash_1.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/UI/InGame/New_InGameButton/right_dash_2.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/UI/InGame/New_InGameButton/right_dash_2.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/UI/InGame/New_InGameButton/right_jump_1.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/UI/InGame/New_InGameButton/right_jump_1.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/UI/InGame/New_InGameButton/right_jump_2.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/UI/InGame/New_InGameButton/right_jump_2.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/UI/WBP_PlayerWidget.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/UI/WBP_PlayerWidget.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/HotDogma/UI/HD_PlayerWidget.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/HotDogma/UI/HD_PlayerWidget.h" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

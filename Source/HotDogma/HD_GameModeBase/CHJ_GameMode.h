@@ -6,6 +6,23 @@
 #include "GameFramework/GameModeBase.h"
 #include "CHJ_GameMode.generated.h"
 
+USTRUCT()
+struct FNarraionData
+{
+	GENERATED_BODY()
+
+    UPROPERTY(EditAnywhere, Category = "MyStruct")
+    USoundBase* Sound;
+
+    UPROPERTY(EditAnywhere, Category = "MyStruct")
+    FString Name;
+
+    UPROPERTY(EditAnywhere, Category = "MyStruct")
+    FString Description;
+
+    UPROPERTY(EditAnywhere, Category = "MyStruct")
+    UTexture2D* Icon;
+};
 /**
  * 
  */
@@ -50,8 +67,10 @@ public:
 	void SetDragonHPUI(float Curr, float Max, int RemainLineCnt);
 
 	// 나레이션
-	UPROPERTY()
+	UPROPERTY(EditAnywhere)
 	TArray<USoundBase*> ArrNarration;
+	UPROPERTY(EditAnywhere)
+	TArray<FNarraionData> NarrationDatas;
 
 	UFUNCTION()
 	void PlaySoundAtIndex(int32 idx);

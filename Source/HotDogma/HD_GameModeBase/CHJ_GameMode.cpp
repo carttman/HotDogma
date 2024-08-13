@@ -40,6 +40,8 @@ void ACHJ_GameMode::BeginPlay()
 	//CreatePlayerWidget();
 	Player = Cast<AHD_CharacterPlayer>(GetWorld()->GetFirstPlayerController()->GetPawn());
 	CreateGamePlayWidget();
+
+	PlaySoundAtIndex(0);
 }
 
 void ACHJ_GameMode::Tick(float DeltaSeconds)
@@ -97,18 +99,18 @@ void ACHJ_GameMode::SetDragonHPUI(float Curr, float Max, int RemainLineCnt)
 
 void ACHJ_GameMode::PlaySoundAtIndex(int32 idx)
 {
-	if (ArrNarration.IsValidIndex(idx))
+	if (NarrationDatas.IsValidIndex(idx))
 	{
-		auto DialogSB = ArrNarration[idx];
-		if (DialogSB && GamePlayWidget)
+		auto& DialogSB = NarrationDatas[idx];
+		if (GamePlayWidget)
 		{
 			// 나레이션 음성 파일을 재생한다.
-			UGameplayStatics::PlaySound2D(GetWorld(), DialogSB);
+			UGameplayStatics::PlaySound2D(GetWorld(), DialogSB.Sound);
 
-			float Duration = DialogSB->GetDuration();
-
+			float Duration = DialogSB.Sound->GetDuration();
+			
 			//UE_LOG(LogTemp,Warning, TEXT("%d"),GamePlayWidget->GetLinkerIndex());
-			GamePlayWidget->WBP_PlayerWidget->ShowDialogForDuration(idx, Duration);
+			GamePlayWidget->WBP_PlayerWidget->ShowDialogForDuration(DialogSB.Icon, DialogSB.Name, DialogSB.Description, 2.0f);
 			//PlayerWidget->ShowDialogForDuration(idx, Duration);
 		}
 	}

@@ -42,6 +42,11 @@ public:
 	
 	TArray<class UImage*> ArrEmptyGauge;
 	
+	UPROPERTY(meta = (BindWidget))
+	class UOverlay* NarrationOverlay;
+	
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<class UHD_NarrationWidget> NarrationWidgetFactory;
 
 	// UPROPERTY(EditAnywhere, meta = (BindWidget))
 	// class UHD_GameOverWidget* WBP_GameOver;
@@ -49,27 +54,14 @@ public:
 	void SetHP(float currHP, float maxHP);
 	void Set_DragonHP(float currHP, float maxHP, int RemainLineCnt);
 	
-	UPROPERTY(EditAnywhere, meta = (BindWidget))
-	UTextBlock* Narration1;
-
-	UPROPERTY(EditAnywhere, meta = (BindWidget))
-	UTextBlock* Narration2;
-
-	UPROPERTY(EditAnywhere, meta = (BindWidget))
-	UTextBlock* Narration3;
-
-	UPROPERTY(EditAnywhere, meta = (BindWidget))
-	UTextBlock* Narration4;
-
-	UPROPERTY(EditAnywhere, meta = (BindWidget))
-	UTextBlock* Narration5;
-
 	UPROPERTY()
 	FTimerHandle DialogHnd;
-	
-	UFUNCTION()
-	void ShowDialogForDuration(int32 idx, float duration);
+	UPROPERTY(EditAnywhere, Category = "MyStruct")
+    USoundBase* Sound;
 
 	UFUNCTION()
-	void EnVisibleTextBlock(int32 idx);
+	void ShowDialogForDuration(UTexture2D* Icon, FString Name, FString Description, float duration);
+
+	UFUNCTION()
+	void EnVisibleTextBlock(UHD_NarrationWidget* widget);
 };

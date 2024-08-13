@@ -6,7 +6,8 @@
 #include "HD_GameOverWidget.h"
 #include "Components/Image.h"
 #include "Components/ProgressBar.h"
-
+#include "HD_NarrationWidget.h"
+#include "Components/Overlay.h"
 
 void UHD_PlayerWidget::NativeConstruct()
 {
@@ -29,17 +30,6 @@ void UHD_PlayerWidget::NativeConstruct()
 	if (EmptyGauge0)
 		ArrEmptyGauge.Add(EmptyGauge0);
 	//WBP_GameOver->SetVisibility(ESlateVisibility::Hidden);
-
-	if(Narration1)
-		Narration1->SetVisibility(ESlateVisibility::Hidden);
-	if(Narration2)
-		Narration2->SetVisibility(ESlateVisibility::Hidden);
-	if(Narration3)
-		Narration3->SetVisibility(ESlateVisibility::Hidden);
-	if(Narration4)
-		Narration4->SetVisibility(ESlateVisibility::Hidden);
-	if(Narration5)
-		Narration5->SetVisibility(ESlateVisibility::Hidden);
 }
 
 void UHD_PlayerWidget::NativeTick(const FGeometry& MyGeometry, float InDeltaTime)
@@ -71,65 +61,23 @@ void UHD_PlayerWidget::Set_DragonHP(float currHP, float maxHP, int RemainLineCnt
 	}
 }
 
-void UHD_PlayerWidget::ShowDialogForDuration(int32 idx, float duration)
+void UHD_PlayerWidget::ShowDialogForDuration(UTexture2D* Icon, FString Name, FString Description, float duration)
 {
-	// TextBlock을 선언한다.
-	UTextBlock* DialogTextBlock = nullptr;
-
-	switch (idx)
-	{
-	case 0:
-		DialogTextBlock = Narration1;
-		break;
-	case 1:
-		DialogTextBlock = Narration2;
-		break;
-	case 2:
-		DialogTextBlock = Narration3;
-		break;
-	case 3:
-		DialogTextBlock = Narration4;
-		break;
-	case 4:
-		DialogTextBlock = Narration5;
-		break;
-	}
-
-	if (DialogTextBlock)
-	{
-		// 선택한 TextBlock Visible을 True 변경
-		DialogTextBlock->SetVisibility(ESlateVisibility::Visible);
-
-		// GetWorld()->GetTimerManager().SetTimer(DialogHnd, [this, idx]()
-		// {
-		// 	EnVisibleTextBlock(idx);
-		// }, duration, false);
-	}
+	auto* WidgetItem = Cast<UHD_NarrationWidget>(CreateWidget(GetWorld(), NarrationWidgetFactory));
+	NarrationOverlay->AddChild(WidgetItem);
+	WidgetItem->MessageStr = Description;
+	WidgetItem->NarrationImage->SetBrushFromTexture(Icon);
+	WidgetItem->NarrationText->SetText(FText::FromString(Name));
+	GetWorld()->GetTimerManager().SetTimer(DialogHnd, [this, WidgetItem]() {
+		WidgetItem->AnimHideWidget();
+		EnVisibleTextBlock(WidgetItem);
+		}, duration, false);
 }
 
-void UHD_PlayerWidget::EnVisibleTextBlock(int32 idx)
+void UHD_PlayerWidget::EnVisibleTextBlock(UHD_NarrationWidget* widget)
 {
-	// TextBlock을 선언한다.
-	UTextBlock* DialogTextBlock = nullptr;
-	switch (idx)
-	{
-	case 0:
-		DialogTextBlock = Narration1;
-		break;
-	case 1:
-		DialogTextBlock = Narration2;
-		break;
-	case 2:
-		DialogTextBlock = Narration3;
-		break;
-	case 3:
-		DialogTextBlock = Narration4;
-		break;
-	case 4:
-		DialogTextBlock = Narration5;
-		break;
-	}
-
-	if (DialogTextBlock)
-		DialogTextBlock->SetVisibility(ESlateVisibility::Hidden);
+	// 제거한다.
+	GetWorld()->GetTimerManager().SetTimer(DialogHnd, [this, widget]() {
+		NarrationOverlay->RemoveChild(widget);
+		}, 0.4f, false);
 }

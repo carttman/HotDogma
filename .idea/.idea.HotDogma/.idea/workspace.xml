@@ -13,13 +13,15 @@
   <component name="ChangeListManager">
     <list default="true" id="816ff4fd-5015-4971-a749-88a8f089f2fd" name="Changes" comment="Portal VFX 추가">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.HotDogma/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.HotDogma/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Assets/Assassin/Mesh/Separated_Mesh/Armor/S_cloak.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Assets/Assassin/Mesh/Separated_Mesh/Armor/S_cloak.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/LGT/VFX/NS_Breath/NS_Breath_test.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/LGT/VFX/NS_Breath/NS_Breath_test.uasset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Content/LHJ/BluePrints/ABP_DragonAnim.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/LHJ/BluePrints/ABP_DragonAnim.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/LHJ/UnkaDragon/Animations/Common/Unka_C_Attack_Fire_Breath.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/LHJ/UnkaDragon/Animations/Common/Unka_C_Attack_Fire_Breath.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/LHJ/UnkaDragon/Animations/Common/Unka_C_Attack_Special1.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/LHJ/UnkaDragon/Animations/Common/Unka_C_Attack_Special1.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/LHJ/UnkaDragon/Animations/RootMotion/Unka_RM_Jump_Forward.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/LHJ/UnkaDragon/Animations/RootMotion/Unka_RM_Jump_Forward.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/LHJ/UnkaDragon/Animations/RootMotion/Unka_RM_Turn_Right_180.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/LHJ/UnkaDragon/Animations/RootMotion/Unka_RM_Turn_Right_180.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/LHJ/BluePrints/BP_BreathCol.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/LHJ/BluePrints/BP_BreathCol.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/LHJ/BluePrints/BP_Dragon.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/LHJ/BluePrints/BP_Dragon.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Maps/CompanionLevel.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Maps/CompanionLevel.umap" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/HotDogma/LHJ/HD_BreathCol.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/HotDogma/LHJ/HD_BreathCol.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/HotDogma/LHJ/HD_Dragon.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/HotDogma/LHJ/HD_Dragon.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/HotDogma/LHJ/HD_Dragon.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/HotDogma/LHJ/HD_Dragon.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/HotDogma/LHJ/HD_DragonAnim.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/HotDogma/LHJ/HD_DragonAnim.cpp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -633,6 +635,7 @@
       <workItem from="1723537942669" duration="1533000" />
       <workItem from="1723541588626" duration="1199000" />
       <workItem from="1723542931072" duration="5429000" />
+      <workItem from="1723552327338" duration="8084000" />
     </task>
     <task id="LOCAL-00001" summary="retarget Attack Animation 추가 / 무기 에셋 추가">
       <option name="closed" value="true" />

@@ -174,7 +174,7 @@ bool UHD_DragonAnim::GetAttackPress(const float& AttackDistance)
 	                                              UEngineTypes::ConvertToTraceType(CollisionChannel), false,
 	                                              ActorsToIgnore, EDrawDebugTrace::None, OutHits,
 	                                              true);
-
+	
 	for (auto& Hit : OutHits)
 	{
 		if (IsValid(Hit.GetActor()))

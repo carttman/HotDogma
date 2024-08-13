@@ -108,14 +108,14 @@ void UHD_DragonFSM::TickComponent(float DeltaTime, ELevelTick TickType, FActorCo
 	// 		GetWorld(), FVector(Dragon->GetActorLocation().X, Dragon->GetActorLocation().Y,
 	// 		                    Dragon->GetActorLocation().Z - 50), myState, nullptr, FColor::Yellow, 0);
 	// }
-	
+
 	if (State == DragonState::Death)
 	{
 		if (DirectionalLight)
 		{
 			LightColorAlpha += DeltaTime;
-			
-			if(DirectionalLight->GetLightComponent()->GetLightColor()!=FLinearColor(1,1,1,1))
+
+			if (DirectionalLight->GetLightComponent()->GetLightColor() != FLinearColor(1, 1, 1, 1))
 			{
 				// Lerp 진행 (Alpha 값은 DeltaTime을 사용해 천천히 변화)
 				FLinearColor LerpColor = FLinearColor::LerpUsingHSV(BreathColor, OldColor, LightColorAlpha);
@@ -129,7 +129,6 @@ void UHD_DragonFSM::TickComponent(float DeltaTime, ELevelTick TickType, FActorCo
 				{
 					DirectionalLight->GetLightComponent()->SetLightColor(LerpColor);
 				}
-				
 			}
 		}
 		return;
@@ -140,7 +139,7 @@ void UHD_DragonFSM::TickComponent(float DeltaTime, ELevelTick TickType, FActorCo
 		ai->StopMovement();
 
 
-	if (NearTargetActor && !isAttack)
+	if (NearTargetActor && !isAttack && !bStartThunder && !bStartMeteor)
 		RotateToTarget(DeltaTime);
 
 	if (State == DragonState::Attack && normalAttackState == AttackState::Breath && bBreathAttack)
@@ -244,13 +243,11 @@ void UHD_DragonFSM::IdleState(const float& DeltaTime)
 			Anim->ChangeAttackState(AttackState::None);
 	}
 
-	// <><><> 공격 받는 부분에 어그로 이동 추가 (일단...보류)
-	// <><><> Fly 수정중
 	CurrIdleTime += DeltaTime;
 	if (CurrIdleTime >= DuringIdleTime)
 	{
 		CurrIdleTime = 0.f;
-		if (Dragon->MaxHP * 0.75 >= Dragon->CurrHP)
+		if (Dragon->MaxHP * NextPagePercent >= Dragon->CurrHP)
 		{
 			if (!chkOnceFly)
 			{
@@ -524,7 +521,14 @@ void UHD_DragonFSM::ShuffleAttackPattern()
 	std::mt19937 g(rd());
 
 	// 사용 스킬 목록을 복사
-	RndAttackPattern = OrgAttackPattern;
+	if (Dragon->MaxHP * NextPagePercent >= Dragon->CurrHP)
+	{
+		RndAttackPattern = OrgAttackPattern_PageTwo;
+	}
+	else
+	{
+		RndAttackPattern = OrgAttackPattern_PageOne;
+	}
 
 	// Shuffle the vector
 	std::shuffle(RndAttackPattern.begin(), RndAttackPattern.end(), g);

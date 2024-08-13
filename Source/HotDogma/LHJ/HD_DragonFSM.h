@@ -189,7 +189,16 @@ public:
 	UPROPERTY()
 	int32 PatternPageNum = 1;
 
-	std::vector<AttackState> OrgAttackPattern = {
+	std::vector<AttackState> OrgAttackPattern_PageOne = {
+		AttackState::Breath,
+		AttackState::Shout,
+		AttackState::HandPress,
+		AttackState::Scratch,
+		AttackState::TailSlap,
+		AttackState::JumpPress,
+	};
+
+	std::vector<AttackState> OrgAttackPattern_PageTwo = {
 		AttackState::Breath,
 		AttackState::Shout,
 		AttackState::HandPress,
@@ -340,8 +349,11 @@ public:
 
 	bool bReturnLightColor = false;
 
-	float LightColorAlpha=0.f;
+	float LightColorAlpha = 0.f;
 
-	UPROPERTY( EditAnywhere )
+	UPROPERTY(EditAnywhere)
 	class USoundBase* Battle_BGM;
+
+	UPROPERTY(EditAnywhere)
+	float NextPagePercent = 0.75;
 };

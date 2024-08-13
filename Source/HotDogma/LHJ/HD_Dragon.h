@@ -77,7 +77,7 @@ public:
 	                         class AController* EventInstigator, AActor* DamageCauser) override;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	float MaxHP = 100;
+	float MaxHP = 3500;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float CurrHP;

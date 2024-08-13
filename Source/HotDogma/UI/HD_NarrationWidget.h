@@ -21,6 +21,9 @@ public:
 
 	UFUNCTION(BlueprintImplementableEvent)
 	void AnimNextWidget();
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void AnimStartWidget();
 	
 	UPROPERTY(meta = (BindWidget))
 	class UImage* NarrationImage;
@@ -33,4 +36,6 @@ public:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 	FString MessageStr;
+
+	float yPos = 0.0f;
 };

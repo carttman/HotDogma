@@ -10,6 +10,12 @@
 #include "HotDogma/UI/HD_PlayerWidget.h"
 #include "Kismet/GameplayStatics.h"
 
+ACHJ_GameMode::ACHJ_GameMode()
+{
+	PrimaryActorTick.bCanEverTick = true;
+	PrimaryActorTick.bStartWithTickEnabled = true;
+}
+
 void ACHJ_GameMode::InitGame(const FString& MapName, const FString& Options, FString& ErrorMessage)
 {
 	Super::InitGame(MapName, Options, ErrorMessage);
@@ -26,6 +32,8 @@ void ACHJ_GameMode::InitGame(const FString& MapName, const FString& Options, FSt
 
 void ACHJ_GameMode::BeginPlay()
 {
+	Super::BeginPlay();
+
 	if (bCompanionsSpawn)
 	{
 		CompanionManager = GetWorld()->SpawnActor<AHD_CompanionManager>(CompanionManagerFactory);
@@ -47,6 +55,22 @@ void ACHJ_GameMode::BeginPlay()
 void ACHJ_GameMode::Tick(float DeltaSeconds)
 {
 	Super::Tick(DeltaSeconds);
+	CurrentNarrationTime += DeltaSeconds;
+	if (NarrationQueue.IsEmpty() == false && NarrationDuration < CurrentNarrationTime)
+	{
+		int32 idx;
+		NarrationQueue.Dequeue(idx);
+
+		auto& DialogSB = NarrationDatas[idx];
+		if (GamePlayWidget)
+		{
+			// 나레이션 음성 파일을 재생한다.
+			UGameplayStatics::PlaySound2D(GetWorld(), DialogSB.Sound);
+			NarrationDuration = DialogSB.Sound->GetDuration();
+			CurrentNarrationTime = 0.0f;
+			GamePlayWidget->WBP_PlayerWidget->ShowDialogForDuration(DialogSB.Icon, DialogSB.Name, DialogSB.Description);
+		}
+	}
 }
 
 void ACHJ_GameMode::CommandCompanion(int num)
@@ -101,17 +125,6 @@ void ACHJ_GameMode::PlaySoundAtIndex(int32 idx)
 {
 	if (NarrationDatas.IsValidIndex(idx))
 	{
-		auto& DialogSB = NarrationDatas[idx];
-		if (GamePlayWidget)
-		{
-			// 나레이션 음성 파일을 재생한다.
-			UGameplayStatics::PlaySound2D(GetWorld(), DialogSB.Sound);
-
-			float Duration = DialogSB.Sound->GetDuration();
-			
-			//UE_LOG(LogTemp,Warning, TEXT("%d"),GamePlayWidget->GetLinkerIndex());
-			GamePlayWidget->WBP_PlayerWidget->ShowDialogForDuration(DialogSB.Icon, DialogSB.Name, DialogSB.Description, 2.0f);
-			//PlayerWidget->ShowDialogForDuration(idx, Duration);
-		}
+		NarrationQueue.Enqueue(idx);
 	}
 }

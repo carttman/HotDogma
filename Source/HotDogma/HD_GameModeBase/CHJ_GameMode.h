@@ -31,6 +31,7 @@ class HOTDOGMA_API ACHJ_GameMode : public AGameModeBase
 {
 	GENERATED_BODY()
 public:
+	ACHJ_GameMode();
 	virtual void InitGame(const FString& MapName, const FString& Options, FString& ErrorMessage);
 	virtual void BeginPlay() override;
 	virtual void Tick(float DeltaSeconds) override;
@@ -72,7 +73,12 @@ public:
 	UPROPERTY(EditAnywhere)
 	TArray<FNarraionData> NarrationDatas;
 
-	UFUNCTION()
+	TQueue<int32> NarrationQueue;
+
+	float CurrentNarrationTime = 0.0f;
+	float NarrationDuration = 0.0f;
+
+	UFUNCTION(BlueprintCallable)
 	void PlaySoundAtIndex(int32 idx);
 	
 	UPROPERTY(EditAnywhere)

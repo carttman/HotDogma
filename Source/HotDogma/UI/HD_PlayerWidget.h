@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
 #include "Components/TextBlock.h"
+#include "Components/TimelineComponent.h"
 #include "HD_PlayerWidget.generated.h"
 
 /**
@@ -17,6 +18,7 @@ class HOTDOGMA_API UHD_PlayerWidget : public UUserWidget
 
 public:
 	virtual void NativeConstruct() override;
+	virtual void NativeDestruct() override;
 	virtual void NativeTick(const FGeometry& MyGeometry, float InDeltaTime) override;
 
 	UPROPERTY(meta = (BindWidget))
@@ -47,6 +49,20 @@ public:
 	
 	UPROPERTY(EditDefaultsOnly)
 	TSubclassOf<class UHD_NarrationWidget> NarrationWidgetFactory;
+	
+	void AddNarrationWidget(UHD_NarrationWidget* widget);
+
+	UPROPERTY()
+	FTimeline WidgetMoveTimeline;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	class UCurveFloat* MoveCurve;
+
+	UFUNCTION()
+	void HandleProgress(float Value);
+
+	UFUNCTION()
+	void WidgetMoveEnd();
 
 	// UPROPERTY(EditAnywhere, meta = (BindWidget))
 	// class UHD_GameOverWidget* WBP_GameOver;
@@ -55,13 +71,13 @@ public:
 	void Set_DragonHP(float currHP, float maxHP, int RemainLineCnt);
 	
 	UPROPERTY()
-	FTimerHandle DialogHnd;
+	TArray<FTimerHandle> DialogHnds;
 	UPROPERTY(EditAnywhere, Category = "MyStruct")
     USoundBase* Sound;
 
 	UFUNCTION()
-	void ShowDialogForDuration(UTexture2D* Icon, FString Name, FString Description, float duration);
+	void ShowDialogForDuration(UTexture2D* Icon, FString Name, FString Description);
 
 	UFUNCTION()
-	void EnVisibleTextBlock(UHD_NarrationWidget* widget);
+	void EnVisibleTextBlock(UHD_NarrationWidget* widget, FTimerHandle DialogHnd);
 };

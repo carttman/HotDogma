@@ -26,7 +26,7 @@ public:
 
 public:
 	UPROPERTY(EditAnywhere)
-	float MaxHP = 1000.f;
+	float MaxHP = 400.f;
 	UPROPERTY(EditAnywhere)
 	float CurrHP;
 	

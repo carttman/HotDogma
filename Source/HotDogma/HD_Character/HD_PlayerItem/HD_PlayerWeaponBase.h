@@ -45,4 +45,6 @@ public:
 	class UNiagaraSystem* BloodVFX;
 	UPROPERTY(EditAnywhere)
 	class USoundBase* Hit_SFX;
+	UPROPERTY(EditAnywhere)
+	class UParticleSystem* WaveVFX;
 };

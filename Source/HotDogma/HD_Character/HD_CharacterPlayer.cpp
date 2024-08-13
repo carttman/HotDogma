@@ -110,6 +110,7 @@ float AHD_CharacterPlayer::TakeDamage(float DamageAmount, FDamageEvent const& Da
 					SlowDownTime_Hit(0.5f, 0.1f);
 					GetMesh()->GetAnimInstance()->Montage_Play(AM_KnockDown_Montage, 1);
 					GetMesh()->GetAnimInstance()->Montage_JumpToSection(FName("KnockDown_Start"), AM_KnockDown_Montage);
+					//PlayerAttackComponent->IsCutting_New = false;
 				}
 				if(HJ_Dragon->strDamageAttackType.Equals("JumpPress"))
 				{
@@ -121,6 +122,7 @@ float AHD_CharacterPlayer::TakeDamage(float DamageAmount, FDamageEvent const& Da
 					GetMesh()->GetAnimInstance()->Montage_Play(AM_Hit_Montage, 1);
 					GetMesh()->GetAnimInstance()->Montage_JumpToSection(FName("Hit_Large"), AM_Hit_Montage);
 					PlayerAttackComponent->IsClimb_Attacking = false;
+					//PlayerAttackComponent->IsCutting_New = false;
 				}
 				if(HJ_Dragon->strDamageAttackType.Equals("TailSlap"))
 				{
@@ -128,6 +130,7 @@ float AHD_CharacterPlayer::TakeDamage(float DamageAmount, FDamageEvent const& Da
 					GetMesh()->GetAnimInstance()->Montage_Play(AM_Hit_Montage, 1);
 					GetMesh()->GetAnimInstance()->Montage_JumpToSection(FName("Hit_Large"), AM_Hit_Montage);
 					PlayerAttackComponent->IsClimb_Attacking = false;
+					//PlayerAttackComponent->IsCutting_New = false;
 				}
 				if(HJ_Dragon->strDamageAttackType.Equals("Scratch"))
 				{
@@ -135,6 +138,7 @@ float AHD_CharacterPlayer::TakeDamage(float DamageAmount, FDamageEvent const& Da
 					GetMesh()->GetAnimInstance()->Montage_Play(AM_Hit_Montage, 1);
 					GetMesh()->GetAnimInstance()->Montage_JumpToSection(FName("Hit_Normal"), AM_Hit_Montage);
 					PlayerAttackComponent->IsClimb_Attacking = false;
+					//PlayerAttackComponent->IsCutting_New = false;
 				}
 				if(HJ_Dragon->strDamageAttackType.Equals("HandPress"))
 				{
@@ -146,6 +150,7 @@ float AHD_CharacterPlayer::TakeDamage(float DamageAmount, FDamageEvent const& Da
 					GetMesh()->GetAnimInstance()->Montage_Play(AM_Hit_Montage, 1);
 					GetMesh()->GetAnimInstance()->Montage_JumpToSection(FName("Hit_Normal"), AM_Hit_Montage);
 					PlayerAttackComponent->IsClimb_Attacking = false;
+					//PlayerAttackComponent->IsCutting_New = false;
 				}
 				if(HJ_Dragon->strDamageAttackType.Equals("Thunder"))
 				{
@@ -156,6 +161,7 @@ float AHD_CharacterPlayer::TakeDamage(float DamageAmount, FDamageEvent const& Da
 					GetMesh()->GetAnimInstance()->Montage_Play(AM_Hit_Montage, 1);
 					GetMesh()->GetAnimInstance()->Montage_JumpToSection(FName("Hit_Normal"), AM_Hit_Montage);
 					PlayerAttackComponent->IsClimb_Attacking = false;
+					//PlayerAttackComponent->IsCutting_New = false;
 				}
 				if(HJ_Dragon->strDamageAttackType.Equals("Meteor"))
 				{
@@ -163,6 +169,7 @@ float AHD_CharacterPlayer::TakeDamage(float DamageAmount, FDamageEvent const& Da
 					GetMesh()->GetAnimInstance()->Montage_Play(AM_Hit_Montage, 1);
 					GetMesh()->GetAnimInstance()->Montage_JumpToSection(FName("Hit_Large"), AM_Hit_Montage);
 					PlayerAttackComponent->IsClimb_Attacking = false;
+					//PlayerAttackComponent->IsCutting_New = false;
 				}//Meteor
 			}
 		}
@@ -212,6 +219,8 @@ void AHD_CharacterPlayer::PlayMontageNotifyBegin_KnockDown(FName NotifyName, con
 	if(NotifyName == FName("KnockDown_End"))
 	{
 		IsKnockDown = false;
+		PlayerAttackComponent->IsCutting_New = false;
+		PlayerAttackComponent->IsCutting = false;
 	}
 }
 
@@ -224,6 +233,8 @@ void AHD_CharacterPlayer::PlayMontageNotifyBegin_Hit(FName NotifyName, const FBr
 	if(NotifyName == FName("Hit_End"))
 	{
 		IsHit = false;
+		PlayerAttackComponent->IsCutting_New = false;
+		PlayerAttackComponent->IsCutting = false;
 	}
 }
 

@@ -61,9 +61,9 @@ void AHD_PlayerWeaponBase::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, A
 		FDamageEvent DamageEvent;
 		UGameplayStatics::ApplyDamage(OtherActor, 10.0f, Player->GetController(), this, UDamageType::StaticClass());
 		UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), BloodVFX, GetActorLocation(), GetActorRotation());
+		UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), WaveVFX, GetActorLocation(), GetActorRotation());
 		UGameplayStatics::PlaySoundAtLocation(GetWorld(), Hit_SFX, GetActorLocation(), GetActorRotation());
 		CapsuleComp->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-		
 	}
 }
 

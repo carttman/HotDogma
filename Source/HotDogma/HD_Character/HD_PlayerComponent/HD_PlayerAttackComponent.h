@@ -92,6 +92,7 @@ public:
 	float Cutting_Attack_Range = 200.f;
 
 	bool IsCutting = false;
+	UPROPERTY(VisibleAnywhere)
 	bool IsCutting_New = false;
 	FTimerHandle CutterTimerHandle;
 

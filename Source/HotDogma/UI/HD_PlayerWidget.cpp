@@ -14,6 +14,8 @@ void UHD_PlayerWidget::NativeConstruct()
 	HealthBar->SetPercent(1);
 	Dragon_HealthBar->SetPercent(1);
 
+	if (EmptyGauge6)
+		ArrEmptyGauge.Add(EmptyGauge6);
 	if (EmptyGauge5)
 		ArrEmptyGauge.Add(EmptyGauge5);
 	if (EmptyGauge4)

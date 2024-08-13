@@ -13,14 +13,9 @@
   <component name="ChangeListManager">
     <list default="true" id="816ff4fd-5015-4971-a749-88a8f089f2fd" name="Changes" comment="Portal VFX 추가">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.HotDogma/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.HotDogma/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/LHJ/BluePrints/ABP_DragonAnim.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/LHJ/BluePrints/ABP_DragonAnim.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/LHJ/BluePrints/BP_Dragon.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/LHJ/BluePrints/BP_Dragon.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/LHJ/UnkaDragon/Animations/MagicCasting/NonFly/Unka_Thunder_TempAni.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/LHJ/UnkaDragon/Animations/MagicCasting/NonFly/Unka_Thunder_TempAni.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/LHJ/UnkaDragon/Animations/MagicCasting/NonFly/Unkat_Meteor_TempAni.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/LHJ/UnkaDragon/Animations/MagicCasting/NonFly/Unkat_Meteor_TempAni.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Maps/CompanionLevel.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Maps/CompanionLevel.umap" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/UI/WBP_PlayerWidget.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/UI/WBP_PlayerWidget.uasset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/HotDogma/LHJ/HD_Dragon.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/HotDogma/LHJ/HD_Dragon.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/HotDogma/LHJ/HD_DragonFSM.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/HotDogma/LHJ/HD_DragonFSM.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/HotDogma/LHJ/HD_DragonFSM.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/HotDogma/LHJ/HD_DragonFSM.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/HotDogma/UI/HD_PlayerWidget.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/HotDogma/UI/HD_PlayerWidget.cpp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -667,6 +662,7 @@
       <workItem from="1723509992627" duration="4515000" />
       <workItem from="1723535393701" duration="2503000" />
       <workItem from="1723537942669" duration="1533000" />
+      <workItem from="1723541588626" duration="1199000" />
     </task>
     <task id="LOCAL-00001" summary="retarget Attack Animation 추가 / 무기 에셋 추가">
       <option name="closed" value="true" />

@@ -86,31 +86,15 @@ public:
 	void Skill_Cutting();
 	void Update_Skill_Cuttring();
 	void Cutting_GetTarget();
+	
 	bool CuttingHit;
 	FRotator Cutting_Target_Rot;
 	float Cutting_Attack_Range = 200.f;
 
 	bool IsCutting = false;
 	bool IsCutting_New = false;
-	void RotatingCamera();
 	FTimerHandle CutterTimerHandle;
 
-	// Timeline Component
-	UPROPERTY()
-	class UTimelineComponent* YawRotationTimeline;
-	// Float Curve for Timeline
-	UPROPERTY(EditAnywhere, Category = "Timeline")
-	class UCurveFloat* YawCurve;
-	// Timeline Function
-	UFUNCTION()
-	void HandleYawRotation(float Value);
-	// Input function to trigger timeline
-	void RotateCamera();
-
-protected:
-	// Timeline Progress Function
-	FOnTimelineFloat YawRotationProgress;
-	
 public:
 	void SlowDownTime(float SlowDownFactor, float Duration);
 	// 타임 딜레이션을 복원하는 함수
@@ -123,14 +107,11 @@ public:
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	bool IsClimb = false;
-
 	bool IsClimb_Attacking = false;
 	
 	UPROPERTY(EditAnywhere)
 	class UAnimMontage* AM_Climb_Attack;
 	UFUNCTION()
 	void PlayMontageNotifyBegin_ClimbAttack(FName NotifyName, const FBranchingPointNotifyPayload& BranchingPointNotifyPayload);
-
-
 	
 };

@@ -4,13 +4,11 @@
 #include "../../HD_Character/HD_PlayerComponent/HD_PlayerAttackComponent.h"
 
 #include "EnhancedInputComponent.h"
-#include "HD_PlayerClimbComponent.h"
 #include "MotionWarpingComponent.h"
 #include "RootMotionModifier.h"
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
-#include "GameFramework/SpringArmComponent.h"
 #include "HotDogma/HD_Character/HD_CharacterPlayer.h"
 #include "HotDogma/HD_Character/HD_PlayerAnimInstance.h"
 #include "HotDogma/HD_Character/HD_PlayerItem/HD_PlayerWeaponBase.h"
@@ -50,8 +48,6 @@ UHD_PlayerAttackComponent::UHD_PlayerAttackComponent()
 	{
 		AM_Cutting = Temp_SCMontage.Object; 
 	}
-	// Create TimelineComponent
-	YawRotationTimeline = CreateDefaultSubobject<UTimelineComponent>(TEXT("YawRotationTimeline"));
 }
 
 
@@ -61,21 +57,13 @@ void UHD_PlayerAttackComponent::BeginPlay()
 	Super::BeginPlay();
 	Player = Cast<AHD_CharacterBase>(GetOwner());
 	CharacterPlayer = Cast<AHD_CharacterPlayer>(Player);
-	//Left_Weapon = Cast<AHD_PlayerWeaponBase>(CharacterPlayer->Left_Weapon);
-	//Right_Weapon = Cast<AHD_PlayerWeaponBase>(CharacterPlayer->Right_Weapon);
+	
 	PlayerAnim = Cast<UHD_PlayerAnimInstance>(Player->GetMesh()->GetAnimInstance());
 	Dragon = Cast<AHD_Dragon>(Player->Dragon);
-	// ...
+	
 	if(AM_Splitter) PlayerAnim->OnPlayMontageNotifyBegin.AddDynamic(this, &UHD_PlayerAttackComponent::PlayMontageNotifyBegin_Splitter);
 	if(AM_Cutting) PlayerAnim->OnPlayMontageNotifyBegin.AddDynamic(this, &UHD_PlayerAttackComponent::PlayMontageNotifyBegin_Cutting);
 	if(AM_Climb_Attack) PlayerAnim->OnPlayMontageNotifyBegin.AddDynamic(this, &UHD_PlayerAttackComponent::PlayMontageNotifyBegin_ClimbAttack);
-	if (YawCurve)
-	{
-		// Bind the function that will be called each tick of the timeline
-		YawRotationProgress.BindUFunction(this, FName("HandleYawRotation"));
-		// Add the float curve to the timeline
-		YawRotationTimeline->AddInterpFloat(YawCurve, YawRotationProgress);
-	}
 }
 
 
@@ -136,7 +124,7 @@ void UHD_PlayerAttackComponent::PlayerAttack()
 void UHD_PlayerAttackComponent::BaseAttack()
 {
 	if(IsSplitting || IsCutting) return;
-	if(Player->PlayerClimbComponent->IsClimbing)return;
+	//if(Player->PlayerClimbComponent->IsClimbing)return;
 	if(Player->IsKnockDown) return;
 	if(Player->IsHit) return;
 	if(Player->IsDeath) return;
@@ -145,7 +133,6 @@ void UHD_PlayerAttackComponent::BaseAttack()
 		PlayerAnim->Montage_Play(AM_BaseAttack, 1.1);
 		ComboCount++;
 		CurrComboTime = 0;
-		
 		//BaseAttackRot();
 	}
 	PlayerBaseAttackPlay(1,FName("Attack_2"));
@@ -156,7 +143,7 @@ void UHD_PlayerAttackComponent::BaseAttack()
 void UHD_PlayerAttackComponent::ClimbAttack()
 {
 	if(IsSplitting || IsCutting) return;
-	if(Player->PlayerClimbComponent->IsClimbing)return;
+	//if(Player->PlayerClimbComponent->IsClimbing)return;
 	if(Player->IsKnockDown) return;
 	if(Player->IsHit) return;
 	PlayerAnim->Montage_Play(AM_Climb_Attack, 1);
@@ -171,7 +158,6 @@ void UHD_PlayerAttackComponent::PlayerBaseAttackPlay(int32 ComboCnt, FName Secti
 			ComboCount++;
 			CurrComboTime = 0;
 			PlayerAnim->Montage_JumpToSection(SectionName, AM_BaseAttack);
-			
 			//BaseAttackRot();
 		}
 	}
@@ -219,7 +205,7 @@ void UHD_PlayerAttackComponent::UpdatePlayerAttack(float DeltaTime)
 void UHD_PlayerAttackComponent::Skill_Splitter()
 {	
 	if(IsSplitting || IsCutting) return;
-	if(Player->PlayerClimbComponent->IsClimbing)return;
+	//if(Player->PlayerClimbComponent->IsClimbing)return;
 	IsSplitting = true;
 	Player->GetCharacterMovement()->SetMovementMode(MOVE_Flying); // 루트모션을 위한 flying 모드 변경
 	PlayerAnim->Montage_Play(AM_Splitter, 1);
@@ -273,7 +259,8 @@ void UHD_PlayerAttackComponent::PlayMontageNotifyBegin_Splitter(FName NotifyName
 
 void UHD_PlayerAttackComponent::Skill_Cutting()
 {
-	if(IsSplitting || Player->PlayerClimbComponent->IsClimbing) return;
+	//if(Player->PlayerClimbComponent->IsClimbing) return;
+	if(IsSplitting) return;
 	if(IsCutting) return;
 	if(IsCutting_New) return;
 	PlayerAnim->Montage_Play(AM_Cutting, 1);
@@ -309,7 +296,6 @@ void UHD_PlayerAttackComponent::Cutting_GetTarget()
 	{
 		if (IsValid(Hit.GetActor()))
 		{
-			//UE_LOG(LogTemp, Warning, TEXT("Hit Actor: %s Cutting_TargetLoc : %.f, %.f, %.f"), *Hit.GetActor()->GetName(),Hit.GetActor()->GetActorLocation().X, Hit.GetActor()->GetActorLocation().Y, Hit.GetActor()->GetActorLocation().Z);
 			FVector newLoc = Hit.GetActor()->GetActorLocation() - Player->GetActorLocation();//히트 된 상대의 위치
 			newLoc.Normalize();
 			Cutting_Target_Rot = UKismetMathLibrary::MakeRotFromX(newLoc); //타겟의 방향벡터
@@ -335,8 +321,7 @@ void UHD_PlayerAttackComponent::PlayMontageNotifyBegin_Cutting(FName NotifyName,
 		Cutting_MW_Target.Location = FVector( (Player->GetActorLocation().X + Player->GetActorForwardVector().X * 600) ,Player->GetActorLocation().Y + Player->GetActorForwardVector().Y * 600 ,Player->GetActorLocation().Z);
 		Cutting_MW_Target.Rotation = Player->GetActorRotation();
 		Player->MotionWarpingComponent->AddOrUpdateWarpTarget(Cutting_MW_Target);
-		// Player->springArm->bUsePawnControlRotation = false;
-		// Player->springArm->CameraRotationLagSpeed = 3.0f;
+	
 		TargetFOV = 100;
 	}
 	if(NotifyName == FName("Cutting_Attack_Start")) 
@@ -357,13 +342,6 @@ void UHD_PlayerAttackComponent::PlayMontageNotifyBegin_Cutting(FName NotifyName,
 	if(NotifyName == FName("Cutting_Camera"))
 	{
 		IsCutting_New = false;
-		// 플레이어 등 뒤로 돌아간다
-		//Player->springArm->bUsePawnControlRotation = false;
-		//Player->springArm->CameraRotationLagSpeed = 3.0f;
-		// 1초 뒤에 천천히 등뒤로 돌아간다
-		//RotateCamera();
-		//GetWorld()->GetTimerManager().SetTimer(CutterTimerHandle, this, &UHD_PlayerAttackComponent::RotatingCamera, 1.f, false);
-	
 	}
 	if(NotifyName == FName("Damage_On_Cutter"))
 	{
@@ -373,34 +351,8 @@ void UHD_PlayerAttackComponent::PlayMontageNotifyBegin_Cutting(FName NotifyName,
 	}
 	if(NotifyName == FName("Damage_Off_Cutter"))
 	{
-		
 		CharacterPlayer->Left_Weapon->CapsuleComp->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 		CharacterPlayer->Right_Weapon->CapsuleComp->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-	}
-}
-
-void UHD_PlayerAttackComponent::RotatingCamera()
-{
-	UE_LOG(LogTemp, Warning, TEXT("3"));
-	Player->springArm->bUsePawnControlRotation = true;
-	Player->springArm->CameraRotationLagSpeed = 6.0f;
-}
-
-void UHD_PlayerAttackComponent::HandleYawRotation(float Value)
-{
-	FRotator NewRotation = Player->springArm->GetRelativeRotation();
-	NewRotation.Yaw = Value;
-	Player->springArm->SetRelativeRotation(FRotator(0, 0, 0));
-	
-	GetWorld()->GetTimerManager().SetTimer(CutterTimerHandle, this, &UHD_PlayerAttackComponent::RotatingCamera, 0.2f, false);
-	
-}
-
-void UHD_PlayerAttackComponent::RotateCamera()
-{
-	if (YawRotationTimeline)
-	{
-		YawRotationTimeline->PlayFromStart();
 	}
 }
 
@@ -423,7 +375,6 @@ void UHD_PlayerAttackComponent::RestoreTimeDilation()
 void UHD_PlayerAttackComponent::PlayMontageNotifyBegin_ClimbAttack(FName NotifyName,
 	const FBranchingPointNotifyPayload& BranchingPointNotifyPayload)
 {
-	
 	if(NotifyName == FName("Climb_Attack_Start"))
 	{
 		// 중복 입력 막기

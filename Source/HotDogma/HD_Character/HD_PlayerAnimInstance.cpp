@@ -6,8 +6,6 @@
 #include "HD_CharacterPlayer.h"
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
-#include "GameFramework/SpringArmComponent.h"
-#include "HD_PlayerComponent/HD_PlayerClimbComponent.h"
 #include "HD_PlayerItem/HD_PlayerWeaponBase.h"
 #include "Kismet/KismetMathLibrary.h"
 
@@ -16,9 +14,6 @@ void UHD_PlayerAnimInstance::NativeInitializeAnimation()
 	Super::NativeInitializeAnimation();
 	
 	Player = Cast<AHD_CharacterPlayer>(TryGetPawnOwner());
-	// Left_Weapon = Cast<AHD_PlayerWeaponBase>(Player->Left_Weapon);
-	// Right_Weapon = Cast<AHD_PlayerWeaponBase>(Player->Right_Weapon);
-	
 }
 
 void UHD_PlayerAnimInstance::NativeUpdateAnimation(float DeltaSeconds)

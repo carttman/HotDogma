@@ -11,7 +11,6 @@
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/SpringArmComponent.h"
-#include "HD_PlayerComponent/HD_PlayerClimbComponent.h"
 #include "CableComponent.h"
 #include "MotionWarpingComponent.h"
 #include "Components/ArrowComponent.h"
@@ -77,7 +76,7 @@ AHD_CharacterBase::AHD_CharacterBase()
 	camera->SetRelativeLocation(FVector(0, 0, 0));
 	camera->SetRelativeRotation(FRotator(-20, 0, 0));
 
-	PlayerClimbComponent = CreateDefaultSubobject<UHD_PlayerClimbComponent>(TEXT("PlayerClimbComponent"));
+	//PlayerClimbComponent = CreateDefaultSubobject<UHD_PlayerClimbComponent>(TEXT("PlayerClimbComponent"));
 	PlayerStatusComponent = CreateDefaultSubobject<UPlayerStatusComponent>(TEXT("PlayerStatusComponent"));
 
 	CableCompoent = CreateDefaultSubobject<UCableComponent>(TEXT("CableComponent"));
@@ -144,7 +143,7 @@ void AHD_CharacterBase::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
 		enhancedInputComponent->BindAction(IA_HD_Run, ETriggerEvent::Completed, this, &AHD_CharacterBase::EnhancedRun);
 
 
-		PlayerClimbComponent->SetupPlayerInputComponent(enhancedInputComponent);
+		//PlayerClimbComponent->SetupPlayerInputComponent(enhancedInputComponent);
 	}
 }
 
@@ -254,20 +253,6 @@ float AHD_CharacterBase::TakeDamage(float DamageAmount, FDamageEvent const& Dama
                                     AActor* DamageCauser)
 {
 	float damage = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
-	// UE_LOG(LogTemp, Warning, TEXT("%s Takes Damage : %f"), *GetName(), damage);
-	// PlayerStatusComponent->CurrHP -= damage;
-	// UE_LOG(LogTemp, Warning, TEXT("%s Takes Damage : %f"), *GetName(), PlayerStatusComponent->CurrHP);
-	//
-	// if(DamageCauser)
-	// {
-	// 	AHD_Dragon* HJ_Dragon = Cast<AHD_Dragon>(DamageCauser);
-	// 	if(HJ_Dragon)
-	// 	{
-	// 		if(HJ_Dragon->strDamageAttackType.Equals("JumpPress"))
-	// 		{
-	// 			UE_LOG(LogTemp, Warning, TEXT("%s"), *HJ_Dragon->strDamageAttackType);
-	// 		}
-	// 	}
-	// }
+	
 	return damage;
 }

@@ -7,7 +7,6 @@
 #include "Engine/DamageEvents.h"
 #include "HotDogma/HD_Character/HD_CharacterPlayer.h"
 #include "HotDogma/HD_Character/HD_PlayerAnimInstance.h"
-#include "HotDogma/HD_Character/HD_PlayerComponent/HD_PlayerAttackComponent.h"
 #include "HotDogma/LHJ/HD_Dragon.h"
 #include "Kismet/GameplayStatics.h"
 #include "NiagaraFunctionLibrary.h"

@@ -3,11 +3,6 @@
 
 #include "../../HD_Character/HD_PlayerComponent/PlayerStatusComponent.h"
 
-#include "HotDogma/HD_Character/HD_CharacterBase.h"
-#include "HotDogma/HD_Character/HD_CharacterPlayer.h"
-#include "HotDogma/HD_GameModeBase/CHJ_GameMode.h"
-#include "HotDogma/UI/HD_PlayerWidget.h"
-
 // Sets default values for this component's properties
 UPlayerStatusComponent::UPlayerStatusComponent()
 {

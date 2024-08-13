@@ -55,8 +55,8 @@ public:
 	UPROPERTY(EditAnywhere)
 	class UInputAction* IA_HD_Order;
 	
-	UPROPERTY(EditAnywhere)
-	class UHD_PlayerClimbComponent* PlayerClimbComponent;
+	// UPROPERTY(EditAnywhere)
+	// class UHD_PlayerClimbComponent* PlayerClimbComponent;
 	UPROPERTY(EditAnywhere)
 	class UPlayerStatusComponent* PlayerStatusComponent;
 	UPROPERTY(EditAnywhere)

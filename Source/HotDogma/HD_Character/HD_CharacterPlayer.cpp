@@ -12,7 +12,6 @@
 #include "HotDogma/LHJ/HD_Dragon.h"
 #include "HotDogma/UI/HD_GameOverWidget.h"
 #include "HotDogma/UI/HD_GamePlayWidget.h"
-#include "HotDogma/UI/HD_PlayerWidget.h"
 #include "Kismet/GameplayStatics.h"
 
 // Sets default values

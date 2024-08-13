@@ -6,8 +6,6 @@
 #include "HotDogma/LHJ/HD_Dragon.h"
 #include "EngineUtils.h"
 #include "HotDogma/HD_Character/HD_CharacterPlayer.h"
-#include "HotDogma/HD_Character/HD_PlayerComponent/HD_PlayerCamera.h"
-#include "HotDogma/UI/HD_GameOverWidget.h"
 #include "HotDogma/UI/HD_GamePlayWidget.h"
 #include "HotDogma/UI/HD_PlayerWidget.h"
 #include "Kismet/GameplayStatics.h"

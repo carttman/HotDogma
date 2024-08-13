@@ -30,53 +30,53 @@ public:
 public:
 	void SetupPlayerInputComponent(class UEnhancedInputComponent* enhancedInputComponent);
 
-	UPROPERTY(EditAnywhere)
-	class UInputAction* IA_Player_Climb;
-	UPROPERTY()
-	class AHD_CharacterPlayer* Player;
-	UPROPERTY()
-	class UHD_PlayerAnimInstance* PlayerAnim;
-	UPROPERTY()
-	class AHD_Dragon* Dragon;
-	
-public:
-	FHitResult Climb_OutHit;
-	void Climb();
-	
-	bool AttachToSurfaceCaculation(float Attach_Distance, FHitResult& OutHit);
-	bool bHit_AttachToSurfaceCaculation;
-	// 델리게이트 인스턴스
-	UPROPERTY(BlueprintAssignable, Category = "CustomEvent")
-	FClimbMovement OnClimbMovement;
-
-	void ClimbMovementEvent(FVector WorldDirection, float ScaleValue);
-	
-public:
-	UPROPERTY()
-	UTimelineComponent* MyTimeline;
-
-	UPROPERTY()
-	FTimeline CurveTimeline;
-	
-	UPROPERTY(EditAnywhere, Category = "Timeline")
-	UCurveFloat* FloatCurve;
-
-	FOnTimelineFloat InterpFunction; // 타임라인의 값이 변경될 때 호출될 델리게이트
-	FOnTimelineEvent TimelineFinished;  // 타임라인이 끝났을 때 호출될 델리게이트
-
-	UFUNCTION()
-	void ClimbTimelineProgress(float Value); // 타임라인 진행 함수
-	UFUNCTION()
-	void OnClimbTimelineFinished(); // 타임라인 종료 함수
-	void StopClimbing();
-	void AttachToCable();
-	void LedgeMantleCaculation();
-	
-	UFUNCTION()
-	void PlayMontageNotifyBegin(FName NotifyName, const FBranchingPointNotifyPayload& BranchingPointNotifyPayload);
-	
-	UPROPERTY(EditAnywhere)
-	class UAnimMontage* LedgeMontage;
-
-	bool IsClimbing = false;
+// 	UPROPERTY(EditAnywhere)
+// 	class UInputAction* IA_Player_Climb;
+// 	UPROPERTY()
+// 	class AHD_CharacterPlayer* Player;
+// 	UPROPERTY()
+// 	class UHD_PlayerAnimInstance* PlayerAnim;
+// 	UPROPERTY()
+// 	class AHD_Dragon* Dragon;
+// 	
+// public:
+// 	FHitResult Climb_OutHit;
+// 	void Climb();
+// 	
+// 	bool AttachToSurfaceCaculation(float Attach_Distance, FHitResult& OutHit);
+// 	bool bHit_AttachToSurfaceCaculation;
+// 	// 델리게이트 인스턴스
+// 	UPROPERTY(BlueprintAssignable, Category = "CustomEvent")
+// 	FClimbMovement OnClimbMovement;
+//
+// 	void ClimbMovementEvent(FVector WorldDirection, float ScaleValue);
+// 	
+// public:
+// 	UPROPERTY()
+// 	UTimelineComponent* MyTimeline;
+//
+// 	UPROPERTY()
+// 	FTimeline CurveTimeline;
+// 	
+// 	UPROPERTY(EditAnywhere, Category = "Timeline")
+// 	UCurveFloat* FloatCurve;
+//
+// 	FOnTimelineFloat InterpFunction; // 타임라인의 값이 변경될 때 호출될 델리게이트
+// 	FOnTimelineEvent TimelineFinished;  // 타임라인이 끝났을 때 호출될 델리게이트
+//
+// 	UFUNCTION()
+// 	void ClimbTimelineProgress(float Value); // 타임라인 진행 함수
+// 	UFUNCTION()
+// 	void OnClimbTimelineFinished(); // 타임라인 종료 함수
+// 	void StopClimbing();
+// 	void AttachToCable();
+// 	void LedgeMantleCaculation();
+// 	
+// 	UFUNCTION()
+// 	void PlayMontageNotifyBegin(FName NotifyName, const FBranchingPointNotifyPayload& BranchingPointNotifyPayload);
+// 	
+// 	UPROPERTY(EditAnywhere)
+// 	class UAnimMontage* LedgeMontage;
+//
+// 	bool IsClimbing = false;
 };

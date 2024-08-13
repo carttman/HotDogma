@@ -62,7 +62,7 @@ void AHD_BreathCol::SetTarget(FTransform target)
 		else
 		{
 			
-			FireSocketRotation.Pitch += 20.f;
+			FireSocketRotation.Pitch += 30.f;
 		}
 	}
 	SetActorRotation(FireSocketRotation);

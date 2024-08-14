@@ -49,8 +49,8 @@ void ACHJ_GameMode::BeginPlay()
 	Player = Cast<AHD_CharacterPlayer>(GetWorld()->GetFirstPlayerController()->GetPawn());
 	CreateGamePlayWidget();
 
-	//PlaySoundAtIndex(0);
 	NarrationFlags.Init(false, NarrationDatas.Num());
+	PlaySoundAtIndex(0);
 }
 
 void ACHJ_GameMode::Tick(float DeltaSeconds)

@@ -73,4 +73,9 @@ public:
 	FTimerHandle TimeDilationTimerHandle;
 
 	void GetPlayerCameraShake();
+public:
+	UPROPERTY()
+	class APostProcessVolume* PostProcessVolume; // 하울링 맞았을때 포스트 프로세스 볼륨
+	void OnPostProcess();
+	void OffPostProcess();
 };

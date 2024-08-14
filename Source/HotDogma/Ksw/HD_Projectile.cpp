@@ -75,18 +75,6 @@ void AHD_Projectile::SetTarget(FVector target)
 	movementComp->Velocity = dir * speed;
 }
 
-void AHD_Projectile::PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent)
-{
-	Super::PostEditChangeProperty(PropertyChangedEvent);
-
-	//총알 속도 변경
-	if (PropertyChangedEvent.GetPropertyName() == GET_MEMBER_NAME_CHECKED(AHD_Projectile, speed))
-	{
-		movementComp->InitialSpeed = speed;
-		movementComp->MaxSpeed = speed;
-	}
-}
-
 void AHD_Projectile::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
 {
 	//피격 이펙트

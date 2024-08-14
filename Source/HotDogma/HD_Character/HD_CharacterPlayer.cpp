@@ -42,6 +42,9 @@ void AHD_CharacterPlayer::BeginPlay()
 	AttachWeapon();
 	if(AM_KnockDown_Montage) GetMesh()->GetAnimInstance()->OnPlayMontageNotifyBegin.AddDynamic(this, &AHD_CharacterPlayer::PlayMontageNotifyBegin_KnockDown);
 	if(AM_Hit_Montage) GetMesh()->GetAnimInstance()->OnPlayMontageNotifyBegin.AddDynamic(this, &AHD_CharacterPlayer::AHD_CharacterPlayer::PlayMontageNotifyBegin_Hit);
+
+	PostProcessVolume = Cast<APostProcessVolume>(UGameplayStatics::GetActorOfClass(GetWorld(), APostProcessVolume::StaticClass()));
+	
 }
 
 // Called every frame
@@ -100,29 +103,22 @@ float AHD_CharacterPlayer::TakeDamage(float DamageAmount, FDamageEvent const& Da
 				// }
 				if(HJ_Dragon->strDamageAttackType.Equals("Shout"))
 				{
-					if(ShoutCameraShake)
-					{
-						PlayerContoller->PlayerCameraManager->StartCameraShake(ShoutCameraShake);
-					}
-					// GetMesh()->GetAnimInstance()->Montage_Play(AM_Hit_Montage, 1);
-					// GetMesh()->GetAnimInstance()->Montage_JumpToSection(FName("Hit_Normal"), AM_Hit_Montage);
-					// GetMesh()->GetAnimInstance()->Montage_JumpToSectionsEnd(FName("Hit_Normal"), AM_Hit_Montage);
+					GetPlayerCameraShake();
+					OnPostProcess();
+					
 					SlowDownTime_Hit(0.5f, 0.1f);
 					GetMesh()->GetAnimInstance()->Montage_Play(AM_KnockDown_Montage, 1);
 					GetMesh()->GetAnimInstance()->Montage_JumpToSection(FName("KnockDown_Start"), AM_KnockDown_Montage);
-					//PlayerAttackComponent->IsCutting_New = false;
+					
 				}
 				if(HJ_Dragon->strDamageAttackType.Equals("JumpPress"))
 				{
-					// if(ShoutCameraShake)
-					// {
-					// 	PlayerContoller->PlayerCameraManager->StartCameraShake(ShoutCameraShake);
-					// }
+					
 					SlowDownTime_Hit(0.5f, 0.1f);
 					GetMesh()->GetAnimInstance()->Montage_Play(AM_Hit_Montage, 1);
 					GetMesh()->GetAnimInstance()->Montage_JumpToSection(FName("Hit_Large"), AM_Hit_Montage);
 					PlayerAttackComponent->IsClimb_Attacking = false;
-					//PlayerAttackComponent->IsCutting_New = false;
+					
 				}
 				if(HJ_Dragon->strDamageAttackType.Equals("TailSlap"))
 				{
@@ -130,7 +126,7 @@ float AHD_CharacterPlayer::TakeDamage(float DamageAmount, FDamageEvent const& Da
 					GetMesh()->GetAnimInstance()->Montage_Play(AM_Hit_Montage, 1);
 					GetMesh()->GetAnimInstance()->Montage_JumpToSection(FName("Hit_Large"), AM_Hit_Montage);
 					PlayerAttackComponent->IsClimb_Attacking = false;
-					//PlayerAttackComponent->IsCutting_New = false;
+				
 				}
 				if(HJ_Dragon->strDamageAttackType.Equals("Scratch"))
 				{
@@ -138,39 +134,29 @@ float AHD_CharacterPlayer::TakeDamage(float DamageAmount, FDamageEvent const& Da
 					GetMesh()->GetAnimInstance()->Montage_Play(AM_Hit_Montage, 1);
 					GetMesh()->GetAnimInstance()->Montage_JumpToSection(FName("Hit_Normal"), AM_Hit_Montage);
 					PlayerAttackComponent->IsClimb_Attacking = false;
-					//PlayerAttackComponent->IsCutting_New = false;
+					
 				}
 				if(HJ_Dragon->strDamageAttackType.Equals("HandPress"))
 				{
-					// if(ShoutCameraShake)
-					// {
-					// 	PlayerContoller->PlayerCameraManager->StartCameraShake(ShoutCameraShake);
-					// }
+					
 					SlowDownTime_Hit(0.5f, 0.1f);
 					GetMesh()->GetAnimInstance()->Montage_Play(AM_Hit_Montage, 1);
 					GetMesh()->GetAnimInstance()->Montage_JumpToSection(FName("Hit_Normal"), AM_Hit_Montage);
 					PlayerAttackComponent->IsClimb_Attacking = false;
-					//PlayerAttackComponent->IsCutting_New = false;
+					
 				}
 				if(HJ_Dragon->strDamageAttackType.Equals("Thunder"))
 				{
-					// if(ShoutCameraShake)
-					// {
-					// 	PlayerContoller->PlayerCameraManager->StartCameraShake(ShoutCameraShake);
-					// }
 					GetMesh()->GetAnimInstance()->Montage_Play(AM_Hit_Montage, 1);
 					GetMesh()->GetAnimInstance()->Montage_JumpToSection(FName("Hit_Normal"), AM_Hit_Montage);
 					PlayerAttackComponent->IsClimb_Attacking = false;
-					//PlayerAttackComponent->IsCutting_New = false;
 				}
 				if(HJ_Dragon->strDamageAttackType.Equals("Meteor"))
 				{
-					//SlowDownTime_Hit(0.5f, 0.01f);
 					GetMesh()->GetAnimInstance()->Montage_Play(AM_Hit_Montage, 1);
 					GetMesh()->GetAnimInstance()->Montage_JumpToSection(FName("Hit_Large"), AM_Hit_Montage);
 					PlayerAttackComponent->IsClimb_Attacking = false;
-					//PlayerAttackComponent->IsCutting_New = false;
-				}//Meteor
+				}
 			}
 		}
 	}
@@ -221,6 +207,7 @@ void AHD_CharacterPlayer::PlayMontageNotifyBegin_KnockDown(FName NotifyName, con
 		IsKnockDown = false;
 		PlayerAttackComponent->IsCutting_New = false;
 		PlayerAttackComponent->IsCutting = false;
+		OffPostProcess();
 	}
 }
 
@@ -259,6 +246,24 @@ void AHD_CharacterPlayer::GetPlayerCameraShake()
 	if(ShoutCameraShake)
 	{
 		PlayerContoller->PlayerCameraManager->StartCameraShake(ShoutCameraShake);
+	}
+}
+
+void AHD_CharacterPlayer::OnPostProcess()
+{
+	if (PostProcessVolume)
+	{
+		PostProcessVolume->Settings.WeightedBlendables.Array[0].Weight = 1;
+		PostProcessVolume->Settings.WeightedBlendables.Array[1].Weight = 1;
+	}
+}
+
+void AHD_CharacterPlayer::OffPostProcess()
+{
+	if (PostProcessVolume)
+	{
+		PostProcessVolume->Settings.WeightedBlendables.Array[0].Weight = 0;
+		PostProcessVolume->Settings.WeightedBlendables.Array[1].Weight = 0;
 	}
 }
 

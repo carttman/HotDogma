@@ -91,6 +91,20 @@ void UHD_DragonFSM::BeginPlay()
 	{
 		OldColor = DirectionalLight->GetLightComponent()->GetLightColor();
 	}
+
+	if(Dragon&&Dragon->SkeletalComp)
+	{
+		UMaterialInterface* Material = Dragon->SkeletalComp->GetMaterial(0);
+		if(Material)
+		{
+			auto DynamicMaterialInstance = UMaterialInstanceDynamic::Create(Material, this);
+
+			Dragon->SkeletalComp->SetMaterial(0, DynamicMaterialInstance);
+			DynamicMaterialInstance->SetScalarParameterValue(FName("Normal Intensity"), 5.f);
+			DynamicMaterialInstance->SetScalarParameterValue(FName("Param"), 150.f);
+			DynamicMaterialInstance->SetScalarParameterValue(FName("Roughness"), 2.3f);			
+		}
+	}
 }
 #pragma endregion
 
@@ -244,6 +258,7 @@ void UHD_DragonFSM::IdleState(const float& DeltaTime)
 	}
 
 	CurrIdleTime += DeltaTime;
+	CurrSearchTime += DeltaTime;
 	if (CurrIdleTime >= DuringIdleTime)
 	{
 		CurrIdleTime = 0.f;
@@ -283,6 +298,16 @@ void UHD_DragonFSM::IdleState(const float& DeltaTime)
 
 void UHD_DragonFSM::F_NormalIdle(const float& DeltaTime)
 {
+	if (!NearTargetActor)
+	{
+		CurrSearchTime = LimitSearchTime;
+	}
+
+	if (CurrSearchTime < LimitSearchTime)
+		return;
+
+	CurrSearchTime = 0.f;
+
 	// 타겟을 지정한다.
 	ACharacter* ClosestCharacter = nullptr;
 	float MinDistance = FLT_MAX;

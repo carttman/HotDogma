@@ -345,7 +345,7 @@ public:
 	class ADirectionalLight* DirectionalLight; // DirectionalLight
 
 	FLinearColor OldColor;
-	FLinearColor BreathColor = {1.f, 0.208637f, 0.198069f, 1.f};
+	FLinearColor BreathColor = {1.f, 0.2f, 0.2f, 1.f};
 
 	bool bReturnLightColor = false;
 
@@ -356,4 +356,11 @@ public:
 
 	UPROPERTY(EditAnywhere)
 	float NextPagePercent = 0.75;
+
+	// 어그로 탐색
+	UPROPERTY(EditAnywhere)
+	float LimitSearchTime = 2.5f;
+
+	float CurrSearchTime;
+
 };

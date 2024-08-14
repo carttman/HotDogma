@@ -4,7 +4,7 @@
 #include "../../HD_Character/HD_PlayerComponent/HD_PlayerClimbComponent.h"
 
 // #include "CableComponent.h"
-// #include "EnhancedInputComponent.h"
+#include "EnhancedInputComponent.h"
 // #include "HD_PlayerAttackComponent.h"
 // #include "MotionWarpingComponent.h"
 // #include "Components/CapsuleComponent.h"
@@ -19,7 +19,7 @@
 UHD_PlayerClimbComponent::UHD_PlayerClimbComponent()
 {
 	PrimaryComponentTick.bCanEverTick = true;
-	// ConstructorHelpers::FObjectFinder<UInputAction> TempIA(TEXT("/Script/EnhancedInput.InputAction'/Game/CHJ/Input/IA_Player_Climb.IA_Player_Climb'"));
+	//ConstructorHelpers::FObjectFinder<UInputAction> TempIA(TEXT("/Script/EnhancedInput.InputAction'/Game/CHJ/Input/IA_Player_Climb.IA_Player_Climb'"));
 	// if(TempIA.Succeeded())
 	// {
 	// 	IA_Player_Climb = TempIA.Object; // ia 셋팅

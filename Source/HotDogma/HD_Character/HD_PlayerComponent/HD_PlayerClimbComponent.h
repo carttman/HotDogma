@@ -30,8 +30,8 @@ public:
 public:
 	void SetupPlayerInputComponent(class UEnhancedInputComponent* enhancedInputComponent);
 
-// 	UPROPERTY(EditAnywhere)
-// 	class UInputAction* IA_Player_Climb;
+	// UPROPERTY(EditAnywhere)
+	// class UInputAction* IA_Player_Climb;
 // 	UPROPERTY()
 // 	class AHD_CharacterPlayer* Player;
 // 	UPROPERTY()

@@ -23,27 +23,10 @@ public:
 
 	UPROPERTY(meta = (BindWidget))
 	class UProgressBar* HealthBar;
+	
+	UPROPERTY(EditAnywhere, meta = (BindWidget))
+	class UHD_BossHPWidget* WBP_BossHPWidget;
 
-	UPROPERTY(meta = (BindWidget))
-	class UProgressBar* Dragon_HealthBar;
-	
-	UPROPERTY(meta = (BindWidget))
-	class UImage* EmptyGauge0;
-	UPROPERTY(meta = (BindWidget))
-	class UImage* EmptyGauge1;
-	UPROPERTY(meta = (BindWidget))
-	class UImage* EmptyGauge2;
-	UPROPERTY(meta = (BindWidget))
-	class UImage* EmptyGauge3;
-	UPROPERTY(meta = (BindWidget))
-	class UImage* EmptyGauge4;
-	UPROPERTY(meta = (BindWidget))
-	class UImage* EmptyGauge5;
-	UPROPERTY(meta = (BindWidget))
-	class UImage* EmptyGauge6;
-	
-	TArray<class UImage*> ArrEmptyGauge;
-	
 	UPROPERTY(meta = (BindWidget))
 	class UOverlay* NarrationOverlay;
 	

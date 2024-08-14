@@ -9,28 +9,12 @@
 #include "HD_NarrationWidget.h"
 #include "Components/Overlay.h"
 #include "Components/TimelineComponent.h"
+#include "HD_BossHPWidget.h"
 
 void UHD_PlayerWidget::NativeConstruct()
 {
 	Super::NativeConstruct();
 	HealthBar->SetPercent(1);
-	Dragon_HealthBar->SetPercent(1);
-
-	if (EmptyGauge6)
-		ArrEmptyGauge.Add(EmptyGauge6);
-	if (EmptyGauge5)
-		ArrEmptyGauge.Add(EmptyGauge5);
-	if (EmptyGauge4)
-		ArrEmptyGauge.Add(EmptyGauge4);
-	if (EmptyGauge3)
-		ArrEmptyGauge.Add(EmptyGauge3);
-	if (EmptyGauge2)
-		ArrEmptyGauge.Add(EmptyGauge2);
-	if (EmptyGauge1)
-		ArrEmptyGauge.Add(EmptyGauge1);
-	if (EmptyGauge0)
-		ArrEmptyGauge.Add(EmptyGauge0);
-	//WBP_GameOver->SetVisibility(ESlateVisibility::Hidden);
 
 	if (MoveCurve)
 	{
@@ -78,20 +62,7 @@ void UHD_PlayerWidget::SetHP(float currHP, float maxHP)
 
 void UHD_PlayerWidget::Set_DragonHP(float currHP, float maxHP, int RemainLineCnt)
 {
-	float percent = currHP / maxHP;
-	Dragon_HealthBar->SetPercent(percent);
-
-	for (int i = 0; i < ArrEmptyGauge.Num(); i++)
-	{
-		if (i < RemainLineCnt)
-		{
-			ArrEmptyGauge[i]->SetVisibility(ESlateVisibility::Visible);
-		}
-		else
-		{
-			ArrEmptyGauge[i]->SetVisibility(ESlateVisibility::Hidden);
-		}
-	}
+	WBP_BossHPWidget->Set_DragonHP(currHP, maxHP, RemainLineCnt);
 }
 
 void UHD_PlayerWidget::ShowDialogForDuration(UTexture2D* Icon, FString Name, FString Description)

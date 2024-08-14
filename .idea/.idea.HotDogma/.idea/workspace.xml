@@ -13,9 +13,7 @@
   <component name="ChangeListManager">
     <list default="true" id="816ff4fd-5015-4971-a749-88a8f089f2fd" name="Changes" comment="오더 3번 4번키 수정">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.HotDogma/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.HotDogma/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/LGT/LGT_TestMap.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/LGT/LGT_TestMap.umap" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/HotDogma/HD_Character/HD_CharacterPlayer.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/HotDogma/HD_Character/HD_CharacterPlayer.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/HotDogma/HD_Character/HD_CharacterPlayer.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/HotDogma/HD_Character/HD_CharacterPlayer.h" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

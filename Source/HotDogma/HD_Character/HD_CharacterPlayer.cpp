@@ -56,10 +56,7 @@ void AHD_CharacterPlayer::Tick(float DeltaTime)
 	{
 		if(IsDeath) return;
 		IsDeath = true;
-		if(IsDeath)
-		{
-			DeathProcess();
-		}
+		if(IsDeath)DeathProcess();
 	}
 }
 
@@ -105,7 +102,6 @@ float AHD_CharacterPlayer::TakeDamage(float DamageAmount, FDamageEvent const& Da
 				{
 					GetPlayerCameraShake();
 					OnPostProcess();
-					
 					SlowDownTime_Hit(0.5f, 0.1f);
 					GetMesh()->GetAnimInstance()->Montage_Play(AM_KnockDown_Montage, 1);
 					GetMesh()->GetAnimInstance()->Montage_JumpToSection(FName("KnockDown_Start"), AM_KnockDown_Montage);
@@ -113,7 +109,6 @@ float AHD_CharacterPlayer::TakeDamage(float DamageAmount, FDamageEvent const& Da
 				}
 				if(HJ_Dragon->strDamageAttackType.Equals("JumpPress"))
 				{
-					
 					SlowDownTime_Hit(0.5f, 0.1f);
 					GetMesh()->GetAnimInstance()->Montage_Play(AM_Hit_Montage, 1);
 					GetMesh()->GetAnimInstance()->Montage_JumpToSection(FName("Hit_Large"), AM_Hit_Montage);
@@ -216,12 +211,14 @@ void AHD_CharacterPlayer::PlayMontageNotifyBegin_Hit(FName NotifyName, const FBr
 	if(NotifyName == FName("Hit_Start"))
 	{
 		IsHit = true;
+		if(PostProcessVolume) PostProcessVolume->Settings.WeightedBlendables.Array[1].Weight = 1;
 	}
 	if(NotifyName == FName("Hit_End"))
 	{
 		IsHit = false;
 		PlayerAttackComponent->IsCutting_New = false;
 		PlayerAttackComponent->IsCutting = false;
+		if(PostProcessVolume) PostProcessVolume->Settings.WeightedBlendables.Array[1].Weight = 0;
 	}
 }
 

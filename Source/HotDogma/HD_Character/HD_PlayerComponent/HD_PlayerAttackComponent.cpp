@@ -205,6 +205,7 @@ void UHD_PlayerAttackComponent::UpdatePlayerAttack(float DeltaTime)
 void UHD_PlayerAttackComponent::Skill_Splitter()
 {	
 	if(IsSplitting || IsCutting) return;
+	if(IsCutting_New) return;
 	//if(Player->PlayerClimbComponent->IsClimbing)return;
 	IsSplitting = true;
 	Player->GetCharacterMovement()->SetMovementMode(MOVE_Flying); // 루트모션을 위한 flying 모드 변경

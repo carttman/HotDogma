@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "HD_CharacterBase.h"
+#include "Components/TimelineComponent.h"
 #include "HD_CharacterPlayer.generated.h"
 
 UCLASS()
@@ -78,4 +79,29 @@ public:
 	class APostProcessVolume* PostProcessVolume; // 하울링 맞았을때 포스트 프로세스 볼륨
 	void OnPostProcess();
 	void OffPostProcess();
+	
+	UPROPERTY(EditAnywhere)
+	class UMaterialInstance* MI_Chromatic;
+	UPROPERTY(EditAnywhere)
+	class UMaterialInstance* MI_Radial_Zoom;
+	float ScalarValue = 0;
+
+	UMaterialInstanceDynamic* ChromaticMaterialInstance;
+	
+	// 타임라인 컴포넌트
+	UPROPERTY(EditAnywhere, Category = "Timeline")
+	UTimelineComponent* PostProcessTimeline;
+
+	// 타임라인 곡선
+	UPROPERTY(EditAnywhere, Category = "Timeline")
+	UCurveFloat* CurveFloat;
+	
+	UMaterialInstanceDynamic* RadialMaterialInstance;
+
+	// 타임라인의 업데이트 함수
+	UFUNCTION()
+	void TimelineFloatReturn(float Value);
+
+private:
+	FOnTimelineFloat TimelineInterpFunction;
 };

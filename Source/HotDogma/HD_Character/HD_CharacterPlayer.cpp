@@ -31,6 +31,7 @@ AHD_CharacterPlayer::AHD_CharacterPlayer()
 
 	// Player 컴포넌트
 	PlayerAttackComponent = CreateDefaultSubobject<UHD_PlayerAttackComponent>(TEXT("PlayerAttackComponent"));
+	PostProcessTimeline = CreateDefaultSubobject<UTimelineComponent>(TEXT("PostProcessTimeline"));
 }
 
 // Called when the game starts or when spawned
@@ -45,6 +46,13 @@ void AHD_CharacterPlayer::BeginPlay()
 
 	PostProcessVolume = Cast<APostProcessVolume>(UGameplayStatics::GetActorOfClass(GetWorld(), APostProcessVolume::StaticClass()));
 	
+	if (CurveFloat)
+	{
+		TimelineInterpFunction.BindUFunction(this, FName("TimelineFloatReturn"));
+		// 타임라인에 곡선 추가
+		PostProcessTimeline->AddInterpFloat(CurveFloat, TimelineInterpFunction);
+		
+	}
 }
 
 // Called every frame
@@ -197,6 +205,10 @@ void AHD_CharacterPlayer::PlayMontageNotifyBegin_KnockDown(FName NotifyName, con
 	{
 		IsKnockDown = true;
 	}
+	if(NotifyName == FName("KnockDown_Reverse"))
+	{
+		PostProcessTimeline->ReverseFromEnd();
+	}
 	if(NotifyName == FName("KnockDown_End"))
 	{
 		IsKnockDown = false;
@@ -250,8 +262,16 @@ void AHD_CharacterPlayer::OnPostProcess()
 {
 	if (PostProcessVolume)
 	{
+		// UMaterialInstanceDynamic* ChromaticMaterialInstance = UMaterialInstanceDynamic::Create(MI_Chromatic, this);
+		// ChromaticMaterialInstance->SetScalarParameterValue(FName("Scalar"), 0.1f);
+		ChromaticMaterialInstance = UMaterialInstanceDynamic::Create(MI_Chromatic, this);
+		RadialMaterialInstance = UMaterialInstanceDynamic::Create(MI_Radial_Zoom, this);
+		PostProcessVolume->Settings.WeightedBlendables.Array[0].Object = ChromaticMaterialInstance;
+		PostProcessVolume->Settings.WeightedBlendables.Array[1].Object = RadialMaterialInstance;
 		PostProcessVolume->Settings.WeightedBlendables.Array[0].Weight = 1;
 		PostProcessVolume->Settings.WeightedBlendables.Array[1].Weight = 1;
+		// 타임라인 시작
+		PostProcessTimeline->PlayFromStart();
 	}
 }
 
@@ -259,8 +279,16 @@ void AHD_CharacterPlayer::OffPostProcess()
 {
 	if (PostProcessVolume)
 	{
+		//PostProcessTimeline->ReverseFromEnd();
 		PostProcessVolume->Settings.WeightedBlendables.Array[0].Weight = 0;
 		PostProcessVolume->Settings.WeightedBlendables.Array[1].Weight = 0;
 	}
+}
+
+void AHD_CharacterPlayer::TimelineFloatReturn(float Value)
+{
+	// 스칼라 파라미터 값을 타임라인 값으로 설정
+	if(ChromaticMaterialInstance)ChromaticMaterialInstance->SetScalarParameterValue(FName("Scale"), 1.05f + (Value * -1));
+	if(RadialMaterialInstance)RadialMaterialInstance->SetScalarParameterValue(FName("BlurScale"), Value);
 }
 

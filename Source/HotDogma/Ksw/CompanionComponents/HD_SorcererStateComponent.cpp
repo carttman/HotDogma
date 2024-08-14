@@ -134,6 +134,14 @@ void UHD_SorcererStateComponent::SetBattleState(ESorcererBattleState state)
 {
 	CurrentBattleState = state;
 	CurrentAttackTime = 0.0f;
+	if (state == ESorcererBattleState::State_HighLevin)
+	{
+		auto* gm = Cast<ACHJ_GameMode>(GetWorld()->GetAuthGameMode());
+		if (gm)
+		{
+			gm->PlaySoundAtIndex(14);
+		}
+	}
 }
 
 void UHD_SorcererStateComponent::CombatCheck()

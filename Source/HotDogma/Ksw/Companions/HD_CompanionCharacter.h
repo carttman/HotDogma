@@ -51,6 +51,7 @@ public:
 	// 문자열
 	UPROPERTY(EditAnywhere, Category = "Companion")
 	FString CompanionName;
+	int32 CompanionId;
 
 	// 이미지
 	UPROPERTY(EditAnywhere, Category = "Companion")

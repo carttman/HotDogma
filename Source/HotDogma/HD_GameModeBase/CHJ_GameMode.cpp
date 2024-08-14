@@ -49,7 +49,8 @@ void ACHJ_GameMode::BeginPlay()
 	Player = Cast<AHD_CharacterPlayer>(GetWorld()->GetFirstPlayerController()->GetPawn());
 	CreateGamePlayWidget();
 
-	PlaySoundAtIndex(0);
+	//PlaySoundAtIndex(0);
+	NarrationFlags.Init(false, NarrationDatas.Num());
 }
 
 void ACHJ_GameMode::Tick(float DeltaSeconds)
@@ -125,6 +126,10 @@ void ACHJ_GameMode::PlaySoundAtIndex(int32 idx)
 {
 	if (NarrationDatas.IsValidIndex(idx))
 	{
-		NarrationQueue.Enqueue(idx);
+		if (NarrationFlags[idx] == false)
+		{
+			NarrationFlags[idx] = true;
+			NarrationQueue.Enqueue(idx);
+		}
 	}
 }

@@ -72,6 +72,8 @@ public:
 	TArray<USoundBase*> ArrNarration;
 	UPROPERTY(EditAnywhere)
 	TArray<FNarraionData> NarrationDatas;
+	UPROPERTY(EditAnywhere)
+	TArray<bool> NarrationFlags;
 
 	TQueue<int32> NarrationQueue;
 

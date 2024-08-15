@@ -18,6 +18,7 @@
 #include "HotDogma/HD_Character/HD_CharacterPlayer.h"
 #include <Kismet/GameplayStatics.h>
 #include <NiagaraFunctionLibrary.h>
+#include "HotDogma/Ksw/HD_Casting.h"
 
 UHD_SorcererStateComponent::UHD_SorcererStateComponent()
 {
@@ -70,6 +71,9 @@ void UHD_SorcererStateComponent::BeginPlay()
 	//PatternList.Add(ESorcererBattleState::State_Galvanize);
 	bMaxLevitate = false;
 	PatternRotting();
+
+	Me->Casting = GetWorld()->SpawnActor<AHD_Casting>(Me->CastingFactory, Me->GetActorLocation(), Me->GetActorRotation());
+	Me->Casting->AttachToComponent(Me->GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, TEXT("Casting"));
 }
 
 void UHD_SorcererStateComponent::StartBattle()
@@ -128,6 +132,11 @@ void UHD_SorcererStateComponent::AttackTick(float DeltaTime)
 
 	//FString myState = UEnum::GetValueOrBitfieldAsString(CurrentBattleState);
 	//DrawDebugString(GetWorld(), GetOwner()->GetActorLocation() + FVector(0, 0, 100), myState, 0, FColor::Yellow, 0);
+}
+
+void UHD_SorcererStateComponent::Canceled()
+{
+	Me->Casting->OnCastingCancel();
 }
 
 void UHD_SorcererStateComponent::SetBattleState(ESorcererBattleState state)
@@ -199,7 +208,6 @@ void UHD_SorcererStateComponent::MagickBolt()
 		// 캐스팅 애니메이션을 실행한다.
 		SorcererAnimInstance->PlayAttackMontage(0);
 		bCastingMagickBolt = true;
-
 		return;
 	}
 
@@ -250,6 +258,10 @@ void UHD_SorcererStateComponent::HighHagol()
 		// 캐스팅 애니메이션을 실행한다.
 		SorcererAnimInstance->PlayHighHagolMontage(0);
 		bCastingHighHagol = true;
+
+		// 파란색
+		Me->Casting->SetCastingColor(FLinearColor(0, 0, 1, 1));
+		Me->Casting->OnCastingStart(HighHagolCastTime);
 	}
 
 	if (HighHagolCastTime < CurrentAttackTime)
@@ -263,6 +275,7 @@ void UHD_SorcererStateComponent::HighHagol()
 			GetWorld()->SpawnActor<AActor>(HighHagolFactory, AttackPoint, FRotator::ZeroRotator);
 		}
 
+		Me->Casting->OnCastingStop();
 		CurrentAttackTime = 0.0f;
 		bCastingHighHagol = false;
 		SetBattleState(ESorcererBattleState::State_CombatCheck);
@@ -277,6 +290,10 @@ void UHD_SorcererStateComponent::HighLevin()
 		// 캐스팅 애니메이션을 실행한다.
 		SorcererAnimInstance->PlayHighLevinMontage(0);
 		bCastingHighLevin = true;
+
+		// 파란색
+		Me->Casting->SetCastingColor(FLinearColor(0, 0, 1, 1));
+		Me->Casting->OnCastingStart(HighLevinCastTime);
 		return;
 	}
 
@@ -288,6 +305,7 @@ void UHD_SorcererStateComponent::HighLevin()
 	
 	if (AttackTime < CurrentAttackTime)
 	{
+		Me->Casting->OnCastingStop();
 		if (HighLevinCount < MaxHighLevinCount)
 		{
 			SorcererAnimInstance->PlayHighLevinMontage(1);
@@ -367,6 +385,10 @@ void UHD_SorcererStateComponent::ArgentSuccor()
 		// 캐스팅 애니메이션을 실행한다.
 		SorcererAnimInstance->PlayArgentSuccorMontage(0);
 		bCastingArgentSuccor = true;
+
+		// 노란색
+		Me->Casting->SetCastingColor(FLinearColor(1, 1, 0, 1));
+		Me->Casting->OnCastingStart(ArgentSuccorCastTime);
 		return;
 	}
 
@@ -382,6 +404,7 @@ void UHD_SorcererStateComponent::ArgentSuccor()
 			UGameplayStatics::ApplyDamage(Player, -1000.0f, Me->GetController(), Me, UDamageType::StaticClass());
 		}
 
+		Me->Casting->OnCastingStop();
 		CurrentAttackTime = 0.0f;
 		bCastingArgentSuccor = false;
 		SetBattleState(ESorcererBattleState::State_CombatCheck);

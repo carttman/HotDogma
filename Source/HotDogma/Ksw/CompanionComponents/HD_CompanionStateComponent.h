@@ -53,6 +53,7 @@ public:
 	virtual void HighfiveReady();
 	UFUNCTION(BlueprintCallable)
 	virtual void Highfive();
+	virtual void Canceled();
 
 	// boids
 	// separation : 다른 개체들과의 거리를 유지

@@ -212,6 +212,7 @@ void UHD_CompanionStateComponent::StunTick(float DeltaTime)
 	if (StunDuration < StunTime)
 	{
 		StunTime = 0.0f;
+		Canceled();
 		SetState(ECompanionState::State_Wait);
 	}
 }
@@ -235,6 +236,11 @@ void UHD_CompanionStateComponent::HighfiveReady()
 
 void UHD_CompanionStateComponent::Highfive()
 {
+}
+
+void UHD_CompanionStateComponent::Canceled()
+{
+
 }
 
 FVector UHD_CompanionStateComponent::Separation(const TArray<UHD_CompanionStateComponent*>& Boids)

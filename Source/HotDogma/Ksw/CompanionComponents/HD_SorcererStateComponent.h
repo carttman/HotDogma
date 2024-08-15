@@ -37,6 +37,7 @@ public:
 	virtual void StartBattle();
 	virtual void EndBattle();
 	virtual void AttackTick(float DeltaTime);
+	virtual void Canceled();
 
 	void SetBattleState(ESorcererBattleState state);
 

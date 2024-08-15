@@ -5,6 +5,7 @@
 
 #include "HD_DragonAnim.h"
 #include "HD_DragonFSM.h"
+#include "Components/AudioComponent.h"
 #include "Components/BoxComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "Components/WidgetSwitcher.h"
@@ -328,6 +329,9 @@ float AHD_Dragon::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent
 
 void AHD_Dragon::CallCredit()
 {
+	if (fsm && fsm->BattleAudioComponent && fsm->BattleAudioComponent->IsPlaying())
+		fsm->BattleAudioComponent->Stop();
+	
 	gm->GamePlayWidget->WidgetSwitcher->SetActiveWidgetIndex(2);
 }
 

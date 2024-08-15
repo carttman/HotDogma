@@ -339,6 +339,7 @@ void UHD_DragonAnim::AnimNotify_EndFlyAttack()
 {
 	if (fsm)
 	{
+		ChangeAttackState(AttackState::None);
 		// 날고있는 상태이고, 정해진 개수만큼 스킬을 사용했을 때
 		if (fsm->CurrUsedSkillCnt >= fsm->ApplySkillAsFly)
 		{

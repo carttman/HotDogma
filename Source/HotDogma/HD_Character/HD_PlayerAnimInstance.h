@@ -90,6 +90,7 @@ public:
 	float HandIKAlpha;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float HandIKTargetAlpha;
+	
 	//UFUNCTION()
 	//void AnimNotify_Start_Hit();
 	//UFUNCTION()

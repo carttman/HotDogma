@@ -10,6 +10,7 @@
 #include "HotDogma/LHJ/HD_Dragon.h"
 #include "Kismet/GameplayStatics.h"
 #include "NiagaraFunctionLibrary.h"
+#include "HotDogma/HD_GameModeBase/CHJ_GameMode.h"
 
 // Sets default values
 AHD_PlayerWeaponBase::AHD_PlayerWeaponBase()
@@ -64,6 +65,12 @@ void AHD_PlayerWeaponBase::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, A
 		UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), WaveVFX, GetActorLocation(), GetActorRotation());
 		UGameplayStatics::PlaySoundAtLocation(GetWorld(), Hit_SFX, GetActorLocation(), GetActorRotation());
 		CapsuleComp->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+		Player->NaraitionIdx++;
+		if(Player->NaraitionIdx == 1)
+		{
+		Player->PlayerGameMode->PlaySoundAtIndex(21);
+		Player->PlayerGameMode->PlaySoundAtIndex(22);
+		}
 	}
 }
 

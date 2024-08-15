@@ -101,7 +101,9 @@ public:
 	// 타임라인의 업데이트 함수
 	UFUNCTION()
 	void TimelineFloatReturn(float Value);
-
+	UFUNCTION()
+	void OnTimelineFinished();
 private:
 	FOnTimelineFloat TimelineInterpFunction;
+	FOnTimelineEvent TimelineFinished;
 };

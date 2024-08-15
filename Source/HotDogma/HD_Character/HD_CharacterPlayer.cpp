@@ -49,9 +49,10 @@ void AHD_CharacterPlayer::BeginPlay()
 	if (CurveFloat)
 	{
 		TimelineInterpFunction.BindUFunction(this, FName("TimelineFloatReturn"));
+		TimelineFinished.BindUFunction(this, FName("OnTimelineFinished"));
 		// 타임라인에 곡선 추가
 		PostProcessTimeline->AddInterpFloat(CurveFloat, TimelineInterpFunction);
-		
+		PostProcessTimeline->SetTimelineFinishedFunc(TimelineFinished);
 	}
 }
 
@@ -214,7 +215,7 @@ void AHD_CharacterPlayer::PlayMontageNotifyBegin_KnockDown(FName NotifyName, con
 		IsKnockDown = false;
 		PlayerAttackComponent->IsCutting_New = false;
 		PlayerAttackComponent->IsCutting = false;
-		OffPostProcess();
+		//OffPostProcess();
 	}
 }
 
@@ -280,8 +281,8 @@ void AHD_CharacterPlayer::OffPostProcess()
 	if (PostProcessVolume)
 	{
 		//PostProcessTimeline->ReverseFromEnd();
-		PostProcessVolume->Settings.WeightedBlendables.Array[0].Weight = 0;
-		PostProcessVolume->Settings.WeightedBlendables.Array[1].Weight = 0;
+		// PostProcessVolume->Settings.WeightedBlendables.Array[0].Weight = 0;
+		// PostProcessVolume->Settings.WeightedBlendables.Array[1].Weight = 0;
 	}
 }
 
@@ -290,5 +291,14 @@ void AHD_CharacterPlayer::TimelineFloatReturn(float Value)
 	// 스칼라 파라미터 값을 타임라인 값으로 설정
 	if(ChromaticMaterialInstance)ChromaticMaterialInstance->SetScalarParameterValue(FName("Scale"), 1.05f + (Value * -1));
 	if(RadialMaterialInstance)RadialMaterialInstance->SetScalarParameterValue(FName("BlurScale"), Value);
+}
+
+void AHD_CharacterPlayer::OnTimelineFinished()
+{
+	if (PostProcessVolume)
+	{
+		PostProcessVolume->Settings.WeightedBlendables.Array[0].Weight = 0;
+		PostProcessVolume->Settings.WeightedBlendables.Array[1].Weight = 0;
+	}
 }
 

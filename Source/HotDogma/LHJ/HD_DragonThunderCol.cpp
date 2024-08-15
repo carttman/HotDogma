@@ -72,6 +72,13 @@ void AHD_DragonThunderCol::Tick(float DeltaTime)
 			GetActorLocation(),
 			GetActorRotation()
 		);
+
+		UNiagaraComponent* NiagaraStonComponent = UNiagaraFunctionLibrary::SpawnSystemAtLocation(
+			this,
+			StonVfX,
+			GetActorLocation(),
+			GetActorRotation()
+		);
 	}
 
 	if (BoxComp->GetCollisionEnabled() == ECollisionEnabled::QueryOnly)

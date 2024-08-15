@@ -54,4 +54,7 @@ public:
 
 	UPROPERTY( EditAnywhere )
 	class USoundBase* ThunderSound;
+
+	UPROPERTY(EditDefaultsOnly)
+	class UNiagaraSystem* StonVfX;
 };

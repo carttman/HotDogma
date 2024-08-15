@@ -425,11 +425,7 @@ void UHD_DragonAnim::AnimNotify_StartMeteorAttack()
 
 void UHD_DragonAnim::AnimNotify_StartDeath()
 {
-	if (Dragon && Dragon->Player)
-		Dragon->Player->SlowDownTime_Hit(TimeDilation, Duration);
-
-	FTimerHandle TimeDilationTimerHandle;
-	GetWorld()->GetTimerManager().SetTimer(TimeDilationTimerHandle, this, &UHD_DragonAnim::DeathNarr, Duration, false);
+	
 }
 
 void UHD_DragonAnim::AnimNotify_ChangeMat()
@@ -442,10 +438,4 @@ void UHD_DragonAnim::AnimNotify_ReturnMat()
 {
 	if (fsm && fsm->DynamicMaterialInstance)
 		fsm->DynamicMaterialInstance->SetScalarParameterValue(FName("Param"), 1.f);
-}
-
-void UHD_DragonAnim::DeathNarr()
-{
-	if (Dragon && Dragon->gm)
-		Dragon->gm->PlaySoundAtIndex(30);
 }

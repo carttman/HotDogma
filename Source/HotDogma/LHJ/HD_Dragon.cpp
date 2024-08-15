@@ -246,6 +246,9 @@ void AHD_Dragon::Tick(float DeltaTime)
 
 	if (CurrHP <= 0 && fsm->State != DragonState::Death)
 	{
+		if (fsm->DynamicMaterialInstance)
+			fsm->DynamicMaterialInstance->SetScalarParameterValue(FName("Param"), 1.f);
+		
 		fsm->Anim->ChangeState(DragonState::Death);
 		SkeletalComp->SetCollisionProfileName(FName("FloorBlock"));
 		FTimerHandle TimeDilationTimerHandle;
@@ -326,6 +329,9 @@ float AHD_Dragon::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent
 	}
 	else
 	{
+		if (fsm->DynamicMaterialInstance)
+			fsm->DynamicMaterialInstance->SetScalarParameterValue(FName("Param"), 1.f);
+		
 		fsm->Anim->ChangeState(DragonState::Death);
 		SkeletalComp->SetCollisionProfileName(FName("FloorBlock"));
 		FTimerHandle TimeDilationTimerHandle;

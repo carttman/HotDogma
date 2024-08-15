@@ -215,9 +215,9 @@ public:
 	void ShuffleAttackPattern();
 
 	std::vector<AttackState> OrgFlyAttackPattern = {
-		AttackState::Breath,
+		//AttackState::Breath,
 		AttackState::ThunderMagic,
-		AttackState::Meteor
+		//AttackState::Meteor
 	};
 
 	std::vector<AttackState> RndFlyAttackPattern;
@@ -372,4 +372,7 @@ public:
 	int32 MeteorCnt=0;
 	int32 ThunderCnt=0;
 	void StartNarr();
+
+	UPROPERTY()
+	UAudioComponent* BattleAudioComponent;
 };

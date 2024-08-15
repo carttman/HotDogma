@@ -547,7 +547,8 @@ bool UHD_DragonFSM::ChkCharacterIntoRadian()
 
 				if (Battle_BGM)
 				{
-					UGameplayStatics::PlaySound2D(GetWorld(), Battle_BGM);
+					BattleAudioComponent = UGameplayStatics::SpawnSound2D(GetWorld(), Battle_BGM);
+					//UGameplayStatics::PlaySound2D(GetWorld(), Battle_BGM);
 				}
 
 				// 나레이션

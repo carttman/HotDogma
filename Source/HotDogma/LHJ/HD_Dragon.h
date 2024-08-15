@@ -211,4 +211,12 @@ public:
 	void CallCredit();
 
 	bool narTirgger = true;
+	
+	UPROPERTY(EditAnywhere)
+	float TimeDilation=0.7f;
+
+	UPROPERTY(EditAnywhere)
+	float Duration=1.25f;
+
+	void DeathNarr();
 };

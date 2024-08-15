@@ -67,7 +67,7 @@ void ACHJ_GameMode::Tick(float DeltaSeconds)
 		{
 			// 나레이션 음성 파일을 재생한다.
 			UGameplayStatics::PlaySound2D(GetWorld(), DialogSB.Sound);
-			NarrationDuration = DialogSB.Sound->GetDuration();
+			NarrationDuration = DialogSB.Sound->GetDuration() + 1.0f;
 			CurrentNarrationTime = 0.0f;
 			GamePlayWidget->WBP_PlayerWidget->ShowDialogForDuration(DialogSB.Icon, DialogSB.Name, DialogSB.Description);
 		}

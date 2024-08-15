@@ -35,7 +35,8 @@ void UHD_PlayerWidget::NativeConstruct()
 void UHD_PlayerWidget::NativeDestruct()
 {
 	Super::NativeDestruct();
-
+	
+	UE_LOG(LogTemp, Warning, TEXT("UHD_PlayerWidget::NativeDestruct()"));
 	for (auto& DialogHnd : DialogHnds)
 	{
 		GetWorld()->GetTimerManager().ClearTimer(DialogHnd);
@@ -76,13 +77,19 @@ void UHD_PlayerWidget::ShowDialogForDuration(UTexture2D* Icon, FString Name, FSt
 	AddNarrationWidget(WidgetItem);
 }
 
-void UHD_PlayerWidget::EnVisibleTextBlock(UHD_NarrationWidget* widget, FTimerHandle DialogHnd)
+void UHD_PlayerWidget::EnVisibleTextBlock(UHD_NarrationWidget* widget)
 {
+	FTimerHandle DialogHnd;
+	UE_LOG(LogTemp, Warning, TEXT("UHD_PlayerWidget::EnVisibleTextBlock()"));
 	// 제거한다.
-	GetWorld()->GetTimerManager().SetTimer(DialogHnd, [this, DialogHnd, widget]() {
-		NarrationOverlay->RemoveChild(widget);
+	GetWorld()->GetTimerManager().SetTimer(DialogHnd, [this, &DialogHnd, widget]() {
+		UE_LOG(LogTemp, Warning, TEXT("UHD_PlayerWidget::EnVisibleTextBlock() SetTimer End"));
+		if (NarrationOverlay)
+			NarrationOverlay->RemoveChild(widget);
 		DialogHnds.Remove(DialogHnd);
 		}, 0.4f, false);
+
+	DialogHnds.Add(DialogHnd);
 }
 
 void UHD_PlayerWidget::AddNarrationWidget(UHD_NarrationWidget* widget)
@@ -99,15 +106,21 @@ void UHD_PlayerWidget::AddNarrationWidget(UHD_NarrationWidget* widget)
 
 	NarrationOverlay->AddChild(widget);
 	FTimerHandle DialogHnd;
-	DialogHnds.Add(DialogHnd);
 
 	WidgetMoveTimeline.PlayFromStart();
 	widget->AnimStartWidget();
 
-	GetWorld()->GetTimerManager().SetTimer(DialogHnd, [this, DialogHnd, widget]() {
-		EnVisibleTextBlock(widget, DialogHnd);
-		widget->AnimHideWidget();
+	UE_LOG(LogTemp, Warning, TEXT("UHD_PlayerWidget::AddNarrationWidget()"));
+	GetWorld()->GetTimerManager().SetTimer(DialogHnd, [this, &DialogHnd, widget]() {
+		if (widget)
+		{
+			DialogHnds.Remove(DialogHnd);
+			EnVisibleTextBlock(widget);
+			widget->AnimHideWidget();
+		}
 		}, 10.0f, false);
+
+	DialogHnds.Add(DialogHnd);
 }
 
 void UHD_PlayerWidget::HandleProgress(float Value)

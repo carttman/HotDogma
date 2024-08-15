@@ -361,7 +361,7 @@ public:
 
 	// 어그로 탐색
 	UPROPERTY(EditAnywhere)
-	float LimitSearchTime = 2.5f;
+	float LimitSearchTime = 1.f;
 
 	float CurrSearchTime;
 

@@ -213,7 +213,7 @@ public:
 	bool narTirgger = true;
 	
 	UPROPERTY(EditAnywhere)
-	float TimeDilation=0.7f;
+	float TimeDilation=0.5f;
 
 	UPROPERTY(EditAnywhere)
 	float Duration=1.25f;

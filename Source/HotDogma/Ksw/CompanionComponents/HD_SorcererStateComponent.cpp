@@ -156,7 +156,10 @@ void UHD_SorcererStateComponent::CombatCheck()
 			if (Distance > 1500)
 			{
 				// 타겟 대상으로 좌우로 조금씩 이동한다.
-				AttackPoint.Z = Me->GetActorLocation().Z;
+				if (SorcererAnimInstance->bLevitate && !bMaxLevitate)
+				{
+					AttackPoint.Z = 300;
+				}
 				AIController->MoveToLocation(AttackPoint, 1300.0f);
 			}
 
@@ -168,7 +171,11 @@ void UHD_SorcererStateComponent::CombatCheck()
 					if (gameMode)
 					{
 						FVector Loc = gameMode->CompanionManager->StrafingLocation(Me, TargetPawn, 16, 1300);
-						Loc.Z = Me->GetActorLocation().Z;
+						if (SorcererAnimInstance->bLevitate && !bMaxLevitate)
+						{
+							Loc.Z = 300;
+						}
+
 						AIController->MoveToLocation(Loc, 100.0f);
 					}
 				}

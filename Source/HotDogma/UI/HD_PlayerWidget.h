@@ -62,5 +62,5 @@ public:
 	void ShowDialogForDuration(UTexture2D* Icon, FString Name, FString Description);
 
 	UFUNCTION()
-	void EnVisibleTextBlock(UHD_NarrationWidget* widget, FTimerHandle DialogHnd);
+	void EnVisibleTextBlock(UHD_NarrationWidget* widget);
 };

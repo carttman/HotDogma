@@ -100,8 +100,7 @@ public:
 	void SlowDownTime(float SlowDownFactor, float Duration);
 	// 타임 딜레이션을 복원하는 함수
 	void RestoreTimeDilation();
-	// 원래 타임 딜레이션
-	float OriginalTimeDilation;
+
 	// 타임 딜레이션 타이머 핸들
 	FTimerHandle TimeDilationTimerHandle;
 

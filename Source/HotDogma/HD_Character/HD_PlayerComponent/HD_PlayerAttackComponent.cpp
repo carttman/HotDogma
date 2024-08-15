@@ -361,8 +361,7 @@ void UHD_PlayerAttackComponent::PlayMontageNotifyBegin_Cutting(FName NotifyName,
 
 void UHD_PlayerAttackComponent::SlowDownTime(float SlowDownFactor, float Duration)
 {
-	// 현재 글로벌 타임 딜레이션 저장
-	OriginalTimeDilation = UGameplayStatics::GetGlobalTimeDilation(GetWorld());
+	
 	// 새로운 글로벌 타임 딜레이션 설정
 	UGameplayStatics::SetGlobalTimeDilation(GetWorld(), SlowDownFactor);
 	// 원래 타임 딜레이션을 복원하는 타이머 설정
@@ -372,7 +371,7 @@ void UHD_PlayerAttackComponent::SlowDownTime(float SlowDownFactor, float Duratio
 void UHD_PlayerAttackComponent::RestoreTimeDilation()
 {
 	// 원래 글로벌 타임 딜레이션 복원
-	UGameplayStatics::SetGlobalTimeDilation(GetWorld(), OriginalTimeDilation);
+	UGameplayStatics::SetGlobalTimeDilation(GetWorld(), 1);
 }
 
 void UHD_PlayerAttackComponent::PlayMontageNotifyBegin_ClimbAttack(FName NotifyName,

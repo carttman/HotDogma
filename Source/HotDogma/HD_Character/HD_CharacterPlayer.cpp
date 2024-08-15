@@ -237,8 +237,6 @@ void AHD_CharacterPlayer::PlayMontageNotifyBegin_Hit(FName NotifyName, const FBr
 
 void AHD_CharacterPlayer::SlowDownTime_Hit(float SlowDownFactor, float Duration)
 {
-	// 현재 글로벌 타임 딜레이션 저장
-	OriginalTimeDilation = UGameplayStatics::GetGlobalTimeDilation(GetWorld());
 	// 새로운 글로벌 타임 딜레이션 설정
 	UGameplayStatics::SetGlobalTimeDilation(GetWorld(), SlowDownFactor);
 	// 원래 타임 딜레이션을 복원하는 타이머 설정
@@ -248,7 +246,7 @@ void AHD_CharacterPlayer::SlowDownTime_Hit(float SlowDownFactor, float Duration)
 void AHD_CharacterPlayer::RestoreTimeDilation_Hit()
 {
 	// 원래 글로벌 타임 딜레이션 복원
-	UGameplayStatics::SetGlobalTimeDilation(GetWorld(), OriginalTimeDilation);
+	UGameplayStatics::SetGlobalTimeDilation(GetWorld(), 1);
 }
 
 void AHD_CharacterPlayer::GetPlayerCameraShake()

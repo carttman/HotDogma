@@ -13,12 +13,11 @@
   <component name="ChangeListManager">
     <list default="true" id="816ff4fd-5015-4971-a749-88a8f089f2fd" name="Changes" comment="하울링 타임라인 끝 함수 추가">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.HotDogma/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.HotDogma/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/LHJ/UnkaDragon/Animations/MagicCasting/Fly/Fly_Meteor_Cast.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/LHJ/UnkaDragon/Animations/MagicCasting/Fly/Fly_Meteor_Cast.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/LHJ/UnkaDragon/Animations/MagicCasting/Fly/Fly_Thunder_Cast.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/LHJ/UnkaDragon/Animations/MagicCasting/Fly/Fly_Thunder_Cast.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/HotDogma/LHJ/HD_Dragon.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/HotDogma/LHJ/HD_Dragon.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/HotDogma/LHJ/HD_DragonAnim.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/HotDogma/LHJ/HD_DragonAnim.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/HotDogma/LHJ/HD_DragonFSM.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/HotDogma/LHJ/HD_DragonFSM.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/HotDogma/LHJ/HD_DragonFSM.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/HotDogma/LHJ/HD_DragonFSM.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/LGT/LGT_TestMap.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/LGT/LGT_TestMap.umap" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/HotDogma/HD_Character/HD_CharacterPlayer.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/HotDogma/HD_Character/HD_CharacterPlayer.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/HotDogma/HD_Character/HD_CharacterPlayer.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/HotDogma/HD_Character/HD_CharacterPlayer.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/HotDogma/HD_Character/HD_PlayerComponent/HD_PlayerAttackComponent.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/HotDogma/HD_Character/HD_PlayerComponent/HD_PlayerAttackComponent.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/HotDogma/HD_Character/HD_PlayerComponent/HD_PlayerAttackComponent.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/HotDogma/HD_Character/HD_PlayerComponent/HD_PlayerAttackComponent.h" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -89,7 +88,7 @@
   "keyToString": {
     "C++ 프로젝트.HotDogma.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "HAK__20240724",
+    "git-widget-placeholder": "CHJ",
     "ignore.virus.scanning.warn.message": "true",
     "last_opened_file_path": "C:/00. hak/HotDogma/HotDogma/Source",
     "node.js.detected.package.eslint": "true",
@@ -751,14 +750,15 @@
     <MESSAGE value="최종 UI 체력바 수정" />
     <MESSAGE value="오더 3번 4번키 수정" />
     <MESSAGE value="하울링 타임라인 끝 함수 추가" />
-    <option name="LAST_COMMIT_MESSAGE" value="하울링 타임라인 끝 함수 추가" />
+    <MESSAGE value="플레이어 공격 사운드 싱크 맟춤" />
+    <option name="LAST_COMMIT_MESSAGE" value="플레이어 공격 사운드 싱크 맟춤" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
           <url>file://$PROJECT_DIR$/Source/HotDogma/HD_Character/HD_CharacterPlayer.cpp</url>
-          <line>299</line>
+          <line>297</line>
           <option name="timeStamp" value="7" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">

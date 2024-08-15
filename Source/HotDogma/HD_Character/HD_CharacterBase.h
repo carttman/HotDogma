@@ -97,4 +97,5 @@ public:
 	bool IsDeath = false;
 	bool IsKnockDown = false;
 	bool IsHit = false;
+	int32 NaraitionIdx = 0;
 };

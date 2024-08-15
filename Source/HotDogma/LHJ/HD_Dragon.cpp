@@ -5,6 +5,7 @@
 
 #include "HD_DragonAnim.h"
 #include "HD_DragonFSM.h"
+#include "Components/AudioComponent.h"
 #include "Components/BoxComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "Components/WidgetSwitcher.h"
@@ -242,6 +243,29 @@ void AHD_Dragon::Tick(float DeltaTime)
 				CharacterArr.Add(charac);
 		}
 	}
+
+	if (CurrHP <= 0 && fsm->State != DragonState::Death)
+	{
+		if (fsm->DynamicMaterialInstance)
+			fsm->DynamicMaterialInstance->SetScalarParameterValue(FName("Param"), 1.f);
+		
+		fsm->Anim->ChangeState(DragonState::Death);
+		SkeletalComp->SetCollisionProfileName(FName("FloorBlock"));
+		FTimerHandle TimeDilationTimerHandle;
+		if (Player)
+		{
+			Player->OnPostProcess();
+			Player->SlowDownTime_Hit(TimeDilation, Duration);
+		}
+
+		GetWorld()->GetTimerManager().SetTimer(TimeDilationTimerHandle, this, &AHD_Dragon::DeathNarr, Duration, false);
+
+		if (gm && gm->GamePlayWidget && gm->GamePlayWidget->WidgetSwitcher)
+		{
+			GetWorld()->GetTimerManager().SetTimer(DeathTimerHandle, this, &AHD_Dragon::CallCredit, BeforeTimeToCredit,
+												   false);
+		}
+	}
 }
 
 void AHD_Dragon::OnOverlapBegin_Scratch(UPrimitiveComponent* OverlappedComp, AActor* OtherActor,
@@ -305,12 +329,23 @@ float AHD_Dragon::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent
 	}
 	else
 	{
+		if (fsm->DynamicMaterialInstance)
+			fsm->DynamicMaterialInstance->SetScalarParameterValue(FName("Param"), 1.f);
+		
 		fsm->Anim->ChangeState(DragonState::Death);
 		SkeletalComp->SetCollisionProfileName(FName("FloorBlock"));
+		FTimerHandle TimeDilationTimerHandle;
+		if (Player)
+		{
+			Player->OnPostProcess();
+			Player->SlowDownTime_Hit(TimeDilation, Duration);
+		}
+
+		GetWorld()->GetTimerManager().SetTimer(TimeDilationTimerHandle, this, &AHD_Dragon::DeathNarr, Duration, false);
 
 		if (gm && gm->GamePlayWidget && gm->GamePlayWidget->WidgetSwitcher)
 		{
-			GetWorld()->GetTimerManager().SetTimer(DeathTimerHandle, this, &AHD_Dragon::CallCredit, 10.f,
+			GetWorld()->GetTimerManager().SetTimer(DeathTimerHandle, this, &AHD_Dragon::CallCredit, BeforeTimeToCredit,
 			                                       false);
 		}
 	}
@@ -320,5 +355,15 @@ float AHD_Dragon::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent
 
 void AHD_Dragon::CallCredit()
 {
-	gm->GamePlayWidget->WidgetSwitcher->SetActiveWidgetIndex(2);
+	UGameplayStatics::OpenLevel(GetWorld(), FName("CreditLevel"));
+	// if (fsm && fsm->BattleAudioComponent && fsm->BattleAudioComponent->IsPlaying())
+	// 	fsm->BattleAudioComponent->Stop();
+	//
+	// gm->GamePlayWidget->WidgetSwitcher->SetActiveWidgetIndex(2);
+}
+
+void AHD_Dragon::DeathNarr()
+{
+	if (gm)
+		gm->PlaySoundAtIndex(30);
 }

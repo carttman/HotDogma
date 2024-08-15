@@ -215,9 +215,9 @@ public:
 	void ShuffleAttackPattern();
 
 	std::vector<AttackState> OrgFlyAttackPattern = {
-		AttackState::Breath,
+		//AttackState::Breath,
 		AttackState::ThunderMagic,
-		AttackState::Meteor
+		//AttackState::Meteor
 	};
 
 	std::vector<AttackState> RndFlyAttackPattern;
@@ -240,6 +240,8 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int CurrUsedSkillCnt; // 현재 사용한 스킬 개수
+
+	int32 TotalUsingSkillCnt;
 
 	FRotator NowRotator;
 #pragma endregion
@@ -345,7 +347,7 @@ public:
 	class ADirectionalLight* DirectionalLight; // DirectionalLight
 
 	FLinearColor OldColor;
-	FLinearColor BreathColor = {1.f, 0.208637f, 0.198069f, 1.f};
+	FLinearColor BreathColor = {1.f, 0.2f, 0.2f, 1.f};
 
 	bool bReturnLightColor = false;
 
@@ -356,4 +358,21 @@ public:
 
 	UPROPERTY(EditAnywhere)
 	float NextPagePercent = 0.75;
+
+	// 어그로 탐색
+	UPROPERTY(EditAnywhere)
+	float LimitSearchTime = 1.f;
+
+	float CurrSearchTime;
+
+	UPROPERTY()
+	class UMaterialInstanceDynamic* DynamicMaterialInstance;
+
+	int32 BreathCnt=0;
+	int32 MeteorCnt=0;
+	int32 ThunderCnt=0;
+	void StartNarr();
+
+	UPROPERTY()
+	UAudioComponent* BattleAudioComponent;
 };

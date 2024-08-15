@@ -172,12 +172,10 @@ public:
 
 	UFUNCTION()
 	void AnimNotify_StartDeath();
-
 	
-	
-	UPROPERTY(EditAnywhere)
-	float TimeDilation=0.7f;
+	UFUNCTION()
+	void AnimNotify_ChangeMat();
 
-	UPROPERTY(EditAnywhere)
-	float Duration=1.25f;
+	UFUNCTION()
+	void AnimNotify_ReturnMat();
 };

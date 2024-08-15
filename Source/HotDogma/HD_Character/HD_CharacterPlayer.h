@@ -68,8 +68,7 @@ public:
 	void SlowDownTime_Hit(float SlowDownFactor, float Duration);
 	// 타임 딜레이션을 복원하는 함수
 	void RestoreTimeDilation_Hit();
-	// 원래 타임 딜레이션
-	float OriginalTimeDilation;
+	
 	// 타임 딜레이션 타이머 핸들
 	FTimerHandle TimeDilationTimerHandle;
 
@@ -101,7 +100,9 @@ public:
 	// 타임라인의 업데이트 함수
 	UFUNCTION()
 	void TimelineFloatReturn(float Value);
-
+	UFUNCTION()
+	void OnTimelineFinished();
 private:
 	FOnTimelineFloat TimelineInterpFunction;
+	FOnTimelineEvent TimelineFinished;
 };

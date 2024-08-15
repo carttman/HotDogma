@@ -6,6 +6,7 @@
 #include "Components/CapsuleComponent.h"
 #include "HotDogma/HD_Character/HD_CharacterPlayer.h"
 #include "HotDogma/HD_Character/HD_PlayerComponent/PlayerStatusComponent.h"
+#include "HotDogma/HD_GameModeBase/CHJ_GameMode.h"
 #include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "Kismet/KismetSystemLibrary.h"
@@ -174,7 +175,7 @@ bool UHD_DragonAnim::GetAttackPress(const float& AttackDistance)
 	                                              UEngineTypes::ConvertToTraceType(CollisionChannel), false,
 	                                              ActorsToIgnore, EDrawDebugTrace::None, OutHits,
 	                                              true);
-	
+
 	for (auto& Hit : OutHits)
 	{
 		if (IsValid(Hit.GetActor()))
@@ -242,11 +243,20 @@ void UHD_DragonAnim::AnimNotify_StartAttack()
 	{
 		fsm->isAttack = true;
 		fsm->CurrUsedSkillCnt++;
+		fsm->TotalUsingSkillCnt++;
 	}
 }
 
 void UHD_DragonAnim::AnimNotify_EndAttack()
 {
+	if (Dragon && Dragon->gm && fsm)
+	{
+		if (fsm->normalAttackState == AttackState::Meteor)
+		{
+			Dragon->gm->PlaySoundAtIndex(12);
+		}
+	}
+
 	ChangeState(DragonState::Idle);
 	if (fsm)
 	{
@@ -290,6 +300,9 @@ void UHD_DragonAnim::AnimNotify_EndFlyUp()
 	}
 	chkUsingSkillCnt = true;
 	isFly = true;
+
+	if (Dragon && Dragon->gm)
+		Dragon->gm->PlaySoundAtIndex(16);
 }
 
 void UHD_DragonAnim::AnimNotify_StartFlyDown()
@@ -318,6 +331,7 @@ void UHD_DragonAnim::AnimNotify_StartFlyAttack()
 	{
 		fsm->isAttack = true;
 		fsm->CurrUsedSkillCnt++;
+		fsm->TotalUsingSkillCnt++;
 	}
 }
 
@@ -325,6 +339,7 @@ void UHD_DragonAnim::AnimNotify_EndFlyAttack()
 {
 	if (fsm)
 	{
+		ChangeAttackState(AttackState::None);
 		// 날고있는 상태이고, 정해진 개수만큼 스킬을 사용했을 때
 		if (fsm->CurrUsedSkillCnt >= fsm->ApplySkillAsFly)
 		{
@@ -348,16 +363,26 @@ void UHD_DragonAnim::AnimNotify_EndFlyAttack()
 void UHD_DragonAnim::AnimNotify_StartBreath()
 {
 	//Dragon->FireCollision->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
-	fsm->bBreathAttack = true;
-	fsm->LightColorAlpha = 0;
+	if (fsm)
+	{
+		fsm->bBreathAttack = true;
+		fsm->LightColorAlpha = 0;
+		if (fsm->DynamicMaterialInstance)
+			fsm->DynamicMaterialInstance->SetScalarParameterValue(FName("Param"), 150.f);
+	}
 }
 
 void UHD_DragonAnim::AnimNotify_EndBreath()
 {
 	//Dragon->FireCollision->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-	fsm->bBreathAttack = false;
-	fsm->bReturnLightColor = true;
-	fsm->LightColorAlpha = 0;
+	if (fsm)
+	{
+		fsm->bBreathAttack = false;
+		fsm->bReturnLightColor = true;
+		fsm->LightColorAlpha = 0;
+		if (fsm->DynamicMaterialInstance)
+			fsm->DynamicMaterialInstance->SetScalarParameterValue(FName("Param"), 1.f);
+	}
 }
 
 void UHD_DragonAnim::AnimNotify_AttackShout()
@@ -384,6 +409,7 @@ void UHD_DragonAnim::AnimNotify_StartThunderAttack()
 		fsm->iCastingCnt = 0;
 		fsm->bStartThunder = true;
 		fsm->CurrUsedSkillCnt++;
+		fsm->TotalUsingSkillCnt++;
 	}
 }
 
@@ -394,11 +420,23 @@ void UHD_DragonAnim::AnimNotify_StartMeteorAttack()
 		fsm->iCastingCnt = 0;
 		fsm->bStartMeteor = true;
 		fsm->CurrUsedSkillCnt++;
+		fsm->TotalUsingSkillCnt++;
 	}
 }
 
 void UHD_DragonAnim::AnimNotify_StartDeath()
 {
-	if (Dragon && Dragon->Player)
-		Dragon->Player->SlowDownTime_Hit(TimeDilation, Duration);
+	
+}
+
+void UHD_DragonAnim::AnimNotify_ChangeMat()
+{
+	if (fsm && fsm->DynamicMaterialInstance)
+		fsm->DynamicMaterialInstance->SetScalarParameterValue(FName("Param"), 150.f);
+}
+
+void UHD_DragonAnim::AnimNotify_ReturnMat()
+{
+	if (fsm && fsm->DynamicMaterialInstance)
+		fsm->DynamicMaterialInstance->SetScalarParameterValue(FName("Param"), 1.f);
 }

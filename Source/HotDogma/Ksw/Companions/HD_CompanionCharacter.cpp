@@ -19,6 +19,7 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include <Kismet/KismetMathLibrary.h>
 #include <Kismet/GameplayStatics.h>
+#include <HotDogma/HD_GameModeBase/CHJ_GameMode.h>
 
 // Sets default values
 AHD_CompanionCharacter::AHD_CompanionCharacter()
@@ -111,9 +112,18 @@ float AHD_CompanionCharacter::TakeDamage(float DamageAmount, struct FDamageEvent
 					{
 						GetMesh()->GetAnimInstance()->Montage_Play(HitMontage, 1);
 						GetMesh()->GetAnimInstance()->Montage_JumpToSection(FName("Stun"), HitMontage);
+						CompanionStateComp->DoStun(0.2f);
 					}
 					if (Dragon->strDamageAttackType.Equals("JumpPress"))
 					{
+						auto* gm = Cast<ACHJ_GameMode>(GetWorld()->GetAuthGameMode());
+						if (gm  && CompanionId == 2)
+						{
+							gm->PlaySoundAtIndex(26);
+							gm->PlaySoundAtIndex(27);
+						}
+
+						CompanionStateComp->DoStun(1.0f);
 						GetMesh()->GetAnimInstance()->Montage_Play(HitMontage, 1);
 						GetMesh()->GetAnimInstance()->Montage_JumpToSection(FName("CriticalHit"), HitMontage);
 					}
@@ -121,11 +131,13 @@ float AHD_CompanionCharacter::TakeDamage(float DamageAmount, struct FDamageEvent
 					{
 						GetMesh()->GetAnimInstance()->Montage_Play(HitMontage, 1);
 						GetMesh()->GetAnimInstance()->Montage_JumpToSection(FName("KnockBack"), HitMontage);
+						CompanionStateComp->DoStun(0.5f);
 					}
 					if (Dragon->strDamageAttackType.Equals("Scratch"))
 					{
 						GetMesh()->GetAnimInstance()->Montage_Play(HitMontage, 1);
 						GetMesh()->GetAnimInstance()->Montage_JumpToSection(FName("KnockBack"), HitMontage);
+						CompanionStateComp->DoStun(0.5f);
 					}
 					if (Dragon->strDamageAttackType.Equals("HandPress"))
 					{
@@ -139,6 +151,14 @@ float AHD_CompanionCharacter::TakeDamage(float DamageAmount, struct FDamageEvent
 					}
 					if (Dragon->strDamageAttackType.Equals("Meteor"))
 					{
+						auto* gm = Cast<ACHJ_GameMode>(GetWorld()->GetAuthGameMode());
+						if (gm && CompanionId == 2)
+						{
+							gm->PlaySoundAtIndex(26);
+							gm->PlaySoundAtIndex(27);
+						}
+
+						CompanionStateComp->DoStun(1.0f);
 						GetMesh()->GetAnimInstance()->Montage_Play(HitMontage, 1);
 						GetMesh()->GetAnimInstance()->Montage_JumpToSection(FName("CriticalHit"), HitMontage);
 					}
@@ -164,6 +184,19 @@ void AHD_CompanionCharacter::ToggleHandIK(bool enable)
 	if (enable)
 	{
 		// »ç¿îµå
+		auto* gm = Cast<ACHJ_GameMode>(GetWorld()->GetAuthGameMode());
+		if (gm)
+		{
+			if (CompanionId == 1)
+			{
+				gm->PlaySoundAtIndex(28);
+			}
+			else if (CompanionId == 2)
+			{
+				gm->PlaySoundAtIndex(29);
+			}
+		}
+
 		UGameplayStatics::PlaySoundAtLocation(GetWorld(), HighfiveSound, GetActorLocation());
 	}
 }

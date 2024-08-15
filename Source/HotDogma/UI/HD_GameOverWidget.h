@@ -40,6 +40,7 @@ public:
 	void OpenLevelTimer();
 	void OpenTitle();
 public:
+	UFUNCTION(BlueprintCallable)
 	void GameOverPlayFade();
 	void GameOverReverseFade();
 };

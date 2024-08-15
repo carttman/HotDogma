@@ -44,6 +44,7 @@ void AHD_CompanionManager::BeginPlay()
 		if (Sorcerer)
 		{
 			Companions.Add(Sorcerer->SetupCompanionStateComp(false));
+			Sorcerer->CompanionId = 0;
 		}
 	}
 	
@@ -54,6 +55,7 @@ void AHD_CompanionManager::BeginPlay()
 		if (Warrior1)
 		{
 			Companions.Add(Warrior1->SetupCompanionStateComp(true));
+			Warrior1->CompanionId = 2;
 		}
 	}
 
@@ -64,6 +66,7 @@ void AHD_CompanionManager::BeginPlay()
 		if (Warrior2)
 		{
 			Companions.Add(Warrior2->SetupCompanionStateComp(true));
+			Warrior2->CompanionId = 1;
 		}
 	}
 

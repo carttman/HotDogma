@@ -82,7 +82,7 @@ void AHD_Projectile::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPr
 
 	//피격 사운드
 	//UGameplayStatics::PlaySoundAtLocation(GetWorld(), explosionSound, GetActorLocation());
-	UGameplayStatics::ApplyDamage(OtherActor, 1, GetInstigatorController(), this, UDamageType::StaticClass());
+	UGameplayStatics::ApplyDamage(OtherActor, 5, GetInstigatorController(), this, UDamageType::StaticClass());
 	//총알 제거
 	Destroy();
 }

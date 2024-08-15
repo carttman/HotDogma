@@ -49,8 +49,8 @@ void ACHJ_GameMode::BeginPlay()
 	Player = Cast<AHD_CharacterPlayer>(GetWorld()->GetFirstPlayerController()->GetPawn());
 	CreateGamePlayWidget();
 
-	//PlaySoundAtIndex(0);
 	NarrationFlags.Init(false, NarrationDatas.Num());
+	PlaySoundAtIndex(0);
 }
 
 void ACHJ_GameMode::Tick(float DeltaSeconds)
@@ -66,8 +66,9 @@ void ACHJ_GameMode::Tick(float DeltaSeconds)
 		if (GamePlayWidget)
 		{
 			// 나레이션 음성 파일을 재생한다.
-			UGameplayStatics::PlaySound2D(GetWorld(), DialogSB.Sound);
-			NarrationDuration = DialogSB.Sound->GetDuration();
+			UGameplayStatics::PlaySound2D(GetWorld(), DialogSB.Sound, 5.0f);
+
+			NarrationDuration = DialogSB.Sound->GetDuration() + 1.0f;
 			CurrentNarrationTime = 0.0f;
 			GamePlayWidget->WBP_PlayerWidget->ShowDialogForDuration(DialogSB.Icon, DialogSB.Name, DialogSB.Description);
 		}

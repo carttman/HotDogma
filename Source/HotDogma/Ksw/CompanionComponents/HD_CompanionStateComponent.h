@@ -16,6 +16,8 @@ enum class ECompanionState : uint8
 	State_Battle UMETA(DisplayName = "Battle"),
 	State_Help UMETA(DisplayName = "Help"),
 	State_BattleEnd UMETA(DisplayName = "BattleEnd"),
+	State_Dead UMETA(DisplayName = "Dead"),
+	State_Stun UMETA(DisplayName = "Stun"),
 };
 
 UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
@@ -40,6 +42,9 @@ public:
 	void BattleTick(float DeltaTime);
 	void HelpTick(float DeltaTime);
 	void BattleEndTick(float DeltaTime);
+	void DeadTick(float DeltaTime);
+	void StunTick(float DeltaTime);
+
 	void SetCommand(ECompanionCommand Command){ CurrentCommand = Command; }
 
 	virtual void AttackTick(float DeltaTime);
@@ -64,6 +69,8 @@ public:
 	void SetMovePoint(const FVector& chacterPos, const FVector& Point);
 	void StopMove();
 	void DoHelp();
+	void DoDead();
+	void DoStun(float Duration);
 
 	void RotateToTarget(float DeltaTime, FVector Target);
 	void SetState(ECompanionState State);
@@ -93,6 +100,9 @@ public:
 	bool bCasting = false;
 
 	bool bHighfive;
+
+	float StunTime = 0.0f;
+	float StunDuration = 1.0f;
 
 	bool IsHighfive();
 };

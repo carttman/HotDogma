@@ -38,7 +38,7 @@ public:
 	bool GetAttackMeteor(const float& AttackDistance);
 
 	UPROPERTY(EditAnywhere, Category = Settings)
-	float speed = 5000;
+	float speed = 4500;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FSM")
 	class AHD_Dragon* Dragon;

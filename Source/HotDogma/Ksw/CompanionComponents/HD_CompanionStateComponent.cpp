@@ -63,6 +63,12 @@ void UHD_CompanionStateComponent::TickComponent(float DeltaTime, ELevelTick Tick
 		case ECompanionState::State_BattleEnd:
 			BattleEndTick(DeltaTime);
 			break;
+		case ECompanionState::State_Dead:
+			DeadTick(DeltaTime);
+			break;
+		case ECompanionState::State_Stun:
+			StunTick(DeltaTime);
+			break;
 	}
 
 	if (TargetPawn && ! bHighfive)
@@ -189,8 +195,24 @@ void UHD_CompanionStateComponent::BattleEndTick(float DeltaTime)
 {
 	if (! bHighfive)
 	{
+		if (AIController)
+			AIController->StopMovement();
 		bHighfive = true;
 		HighfiveReady();
+	}
+}
+
+void UHD_CompanionStateComponent::DeadTick(float DeltaTime)
+{
+}
+
+void UHD_CompanionStateComponent::StunTick(float DeltaTime)
+{
+	StunTime += DeltaTime;
+	if (StunDuration < StunTime)
+	{
+		StunTime = 0.0f;
+		SetState(ECompanionState::State_Wait);
 	}
 }
 
@@ -344,6 +366,21 @@ void UHD_CompanionStateComponent::DoHelp()
 
 	// 지원 스킬이 있는지 확인하고 사용한다.
 	SetState(ECompanionState::State_BattleEnd);
+}
+
+void UHD_CompanionStateComponent::DoDead()
+{
+	if (AIController)
+		AIController->StopMovement();
+}
+
+void UHD_CompanionStateComponent::DoStun(float Duration)
+{
+	StunDuration = Duration;
+	// 움직임 멈춤
+	if (AIController)
+		AIController->StopMovement();
+	SetState(ECompanionState::State_Stun);
 }
 
 void UHD_CompanionStateComponent::RotateToTarget(float DeltaTime, FVector Target)

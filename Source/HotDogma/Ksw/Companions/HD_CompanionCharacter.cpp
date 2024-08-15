@@ -112,6 +112,7 @@ float AHD_CompanionCharacter::TakeDamage(float DamageAmount, struct FDamageEvent
 					{
 						GetMesh()->GetAnimInstance()->Montage_Play(HitMontage, 1);
 						GetMesh()->GetAnimInstance()->Montage_JumpToSection(FName("Stun"), HitMontage);
+						CompanionStateComp->DoStun(0.2f);
 					}
 					if (Dragon->strDamageAttackType.Equals("JumpPress"))
 					{
@@ -122,6 +123,7 @@ float AHD_CompanionCharacter::TakeDamage(float DamageAmount, struct FDamageEvent
 							gm->PlaySoundAtIndex(27);
 						}
 
+						CompanionStateComp->DoStun(1.0f);
 						GetMesh()->GetAnimInstance()->Montage_Play(HitMontage, 1);
 						GetMesh()->GetAnimInstance()->Montage_JumpToSection(FName("CriticalHit"), HitMontage);
 					}
@@ -129,11 +131,13 @@ float AHD_CompanionCharacter::TakeDamage(float DamageAmount, struct FDamageEvent
 					{
 						GetMesh()->GetAnimInstance()->Montage_Play(HitMontage, 1);
 						GetMesh()->GetAnimInstance()->Montage_JumpToSection(FName("KnockBack"), HitMontage);
+						CompanionStateComp->DoStun(0.5f);
 					}
 					if (Dragon->strDamageAttackType.Equals("Scratch"))
 					{
 						GetMesh()->GetAnimInstance()->Montage_Play(HitMontage, 1);
 						GetMesh()->GetAnimInstance()->Montage_JumpToSection(FName("KnockBack"), HitMontage);
+						CompanionStateComp->DoStun(0.5f);
 					}
 					if (Dragon->strDamageAttackType.Equals("HandPress"))
 					{
@@ -154,6 +158,7 @@ float AHD_CompanionCharacter::TakeDamage(float DamageAmount, struct FDamageEvent
 							gm->PlaySoundAtIndex(27);
 						}
 
+						CompanionStateComp->DoStun(1.0f);
 						GetMesh()->GetAnimInstance()->Montage_Play(HitMontage, 1);
 						GetMesh()->GetAnimInstance()->Montage_JumpToSection(FName("CriticalHit"), HitMontage);
 					}

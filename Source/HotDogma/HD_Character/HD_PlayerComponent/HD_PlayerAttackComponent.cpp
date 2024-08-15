@@ -124,6 +124,7 @@ void UHD_PlayerAttackComponent::PlayerAttack()
 void UHD_PlayerAttackComponent::BaseAttack()
 {
 	if(IsSplitting || IsCutting) return;
+	if(IsCutting_New) return;
 	//if(Player->PlayerClimbComponent->IsClimbing)return;
 	if(Player->IsKnockDown) return;
 	if(Player->IsHit) return;
@@ -143,6 +144,7 @@ void UHD_PlayerAttackComponent::BaseAttack()
 void UHD_PlayerAttackComponent::ClimbAttack()
 {
 	if(IsSplitting || IsCutting) return;
+	if(IsCutting_New) return;
 	//if(Player->PlayerClimbComponent->IsClimbing)return;
 	if(Player->IsKnockDown) return;
 	if(Player->IsHit) return;

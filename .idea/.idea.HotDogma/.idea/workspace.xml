@@ -11,11 +11,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="816ff4fd-5015-4971-a749-88a8f089f2fd" name="Changes" comment="오더 3번 4번키 수정">
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.HotDogma/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.HotDogma/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/LGT/LGT_TestMap.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/LGT/LGT_TestMap.umap" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/HotDogma/HD_Character/HD_CharacterPlayer.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/HotDogma/HD_Character/HD_CharacterPlayer.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/HotDogma/HD_Character/HD_CharacterPlayer.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/HotDogma/HD_Character/HD_CharacterPlayer.h" afterDir="false" />
+    <list default="true" id="816ff4fd-5015-4971-a749-88a8f089f2fd" name="Changes" comment="하울링 타임라인 끝 함수 추가">
+      <change beforePath="$PROJECT_DIR$/Source/HotDogma/HD_Character/HD_PlayerComponent/HD_PlayerAttackComponent.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/HotDogma/HD_Character/HD_PlayerComponent/HD_PlayerAttackComponent.cpp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -696,7 +693,15 @@
       <option name="project" value="LOCAL" />
       <updated>1723609847398</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="하울링 타임라인 끝 함수 추가">
+      <option name="closed" value="true" />
+      <created>1723704260277</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1723704260277</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -738,7 +743,8 @@
     <MESSAGE value="용 체력바 새 버전으로 변경" />
     <MESSAGE value="최종 UI 체력바 수정" />
     <MESSAGE value="오더 3번 4번키 수정" />
-    <option name="LAST_COMMIT_MESSAGE" value="오더 3번 4번키 수정" />
+    <MESSAGE value="하울링 타임라인 끝 함수 추가" />
+    <option name="LAST_COMMIT_MESSAGE" value="하울링 타임라인 끝 함수 추가" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

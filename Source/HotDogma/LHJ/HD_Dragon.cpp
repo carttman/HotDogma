@@ -5,6 +5,7 @@
 
 #include "HD_DragonAnim.h"
 #include "HD_DragonFSM.h"
+#include "Components/AudioComponent.h"
 #include "Components/BoxComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "Components/WidgetSwitcher.h"
@@ -307,10 +308,18 @@ float AHD_Dragon::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent
 	{
 		fsm->Anim->ChangeState(DragonState::Death);
 		SkeletalComp->SetCollisionProfileName(FName("FloorBlock"));
-
+		FTimerHandle TimeDilationTimerHandle;
+		if (Player)
+		{
+			Player->OnPostProcess();
+			Player->SlowDownTime_Hit(TimeDilation, Duration);
+		}		
+		
+		GetWorld()->GetTimerManager().SetTimer(TimeDilationTimerHandle, this, &AHD_Dragon::DeathNarr, Duration, false);
+		
 		if (gm && gm->GamePlayWidget && gm->GamePlayWidget->WidgetSwitcher)
 		{
-			GetWorld()->GetTimerManager().SetTimer(DeathTimerHandle, this, &AHD_Dragon::CallCredit, 10.f,
+			GetWorld()->GetTimerManager().SetTimer(DeathTimerHandle, this, &AHD_Dragon::CallCredit, 20.f,
 			                                       false);
 		}
 	}
@@ -320,5 +329,15 @@ float AHD_Dragon::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent
 
 void AHD_Dragon::CallCredit()
 {
+	if (fsm && fsm->BattleAudioComponent && fsm->BattleAudioComponent->IsPlaying())
+		fsm->BattleAudioComponent->Stop();
+	
 	gm->GamePlayWidget->WidgetSwitcher->SetActiveWidgetIndex(2);
 }
+
+void AHD_Dragon::DeathNarr()
+{
+	if (gm)
+		gm->PlaySoundAtIndex(30);
+}
+

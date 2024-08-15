@@ -12,7 +12,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="816ff4fd-5015-4971-a749-88a8f089f2fd" name="Changes" comment="하울링 타임라인 끝 함수 추가">
-      <change beforePath="$PROJECT_DIR$/Source/HotDogma/HD_Character/HD_PlayerComponent/HD_PlayerAttackComponent.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/HotDogma/HD_Character/HD_PlayerComponent/HD_PlayerAttackComponent.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.HotDogma/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.HotDogma/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/CHJ/Blueprints/BP_CHJ_GameModeBase.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/CHJ/Blueprints/BP_CHJ_GameModeBase.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/CHJ/Blueprints/BP_HD_Player.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/CHJ/Blueprints/BP_HD_Player.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/CHJ/PostProcessCurve.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/CHJ/PostProcessCurve.uasset" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -81,7 +84,7 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
-    "C++ 프로젝트.HotDogma.executor": "Debug",
+    "C++ 프로젝트.HotDogma.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "git-widget-placeholder": "CHJ",
     "ignore.virus.scanning.warn.message": "true",

@@ -13,14 +13,7 @@
   <component name="ChangeListManager">
     <list default="true" id="816ff4fd-5015-4971-a749-88a8f089f2fd" name="Changes" comment="오더 3번 4번키 수정">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.HotDogma/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.HotDogma/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/LHJ/UnkaDragon/Animations/Common/My_Unka_C_Attack_Special.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/LHJ/UnkaDragon/Animations/Common/My_Unka_C_Attack_Special.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/LHJ/UnkaDragon/Animations/MagicCasting/Fly/Fly_Meteor_Cast.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/LHJ/UnkaDragon/Animations/MagicCasting/Fly/Fly_Meteor_Cast.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/LHJ/UnkaDragon/Animations/MagicCasting/Fly/Fly_Meteor_Idle.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/LHJ/UnkaDragon/Animations/MagicCasting/Fly/Fly_Meteor_Idle.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/LHJ/UnkaDragon/Animations/MagicCasting/Fly/Fly_Thunder_Cast.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/LHJ/UnkaDragon/Animations/MagicCasting/Fly/Fly_Thunder_Cast.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/LHJ/UnkaDragon/Animations/MagicCasting/Fly/Fly_Thunder_Idle.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/LHJ/UnkaDragon/Animations/MagicCasting/Fly/Fly_Thunder_Idle.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/LHJ/UnkaDragon/Animations/MagicCasting/Fly/Unka_Fly_Meteor_Return_Idle.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/LHJ/UnkaDragon/Animations/MagicCasting/Fly/Unka_Fly_Meteor_Return_Idle.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/LHJ/UnkaDragon/Animations/MagicCasting/NonFly/Unka_Thunder_TempAni.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/LHJ/UnkaDragon/Animations/MagicCasting/NonFly/Unka_Thunder_TempAni.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/LHJ/UnkaDragon/Animations/MagicCasting/NonFly/Unkat_Meteor_TempAni.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/LHJ/UnkaDragon/Animations/MagicCasting/NonFly/Unkat_Meteor_TempAni.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/LHJ/BluePrints/ABP_DragonAnim.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/LHJ/BluePrints/ABP_DragonAnim.uasset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/HotDogma/LHJ/HD_DragonAnim.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/HotDogma/LHJ/HD_DragonAnim.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/HotDogma/LHJ/HD_DragonAnim.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/HotDogma/LHJ/HD_DragonAnim.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/HotDogma/LHJ/HD_DragonFSM.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/HotDogma/LHJ/HD_DragonFSM.cpp" afterDir="false" />
@@ -676,6 +669,7 @@
       <workItem from="1723552327338" duration="8084000" />
       <workItem from="1723622311248" duration="12352000" />
       <workItem from="1723677486028" duration="2197000" />
+      <workItem from="1723688047076" duration="5177000" />
     </task>
     <task id="LOCAL-00001" summary="retarget Attack Animation 추가 / 무기 에셋 추가">
       <option name="closed" value="true" />
@@ -782,17 +776,17 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
           <url>file://$PROJECT_DIR$/Source/HotDogma/LHJ/HD_DragonFSM.cpp</url>
-          <line>267</line>
+          <line>295</line>
           <option name="timeStamp" value="4" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
           <url>file://$PROJECT_DIR$/Source/HotDogma/LHJ/HD_DragonFSM.cpp</url>
-          <line>274</line>
+          <line>304</line>
           <option name="timeStamp" value="5" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
           <url>file://$PROJECT_DIR$/Source/HotDogma/LHJ/HD_DragonFSM.cpp</url>
-          <line>294</line>
+          <line>324</line>
           <option name="timeStamp" value="6" />
         </line-breakpoint>
       </breakpoints>

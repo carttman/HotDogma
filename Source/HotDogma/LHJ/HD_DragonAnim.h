@@ -184,4 +184,6 @@ public:
 
 	UPROPERTY(EditAnywhere)
 	float Duration=1.25f;
+
+	void DeathNarr();
 };

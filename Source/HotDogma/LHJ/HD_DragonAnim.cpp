@@ -6,6 +6,7 @@
 #include "Components/CapsuleComponent.h"
 #include "HotDogma/HD_Character/HD_CharacterPlayer.h"
 #include "HotDogma/HD_Character/HD_PlayerComponent/PlayerStatusComponent.h"
+#include "HotDogma/HD_GameModeBase/CHJ_GameMode.h"
 #include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "Kismet/KismetSystemLibrary.h"
@@ -242,11 +243,20 @@ void UHD_DragonAnim::AnimNotify_StartAttack()
 	{
 		fsm->isAttack = true;
 		fsm->CurrUsedSkillCnt++;
+		fsm->TotalUsingSkillCnt++;
 	}
 }
 
 void UHD_DragonAnim::AnimNotify_EndAttack()
 {
+	if (Dragon && Dragon->gm && fsm)
+	{
+		if (fsm->normalAttackState == AttackState::Meteor)
+		{
+			Dragon->gm->PlaySoundAtIndex(12);
+		}
+	}
+
 	ChangeState(DragonState::Idle);
 	if (fsm)
 	{
@@ -290,6 +300,9 @@ void UHD_DragonAnim::AnimNotify_EndFlyUp()
 	}
 	chkUsingSkillCnt = true;
 	isFly = true;
+
+	if (Dragon && Dragon->gm)
+		Dragon->gm->PlaySoundAtIndex(16);
 }
 
 void UHD_DragonAnim::AnimNotify_StartFlyDown()
@@ -318,6 +331,7 @@ void UHD_DragonAnim::AnimNotify_StartFlyAttack()
 	{
 		fsm->isAttack = true;
 		fsm->CurrUsedSkillCnt++;
+		fsm->TotalUsingSkillCnt++;
 	}
 }
 
@@ -394,6 +408,7 @@ void UHD_DragonAnim::AnimNotify_StartThunderAttack()
 		fsm->iCastingCnt = 0;
 		fsm->bStartThunder = true;
 		fsm->CurrUsedSkillCnt++;
+		fsm->TotalUsingSkillCnt++;
 	}
 }
 
@@ -404,6 +419,7 @@ void UHD_DragonAnim::AnimNotify_StartMeteorAttack()
 		fsm->iCastingCnt = 0;
 		fsm->bStartMeteor = true;
 		fsm->CurrUsedSkillCnt++;
+		fsm->TotalUsingSkillCnt++;
 	}
 }
 
@@ -411,6 +427,9 @@ void UHD_DragonAnim::AnimNotify_StartDeath()
 {
 	if (Dragon && Dragon->Player)
 		Dragon->Player->SlowDownTime_Hit(TimeDilation, Duration);
+
+	FTimerHandle TimeDilationTimerHandle;
+	GetWorld()->GetTimerManager().SetTimer(TimeDilationTimerHandle, this, &UHD_DragonAnim::DeathNarr, Duration, false);
 }
 
 void UHD_DragonAnim::AnimNotify_ChangeMat()
@@ -423,4 +442,10 @@ void UHD_DragonAnim::AnimNotify_ReturnMat()
 {
 	if (fsm && fsm->DynamicMaterialInstance)
 		fsm->DynamicMaterialInstance->SetScalarParameterValue(FName("Param"), 1.f);
+}
+
+void UHD_DragonAnim::DeathNarr()
+{
+	if (Dragon && Dragon->gm)
+		Dragon->gm->PlaySoundAtIndex(30);
 }

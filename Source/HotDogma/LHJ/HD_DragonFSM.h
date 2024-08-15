@@ -241,6 +241,8 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int CurrUsedSkillCnt; // 현재 사용한 스킬 개수
 
+	int32 TotalUsingSkillCnt;
+
 	FRotator NowRotator;
 #pragma endregion
 
@@ -365,4 +367,9 @@ public:
 
 	UPROPERTY()
 	class UMaterialInstanceDynamic* DynamicMaterialInstance;
+
+	int32 BreathCnt=0;
+	int32 MeteorCnt=0;
+	int32 ThunderCnt=0;
+	void StartNarr();
 };

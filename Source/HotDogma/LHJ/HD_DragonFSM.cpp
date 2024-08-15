@@ -153,8 +153,9 @@ void UHD_DragonFSM::TickComponent(float DeltaTime, ELevelTick TickType, FActorCo
 		ai->StopMovement();
 
 
-	if (NearTargetActor && !isAttack && !((State == DragonState::Attack && normalAttackState == AttackState::Meteor) || (
-		State == DragonState::Attack && normalAttackState == AttackState::ThunderMagic)))
+	if (NearTargetActor && !isAttack && !((State == DragonState::Attack && normalAttackState == AttackState::Meteor) ||
+		(
+			State == DragonState::Attack && normalAttackState == AttackState::ThunderMagic)))
 		RotateToTarget(DeltaTime);
 
 	if (State == DragonState::Attack && normalAttackState == AttackState::Breath && bBreathAttack)
@@ -193,6 +194,33 @@ void UHD_DragonFSM::TickComponent(float DeltaTime, ELevelTick TickType, FActorCo
 			DirectionalLight->GetLightComponent()->SetLightColor(LerpColor);
 		}
 	}
+
+	if (Dragon && Dragon->gm)
+	{
+		if (Dragon->CurrHP > Dragon->MaxHP * 0.8 && Dragon->CurrHP <= Dragon->MaxHP * 0.9)
+		{
+			Dragon->gm->PlaySoundAtIndex(23);
+			Dragon->gm->PlaySoundAtIndex(24);
+			Dragon->gm->PlaySoundAtIndex(25);
+		}
+		if (Dragon->CurrHP > Dragon->MaxHP * 0.5 && Dragon->CurrHP <= Dragon->MaxHP * 0.6)
+		{
+			Dragon->gm->PlaySoundAtIndex(17);
+		}
+		if (Dragon->CurrHP > Dragon->MaxHP * 0.4 && Dragon->CurrHP <= Dragon->MaxHP * 0.5)
+		{
+			Dragon->gm->PlaySoundAtIndex(18);
+		}
+		if (Dragon->CurrHP > Dragon->MaxHP * 0.2 && Dragon->CurrHP <= Dragon->MaxHP * 0.3)
+		{
+			Dragon->gm->PlaySoundAtIndex(19);
+		}
+		if (Dragon->CurrHP <= Dragon->MaxHP * 0.15)
+		{
+			Dragon->gm->PlaySoundAtIndex(20);
+		}
+	}
+
 
 	//공격중일 때는 상태 변환 x
 	if (!isAttack)
@@ -267,6 +295,8 @@ void UHD_DragonFSM::IdleState(const float& DeltaTime)
 		{
 			if (!chkOnceFly)
 			{
+				if (Dragon->gm)
+					Dragon->gm->PlaySoundAtIndex(13);
 				Anim->ChangeAttackState(AttackState::None);
 				Anim->ChangeState(DragonState::Fly);
 			}
@@ -345,6 +375,9 @@ void UHD_DragonFSM::F_NormalIdle(const float& DeltaTime)
 		{
 			ChooseAttackState();
 			Anim->ChangeState(DragonState::Attack);
+
+			if (Dragon && Dragon->gm && TotalUsingSkillCnt == 3)
+				Dragon->gm->PlaySoundAtIndex(15);
 		}
 	}
 	else
@@ -517,6 +550,12 @@ bool UHD_DragonFSM::ChkCharacterIntoRadian()
 					UGameplayStatics::PlaySound2D(GetWorld(), Battle_BGM);
 				}
 
+				// 나레이션
+				if (Dragon && Dragon->gm)
+				{
+					Dragon->gm->PlaySoundAtIndex(5);
+				}
+
 				break;
 			}
 		}
@@ -577,33 +616,11 @@ void UHD_DragonFSM::ChooseAttackState()
 {
 	if (Anim->isFly)
 	{
-		// 공중날고 있을때 사용가능 스킬 - 3개
-		// Breath, ThunderMagic, Meteor
-		// 30 20 20
-		//int_rand = FMath::RandRange(1, 70);
-		// if (int_rand > 50)
-		// {
-		// 	//ThunderMagic
-		// 	//Anim->ChangeAttackState(AttackState::ThunderMagic);
-		// 	Anim->ChangeState(DragonState::Idle);
-		// }
-		// else if (int_rand > 30)
-		// {
-		// 	//Meteor
-		// 	//Anim->ChangeAttackState(AttackState::Meteor);
-		// 	Anim->ChangeState(DragonState::Idle);
-		// }
-		// else if (int_rand > 0)
-		// if (int_rand > 0)
-		// {
-		// 	//Breath
-		// 	Anim->ChangeAttackState(AttackState::Breath);
-		// }
-
 		if (RndFlyAttackPattern.size() > 0)
 		{
 			AttackState attack = RndFlyAttackPattern[0];
 			Anim->ChangeAttackState(attack);
+			StartNarr();
 			RndFlyAttackPattern.erase(RndFlyAttackPattern.begin());
 		}
 		else
@@ -611,72 +628,17 @@ void UHD_DragonFSM::ChooseAttackState()
 			ShuffleFlyAttackPattern();
 			AttackState attack = RndFlyAttackPattern[0];
 			Anim->ChangeAttackState(attack);
+			StartNarr();
 			RndFlyAttackPattern.erase(RndFlyAttackPattern.begin());
 		}
 	}
 	else
 	{
-		// 지상에 있을때 사용가능 스킬 - 8개
-		// Breath, Shout, HandPress, Scratch, TailSlap, JumpPress, ThunderMagic, Meteor
-		// 20		30		30			30		30			20		10				10
-		//int_rand = FMath::RandRange(1, 180);
-		// if (int_rand > 170)
-		// {
-		// 	//Meteor
-		// 	//Anim->ChangeAttackState(AttackState::Meteor);
-		// 	Anim->ChangeState(DragonState::Idle);
-		// }
-		// else if (int_rand > 160)
-		// {
-		// 	//ThunderMagic
-		// 	//Anim->ChangeAttackState(AttackState::ThunderMagic);
-		// 	Anim->ChangeState(DragonState::Idle);
-		// }
-		//else if (int_rand > 140)
-
-		//=================================================
-
-		// int_rand = FMath::RandRange(1, 160);
-		// if (int_rand > 140)
-		// {
-		// 	//JumpPress
-		// 	Anim->ChangeAttackState(AttackState::JumpPress);
-		// }
-		// else if (int_rand > 110)
-		// {
-		// 	//TailSlap
-		// 	Anim->ChangeAttackState(AttackState::TailSlap);
-		// 	// Anim->InnerAngle = GetRadianFromCharacter();
-		// 	// Anim->chkAngle = true;
-		// }
-		// else if (int_rand > 80)
-		// {
-		// 	//Scratch
-		// 	Anim->ChangeAttackState(AttackState::Scratch);
-		// 	// Anim->InnerAngle = GetRadianFromCharacter();
-		// 	// Anim->chkAngle = true;
-		// }
-		// else if (int_rand > 50)
-		// {
-		// 	//HandPress
-		// 	Anim->ChangeAttackState(AttackState::HandPress);
-		// }
-		// else if (int_rand > 20)
-		// {
-		// 	//Shout
-		// 	Anim->ChangeAttackState(AttackState::Shout);
-		// }
-		// else if (int_rand > 0)
-		// {
-		// 	//Breath
-		// 	Anim->ChangeAttackState(AttackState::Breath);
-		// }
-
-		//=================================================TEST
 		if (RndAttackPattern.size() > 0)
 		{
 			AttackState attack = RndAttackPattern[0];
 			Anim->ChangeAttackState(attack);
+			StartNarr();
 			RndAttackPattern.erase(RndAttackPattern.begin());
 		}
 		else
@@ -684,6 +646,7 @@ void UHD_DragonFSM::ChooseAttackState()
 			ShuffleAttackPattern();
 			AttackState attack = RndAttackPattern[0];
 			Anim->ChangeAttackState(attack);
+			StartNarr();
 			RndAttackPattern.erase(RndAttackPattern.begin());
 		}
 	}
@@ -881,4 +844,39 @@ FVector UHD_DragonFSM::F_GetSpawnMeteorLoc()
 	}
 
 	return rtnVec;
+}
+
+void UHD_DragonFSM::StartNarr()
+{
+	if (!(normalAttackState == AttackState::Breath || normalAttackState == AttackState::Meteor || normalAttackState ==
+		AttackState::ThunderMagic))
+		return;
+
+	switch (normalAttackState)
+	{
+	case AttackState::Breath:
+		BreathCnt++;
+		if (BreathCnt == 1)
+			Dragon->gm->PlaySoundAtIndex(6);
+		else if (BreathCnt == 2)
+			Dragon->gm->PlaySoundAtIndex(7);
+		else if (BreathCnt == 3)
+			Dragon->gm->PlaySoundAtIndex(8);
+
+		break;
+	case AttackState::Meteor:
+		MeteorCnt++;
+		if (MeteorCnt == 1)
+			Dragon->gm->PlaySoundAtIndex(9);
+
+		break;
+	case AttackState::ThunderMagic:
+		ThunderCnt++;
+		if (ThunderCnt == 1)
+			Dragon->gm->PlaySoundAtIndex(10);
+		else if (ThunderCnt == 2)
+			Dragon->gm->PlaySoundAtIndex(11);
+
+		break;
+	}
 }

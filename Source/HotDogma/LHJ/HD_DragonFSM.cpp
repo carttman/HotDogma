@@ -92,17 +92,17 @@ void UHD_DragonFSM::BeginPlay()
 		OldColor = DirectionalLight->GetLightComponent()->GetLightColor();
 	}
 
-	if(Dragon&&Dragon->SkeletalComp)
+	if (Dragon && Dragon->SkeletalComp)
 	{
 		UMaterialInterface* Material = Dragon->SkeletalComp->GetMaterial(0);
-		if(Material)
+		if (Material)
 		{
-			auto DynamicMaterialInstance = UMaterialInstanceDynamic::Create(Material, this);
+			DynamicMaterialInstance = UMaterialInstanceDynamic::Create(Material, this);
 
 			Dragon->SkeletalComp->SetMaterial(0, DynamicMaterialInstance);
 			DynamicMaterialInstance->SetScalarParameterValue(FName("Normal Intensity"), 5.f);
-			DynamicMaterialInstance->SetScalarParameterValue(FName("Param"), 150.f);
-			DynamicMaterialInstance->SetScalarParameterValue(FName("Roughness"), 2.3f);			
+			DynamicMaterialInstance->SetScalarParameterValue(FName("Param"), 1.f);
+			DynamicMaterialInstance->SetScalarParameterValue(FName("Roughness"), 2.3f);
 		}
 	}
 }
@@ -153,7 +153,8 @@ void UHD_DragonFSM::TickComponent(float DeltaTime, ELevelTick TickType, FActorCo
 		ai->StopMovement();
 
 
-	if (NearTargetActor && !isAttack && !bStartThunder && !bStartMeteor)
+	if (NearTargetActor && !isAttack && !((State == DragonState::Attack && normalAttackState == AttackState::Meteor) || (
+		State == DragonState::Attack && normalAttackState == AttackState::ThunderMagic)))
 		RotateToTarget(DeltaTime);
 
 	if (State == DragonState::Attack && normalAttackState == AttackState::Breath && bBreathAttack)

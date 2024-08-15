@@ -363,4 +363,6 @@ public:
 
 	float CurrSearchTime;
 
+	UPROPERTY()
+	class UMaterialInstanceDynamic* DynamicMaterialInstance;
 };

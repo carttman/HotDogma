@@ -174,7 +174,7 @@ bool UHD_DragonAnim::GetAttackPress(const float& AttackDistance)
 	                                              UEngineTypes::ConvertToTraceType(CollisionChannel), false,
 	                                              ActorsToIgnore, EDrawDebugTrace::None, OutHits,
 	                                              true);
-	
+
 	for (auto& Hit : OutHits)
 	{
 		if (IsValid(Hit.GetActor()))
@@ -348,16 +348,26 @@ void UHD_DragonAnim::AnimNotify_EndFlyAttack()
 void UHD_DragonAnim::AnimNotify_StartBreath()
 {
 	//Dragon->FireCollision->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
-	fsm->bBreathAttack = true;
-	fsm->LightColorAlpha = 0;
+	if (fsm)
+	{
+		fsm->bBreathAttack = true;
+		fsm->LightColorAlpha = 0;
+		if (fsm->DynamicMaterialInstance)
+			fsm->DynamicMaterialInstance->SetScalarParameterValue(FName("Param"), 150.f);
+	}
 }
 
 void UHD_DragonAnim::AnimNotify_EndBreath()
 {
 	//Dragon->FireCollision->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-	fsm->bBreathAttack = false;
-	fsm->bReturnLightColor = true;
-	fsm->LightColorAlpha = 0;
+	if (fsm)
+	{
+		fsm->bBreathAttack = false;
+		fsm->bReturnLightColor = true;
+		fsm->LightColorAlpha = 0;
+		if (fsm->DynamicMaterialInstance)
+			fsm->DynamicMaterialInstance->SetScalarParameterValue(FName("Param"), 1.f);
+	}
 }
 
 void UHD_DragonAnim::AnimNotify_AttackShout()
@@ -401,4 +411,16 @@ void UHD_DragonAnim::AnimNotify_StartDeath()
 {
 	if (Dragon && Dragon->Player)
 		Dragon->Player->SlowDownTime_Hit(TimeDilation, Duration);
+}
+
+void UHD_DragonAnim::AnimNotify_ChangeMat()
+{
+	if (fsm && fsm->DynamicMaterialInstance)
+		fsm->DynamicMaterialInstance->SetScalarParameterValue(FName("Param"), 150.f);
+}
+
+void UHD_DragonAnim::AnimNotify_ReturnMat()
+{
+	if (fsm && fsm->DynamicMaterialInstance)
+		fsm->DynamicMaterialInstance->SetScalarParameterValue(FName("Param"), 1.f);
 }

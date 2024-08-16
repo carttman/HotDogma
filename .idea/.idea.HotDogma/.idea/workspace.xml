@@ -11,9 +11,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="816ff4fd-5015-4971-a749-88a8f089f2fd" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.HotDogma/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.HotDogma/.idea/workspace.xml" afterDir="false" />
-    </list>
+    <list default="true" id="816ff4fd-5015-4971-a749-88a8f089f2fd" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -22,7 +20,7 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="main" />
+        <entry key="$PROJECT_DIR$" value="CHJ" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -33,12 +31,12 @@
     &quot;assignee&quot;: &quot;carttman&quot;
   }
 }</component>
-  <component name="GithubPullRequestsUISettings"><![CDATA[{
-  "selectedUrlAndAccountId": {
-    "url": "https://github.com/carttman/HotDogma.git",
-    "accountId": "ddb3a282-e026-4ddd-9f6b-67bed85745fa"
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/carttman/HotDogma.git&quot;,
+    &quot;accountId&quot;: &quot;ddb3a282-e026-4ddd-9f6b-67bed85745fa&quot;
   }
-}]]></component>
+}</component>
   <component name="HighlightingSettingsPerFile">
     <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
@@ -83,7 +81,7 @@
   "keyToString": {
     "C++ 프로젝트.HotDogma.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "CHJ",
+    "git-widget-placeholder": "main",
     "ignore.virus.scanning.warn.message": "true",
     "last_opened_file_path": "C:/00. hak/HotDogma/HotDogma/Source",
     "node.js.detected.package.eslint": "true",
@@ -707,7 +705,15 @@
       <option name="project" value="LOCAL" />
       <updated>1723704260277</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="새 사운드 추가 / 대사 오탈 수정">
+      <option name="closed" value="true" />
+      <created>1723768362603</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1723768362603</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -751,30 +757,16 @@
     <MESSAGE value="오더 3번 4번키 수정" />
     <MESSAGE value="하울링 타임라인 끝 함수 추가" />
     <MESSAGE value="플레이어 공격 사운드 싱크 맟춤" />
-    <option name="LAST_COMMIT_MESSAGE" value="플레이어 공격 사운드 싱크 맟춤" />
+    <MESSAGE value="새 사운드 추가 / 대사 오탈 수정" />
+    <option name="LAST_COMMIT_MESSAGE" value="새 사운드 추가 / 대사 오탈 수정" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
-          <url>file://$PROJECT_DIR$/Source/HotDogma/LHJ/HD_DragonAnim.cpp</url>
-          <line>370</line>
-          <option name="timeStamp" value="8" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
-          <url>file://$PROJECT_DIR$/Source/HotDogma/LHJ/HD_DragonAnim.cpp</url>
-          <line>383</line>
-          <option name="timeStamp" value="9" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
-          <url>file://$PROJECT_DIR$/Source/HotDogma/LHJ/HD_DragonAnim.cpp</url>
-          <line>434</line>
-          <option name="timeStamp" value="10" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
-          <url>file://$PROJECT_DIR$/Source/HotDogma/LHJ/HD_DragonAnim.cpp</url>
-          <line>440</line>
-          <option name="timeStamp" value="11" />
+          <url>file://$PROJECT_DIR$/Source/HotDogma/HD_Character/HD_CharacterPlayer.cpp</url>
+          <line>299</line>
+          <option name="timeStamp" value="7" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

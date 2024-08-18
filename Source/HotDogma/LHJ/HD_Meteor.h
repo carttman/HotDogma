@@ -1,5 +1,3 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
 #pragma once
 
 #include "CoreMinimal.h"
@@ -23,36 +21,32 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	UPROPERTY(VisibleAnywhere, Category = Movement)
-	class UProjectileMovementComponent* ProjectileComp;
-
-	UPROPERTY(VisibleAnywhere, Category = Collision)
-	class USphereComponent* collisionComp;
-
-	void SetTarget(FVector target);
-
 	UFUNCTION()
 	void OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse,
-	           const FHitResult& Hit);
-
-	bool GetAttackMeteor(const float& AttackDistance);
+			   const FHitResult& Hit);
+	
+	UPROPERTY(VisibleAnywhere, Category = Movement)
+	class UProjectileMovementComponent* ProjectileComp;
+	UPROPERTY(VisibleAnywhere, Category = Collision)
+	class USphereComponent* collisionComp;
+	
+	UPROPERTY()
+	class AHD_Dragon* Dragon;
 
 	UPROPERTY(EditAnywhere, Category = Settings)
 	float speed = 4500;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FSM")
-	class AHD_Dragon* Dragon;
-
 	float AttackDist = 300;
-
 	float CameraShakeDist = 1000;
-
 	UPROPERTY()
 	TSet<AActor*> DamageActorSet;
+	
+	void SetTarget(FVector target);	
+
+	bool GetAttackMeteor(const float& AttackDistance);
 
 	UPROPERTY(EditDefaultsOnly)
 	class UNiagaraSystem* MeteorNia;
-
 	UPROPERTY( EditAnywhere )
 	class USoundBase* MeteorSound;
 };

@@ -1,18 +1,12 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
-
 #include "../LHJ/HD_DragonFSM.h"
 
 #include <random>
-
 #include "AIController.h"
 #include "HD_BreathCol.h"
 #include "HD_Dragon.h"
 #include "HD_DragonAnim.h"
 #include "HD_DragonThunderCol.h"
 #include "HD_Meteor.h"
-#include "NiagaraComponent.h"
-#include "NiagaraFunctionLibrary.h"
 #include "Components/LightComponent.h"
 #include "Engine/DirectionalLight.h"
 #include "HotDogma/HD_Character/HD_CharacterPlayer.h"
@@ -22,7 +16,6 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "HotDogma/HD_GameModeBase/CHJ_GameMode.h"
 #include "HotDogma/UI/HD_GamePlayWidget.h"
-#include "Particles/ParticleSystem.h"
 
 #pragma region [Constructor]
 UHD_DragonFSM::UHD_DragonFSM()
@@ -59,6 +52,8 @@ void UHD_DragonFSM::BeginPlay()
 
 	if (Dragon)
 	{
+		// Dragon->GetAnim(Anim);
+		// Dragon->GetAiController(ai);
 		Anim = Cast<UHD_DragonAnim>(Dragon->SkeletalComp->GetAnimInstance());
 		ai = Cast<AAIController>(Dragon->Controller);
 	}
@@ -76,14 +71,14 @@ void UHD_DragonFSM::BeginPlay()
 		}
 	}
 
-	FOnTimelineFloat ProgressUpdate;
-	ProgressUpdate.BindUFunction(this, FName("BreathRStart"));
+	// FOnTimelineFloat ProgressUpdate;
+	// ProgressUpdate.BindUFunction(this, FName("BreathRStart"));
+	//
+	// FOnTimelineEvent FinishedEvent;
+	// FinishedEvent.BindUFunction(this, FName("BreathREnd"));
 
-	FOnTimelineEvent FinishedEvent;
-	FinishedEvent.BindUFunction(this, FName("BreathREnd"));
-
-	BreathTimeline.AddInterpFloat(BreathCurve, ProgressUpdate);
-	BreathTimeline.SetTimelineFinishedFunc(FinishedEvent);
+	// BreathTimeline.AddInterpFloat(BreathCurve, ProgressUpdate);
+	// BreathTimeline.SetTimelineFinishedFunc(FinishedEvent);
 
 	DirectionalLight = Cast<ADirectionalLight>(
 		UGameplayStatics::GetActorOfClass(GetWorld(), ADirectionalLight::StaticClass()));
@@ -94,15 +89,15 @@ void UHD_DragonFSM::BeginPlay()
 
 	if (Dragon && Dragon->SkeletalComp)
 	{
-		UMaterialInterface* Material = Dragon->SkeletalComp->GetMaterial(0);
+		UMaterialInterface* Material = Dragon->GetMaterial();
 		if (Material)
 		{
 			DynamicMaterialInstance = UMaterialInstanceDynamic::Create(Material, this);
 
-			Dragon->SkeletalComp->SetMaterial(0, DynamicMaterialInstance);
 			DynamicMaterialInstance->SetScalarParameterValue(FName("Normal Intensity"), 5.f);
 			DynamicMaterialInstance->SetScalarParameterValue(FName("Param"), 1.f);
 			DynamicMaterialInstance->SetScalarParameterValue(FName("Roughness"), 2.3f);
+			Dragon->SetMaterial(DynamicMaterialInstance);
 		}
 	}
 }
@@ -136,28 +131,22 @@ void UHD_DragonFSM::TickComponent(float DeltaTime, ELevelTick TickType, FActorCo
 
 				// LightComponent의 색상 업데이트
 				if (LightColorAlpha >= 1)
-				{
-					DirectionalLight->GetLightComponent()->SetLightColor(OldColor);
-				}
+					SetDirectionalLight(OldColor);
 				else
-				{
-					DirectionalLight->GetLightComponent()->SetLightColor(LerpColor);
-				}
+					SetDirectionalLight(LerpColor);
 			}
 		}
 		return;
 	}
 
-	BreathTimeline.TickTimeline(DeltaTime);
-	if (State != DragonState::Move)
+	// BreathTimeline.TickTimeline(DeltaTime);
+	if (ai && State != DragonState::Move)
 		ai->StopMovement();
 
-
-	if (NearTargetActor && !isAttack && !((State == DragonState::Attack && normalAttackState == AttackState::Meteor) ||
-		(
-			State == DragonState::Attack && normalAttackState == AttackState::ThunderMagic)))
+	if (NearTargetActor && !isAttack)
 		RotateToTarget(DeltaTime);
 
+#pragma region Attack
 	if (State == DragonState::Attack && normalAttackState == AttackState::Breath && bBreathAttack)
 	{
 		ProjectileBreathCollision(DeltaTime);
@@ -168,13 +157,9 @@ void UHD_DragonFSM::TickComponent(float DeltaTime, ELevelTick TickType, FActorCo
 
 		// LightComponent의 색상 업데이트
 		if (LightColorAlpha >= 1)
-		{
-			DirectionalLight->GetLightComponent()->SetLightColor(BreathColor);
-		}
+			SetDirectionalLight(BreathColor);
 		else
-		{
-			DirectionalLight->GetLightComponent()->SetLightColor(LerpColor);
-		}
+			SetDirectionalLight(LerpColor);
 	}
 	else if (State == DragonState::Attack && normalAttackState == AttackState::Breath && !bBreathAttack &&
 		bReturnLightColor)
@@ -186,14 +171,21 @@ void UHD_DragonFSM::TickComponent(float DeltaTime, ELevelTick TickType, FActorCo
 
 		// LightComponent의 색상 업데이트
 		if (LightColorAlpha >= 1)
-		{
-			DirectionalLight->GetLightComponent()->SetLightColor(OldColor);
-		}
+			SetDirectionalLight(OldColor);
 		else
-		{
-			DirectionalLight->GetLightComponent()->SetLightColor(LerpColor);
-		}
+			SetDirectionalLight(LerpColor);
 	}
+
+	if (State == DragonState::Attack && normalAttackState == AttackState::Meteor && bStartMeteor)
+	{
+		F_MeteorMagic(DeltaTime);
+	}
+
+	if (State == DragonState::Attack && normalAttackState == AttackState::ThunderMagic && bStartThunder)
+	{
+		F_ThunderMagic(DeltaTime);
+	}
+#pragma endregion
 
 	if (Dragon && Dragon->gm)
 	{
@@ -220,7 +212,6 @@ void UHD_DragonFSM::TickComponent(float DeltaTime, ELevelTick TickType, FActorCo
 			Dragon->gm->PlaySoundAtIndex(20);
 		}
 	}
-
 
 	//공격중일 때는 상태 변환 x
 	if (!isAttack)
@@ -249,7 +240,11 @@ void UHD_DragonFSM::TickComponent(float DeltaTime, ELevelTick TickType, FActorCo
 			MoveState(DeltaTime);
 			break;
 		case DragonState::Attack:
-			F_NormalAttackState(DeltaTime);
+			if (normalAttackState == AttackState::Scratch || normalAttackState == AttackState::TailSlap)
+			{
+				Anim->InnerAngle = GetRadianFromCharacter();
+				Anim->chkAngle = true;
+			}
 			break;
 		case DragonState::Fly:
 			break;
@@ -278,16 +273,12 @@ void UHD_DragonFSM::IdleState(const float& DeltaTime)
 {
 	if (Anim)
 	{
-		// 꼬리치기 변수 초기화
-		if (Anim->chkAngle)
-			Anim->chkAngle = false;
-
-		if (!isAttack)
-			Anim->ChangeAttackState(AttackState::None);
+		Anim->ChangeAttackState(AttackState::None);
 	}
 
 	CurrIdleTime += DeltaTime;
 	CurrSearchTime += DeltaTime;
+	bool bAttackIdleStep = false;
 	if (CurrIdleTime >= DuringIdleTime)
 	{
 		CurrIdleTime = 0.f;
@@ -297,33 +288,26 @@ void UHD_DragonFSM::IdleState(const float& DeltaTime)
 			{
 				if (Dragon->gm)
 					Dragon->gm->PlaySoundAtIndex(13);
-				Anim->ChangeAttackState(AttackState::None);
 				Anim->ChangeState(DragonState::Fly);
 			}
 			else
 			{
 				if (Anim->isFly)
-				{
-					F_NormalIdle(DeltaTime);
-				}
+					bAttackIdleStep = true;
 				else
 				{
 					if (RequiredSkillCnt == CurrUsedSkillCnt)
-					{
-						Anim->ChangeAttackState(AttackState::None);
 						Anim->ChangeState(DragonState::Fly);
-					}
 					else
-					{
-						F_NormalIdle(DeltaTime);
-					}
+						bAttackIdleStep = true;
 				}
 			}
 		}
 		else
-		{
+			bAttackIdleStep = true;
+
+		if (bAttackIdleStep)
 			F_NormalIdle(DeltaTime);
-		}
 	}
 }
 
@@ -365,13 +349,12 @@ void UHD_DragonFSM::F_NormalIdle(const float& DeltaTime)
 	if (NearTargetActor && MinDistance < AttackDist)
 	{
 		// 공중에서 스킬 사용개수 지정
-		if (Anim->chkUsingSkillCnt && ApplySkillAsFly == 0)
+		if (Anim->isFly && ApplySkillAsFly == 0)
 			ApplySkillAsFly = FMath::RandRange(1, 2);
 
 		// 공격 상태로 전이
-
-		bool b = RotateToTarget(DeltaTime);
-		if (b)
+		bool bRotateEnd = RotateToTarget(DeltaTime);
+		if (bRotateEnd)
 		{
 			ChooseAttackState();
 			Anim->ChangeState(DragonState::Attack);
@@ -388,23 +371,13 @@ void UHD_DragonFSM::F_NormalIdle(const float& DeltaTime)
 	}
 }
 
-
 void UHD_DragonFSM::MoveState(const float& DeltaTime)
 {
 	if (NearTargetActor)
 	{
 		//Distance랑 Speed만 동기화
-
 		Anim->Speed = 0.75f;
-		FVector ForwardVec = Dragon->GetActorForwardVector();
-		FVector CurrentLocation = Dragon->GetActorLocation();
-		FVector TargetVec = NearTargetActor->GetActorLocation() - CurrentLocation;
-		float TargetDot = FVector::DotProduct(ForwardVec, TargetVec);
-
-		float RadianValue = FMath::Acos(TargetDot);
-
-		float DegreeValue = FMath::RadiansToDegrees(RadianValue);
-		Anim->Direction = DegreeValue;
+		Anim->Direction = GetDegreeFromCharacter();
 
 		//ai->MoveToActor(NearTargetActor);
 		ai->MoveToLocation(NearTargetActor->GetActorLocation());
@@ -416,62 +389,36 @@ void UHD_DragonFSM::MoveState(const float& DeltaTime)
 		}
 	}
 }
-
-
-void UHD_DragonFSM::F_NormalAttackState(const float& DeltaTime)
-{
-	// 정해진 공격 패턴의 스킬 쿨타임이 남아 있다면 다시 패턴 지정
-	if (normalAttackState == AttackState::Scratch || normalAttackState == AttackState::TailSlap)
-	{
-		Anim->InnerAngle = GetRadianFromCharacter();
-		Anim->chkAngle = true;
-	}
-	if (normalAttackState == AttackState::ThunderMagic)
-	{
-		if (bStartThunder)
-			F_ThunderMagic(DeltaTime);
-	}
-	if (normalAttackState == AttackState::Meteor)
-	{
-		if (bStartMeteor)
-			F_MeteorMagic(DeltaTime);
-	}
-	// if (normalAttackState == AttackState::Breath)
-	// {
-	// 	if (bBreathAttack)
-	// 		ProjectileBreathCollision(DeltaTime);
-	// }
-}
 #pragma endregion
 
-#pragma region Normal Attack Function
+#pragma region	Attack
 void UHD_DragonFSM::FlyPress(float DeltaTime)
 {
 	if (!Dragon || !Anim)
 		return;
 
-	if (bStartFlyPress)
-	{
-		// 캐릭터의 movement가 flying이 아니면 설정한다.
-		if (!Dragon->GetCharacterMovement()->GetMovementName().Contains("Flying"))
-		{
-			Dragon->GetCharacterMovement()->SetMovementMode(MOVE_Flying);
-		}
-
-		x = Dragon->GetActorLocation().X;
-		y = Dragon->GetActorLocation().Y;
-		z = Dragon->GetActorLocation().Z;
-
-		if (z < FlyPressHeight)
-		{
-			Dragon->AddMovementInput(FVector(0, 0, 1000));
-		}
-		else
-		{
-			Anim->bEndFlyUp = true;
-			bStartFlyPress = false;
-		}
-	}
+	// if (bStartFlyPress)
+	// {
+	// 	// 캐릭터의 movement가 flying이 아니면 설정한다.
+	// 	if (!Dragon->GetCharacterMovement()->GetMovementName().Contains("Flying"))
+	// 	{
+	// 		Dragon->GetCharacterMovement()->SetMovementMode(MOVE_Flying);
+	// 	}
+	//
+	// 	x = Dragon->GetActorLocation().X;
+	// 	y = Dragon->GetActorLocation().Y;
+	// 	z = Dragon->GetActorLocation().Z;
+	//
+	// 	if (z < FlyPressHeight)
+	// 	{
+	// 		Dragon->AddMovementInput(FVector(0, 0, 1000));
+	// 	}
+	// 	else
+	// 	{
+	// 		Anim->bEndFlyUp = true;
+	// 		bStartFlyPress = false;
+	// 	}
+	// }
 
 	if (Anim->bFlyPress)
 	{
@@ -490,218 +437,17 @@ void UHD_DragonFSM::FlyPress(float DeltaTime)
 		{
 			Dragon->GetCharacterMovement()->SetMovementMode(MOVE_Walking);
 			Anim->bEndFlyUp = false;
-			bStartFlyPress = false;
+			//bStartFlyPress = false;
 			Anim->bFlyPress = false; // 낙하 완료 상태로 전환
 		}
 	}
 }
 
-void UHD_DragonFSM::NormalBreath(const float& DeltaTime)
-{
-}
-#pragma endregion
-
-#pragma region [Check direction from character]
-float UHD_DragonFSM::GetRadianFromCharacter()
-{
-	float fRtn = 0;
-
-	if (NearTargetActor && DragonActor)
-	{
-		dir = NearTargetActor->GetActorLocation() - DragonActor->GetActorLocation();
-		dir.Normalize();
-		FVector rightVec = DragonActor->GetActorRightVector();
-
-		double dot = UKismetMathLibrary::Dot_VectorVector(rightVec, dir);
-		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red,
-		                                 FString::Printf(TEXT("Player To Dragon Direction : %f"), dot));
-
-		fRtn = dot;
-	}
-
-	return fRtn;
-}
-
-// 일정 범위 내에 플레이어가 있는지 확인
-bool UHD_DragonFSM::ChkCharacterIntoRadian()
-{
-	bool bRtn = false;
-	// 월드에 있는 캐릭터를 가지고 와서 배열에 저장(BeginPlay에 작성)
-	// 임시로 캐릭터로 지정
-	// 일정 거리 안에 들어온 캐릭터가 있으면
-	for (int i = 0; i < Dragon->CharacterArr.Num(); i++)
-	{
-		int distanceSize = (Dragon->CharacterArr[i]->GetActorLocation() - Dragon->GetActorLocation()).Size();
-		if (distanceSize <= ThresholdRadian)
-		{
-			if (Anim)
-			{
-				// true 리턴
-				Anim->bSleepEnd = true;
-				chkCharacterUsingSleep = true;
-
-				if (Dragon && Dragon->gm && Dragon->gm->GamePlayWidget)
-				{
-					Dragon->gm->GamePlayWidget->StopBGM_Crow();
-				}
-
-				if (Battle_BGM)
-				{
-					BattleAudioComponent = UGameplayStatics::SpawnSound2D(GetWorld(), Battle_BGM);
-					//UGameplayStatics::PlaySound2D(GetWorld(), Battle_BGM);
-				}
-
-				// 나레이션
-				if (Dragon && Dragon->gm)
-				{
-					Dragon->gm->PlaySoundAtIndex(5);
-				}
-
-				break;
-			}
-		}
-	}
-	return bRtn;
-}
-
-float UHD_DragonFSM::GetDegreeFromCharacter()
-{
-	FVector ForwardVec = Dragon->GetActorForwardVector();
-	FVector CurrentLocation = Dragon->GetActorLocation();
-	FVector TargetVec = NearTargetActor->GetActorLocation() - CurrentLocation;
-	float TargetDot = FVector::DotProduct(ForwardVec, TargetVec);
-
-	float RadianValue = FMath::Acos(TargetDot);
-
-	float DegreeValue = FMath::RadiansToDegrees(RadianValue);
-	//Anim->Direction = DegreeValue;
-	return DegreeValue;
-}
-#pragma endregion
-
-
-void UHD_DragonFSM::ShuffleAttackPattern()
-{
-	// Random number generator
-	std::random_device rd;
-	std::mt19937 g(rd());
-
-	// 사용 스킬 목록을 복사
-	if (Dragon->MaxHP * NextPagePercent >= Dragon->CurrHP)
-	{
-		RndAttackPattern = OrgAttackPattern_PageTwo;
-	}
-	else
-	{
-		RndAttackPattern = OrgAttackPattern_PageOne;
-	}
-
-	// Shuffle the vector
-	std::shuffle(RndAttackPattern.begin(), RndAttackPattern.end(), g);
-}
-
-void UHD_DragonFSM::ShuffleFlyAttackPattern()
-{
-	// Random number generator
-	std::random_device rd;
-	std::mt19937 g(rd());
-
-	// 사용 스킬 목록을 복사
-	RndFlyAttackPattern = OrgFlyAttackPattern;
-
-	// Shuffle the vector
-	std::shuffle(RndFlyAttackPattern.begin(), RndFlyAttackPattern.end(), g);
-}
-
-void UHD_DragonFSM::ChooseAttackState()
-{
-	if (Anim->isFly)
-	{
-		if (RndFlyAttackPattern.size() > 0)
-		{
-			AttackState attack = RndFlyAttackPattern[0];
-			Anim->ChangeAttackState(attack);
-			StartNarr();
-			RndFlyAttackPattern.erase(RndFlyAttackPattern.begin());
-		}
-		else
-		{
-			ShuffleFlyAttackPattern();
-			AttackState attack = RndFlyAttackPattern[0];
-			Anim->ChangeAttackState(attack);
-			StartNarr();
-			RndFlyAttackPattern.erase(RndFlyAttackPattern.begin());
-		}
-	}
-	else
-	{
-		if (RndAttackPattern.size() > 0)
-		{
-			AttackState attack = RndAttackPattern[0];
-			Anim->ChangeAttackState(attack);
-			StartNarr();
-			RndAttackPattern.erase(RndAttackPattern.begin());
-		}
-		else
-		{
-			ShuffleAttackPattern();
-			AttackState attack = RndAttackPattern[0];
-			Anim->ChangeAttackState(attack);
-			StartNarr();
-			RndAttackPattern.erase(RndAttackPattern.begin());
-		}
-	}
-}
-
-bool UHD_DragonFSM::RotateToTarget(const float& DeltaTime)
-{
-	FVector StartLoc = Dragon->GetActorLocation();
-	FRotator curRot = Dragon->GetActorRotation();
-	FVector TargetLoc = NearTargetActor->GetActorLocation();
-	FRotator realRot = UKismetMathLibrary::FindLookAtRotation(StartLoc, TargetLoc);
-	bool EndRotate = false;
-
-	al += DeltaTime / 100;
-
-	float r = GetRadianFromCharacter();
-
-	//UE_LOG(LogTemp, Warning, TEXT("%f"), r);
-	if (al > 1 || (r > -0.5 && r <= 0.5))
-	{
-		al = 0;
-		bRotate = false;
-		EndRotate = true;
-		if (Anim)
-		{
-			Anim->isRotate = false;
-			Anim->InnerProductValue = 0;
-		}
-	}
-	else
-	{
-		if (Anim)
-		{
-			Anim->isRotate = true;
-			Anim->InnerProductValue = r;
-		}
-		FRotator realrealRot = UKismetMathLibrary::RLerp(curRot, realRot, al, true);
-		Dragon->SetActorRotation(realrealRot);
-	}
-
-	return EndRotate;
-}
-
 void UHD_DragonFSM::BreathRStart(const float& Alpha)
 {
-	//Dragon->SetActorRotation(FRotator(NowRotator.Pitch, NowRotator.Yaw + Alpha * 6, NowRotator.Roll));
-
 	// Value는 0에서 1까지의 값으로, 360도를 회전하도록 설정
 	float NewYaw = FMath::Lerp(0.0f, 360.0f, Alpha);
 	Dragon->SetActorRotation(FRotator(NowRotator.Pitch, NowRotator.Yaw + NewYaw, NowRotator.Roll));
-}
-
-void UHD_DragonFSM::BreathREnd()
-{
 }
 
 void UHD_DragonFSM::ProjectileBreathCollision(const float& DeltaTime)
@@ -800,7 +546,7 @@ void UHD_DragonFSM::F_MeteorMagic(const float& DeltaTime)
 {
 	F_GetCharacterLoc_Casting();
 
-	FVector SpMeteorLoc = F_GetSpawnMeteorLoc();
+	FVector SpMeteorLoc = Dragon->MeteorPoint->GetComponentLocation();
 
 	if (iCastingCnt < 4)
 	{
@@ -819,35 +565,208 @@ void UHD_DragonFSM::F_MeteorMagic(const float& DeltaTime)
 		}
 	}
 }
+#pragma endregion
 
-FVector UHD_DragonFSM::F_GetSpawnMeteorLoc()
+#pragma region 캐릭터 위치 확인
+float UHD_DragonFSM::GetRadianFromCharacter() // Right Vector 기준으로 내적
 {
-	int rndLoc = FMath::RandRange(1, 4);
-	FVector rtnVec = FVector::ZeroVector;
+	float fRtn = 0;
 
-	switch (rndLoc)
+	if (NearTargetActor && DragonActor)
 	{
-	case 1:
-		rtnVec = Dragon->MeteorPoint1->GetComponentLocation();
-		break;
-	case 2:
-		rtnVec = Dragon->MeteorPoint2->GetComponentLocation();
-		break;
-	case 3:
-		rtnVec = Dragon->MeteorPoint3->GetComponentLocation();
-		break;
-	case 4:
-		rtnVec = Dragon->MeteorPoint4->GetComponentLocation();
-		break;
-	default:
-		UE_LOG(LogTemp, Warning, TEXT("%d"), rndLoc);
-		break;
+		dir = NearTargetActor->GetActorLocation() - DragonActor->GetActorLocation();
+		dir.Normalize();
+		FVector rightVec = DragonActor->GetActorRightVector();
+
+		double dot = UKismetMathLibrary::Dot_VectorVector(rightVec, dir);
+		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red,
+		                                 FString::Printf(TEXT("Player To Dragon Direction : %f"), dot));
+
+		fRtn = dot;
 	}
 
-	return rtnVec;
+	return fRtn;
 }
 
-void UHD_DragonFSM::StartNarr()
+bool UHD_DragonFSM::ChkCharacterIntoRadian() // 일정 범위 내에 플레이어가 있는지 확인
+{
+	bool bRtn = false;
+	// 월드에 있는 캐릭터를 가지고 와서 배열에 저장(BeginPlay에 작성)
+	// 임시로 캐릭터로 지정
+	// 일정 거리 안에 들어온 캐릭터가 있으면
+	for (int i = 0; i < Dragon->CharacterArr.Num(); i++)
+	{
+		int distanceSize = (Dragon->CharacterArr[i]->GetActorLocation() - Dragon->GetActorLocation()).Size();
+		if (distanceSize <= ThresholdRadian)
+		{
+			if (Anim)
+			{
+				// true 리턴
+				Anim->bSleepEnd = true;
+				chkCharacterUsingSleep = true;
+
+				if (Dragon && Dragon->gm && Dragon->gm->GamePlayWidget)
+				{
+					Dragon->gm->GamePlayWidget->StopBGM_Crow();
+				}
+
+				if (Battle_BGM)
+				{
+					BattleAudioComponent = UGameplayStatics::SpawnSound2D(GetWorld(), Battle_BGM);
+					//UGameplayStatics::PlaySound2D(GetWorld(), Battle_BGM);
+				}
+
+				// 나레이션
+				if (Dragon && Dragon->gm)
+				{
+					Dragon->gm->PlaySoundAtIndex(5);
+				}
+
+				break;
+			}
+		}
+	}
+	return bRtn;
+}
+
+float UHD_DragonFSM::GetDegreeFromCharacter() // 전방 기준으로 내적
+{
+	FVector ForwardVec = Dragon->GetActorForwardVector();
+	FVector CurrentLocation = Dragon->GetActorLocation();
+	FVector TargetVec = NearTargetActor->GetActorLocation() - CurrentLocation;
+	float TargetDot = FVector::DotProduct(ForwardVec, TargetVec);
+	float RadianValue = FMath::Acos(TargetDot);
+	float DegreeValue = FMath::RadiansToDegrees(RadianValue);
+	return DegreeValue;
+}
+#pragma endregion
+
+#pragma region 스킬 리스트 셔플 및 선택
+void UHD_DragonFSM::ShuffleAttackPattern()
+{
+	// Random number generator
+	std::random_device rd;
+	std::mt19937 g(rd());
+
+	// 사용 스킬 목록을 복사
+	if (Dragon->MaxHP * NextPagePercent >= Dragon->CurrHP)
+	{
+		RndAttackPattern = OrgAttackPattern_PageTwo;
+	}
+	else
+	{
+		RndAttackPattern = OrgAttackPattern_PageOne;
+	}
+
+	// Shuffle the vector
+	std::shuffle(RndAttackPattern.begin(), RndAttackPattern.end(), g);
+}
+
+void UHD_DragonFSM::ShuffleFlyAttackPattern()
+{
+	// Random number generator
+	std::random_device rd;
+	std::mt19937 g(rd());
+
+	// 사용 스킬 목록을 복사
+	RndFlyAttackPattern = OrgFlyAttackPattern;
+
+	// Shuffle the vector
+	std::shuffle(RndFlyAttackPattern.begin(), RndFlyAttackPattern.end(), g);
+}
+
+void UHD_DragonFSM::ChooseAttackState()
+{
+	if (Anim->isFly)
+	{
+		if (RndFlyAttackPattern.size() > 0)
+		{
+			AttackState attack = RndFlyAttackPattern[0];
+			Anim->ChangeAttackState(attack);
+			StartNarr();
+			RndFlyAttackPattern.erase(RndFlyAttackPattern.begin());
+		}
+		else
+		{
+			ShuffleFlyAttackPattern();
+			AttackState attack = RndFlyAttackPattern[0];
+			Anim->ChangeAttackState(attack);
+			StartNarr();
+			RndFlyAttackPattern.erase(RndFlyAttackPattern.begin());
+		}
+	}
+	else
+	{
+		if (RndAttackPattern.size() > 0)
+		{
+			AttackState attack = RndAttackPattern[0];
+			Anim->ChangeAttackState(attack);
+			StartNarr();
+			RndAttackPattern.erase(RndAttackPattern.begin());
+		}
+		else
+		{
+			ShuffleAttackPattern();
+			AttackState attack = RndAttackPattern[0];
+			Anim->ChangeAttackState(attack);
+			StartNarr();
+			RndAttackPattern.erase(RndAttackPattern.begin());
+		}
+	}
+}
+#pragma endregion
+
+#pragma region 타겟 방향으로 회전
+bool UHD_DragonFSM::RotateToTarget(const float& DeltaTime)
+{
+	FVector StartLoc = Dragon->GetActorLocation();
+	FRotator curRot = Dragon->GetActorRotation();
+	FVector TargetLoc = NearTargetActor->GetActorLocation();
+	FRotator realRot = UKismetMathLibrary::FindLookAtRotation(StartLoc, TargetLoc);
+	bool EndRotate = false;
+
+	al += DeltaTime / 100;
+
+	float r = GetRadianFromCharacter();
+
+	//UE_LOG(LogTemp, Warning, TEXT("%f"), r);
+	if (al > 1 || (r > -0.5 && r <= 0.5))
+	{
+		al = 0;
+		bRotate = false;
+		EndRotate = true;
+		if (Anim)
+		{
+			Anim->isRotate = false;
+			Anim->InnerAngle = 0;
+		}
+	}
+	else
+	{
+		if (Anim)
+		{
+			Anim->isRotate = true;
+			Anim->InnerAngle = r;
+		}
+		FRotator realrealRot = UKismetMathLibrary::RLerp(curRot, realRot, al, true);
+		Dragon->SetActorRotation(realrealRot);
+	}
+
+	return EndRotate;
+}
+#pragma endregion
+
+void UHD_DragonFSM::SetDirectionalLight(FLinearColor NewColor)	// DiractionalLight 색 변경
+{
+	DirectionalLight->GetLightComponent()->SetLightColor(NewColor);
+}
+
+void UHD_DragonFSM::SetDynamicMaterialInstanceValue(float value)	// Dragon Body Material 내부 값 변경
+{
+	DynamicMaterialInstance->SetScalarParameterValue(FName("Param"), value);
+}
+
+void UHD_DragonFSM::StartNarr()	// 나레이션 재생
 {
 	if (!(normalAttackState == AttackState::Breath || normalAttackState == AttackState::Meteor || normalAttackState ==
 		AttackState::ThunderMagic))

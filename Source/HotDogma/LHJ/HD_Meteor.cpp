@@ -1,6 +1,3 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
-
 #include "../LHJ/HD_Meteor.h"
 
 #include "HD_Dragon.h"
@@ -12,12 +9,9 @@
 #include "HotDogma/HD_Character/HD_CharacterPlayer.h"
 #include "HotDogma/HD_Character/HD_PlayerComponent/PlayerStatusComponent.h"
 #include "Kismet/GameplayStatics.h"
-#include "Kismet/KismetMathLibrary.h"
 
-// Sets default values
 AHD_Meteor::AHD_Meteor()
 {
-	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
 	collisionComp = CreateDefaultSubobject<USphereComponent>(TEXT("CollisionComp"));
@@ -34,7 +28,6 @@ AHD_Meteor::AHD_Meteor()
 	ProjectileComp->ProjectileGravityScale = 0.f;
 }
 
-// Called when the game starts or when spawned
 void AHD_Meteor::BeginPlay()
 {
 	Super::BeginPlay();
@@ -42,7 +35,6 @@ void AHD_Meteor::BeginPlay()
 	Dragon = Cast<AHD_Dragon>(UGameplayStatics::GetActorOfClass(GetWorld(), AHD_Dragon::StaticClass()));
 }
 
-// Called every frame
 void AHD_Meteor::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);

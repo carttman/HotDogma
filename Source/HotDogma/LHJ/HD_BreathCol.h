@@ -22,26 +22,24 @@ protected:
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-
-	UPROPERTY(VisibleAnywhere, Category = Movement)
-	class UProjectileMovementComponent* ProjectileComp;
-
-	UPROPERTY(VisibleAnywhere, Category = Collision)
-	class USphereComponent* collisionComp;
-
-	void SetTarget(FTransform target);
-
+	
 	UFUNCTION()
 	void OnOverlapBegin(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor,
 						class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep,
 						const FHitResult& SweepResult);
 
-	UPROPERTY(EditAnywhere, Category = Settings)
-	float speed = 5000;
-	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FSM")
-	class AHD_Dragon* Dragon;
+	UPROPERTY(VisibleAnywhere, Category = Movement)
+	class UProjectileMovementComponent* ProjectileComp;
+	UPROPERTY(VisibleAnywhere, Category = Collision)
+	class USphereComponent* collisionComp;
 
-	UPROPERTY(BlueprintReadOnly, EditInstanceOnly)
+	UPROPERTY(EditAnywhere, Category = Settings)
+	float speed = 4900;
+
+	void SetTarget(FTransform target);
+	
+	UPROPERTY()
+	class AHD_Dragon* Dragon;
+	UPROPERTY()
 	class UHD_DragonAnim* Anim;
 };

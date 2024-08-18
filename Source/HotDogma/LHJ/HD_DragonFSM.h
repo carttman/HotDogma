@@ -1,12 +1,8 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
 #pragma once
 
-#include <random>
 #include <vector>
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
-#include "Components/TimelineComponent.h"
 #include "HD_DragonFSM.generated.h"
 
 UENUM()
@@ -55,6 +51,9 @@ public:
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType,
 	                           FActorComponentTickFunction* ThisTickFunction) override;
 
+	UPROPERTY(BlueprintReadOnly, EditInstanceOnly)
+	class UHD_DragonAnim* Anim;
+
 	UPROPERTY()
 	class AAIController* ai;
 
@@ -68,9 +67,6 @@ public:
 	UFUNCTION()
 	void MoveState(const float& DeltaTime);
 
-	UFUNCTION()
-	void F_NormalAttackState(const float& DeltaTime);
-
 	UPROPERTY()
 	float al = 0;
 
@@ -80,8 +76,6 @@ public:
 	UFUNCTION()
 	bool RotateToTarget(const float& DeltaTime);
 #pragma endregion
-
-#pragma region Attack Function
 
 #pragma region FlyPress
 	UFUNCTION()
@@ -93,8 +87,8 @@ public:
 	UPROPERTY()
 	bool bUseFlyPress = true; // 공중찍기 스킬 사용 여부
 
-	UPROPERTY()
-	bool bStartFlyPress = false; // 공중찍기 시작
+	// UPROPERTY()
+	// bool bStartFlyPress = false; // 공중찍기 시작
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float FlyPressHeight = 500; // 공중찍기 높이
@@ -107,11 +101,6 @@ public:
 	float z = 0.f;
 	UPROPERTY()
 	float FallSpeed = 0.f; // 초기 낙하 속도
-#pragma endregion
-
-	UFUNCTION()
-	void NormalBreath(const float& DeltaTime);
-
 #pragma endregion
 
 #pragma region Attack Properties
@@ -137,8 +126,7 @@ public:
 	UPROPERTY(EditDefaultsOnly)
 	AttackState normalAttackState = AttackState::None;
 
-	UPROPERTY(BlueprintReadOnly, EditInstanceOnly)
-	class UHD_DragonAnim* Anim;
+	
 
 	// 가까운 플레이어
 	UPROPERTY(EditAnywhere)
@@ -215,9 +203,9 @@ public:
 	void ShuffleAttackPattern();
 
 	std::vector<AttackState> OrgFlyAttackPattern = {
-		//AttackState::Breath,
+		AttackState::Breath,
 		AttackState::ThunderMagic,
-		//AttackState::Meteor
+		AttackState::Meteor
 	};
 
 	std::vector<AttackState> RndFlyAttackPattern;
@@ -252,17 +240,14 @@ public:
 	int ApplySkillAsFly = 0; // 공중에서 사용할 스킬 개수
 #pragma endregion
 
-	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category="Breath")
-	class UCurveFloat* BreathCurve;
-
-	UPROPERTY()
-	FTimeline BreathTimeline;
+	// UPROPERTY(BlueprintReadWrite, EditAnywhere, Category="Breath")
+	// class UCurveFloat* BreathCurve;
+	//
+	// UPROPERTY()
+	// FTimeline BreathTimeline;
 
 	UFUNCTION()
 	void BreathRStart(const float& Alpha);
-
-	UFUNCTION()
-	void BreathREnd();
 
 	bool bBreathAttack = false;
 
@@ -339,12 +324,12 @@ public:
 
 	UFUNCTION()
 	void F_MeteorMagic(const float& DeltaTime);
-
-	FVector F_GetSpawnMeteorLoc();
 #pragma endregion
 
 	UPROPERTY()
 	class ADirectionalLight* DirectionalLight; // DirectionalLight
+	UFUNCTION()
+	void SetDirectionalLight(FLinearColor NewColor);
 
 	FLinearColor OldColor;
 	FLinearColor BreathColor = {1.f, 0.2f, 0.2f, 1.f};
@@ -367,6 +352,9 @@ public:
 
 	UPROPERTY()
 	class UMaterialInstanceDynamic* DynamicMaterialInstance;
+
+	UFUNCTION()
+	void SetDynamicMaterialInstanceValue(float value);
 
 	int32 BreathCnt=0;
 	int32 MeteorCnt=0;

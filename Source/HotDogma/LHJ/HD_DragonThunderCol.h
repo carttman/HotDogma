@@ -1,5 +1,3 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
 #pragma once
 
 #include "CoreMinimal.h"
@@ -30,8 +28,7 @@ public:
 
 	UPROPERTY(EditAnywhere)
 	class UBoxComponent* BoxComp;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FSM")
+	UPROPERTY()
 	class AHD_Dragon* Dragon;
 
 	UPROPERTY(EditAnywhere)
@@ -39,22 +36,19 @@ public:
 
 	UPROPERTY(EditAnywhere)
 	float DestroyTime = 0.1f;
-
 	float CurrTime = 0.f;
-
-	UPROPERTY(EditDefaultsOnly)
-	class UNiagaraSystem* ThunderSmog;
-
+	
 	float CameraShakeDist = 1000;
 
 	bool GetCameraShackThunder(const float& AttackDistance);
 
 	UPROPERTY()
 	TSet<AActor*> DamageActorSet;
-
-	UPROPERTY( EditAnywhere )
-	class USoundBase* ThunderSound;
-
+	
+	UPROPERTY(EditDefaultsOnly)
+	class UNiagaraSystem* ThunderSmog;
 	UPROPERTY(EditDefaultsOnly)
 	class UNiagaraSystem* StonVfX;
+	UPROPERTY( EditAnywhere )
+	class USoundBase* ThunderSound;
 };

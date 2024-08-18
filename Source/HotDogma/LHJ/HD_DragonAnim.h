@@ -1,5 +1,3 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
 #pragma once
 
 #include "CoreMinimal.h"
@@ -7,9 +5,6 @@
 #include "Animation/AnimInstance.h"
 #include "HD_DragonAnim.generated.h"
 
-/**
- * 
- */
 UCLASS()
 class HOTDOGMA_API UHD_DragonAnim : public UAnimInstance
 {
@@ -18,125 +13,116 @@ class HOTDOGMA_API UHD_DragonAnim : public UAnimInstance
 	virtual void NativeInitializeAnimation() override;
 
 public:
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "FSM")
-	DragonState AnimState;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "FSM")
-	AttackState AnimNormalAttackState;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FSM")
-	class UHD_DragonFSM* fsm;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FSM")
+	UPROPERTY()
 	class AHD_Dragon* Dragon;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FSM")
-	bool bSleepEnd = false; // 플레이어 인지
+	UPROPERTY(BlueprintReadWrite, Category = "State")
+	DragonState AnimState;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FSM")
-	bool bPlayShoutAnim = false;
+	UPROPERTY(BlueprintReadWrite, Category = "State")
+	AttackState AnimNormalAttackState;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FSM")
-	bool bFlyPress = false; // 공중 찍기 시전
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FSM")
-	bool bEndFlyUp = false; // 날아 오르기 완료
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FSM")
-	float InnerAngle = 0.f; // 캐릭터와 내적 값
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FSM")
-	bool chkAngle = false;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FSM")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "State")
 	bool isFly = false; // 공중이동 전용
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FSM")
-	bool isGroggy = false; // 그로기 전용
+	UPROPERTY(BlueprintReadWrite, Category = "Component")
+	class UHD_DragonFSM* fsm;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FSM")
-	bool isRotate = false; // 타겟으로 회전
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Sleep")
+	bool bSleepEnd = false; // 플레이어 인지
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FSM")
-	float InnerProductValue; // 내적 값
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Sleep")
+	bool bPlayShoutAnim = false;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Meta = (AllowPrivateAccess=true))
-	float Direction;
-
-	bool chkUsingSkillCnt = false;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Meta = (AllowPrivateAccess=true))
-	float Speed;
-
-	UFUNCTION(BlueprintCallable)
-	void ChangeState(DragonState ChangeState);
-
-	UFUNCTION(BlueprintCallable)
-	void ChangeAttackState(AttackState ChangeState);
-
-	UFUNCTION(BlueprintCallable)
-	void StartFlyUpFunction();
-
-	//=======================전투시작
-	UFUNCTION()
-	void AnimNotify_SleepEnd(); // 주변 캐릭터 인지
-
-	UFUNCTION()
-	void AnimNotify_StartFight(); // 전투 시작(포효 시작)
-
-	UFUNCTION()
-	void AnimNotify_endShout(); // 전투 시작 포효 종료
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FSM")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Sleep")
 	bool bEndStartAnim = false;
-	//=========================도약찍기
-	UFUNCTION()
-	void AnimNotify_bPress();
 
-	UFUNCTION()
-	void AnimNotify_StartFlyPress();
-
-	UFUNCTION()
-	void AnimNotify_PressEnd();
-
-	UFUNCTION()
-	void AnimNotify_AttackJumpPress();
-
-	UFUNCTION()
-	void AnimNotify_AttackHandPress();
-
-	UFUNCTION()
-	bool GetAttackPress(const float& AttackDistance);
-
-	FRotator JumpPress_Target_Rot;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "JumpPress")
+	bool bFlyPress = false; // 공중 찍기 시전
 
 	UPROPERTY()
-	TSet<AActor*> DamageActorSet;
-	//=========================꼬리치기, 손바닥 내려치기 변수 초기화
-	UFUNCTION()
-	void AnimNotify_MyStartTailSlap();
+	bool bEndFlyUp = false; // JumpPress
 
-	UFUNCTION()
-	void AnimNotify_EndTailSlap();
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Swing")
+	float InnerAngle = 0.f; // 캐릭터와 내적 값
 
-	UFUNCTION()
-	void AnimNotify_StartScratch();
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Swing")
+	bool chkAngle = false;
 
-	UFUNCTION()
-	void AnimNotify_EndScratch();
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Rotate")
+	bool isRotate = false; // 타겟으로 회전
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Meta = (AllowPrivateAccess=true), Category = "Move")
+	float Direction;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Meta = (AllowPrivateAccess=true), Category = "Move")
+	float Speed;
+
+	UPROPERTY()
+	TSet<AActor*> DamageActorSet;	// 중복 데미지 처리 방지용
+	
+#pragma region Change State
+	UFUNCTION(BlueprintCallable)
+	void ChangeState(DragonState ChangeState);
+	UFUNCTION(BlueprintCallable)
+	void ChangeAttackState(AttackState ChangeState);
+#pragma endregion
+	
+#pragma region Sleep
 	UFUNCTION()
-	void AnimNotify_ClearSet();
-	//=========================공격 시작, 종료
+	void AnimNotify_SleepEnd(); // 주변 캐릭터 인지
+	UFUNCTION()
+	void AnimNotify_StartFight(); // 전투 시작(포효 시작)
+	UFUNCTION()
+	void AnimNotify_endShout(); // 전투 시작 포효 종료
+#pragma endregion
+	
+#pragma region Jump Press
+	UFUNCTION()
+	void AnimNotify_bPress();
+	// UFUNCTION()
+	// void AnimNotify_StartFlyPress();
+	UFUNCTION()
+	void AnimNotify_AttackJumpPress();
+	UFUNCTION()
+	void AnimNotify_PressEnd();
+#pragma endregion
+
+#pragma region HandPress
+	UFUNCTION()
+	void AnimNotify_AttackHandPress();
+#pragma endregion
+
+#pragma region Attack Common
 	UFUNCTION()
 	void AnimNotify_StartAttack();
-
 	UFUNCTION()
 	void AnimNotify_EndAttack();
-	//=========================
 	UFUNCTION()
-	void AnimNotify_RotateFire();
+	void AnimNotify_StartFlyAttack();
+	UFUNCTION()
+	void AnimNotify_EndFlyAttack();
+	UFUNCTION()
+	bool GetAttackPress(const float& AttackDistance);
+	UFUNCTION()
+	void ApplyDamageToTarget(AActor* Target, float Damage, FString DamageType);
+	void EndAttack();
+#pragma endregion
 
+#pragma region Tail & Scratch
+	UFUNCTION()
+	void AnimNotify_MyStartTailSlap();
+	UFUNCTION()
+	void AnimNotify_EndTailSlap();
+	UFUNCTION()
+	void AnimNotify_StartScratch();
+	UFUNCTION()
+	void AnimNotify_EndScratch();
+	UFUNCTION()
+	void AnimNotify_ClearSet();
+#pragma endregion
+
+#pragma region FlyUp & FlyDown
 	UFUNCTION()
 	void AnimNotify_StartFlyUp();
 
@@ -148,34 +134,35 @@ public:
 
 	UFUNCTION()
 	void AnimNotify_EndFlyDown();
+#pragma endregion
 
-	UFUNCTION()
-	void AnimNotify_StartFlyAttack();
-
-	UFUNCTION()
-	void AnimNotify_EndFlyAttack();
-
+#pragma region Breath
 	UFUNCTION()
 	void AnimNotify_StartBreath();
 
 	UFUNCTION()
 	void AnimNotify_EndBreath();
+#pragma endregion
 
+#pragma region Shout
 	UFUNCTION()
 	void AnimNotify_AttackShout();
+#pragma endregion
 
+#pragma region Magic Attack
 	UFUNCTION()
 	void AnimNotify_StartThunderAttack();
-
 	UFUNCTION()
 	void AnimNotify_StartMeteorAttack();
+#pragma endregion
 
-	UFUNCTION()
-	void AnimNotify_StartDeath();
-	
+#pragma region Change Material
 	UFUNCTION()
 	void AnimNotify_ChangeMat();
-
 	UFUNCTION()
 	void AnimNotify_ReturnMat();
+#pragma endregion
+
+	UFUNCTION()
+	void AnimNotify_RotateFire();
 };

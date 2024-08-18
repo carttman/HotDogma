@@ -1,5 +1,3 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
 #pragma once
 
 #include "CoreMinimal.h"
@@ -22,6 +20,8 @@ protected:
 public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent,
+							 class AController* EventInstigator, AActor* DamageCauser) override;
 
 	UFUNCTION()
 	void OnOverlapBegin_Scratch(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor,
@@ -31,32 +31,7 @@ public:
 	UFUNCTION()
 	void OnOverlapBegin_TailSlap(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor,
 	                             class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep,
-	                             const FHitResult& SweepResult);
-
-	UPROPERTY()
-	class ACHJ_GameMode* gm;
-
-	UPROPERTY(EditAnywhere)
-	class UCapsuleComponent* HandCollision_R;
-
-	UPROPERTY(EditAnywhere)
-	class UCapsuleComponent* HandCollision_L;
-
-	UPROPERTY(EditAnywhere)
-	class UCapsuleComponent* TailCollision;
-
-	// 공격 추적용
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	class UCapsuleComponent* TargetPoint1;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	class UCapsuleComponent* TargetPoint2;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	class UCapsuleComponent* TargetPoint3;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	class UCapsuleComponent* TargetPoint4;
+	                             const FHitResult& SweepResult);	
 
 	// 더미 콜리전
 	// NoCollision 처리할건데 충돌처리 문제나면 변경하기
@@ -67,31 +42,35 @@ public:
 	UPROPERTY(EditAnywhere)
 	class USkeletalMeshComponent* SkeletalComp;
 
+#pragma region Body Material Getter&Setter
+	UFUNCTION()
+	UMaterialInterface* GetMaterial();
+	UFUNCTION()
+	void SetMaterial(UMaterialInstanceDynamic* & NewMaterial);
+#pragma endregion
+
+#pragma region Init
+#pragma region 공격용 콜리전
 	UPROPERTY(EditAnywhere)
-	class UHD_DragonFSM* fsm;
-
-	UPROPERTY()
-	TArray<class ACharacter*> CharacterArr; // 공격 대상 인지
-
-	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent,
-	                         class AController* EventInstigator, AActor* DamageCauser) override;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	float MaxHP = 3500;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	float CurrHP;
-
+	class UCapsuleComponent* HandCollision_R;
 	UPROPERTY(EditAnywhere)
-	float MaxFireCollisionSize = 10;
+	class UCapsuleComponent* HandCollision_L;
+	UPROPERTY(EditAnywhere)
+	class UCapsuleComponent* TailCollision;
+#pragma endregion
 
-	UPROPERTY()
-	float CurrFireCollisionSize = 0;
+#pragma region 플레이어 공격 추적용 콜리전
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	class UCapsuleComponent* TargetPoint1;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	class UCapsuleComponent* TargetPoint2;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	class UCapsuleComponent* TargetPoint3;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	class UCapsuleComponent* TargetPoint4;
+#pragma endregion
 
-	UPROPERTY()
-	TSet<AActor*> DamageActorSet;
-
-	// ThunderMagic Point
+#pragma region Thunder Point
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	class USceneComponent* ThunderPoint1;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
@@ -108,23 +87,14 @@ public:
 	class USceneComponent* ThunderPoint7;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	class USceneComponent* ThunderPoint8;
+#pragma endregion
 
-	UFUNCTION()
-	void CreateThunderPoint();
+#pragma region Meteor Point
+	UPROPERTY(EditAnywhere)
+	class USceneComponent* MeteorPoint;
+#pragma endregion
 
-	UPROPERTY()
-	FString strDamageAttackType;
-
-	UPROPERTY(EditDefaultsOnly)
-	class UParticleSystem* ThunderVFX1;
-
-	UPROPERTY(EditDefaultsOnly)
-	class UParticleSystem* ThunderVFX2;
-
-	UPROPERTY(EditDefaultsOnly)
-	class UParticleSystem* MeteorVFX;
-
-	// 클라이밍용
+#pragma region 클라이밍
 	UPROPERTY(EditAnywhere)
 	class UChildActorComponent* ClimbHand_L;
 	UPROPERTY(EditAnywhere)
@@ -186,40 +156,54 @@ public:
 
 	UPROPERTY(EditAnywhere)
 	class UChildActorComponent* ClimbHead;
-
-	UPROPERTY(EditAnywhere)
-	class USceneComponent* MeteorPoint1;
-	UPROPERTY(EditAnywhere)
-	class USceneComponent* MeteorPoint2;
-	UPROPERTY(EditAnywhere)
-	class USceneComponent* MeteorPoint3;
-	UPROPERTY(EditAnywhere)
-	class USceneComponent* MeteorPoint4;
+#pragma endregion
 
 	UFUNCTION()
+	void CreateSlashPoint();
+	UFUNCTION()
+	void CreateAttackPoint();
+	UFUNCTION()
 	void CreateClimbCollision();
+#pragma endregion
+
+	UPROPERTY()
+	class UHD_DragonFSM* fsm; // fsm
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float MaxHP = 3500; // 체력
+	UPROPERTY()
+	float CurrHP;
+
+	UPROPERTY()
+	TArray<class ACharacter*> CharacterArr; // 공격 대상 리스트
+	UPROPERTY()
+	TSet<AActor*> DamageActorSet; // 중복 데미지 처리 방지용
+	UPROPERTY()
+	FString strDamageAttackType; // 공격 종류
+
+	UPROPERTY(EditDefaultsOnly)
+	class UParticleSystem* ThunderVFX1;
+	UPROPERTY(EditDefaultsOnly)
+	class UParticleSystem* ThunderVFX2;
+	UPROPERTY(EditDefaultsOnly)
+	class UParticleSystem* MeteorVFX;
 
 	//UI
 	int LineCnt = 8; // 피통 줄 수
 	float LineHpValue; // 한줄 당 피 값
 
-	UPROPERTY()
-	class AHD_CharacterPlayer* Player;
-
-	FTimerHandle DeathTimerHandle;
-
+	UPROPERTY(EditAnywhere)
+	float TimeDilation = 0.5f;
+	UPROPERTY(EditAnywhere)
+	float Duration = 1.25f;
+	UPROPERTY(EditAnywhere)
+	float BeforeTimeToCredit = 35.f;
 	void CallCredit();
-
-	bool narTirgger = true;
-	
-	UPROPERTY(EditAnywhere)
-	float TimeDilation=0.5f;
-
-	UPROPERTY(EditAnywhere)
-	float Duration=1.25f;
-
 	void DeathNarr();
 
-	UPROPERTY(EditAnywhere)
-	float BeforeTimeToCredit=35.f;
+	UPROPERTY()
+	class ACHJ_GameMode* gm; // 게임모드
+	
+	UPROPERTY()
+	class AHD_CharacterPlayer* Player;
 };

@@ -11,7 +11,32 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="816ff4fd-5015-4971-a749-88a8f089f2fd" name="Changes" comment="" />
+    <list default="true" id="816ff4fd-5015-4971-a749-88a8f089f2fd" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.HotDogma/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.HotDogma/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/CHJ/Blueprints/BP_CHJ_GameModeBase.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/CHJ/Blueprints/BP_CHJ_GameModeBase.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/LHJ/BluePrints/ABP_DragonAnim.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/LHJ/BluePrints/ABP_DragonAnim.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/LHJ/UnkaDragon/Animations/Common/Unka_C_Death_Dramatic_Right.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/LHJ/UnkaDragon/Animations/Common/Unka_C_Death_Dramatic_Right.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/LHJ/UnkaDragon/Animations/InPlace/Unka_IP_Fly_Up.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/LHJ/UnkaDragon/Animations/InPlace/Unka_IP_Fly_Up.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/LHJ/UnkaDragon/Animations/InPlace/Unka_IP_Jump_Up_Air.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/LHJ/UnkaDragon/Animations/InPlace/Unka_IP_Jump_Up_Air.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/LHJ/UnkaDragon/Animations/MagicCasting/Fly/Fly_Meteor_Cast.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/LHJ/UnkaDragon/Animations/MagicCasting/Fly/Fly_Meteor_Cast.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/LHJ/UnkaDragon/Animations/MagicCasting/Fly/Fly_Thunder_Cast.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/LHJ/UnkaDragon/Animations/MagicCasting/Fly/Fly_Thunder_Cast.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/LHJ/UnkaDragon/Animations/MagicCasting/NonFly/Unka_Thunder_TempAni.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/LHJ/UnkaDragon/Animations/MagicCasting/NonFly/Unka_Thunder_TempAni.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/LHJ/UnkaDragon/Animations/MagicCasting/NonFly/Unkat_Meteor_TempAni.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/LHJ/UnkaDragon/Animations/MagicCasting/NonFly/Unkat_Meteor_TempAni.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/LHJ/UnkaDragon/Animations/RootMotion/My_Unka_Fly_Death.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/LHJ/UnkaDragon/Animations/RootMotion/My_Unka_Fly_Death.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/LHJ/UnkaDragon/Animations/RootMotion/Unka_RM_Jump_Up_Cut2.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/LHJ/UnkaDragon/Animations/RootMotion/Unka_RM_Jump_Up_Cut2.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/HotDogma/LHJ/HD_BreathCol.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/HotDogma/LHJ/HD_BreathCol.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/HotDogma/LHJ/HD_BreathCol.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/HotDogma/LHJ/HD_BreathCol.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/HotDogma/LHJ/HD_Dragon.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/HotDogma/LHJ/HD_Dragon.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/HotDogma/LHJ/HD_Dragon.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/HotDogma/LHJ/HD_Dragon.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/HotDogma/LHJ/HD_DragonAnim.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/HotDogma/LHJ/HD_DragonAnim.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/HotDogma/LHJ/HD_DragonAnim.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/HotDogma/LHJ/HD_DragonAnim.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/HotDogma/LHJ/HD_DragonFSM.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/HotDogma/LHJ/HD_DragonFSM.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/HotDogma/LHJ/HD_DragonFSM.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/HotDogma/LHJ/HD_DragonFSM.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/HotDogma/LHJ/HD_DragonThunderCol.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/HotDogma/LHJ/HD_DragonThunderCol.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/HotDogma/LHJ/HD_DragonThunderCol.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/HotDogma/LHJ/HD_DragonThunderCol.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/HotDogma/LHJ/HD_Meteor.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/HotDogma/LHJ/HD_Meteor.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/HotDogma/LHJ/HD_Meteor.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/HotDogma/LHJ/HD_Meteor.h" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -38,6 +63,22 @@
   }
 }</component>
   <component name="HighlightingSettingsPerFile">
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
@@ -77,29 +118,29 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "C++ 프로젝트.HotDogma.executor": "Run",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "main",
-    "ignore.virus.scanning.warn.message": "true",
-    "last_opened_file_path": "C:/00. hak/HotDogma/HotDogma/Source",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "preferences.lookFeel",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;C++ 프로젝트.HotDogma.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;LHJ__ReFactoring__Home&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/00. hak/HotDogma/HotDogma/Source&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.lookFeel&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   },
-  "keyToStringList": {
-    "rider.external.source.directories": [
-      "C:\\Users\\hakju\\AppData\\Roaming\\JetBrains\\Rider2024.1\\resharper-host\\DecompilerCache",
-      "C:\\Users\\hakju\\AppData\\Roaming\\JetBrains\\Rider2024.1\\resharper-host\\SourcesCache",
-      "C:\\Users\\hakju\\AppData\\Local\\Symbols\\src"
+  &quot;keyToStringList&quot;: {
+    &quot;rider.external.source.directories&quot;: [
+      &quot;C:\\Users\\hakju\\AppData\\Roaming\\JetBrains\\Rider2024.1\\resharper-host\\DecompilerCache&quot;,
+      &quot;C:\\Users\\hakju\\AppData\\Roaming\\JetBrains\\Rider2024.1\\resharper-host\\SourcesCache&quot;,
+      &quot;C:\\Users\\hakju\\AppData\\Local\\Symbols\\src&quot;
     ]
   }
-}]]></component>
+}</component>
   <component name="RunManager" selected="C++ 프로젝트.HotDogma">
     <configuration name="HotDogma" type="CppProject" factoryName="C++ Project">
       <configuration_1>
@@ -640,6 +681,8 @@
       <workItem from="1723734274770" duration="971000" />
       <workItem from="1723735554013" duration="853000" />
       <workItem from="1723736515107" duration="89000" />
+      <workItem from="1723955907651" duration="14368000" />
+      <workItem from="1723984344251" duration="4599000" />
     </task>
     <task id="LOCAL-00001" summary="retarget Attack Animation 추가 / 무기 에셋 추가">
       <option name="closed" value="true" />
@@ -759,16 +802,5 @@
     <MESSAGE value="플레이어 공격 사운드 싱크 맟춤" />
     <MESSAGE value="새 사운드 추가 / 대사 오탈 수정" />
     <option name="LAST_COMMIT_MESSAGE" value="새 사운드 추가 / 대사 오탈 수정" />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
-          <url>file://$PROJECT_DIR$/Source/HotDogma/HD_Character/HD_CharacterPlayer.cpp</url>
-          <line>299</line>
-          <option name="timeStamp" value="7" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
   </component>
 </project>
